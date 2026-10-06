@@ -1853,15 +1853,10 @@
         padding-right: 12px;
       }
       .shortcut-slot {
-        --shortcut-accent: var(--blue);
-        --shortcut-tint: #eef3ff;
+        --shortcut-accent: #64646b;
+        --shortcut-tint: #f3f3f5;
         border-radius: 14px;
-        background: #dce6ff;
-      }
-      .shortcut-progress {
-        --shortcut-accent: #956342;
-        --shortcut-tint: #fff3e9;
-        background: #edd3bd;
+        background: #e4e4e8;
       }
       .shortcut-link {
         min-height: 78px;
@@ -1886,7 +1881,7 @@
         place-items: center;
         border-radius: 11px;
         background: var(--shortcut-tint);
-        color: var(--shortcut-accent);
+        color: #8a8a90;
         transition:
           background 0.2s,
           color 0.2s;
@@ -1919,7 +1914,7 @@
         align-items: center;
         gap: 10px;
         flex: none;
-        color: #9296a1;
+        color: #929298;
         transition: color 0.2s;
       }
       .shortcut-open {
@@ -1933,15 +1928,16 @@
       .shortcut-link:focus-visible {
         transform: translateX(12px);
         border-color: var(--shortcut-accent);
-        box-shadow: 0 7px 20px #2534530c;
+        outline-color: #90909780;
+        box-shadow: 0 7px 20px #0000000c;
       }
       .shortcut-link:focus-visible .shortcut-title,
       .shortcut-link:focus-visible .shortcut-end {
         color: var(--shortcut-accent);
       }
       .shortcut-link:focus-visible .shortcut-icon {
-        background: var(--shortcut-accent);
-        color: white;
+        background: #ededf0;
+        color: #64646b;
       }
       .shortcut-link:focus-visible .shortcut-open {
         opacity: 1;
@@ -1951,15 +1947,15 @@
         .shortcut-slot:hover .shortcut-link {
           transform: translateX(12px);
           border-color: var(--shortcut-accent);
-          box-shadow: 0 7px 20px #2534530c;
+          box-shadow: 0 7px 20px #0000000c;
         }
         .shortcut-slot:hover .shortcut-title,
         .shortcut-slot:hover .shortcut-end {
           color: var(--shortcut-accent);
         }
         .shortcut-slot:hover .shortcut-icon {
-          background: var(--shortcut-accent);
-          color: white;
+          background: #ededf0;
+          color: #64646b;
         }
         .shortcut-slot:hover .shortcut-open {
           opacity: 1;
@@ -2297,7 +2293,7 @@ SOFTWARE.
           </button>
         </div>
         <div class="sidebar-footer">
-          <i></i>Student preview <span style="margin-left: auto">v.05</span>
+          <i></i>Student preview <span style="margin-left: auto">v.06</span>
         </div>
       </div>
     </aside>
@@ -2614,7 +2610,7 @@ SOFTWARE.
               "See your results and progress.",
             ],
           ];
-          return `<nav class="dashboard-shortcuts" aria-label="Your learning shortcuts">${shortcuts.map(([view, symbol, title, description], index) => `<div class="shortcut-slot ${view === "results" ? "shortcut-progress" : ""}"><a class="shortcut-link" href="#${view}" aria-labelledby="shortcut-${view}" style="--shortcut-order:${index}"><span class="shortcut-icon" aria-hidden="true">${icon(symbol)}</span><span class="shortcut-copy"><span class="shortcut-title" id="shortcut-${view}">${title}</span><span class="shortcut-description">${description}</span></span><span class="shortcut-end" aria-hidden="true"><span class="shortcut-open">Open</span>${icon("arrow", true)}</span></a></div>`).join("")}</nav>`;
+          return `<nav class="dashboard-shortcuts" aria-label="Your learning shortcuts">${shortcuts.map(([view, symbol, title, description], index) => `<div class="shortcut-slot"><a class="shortcut-link" href="#${view}" aria-labelledby="shortcut-${view}" style="--shortcut-order:${index}"><span class="shortcut-icon" aria-hidden="true">${icon(symbol)}</span><span class="shortcut-copy"><span class="shortcut-title" id="shortcut-${view}">${title}</span><span class="shortcut-description">${description}</span></span><span class="shortcut-end" aria-hidden="true"><span class="shortcut-open">Open</span>${icon("arrow", true)}</span></a></div>`).join("")}</nav>`;
         }
         function tasksMarkup() {
           const list = state.tasks.filter((t) =>
