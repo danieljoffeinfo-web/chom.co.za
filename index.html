@@ -332,56 +332,6 @@
       .shell {
         margin-left: var(--sidebar);
       }
-      .topbar {
-        height: 80px;
-        border-bottom: 1px solid var(--line);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 36px;
-        background: #fff;
-        gap: 20px;
-      }
-      .breadcrumb {
-        font-size: 13px;
-        font-weight: 550;
-        white-space: nowrap;
-      }
-      .top-actions {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-      }
-      .search-button {
-        display: flex;
-        align-items: center;
-        gap: 9px;
-        font-size: 12px;
-        color: var(--muted);
-        padding: 9px 12px;
-        border-radius: 9px;
-        background: #f5f5f7;
-        width: 242px;
-        text-align: left;
-      }
-      .search-button kbd {
-        font: 10px inherit;
-        color: #7e7e84;
-        margin-left: auto;
-        padding: 0 4px;
-      }
-      .utility {
-        height: 34px;
-        width: 34px;
-        display: grid;
-        place-items: center;
-        border-radius: 50%;
-        position: relative;
-        color: #66666b;
-      }
-      .utility:hover {
-        background: var(--soft);
-      }
       .notification-dot {
         position: absolute;
         top: 6px;
@@ -391,11 +341,6 @@
         border-radius: 50%;
         background: var(--blue);
         box-shadow: 0 0 0 2px white;
-      }
-      .profile {
-        display: flex;
-        align-items: center;
-        gap: 10px;
       }
       .avatar {
         display: grid;
@@ -410,17 +355,6 @@
         font-size: 11px;
         color: #795e4a;
       }
-      .profile-copy {
-        font-size: 11px;
-        text-align: left;
-        line-height: 1.5;
-      }
-      .profile-copy strong {
-        font-size: 12px;
-        display: block;
-        font-weight: 600;
-      }
-      .mobile-menu,
       .mobile-close {
         display: none;
       }
@@ -1592,8 +1526,7 @@
           padding-left: 13px;
           padding-right: 13px;
         }
-        .page,
-        .topbar {
+        .page {
           padding-left: 26px;
           padding-right: 26px;
         }
@@ -1626,15 +1559,6 @@
         }
         .study-description {
           font-size: 13px;
-        }
-        .search-button {
-          width: 210px;
-        }
-        .top-actions {
-          gap: 13px;
-        }
-        .profile-copy {
-          display: none;
         }
         h1 {
           font-size: 32px;
@@ -1677,8 +1601,7 @@
           font-size: 12px;
           gap: 10px;
         }
-        .page,
-        .topbar {
+        .page {
           padding-left: 23px;
           padding-right: 23px;
         }
@@ -1721,9 +1644,6 @@
         }
         .study-input {
           margin-top: 26px;
-        }
-        .search-button {
-          width: 215px;
         }
         .content-grid {
           gap: 18px;
@@ -1772,45 +1692,6 @@
           z-index: 35;
           backdrop-filter: blur(3px);
         }
-        .mobile-menu {
-          display: grid;
-          width: 32px;
-          height: 32px;
-          place-items: center;
-          margin-left: -5px;
-          color: #606067;
-        }
-        .topbar {
-          height: 68px;
-          padding: 0 24px;
-          gap: 12px;
-        }
-        .breadcrumb {
-          margin-right: auto;
-          font-size: 13px;
-        }
-        .top-actions {
-          gap: 9px;
-        }
-        .search-button {
-          width: 33px;
-          height: 33px;
-          display: grid;
-          place-items: center;
-          background: none;
-          padding: 0;
-        }
-        .search-button span,
-        .search-button kbd {
-          display: none;
-        }
-        .search-button .icon {
-          width: 19px;
-          height: 19px;
-        }
-        .profile > .icon {
-          display: none;
-        }
         .avatar {
           width: 32px;
           height: 32px;
@@ -1857,21 +1738,8 @@
         }
       }
       @media (max-width: 520px) {
-        .topbar {
-          padding: 0 19px;
-        }
         .page {
           padding: 26px 18px;
-        }
-        .top-actions {
-          gap: 5px;
-        }
-        .utility {
-          width: 30px;
-          height: 32px;
-        }
-        .profile {
-          gap: 0;
         }
         .greeting h1 {
           font-size: 29px;
@@ -2080,9 +1948,6 @@
           padding: 5px 7px;
           font-size: 9px;
         }
-        .topbar {
-          gap: 7px;
-        }
         .page {
           padding-left: 14px;
           padding-right: 14px;
@@ -2131,6 +1996,123 @@
           scroll-behavior: auto !important;
           transition: none !important;
           animation: none !important;
+        }
+      }
+
+      /* Shared floating actions leave every page header free of application chrome. */
+      .page {
+        padding-bottom: calc(112px + env(safe-area-inset-bottom, 0px));
+      }
+      #main:focus {
+        outline: none;
+      }
+      .quick-actions {
+        position: fixed;
+        right: max(28px, env(safe-area-inset-right, 0px));
+        bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+        z-index: 30;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 7px;
+        border: 1px solid #e0e2e8;
+        border-radius: 23px;
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow:
+          0 8px 32px #18244112,
+          0 2px 6px #18244105;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+      }
+      .quick-button {
+        display: grid;
+        place-items: center;
+        position: relative;
+        width: 44px;
+        height: 44px;
+        flex: none;
+        border-radius: 15px;
+        color: #65666f;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .quick-button > .icon {
+        width: 20px;
+        height: 20px;
+      }
+      .quick-button:hover,
+      .quick-button:focus-visible {
+        background: var(--blue-soft);
+        color: var(--blue);
+      }
+      .quick-button .notification-dot {
+        top: 9px;
+        right: 10px;
+      }
+      .quick-button .avatar {
+        width: 32px;
+        height: 32px;
+        border: 2px solid white;
+        font-size: 10px;
+      }
+      .quick-button::after {
+        content: attr(data-hint);
+        position: absolute;
+        left: 50%;
+        bottom: calc(100% + 17px);
+        transform: translate(-50%, 3px);
+        padding: 6px 9px;
+        border-radius: 7px;
+        background: #24252a;
+        color: white;
+        font-size: 11px;
+        line-height: 1.4;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          opacity 0.15s,
+          transform 0.15s;
+      }
+      .quick-button:focus-visible::after {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+      .dock-divider {
+        width: 1px;
+        height: 22px;
+        background: #e7e8ed;
+        margin: 0 4px;
+      }
+      .quick-actions .mobile-menu,
+      .dock-divider.mobile-only {
+        display: none;
+      }
+      .toast {
+        bottom: calc(103px + env(safe-area-inset-bottom, 0px));
+      }
+      @media (hover: hover) and (pointer: fine) {
+        .quick-button:hover::after {
+          opacity: 1;
+          transform: translate(-50%, 0);
+        }
+      }
+      @media (max-width: 900px) {
+        .quick-actions {
+          left: 50%;
+          right: auto;
+          transform: translateX(-50%);
+          bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        }
+        .quick-actions .mobile-menu {
+          display: grid;
+        }
+        .dock-divider.mobile-only {
+          display: block;
+        }
+        .toast {
+          bottom: calc(96px + env(safe-area-inset-bottom, 0px));
         }
       }
     </style>
@@ -2414,52 +2396,55 @@ SOFTWARE.
           </button>
         </div>
         <div class="sidebar-footer">
-          <i></i>Student preview <span style="margin-left: auto">v.03</span>
+          <i></i>Student preview <span style="margin-left: auto">v.04</span>
         </div>
       </div>
     </aside>
     <div class="shell">
-      <header class="topbar">
+      <nav class="quick-actions" aria-label="Quick actions">
         <button
-          class="mobile-menu"
+          class="quick-button mobile-menu"
           data-action="open-nav"
           aria-label="Open menu"
           aria-controls="sidebar"
           aria-expanded="false"
+          data-hint="Menu"
         >
-          <svg class="icon"><use href="#i-menu" /></svg>
+          <svg class="icon" aria-hidden="true"><use href="#i-menu" /></svg>
         </button>
-        <div class="breadcrumb" id="breadcrumb">My dashboard</div>
-        <div class="top-actions">
-          <button
-            class="search-button"
-            data-action="search"
-            aria-label="Search Chom"
-          >
-            <svg class="icon small"><use href="#i-search" /></svg
-            ><span>Find something...</span><kbd>⌘ K</kbd></button
-          ><button
-            class="utility"
-            data-action="notifications"
-            aria-label="Notifications"
-          >
-            <svg class="icon"><use href="#i-bell" /></svg
-            ><span
-              class="notification-dot"
-              id="notification-dot"
-            ></span></button
-          ><button
-            class="profile"
-            data-action="profile"
-            aria-label="Amara's profile"
-          >
-            <span class="avatar">AN</span
-            ><span class="profile-copy"
-              ><strong>Amara</strong><span class="muted">Grade 10B</span></span
-            ><svg class="icon small"><use href="#i-down" /></svg>
-          </button>
-        </div>
-      </header>
+        <span class="dock-divider mobile-only" aria-hidden="true"></span>
+        <button
+          class="quick-button"
+          data-action="search"
+          aria-label="Search Chom"
+          aria-keyshortcuts="Meta+K Control+K"
+          data-hint="Search"
+        >
+          <svg class="icon" aria-hidden="true"><use href="#i-search" /></svg>
+        </button>
+        <button
+          class="quick-button"
+          data-action="notifications"
+          aria-label="Notifications"
+          data-hint="Notifications"
+        >
+          <svg class="icon" aria-hidden="true"><use href="#i-bell" /></svg
+          ><span
+            class="notification-dot"
+            id="notification-dot"
+            aria-hidden="true"
+          ></span>
+        </button>
+        <span class="dock-divider" aria-hidden="true"></span>
+        <button
+          class="quick-button"
+          data-action="profile"
+          aria-label="Amara's profile"
+          data-hint="Your profile"
+        >
+          <span class="avatar" aria-hidden="true">AN</span>
+        </button>
+      </nav>
       <main class="page" id="main" tabindex="-1"></main>
     </div>
     <dialog class="dialog" id="dialog" aria-labelledby="dialog-title">
@@ -2766,7 +2751,6 @@ SOFTWARE.
         }
         function render() {
           document.body.classList.toggle("focus-mode", !!state.focus);
-          $("#breadcrumb").textContent = views[currentView];
           document.title = `${views[currentView]} — Chom Learn`;
           $$("[data-view]")
             .filter((el) => el.closest("nav"))
