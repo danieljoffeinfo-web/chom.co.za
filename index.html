@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f7fb;
+    --surface: #ffffff;
+    --ink: #282e3e;
+    --ink-2: #586380;
+    --ink-3: #939bb4;
+    --border: #d9dde8;
+    --action: #4255ff;
+    --action-tint: #eef0ff;
+
+    /* tile pastels: content-block backgrounds only */
+    --t-sky: #98e3ff;   --t-sky-edge: #5cc4ea;
+    --t-pink: #eeaaff;  --t-pink-edge: #cf7fe6;
+    --t-orange: #ffc38c;--t-orange-edge: #e89a55;
+    --t-mint: #a6efc4;  --t-mint-edge: #67cf93;
+    --t-lilac: #c3c6ff; --t-lilac-edge: #8f93f0;
+
+    --shadow: 0 4px 16px rgba(40, 46, 62, .08);
+    --r-tile: 20px;
+    --r-panel: 20px;
+    --r-row: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12141c; --surface: #1c1f2b; --ink: #eef0f7; --ink-2: #a9b0c6; --ink-3: #6f7690;
+      --border: #2c3142; --action: #7b88ff; --action-tint: #23274a;
+      --shadow: 0 4px 16px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12141c; --surface: #1c1f2b; --ink: #eef0f7; --ink-2: #a9b0c6; --ink-3: #6f7690;
+    --border: #2c3142; --action: #7b88ff; --action-tint: #23274a;
+    --shadow: 0 4px 16px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font: 500 16px/1.5 Nunito, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  svg { display: block; }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    height: 64px;
+    display: flex; align-items: center; gap: 16px;
+    padding: 0 32px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font: 700 20px Fredoka, sans-serif; }
+  .brand-mark {
+    width: 32px; height: 32px; border-radius: 10px;
+    background: var(--action); color: #fff;
+    display: grid; place-items: center; font-size: 18px;
+  }
+  .search {
+    flex: 1; max-width: 420px; margin-left: 24px;
+    display: flex; align-items: center; gap: 8px;
+    height: 40px; padding: 0 14px;
+    background: var(--bg); border-radius: 200px;
+    color: var(--ink-3); font-size: 14px;
+  }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .icon-btn {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: grid; place-items: center; color: var(--ink-2);
+    position: relative;
+  }
+  .icon-btn:hover { background: var(--bg); }
+  .dot { position: absolute; top: 9px; right: 10px; width: 8px; height: 8px; border-radius: 50%; background: #ff6b6b; border: 2px solid var(--surface); }
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--t-orange); color: #282e3e;
+    display: grid; place-items: center; font-weight: 800; font-size: 14px;
+  }
+
+  /* ---------- page ---------- */
+  .page {
+    max-width: 1280px; margin: 0 auto;
+    padding: 40px 32px 64px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 48px;
+    align-items: start;
+  }
+  .hello h1 { font: 700 32px/1.25 Fredoka, sans-serif; text-wrap: balance; }
+  .hello p { color: var(--ink-2); margin-top: 4px; }
+
+  /* ---------- tiles: 3 + 2 ---------- */
+  .tiles {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 28px 32px;
+  }
+  .tile { grid-column: span 2; }
+  .tile:nth-child(4) { grid-column: 2 / span 2; }
+  .tile:nth-child(5) { grid-column: 4 / span 2; }
+
+  .tile {
+    --c: var(--t-sky); --edge: var(--t-sky-edge);
+    position: relative;
+    aspect-ratio: 1 / 1;
+    min-height: 200px;
+    padding: 22px;
+    border-radius: var(--r-tile);
+    background: var(--c);
+    color: #282e3e;
+    box-shadow: 0 6px 0 var(--edge);
+    display: flex; flex-direction: column;
+    text-align: left;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .tile:hover { transform: translateY(-2px); box-shadow: 0 8px 0 var(--edge); }
+  .tile:active { transform: translateY(5px); box-shadow: 0 1px 0 var(--edge); }
+  .tile:focus-visible { outline: 3px solid var(--action); outline-offset: 4px; }
+
+  .tile.sky    { --c: var(--t-sky);    --edge: var(--t-sky-edge); }
+  .tile.pink   { --c: var(--t-pink);   --edge: var(--t-pink-edge); }
+  .tile.orange { --c: var(--t-orange); --edge: var(--t-orange-edge); }
+  .tile.mint   { --c: var(--t-mint);   --edge: var(--t-mint-edge); }
+  .tile.lilac  { --c: var(--t-lilac);  --edge: var(--t-lilac-edge); }
+
+  .tile-num {
+    font: 700 56px/1 Fredoka, sans-serif;
+    opacity: .9;
+  }
+  .tile-icon {
+    position: absolute; top: 22px; right: 22px;
+    width: 48px; height: 48px; border-radius: 14px;
+    background: rgba(255,255,255,.55);
+    display: grid; place-items: center;
+  }
+  .tile-name { margin-top: auto; font: 700 24px/1.2 Fredoka, sans-serif; text-wrap: balance; }
+  .tile-meta {
+    margin-top: 10px;
+    display: inline-flex; align-self: flex-start; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 200px;
+    background: rgba(255,255,255,.6);
+    font-size: 13px; font-weight: 700;
+  }
+
+  /* ---------- My items panel ---------- */
+  .panel {
+    position: sticky; top: 24px;
+    background: var(--surface);
+    border-radius: var(--r-panel);
+    box-shadow: var(--shadow);
+    padding: 24px 14px 14px;
+  }
+  .panel h2 {
+    font: 700 22px Fredoka, sans-serif;
+    padding: 0 10px 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .items { list-style: none; padding: 0; display: grid; gap: 2px; }
+  .item {
+    width: 100%;
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px; border-radius: var(--r-row);
+    text-align: left; font-weight: 700; font-size: 15px;
+  }
+  .item:hover { background: var(--action-tint); }
+  .item:hover .chev { color: var(--action); transform: translateX(2px); }
+  .item:focus-visible { outline: 2px solid var(--action); outline-offset: 1px; }
+  .item-ic {
+    flex: none; width: 36px; height: 36px; border-radius: 10px;
+    display: grid; place-items: center; color: #282e3e;
+  }
+  .item-label { flex: 1; min-width: 0; }
+  .item-sub { display: block; font-weight: 600; font-size: 13px; color: var(--ink-2); }
+  .chev { color: var(--ink-3); transition: transform .12s ease; }
+  .badge {
+    font-size: 12px; font-weight: 800;
+    padding: 2px 8px; border-radius: 200px;
+    background: var(--action); color: #fff;
+  }
+
+  .bg-sky { background: var(--t-sky); }
+  .bg-pink { background: var(--t-pink); }
+  .bg-orange { background: var(--t-orange); }
+  .bg-mint { background: var(--t-mint); }
+  .bg-lilac { background: var(--t-lilac); }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 1080px) {
+    .page { grid-template-columns: 1fr; gap: 40px; }
+    .panel { position: static; }
+  }
+  @media (max-width: 720px) {
+    .topbar { padding: 0 16px; }
+    .search { display: none; }
+    .page { padding: 24px 16px 48px; }
+    .hello h1 { font-size: 26px; }
+    .tiles { grid-template-columns: 1fr 1fr; gap: 20px 16px; }
+    .tile, .tile:nth-child(4), .tile:nth-child(5) { grid-column: span 1; }
+    .tile:nth-child(5) { grid-column: 1 / -1; aspect-ratio: auto; min-height: 150px; }
+    .tile { min-height: 0; padding: 16px; }
+    .tile-num { font-size: 40px; }
+    .tile-icon { top: 16px; right: 16px; width: 40px; height: 40px; }
+    .tile-name { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><span class="brand-mark">C</span>Chom Learn</div>
+  <div class="search">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    Search classes, tasks, people
+  </div>
+  <div class="topbar-right">
+    <button class="icon-btn" aria-label="Notifications">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+      <span class="dot"></span>
+    </button>
+    <div class="avatar" aria-label="Your profile">AN</div>
+  </div>
+</header>
+
+<main class="page">
+  <section>
+    <div class="hello">
+      <h1>Good morning, Amara 👋</h1>
+      <p>Tuesday, 6 October · Grade 10 · 3 things due this week</p>
+    </div>
+
+    <div class="tiles">
+      <button class="tile sky">
+        <span class="tile-num">1</span>
+        <span class="tile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></span>
+        <span class="tile-name">Tasks</span>
+        <span class="tile-meta">4 for today</span>
+      </button>
+
+      <button class="tile pink">
+        <span class="tile-num">2</span>
+        <span class="tile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5 12 3l9 4.5-9 4.5z"/><path d="M7 10v5c0 1.5 2.2 3 5 3s5-1.5 5-3v-5"/></svg></span>
+        <span class="tile-name">Classes</span>
+        <span class="tile-meta">Next: Maths, 09:40</span>
+      </button>
+
+      <button class="tile orange">
+        <span class="tile-num">3</span>
+        <span class="tile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
+        <span class="tile-name">Assignments</span>
+        <span class="tile-meta">2 due Friday</span>
+      </button>
+
+      <button class="tile mint">
+        <span class="tile-num">4</span>
+        <span class="tile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h.01M12 11h.01M15 11h.01"/></svg></span>
+        <span class="tile-name">Chom</span>
+        <span class="tile-meta">Open Chom</span>
+      </button>
+
+      <button class="tile lilac">
+        <span class="tile-num">5</span>
+        <span class="tile-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg></span>
+        <span class="tile-name">Help me Improve</span>
+        <span class="tile-meta">3 suggestions</span>
+      </button>
+    </div>
+  </section>
+
+  <aside class="panel" aria-labelledby="my-items">
+    <h2 id="my-items">My items</h2>
+    <ul class="items">
+      <li><button class="item">
+        <span class="item-ic bg-sky"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>
+        <span class="item-label">Calendar</span>
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      </button></li>
+      <li><button class="item">
+        <span class="item-ic bg-mint"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a14 14 0 0 0 0 18M12 3a14 14 0 0 1 0 18M3.5 9h17M3.5 15h17"/></svg></span>
+        <span class="item-label">My Extra Curricular<span class="item-sub">Sports + others</span></span>
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      </button></li>
+      <li><button class="item">
+        <span class="item-ic bg-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span>
+        <span class="item-label">My Results</span>
+        <span class="badge">New</span>
+      </button></li>
+      <li><button class="item">
+        <span class="item-ic bg-pink"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v10a2 2 0 0 1-2 2M8 9h5M8 13h5M8 17h3"/></svg></span>
+        <span class="item-label">School News</span>
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      </button></li>
+      <li><button class="item">
+        <span class="item-ic bg-lilac"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 11h16M8 21l1-4M16 21l-1-4"/><circle cx="8.5" cy="14" r=".5"/><circle cx="15.5" cy="14" r=".5"/></svg></span>
+        <span class="item-label">Transport Services</span>
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      </button></li>
+      <li><button class="item">
+        <span class="item-ic bg-sky"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg></span>
+        <span class="item-label">Speak to a counsellor</span>
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      </button></li>
+      <li><button class="item">
+        <span class="item-ic bg-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg></span>
+        <span class="item-label">My Career</span>
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      </button></li>
+      <li><button class="item">
+        <span class="item-ic bg-pink"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 3 6l2 5 2-1v11h10V10l2 1 2-5-5-3a4 4 0 0 1-8 0z"/></svg></span>
+        <span class="item-label">Uniform Shop</span>
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      </button></li>
+      <li><button class="item">
+        <span class="item-ic bg-mint"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></span>
+        <span class="item-label">Am I on track?</span>
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      </button></li>
+    </ul>
+  </aside>
+</main>
+
+</body>
+</html>
