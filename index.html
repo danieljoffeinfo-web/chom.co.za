@@ -3,361 +3,668 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
 <title>Chom Learn · Dashboard</title>
 <link rel="preconnect" href="https://rsms.me/">
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 <style>
+  /* ------------------------------------------------------------------
+     Tokens
+     Canvas: warm off-white planner page. Tiles: navy instruments.
+     One UI accent (blue) used rarely; sky is a data highlight on navy only.
+  ------------------------------------------------------------------ */
   :root {
-    --canvas: #faf8f5;
+    --canvas: #f9f7f3;
     --surface: #ffffff;
-    --ink: #27251e;
-    --ink-2: #72706b;
-    --ink-3: #92918b;
-    --line: #e6e3dc;
-    --line-strong: #d1d1cd;
-    --accent: #2457c5;
-    --accent-tint: #eef2fb;
-    --navy: #13294b;
-    --navy-hover: #1a3560;
-    --navy-ink: #f4f6fa;
-    --navy-ink-2: #a7b4c9;
-    --navy-line: rgba(244, 246, 250, .14);
-    --aside-w: 340px;
+    --surface-2: #f2efe9;
+    --ink: #1b1a17;
+    --ink-2: #5d5b55;
+    --ink-3: #8b8880;
+    --line: #e6e2da;
+    --line-2: #d6d1c6;
 
-    --shadow: 0 1px 2px rgba(0, 0, 0, .06);
-    --shadow-hover: 0 1px 2px rgba(0,0,0,.05), 0 8px 24px rgba(39, 37, 30, .07);
-    --r-card: 16px;
+    --accent: #2a5bd7;
+    --accent-tint: #e9eefb;
+    --ok: #2f8a57;
+    --ok-tint: #e6f3ec;
+
+    --navy: #0f1f3d;
+    --navy-2: #152b54;
+    --navy-ink: #eef2f9;
+    --navy-ink-2: #a3b2ce;
+    --navy-ink-3: #6f84a8;
+    --navy-line: rgba(255, 255, 255, .10);
+    --sky: #8fb4ff;
+    --amber: #ffd08a;
+
+    --rail-w: 320px;
+    --bar-h: 56px;
+    --r-tile: 14px;
     --r-ctl: 8px;
+    --r-pill: 9999px;
+
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   }
 
   * { box-sizing: border-box; margin: 0; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
     background: var(--canvas);
     color: var(--ink);
-    font: 400 15px/1.5 InterVariable, Inter, system-ui, sans-serif;
+    font: 400 14px/1.5 InterVariable, Inter, system-ui, sans-serif;
     font-feature-settings: "cv01", "ss03";
     letter-spacing: -.011em;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
-  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; letter-spacing: inherit; }
+  a { color: inherit; text-decoration: none; }
   svg { display: block; flex: none; }
   .num { font-variant-numeric: tabular-nums; }
+  .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: 0; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
 
-  /* ---------- top bar ---------- */
+  /* ------------------------------------------------------------------
+     Top bar
+  ------------------------------------------------------------------ */
   .topbar {
-    position: sticky; top: 0; z-index: 5;
-    height: 64px;
-    display: flex; align-items: center; gap: 24px;
-    padding: 0 32px;
-    background: rgba(250, 248, 245, .9);
-    backdrop-filter: blur(8px);
+    position: sticky; top: 0; z-index: 10;
+    height: var(--bar-h);
+    display: flex; align-items: center; gap: 16px;
+    padding: 0 24px;
+    background: color-mix(in srgb, var(--canvas) 88%, transparent);
+    backdrop-filter: saturate(1.2) blur(10px);
+    -webkit-backdrop-filter: saturate(1.2) blur(10px);
     border-bottom: 1px solid var(--line);
   }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 590; font-size: 15px; letter-spacing: -.01em; }
-  .brand-mark {
-    width: 28px; height: 28px; border-radius: 8px;
-    background: var(--ink); color: var(--canvas);
-    display: grid; place-items: center; font-size: 14px; font-weight: 590;
-  }
-  .brand-school { color: var(--ink-3); font-weight: 400; padding-left: 10px; border-left: 1px solid var(--line-strong); }
-  .search {
-    flex: 1; max-width: 380px; margin-left: auto;
+  .brand {
     display: flex; align-items: center; gap: 10px;
-    height: 36px; padding: 0 12px;
-    background: var(--surface); border: 1px solid var(--line-strong); border-radius: 10px;
-    color: var(--ink-3); font-size: 14px;
+    font-weight: 590; font-size: 14px; letter-spacing: -.012em;
   }
-  .kbd { margin-left: auto; font-size: 12px; padding: 1px 6px; border: 1px solid var(--line); border-radius: 5px; }
-  .topbar-right { display: flex; align-items: center; gap: 8px; }
+  .mark {
+    width: 24px; height: 24px; border-radius: 7px;
+    background: var(--navy); color: #fff;
+    display: grid; place-items: center;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.14);
+  }
+  .brand-role { color: var(--ink-3); font-weight: 400; margin-left: 2px; }
+  .brand-role::before { content: "/"; margin-right: 8px; color: var(--line-2); }
+
+  .tabs {
+    margin-left: 16px;
+    display: flex; gap: 2px; padding: 3px;
+    border: 1px solid var(--line); border-radius: var(--r-pill);
+    background: var(--surface);
+  }
+  .tab {
+    padding: 5px 12px; border-radius: var(--r-pill);
+    font-size: 13px; font-weight: 510; color: var(--ink-2);
+    transition: background .15s ease, color .15s ease;
+  }
+  .tab:hover { background: var(--surface-2); color: var(--ink); }
+  .tab.on { background: var(--navy); color: var(--navy-ink); box-shadow: inset 0 1px 0 rgba(255,255,255,.12); }
+
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+  .search {
+    width: 272px; height: 32px;
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 8px 0 10px; margin-right: 6px;
+    background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--r-pill);
+    color: var(--ink-3); font-size: 13px;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .search:hover { border-color: #c4beb1; }
+  .search span { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kbd {
+    flex: none !important;
+    font-family: var(--mono); font-size: 11px; line-height: 1;
+    padding: 4px 5px; border-radius: 5px;
+    color: var(--ink-3); background: var(--surface-2); border: 1px solid var(--line);
+  }
   .icon-btn {
-    width: 36px; height: 36px; border-radius: var(--r-ctl);
+    width: 32px; height: 32px; border-radius: var(--r-pill);
     display: grid; place-items: center; color: var(--ink-2); position: relative;
+    transition: background .15s ease, color .15s ease;
   }
-  .icon-btn:hover { background: var(--accent-tint); color: var(--accent); }
-  .dot { position: absolute; top: 8px; right: 9px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .icon-btn:hover { background: var(--surface-2); color: var(--ink); }
+  .icon-btn.only-m { display: none; }
+  .dot {
+    position: absolute; top: 7px; right: 8px;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 0 2px var(--canvas);
+  }
   .avatar {
-    width: 34px; height: 34px; border-radius: 50%;
-    background: #e9e4da; color: var(--ink);
-    display: grid; place-items: center; font-weight: 590; font-size: 13px;
+    width: 28px; height: 28px; border-radius: 50%; margin-left: 4px;
+    background: #e7e1d5; color: var(--ink);
+    border: 1px solid var(--line-2);
+    display: grid; place-items: center; font-weight: 590; font-size: 11px; letter-spacing: 0;
   }
 
-  /* ---------- page ---------- */
+  /* ------------------------------------------------------------------
+     Layout
+  ------------------------------------------------------------------ */
   .layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) var(--aside-w);
-    min-height: calc(100vh - 64px);
+    grid-template-columns: minmax(0, 1fr) var(--rail-w);
+    min-height: calc(100vh - var(--bar-h));
   }
   .page {
-    width: 100%; max-width: 1040px; margin: 0 auto;
-    padding: 48px 40px 80px;
+    width: 100%; max-width: 1064px; margin: 0 auto;
+    padding: 40px 40px 88px;
+    min-width: 0;
   }
-  .eyebrow { font-size: 13px; color: var(--ink-3); }
-  .hello h1 { margin-top: 6px; font-size: 30px; line-height: 1.2; font-weight: 590; letter-spacing: -.025em; text-wrap: balance; }
-  .summary {
-    margin-top: 20px;
-    display: flex; flex-wrap: wrap; gap: 8px;
+
+  /* ---------- header ---------- */
+  .eyebrow {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    font-size: 12.5px; color: var(--ink-3);
   }
-  .chip {
-    display: inline-flex; align-items: center; gap: 8px;
-    height: 30px; padding: 0 12px;
-    border: 1px solid var(--line-strong); border-radius: 9999px;
-    font-size: 13px; color: var(--ink-2); background: var(--surface);
+  .eyebrow .sep { width: 3px; height: 3px; border-radius: 50%; background: var(--line-2); }
+  h1 {
+    margin-top: 8px;
+    font-size: 30px; line-height: 1.15; font-weight: 590; letter-spacing: -.028em;
+    text-wrap: balance;
   }
-  .chip b { color: var(--ink); font-weight: 590; }
-  .chip i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+  .stats {
+    margin-top: 24px;
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+    background: var(--surface);
+    border: 1px solid var(--line); border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(27, 26, 23, .04);
+    overflow: hidden;
+  }
+  .stat { padding: 14px 18px 15px; border-left: 1px solid var(--line); min-width: 0; }
+  .stat:first-child { border-left: 0; }
+  .stat-l { display: block; font-size: 12px; color: var(--ink-3); }
+  .stat-v {
+    display: block; margin-top: 3px;
+    font-size: 15px; font-weight: 510; letter-spacing: -.012em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .stat-v b { font-weight: 590; }
+  .stat-v .muted { color: var(--ink-3); font-weight: 400; }
+  .stat-v .live { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--ok); margin: 0 6px 1px 0; }
 
   .section-head {
-    margin: 40px 0 16px;
-    display: flex; align-items: baseline; justify-content: space-between;
+    margin: 36px 0 14px;
+    display: flex; align-items: center; justify-content: space-between;
   }
-  .section-head h2 { font-size: 13px; font-weight: 510; color: var(--ink-2); text-transform: uppercase; letter-spacing: .06em; }
+  .section-head h2 { font-size: 13px; font-weight: 510; color: var(--ink-2); letter-spacing: -.005em; }
+  .ghost {
+    font-size: 12.5px; font-weight: 510; color: var(--ink-3);
+    padding: 4px 8px; border-radius: 6px;
+    transition: background .15s ease, color .15s ease;
+  }
+  .ghost:hover { background: var(--surface-2); color: var(--ink); }
 
-  /* ---------- tiles: 3 + 2 ---------- */
+  /* ------------------------------------------------------------------
+     Tiles: 3 on top, 2 centred below (6-track grid, span 2 each)
+  ------------------------------------------------------------------ */
   .tiles {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 16px;
   }
   .tile { grid-column: span 2; }
   .tile:nth-child(4) { grid-column: 2 / span 2; }
   .tile:nth-child(5) { grid-column: 4 / span 2; }
 
   .tile {
-    min-height: 220px;
-    padding: 20px;
-    border-radius: var(--r-card);
-    background: var(--navy);
+    position: relative;
+    display: flex; flex-direction: column; gap: 12px;
+    min-height: 252px;
+    padding: 16px 16px 14px;
+    border-radius: var(--r-tile);
+    background: linear-gradient(180deg, var(--navy-2) 0%, var(--navy) 100%);
     color: var(--navy-ink);
-    border: 1px solid var(--navy);
-    box-shadow: 0 1px 2px rgba(19, 41, 75, .2);
-    display: flex; flex-direction: column;
     text-align: left;
-    transition: box-shadow .18s ease, border-color .18s ease, transform .18s ease;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, .10),
+      inset 0 0 0 1px rgba(255, 255, 255, .04),
+      0 0 0 1px rgba(15, 31, 61, .85),
+      0 1px 2px rgba(15, 31, 61, .25);
+    transition: transform .18s ease, box-shadow .18s ease;
+    min-width: 0;
   }
-  .tile:hover { background: var(--navy-hover); box-shadow: 0 1px 2px rgba(19,41,75,.2), 0 10px 28px rgba(19, 41, 75, .22); transform: translateY(-1px); }
+  .tile:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, .14),
+      inset 0 0 0 1px rgba(255, 255, 255, .07),
+      0 0 0 1px rgba(15, 31, 61, .9),
+      0 1px 2px rgba(15, 31, 61, .3),
+      0 18px 36px -16px rgba(15, 31, 61, .5);
+  }
+  .tile:active { transform: translateY(0); }
   .tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-  .tile-top { display: flex; align-items: center; justify-content: space-between; }
-  .tile-idx { font-size: 13px; font-weight: 510; color: var(--navy-ink-2); }
-  .tile-ic {
-    width: 40px; height: 40px; border-radius: 10px;
-    border: 1px solid var(--navy-line);
-    background: rgba(244, 246, 250, .06);
-    display: grid; place-items: center; color: var(--navy-ink);
+  .tile-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .idx {
+    width: 26px; height: 22px; flex: none;
+    display: grid; place-items: center;
+    font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .02em;
+    color: var(--navy-ink-2);
+    border: 1px solid var(--navy-line); border-radius: 6px;
+    background: rgba(255, 255, 255, .03);
   }
-  .tile-name { margin-top: auto; font-size: 19px; font-weight: 590; letter-spacing: -.015em; }
-  .tile-desc { margin-top: 4px; font-size: 14px; color: var(--navy-ink-2); }
-  .tile-foot {
-    margin-top: 16px; padding-top: 14px;
+  .tile-title { font-size: 15.5px; font-weight: 590; letter-spacing: -.014em; white-space: nowrap; }
+  .pill {
+    margin-left: auto; flex: none;
+    font-size: 11.5px; font-weight: 510; letter-spacing: -.005em;
+    padding: 3px 8px; border-radius: var(--r-pill);
+    color: var(--navy-ink-2);
+    background: rgba(255, 255, 255, .07);
+    border: 1px solid rgba(255, 255, 255, .06);
+  }
+  .pill.hot { color: var(--amber); background: rgba(255, 208, 138, .10); border-color: rgba(255, 208, 138, .16); }
+  .pill.sky { color: var(--sky); background: rgba(143, 180, 255, .10); border-color: rgba(143, 180, 255, .16); }
+
+  /* ledger rows — the mini-preview inside each tile */
+  .ledger { list-style: none; display: flex; flex-direction: column; }
+  .ledger li {
+    display: flex; align-items: center; gap: 10px; min-width: 0;
+    padding: 8px 0;
     border-top: 1px solid var(--navy-line);
-    display: flex; align-items: center; justify-content: space-between;
-    font-size: 13px; color: var(--navy-ink-2);
+    font-size: 13px;
+  }
+  .ledger li:first-child { border-top: 0; padding-top: 2px; }
+  .l-time {
+    flex: none; width: 46px;
+    font-family: var(--mono); font-size: 11.5px; font-weight: 500; letter-spacing: 0;
+    font-variant-numeric: tabular-nums;
+    color: var(--navy-ink-3);
+  }
+  .l-text { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .l-text .l-sub { color: var(--navy-ink-2); }
+  .l-text .l-sub::before { content: "·"; margin: 0 5px; color: var(--navy-ink-3); }
+  .l-meta { flex: none; font-size: 11.5px; color: var(--navy-ink-3); }
+  .l-meta.hot { color: var(--amber); }
+  .ledger li.is-done .l-text { color: var(--navy-ink-2); }
+  .ledger li.next .l-time { color: var(--sky); }
+  .ledger li.next .l-text { font-weight: 510; }
+  .l-check {
+    flex: none; width: 14px; height: 14px; border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, .22);
+    background: rgba(255, 255, 255, .03);
+  }
+  .l-check.done { background: var(--sky); border-color: var(--sky); position: relative; }
+  .l-check.done::after {
+    content: ""; position: absolute; left: 4px; top: 1px; width: 4px; height: 8px;
+    border: solid var(--navy); border-width: 0 1.6px 1.6px 0; transform: rotate(45deg);
+  }
+
+  /* tiny segmented progress used in Assignments rows */
+  .seg { flex: none; display: flex; gap: 2px; }
+  .seg i { width: 9px; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, .12); }
+  .seg i.on { background: var(--sky); }
+
+  /* Chom (assistant) body */
+  .ask {
+    display: flex; align-items: center; gap: 10px;
+    height: 40px; padding: 0 8px 0 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(255, 255, 255, .10);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
+    color: var(--navy-ink-2); font-size: 13px;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .tile:hover .ask { background: rgba(255, 255, 255, .09); border-color: rgba(255, 255, 255, .16); }
+  .ask span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ask .kbd { color: var(--navy-ink-3); background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.08); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips span {
+    font-size: 12px; color: var(--navy-ink-2);
+    padding: 4px 9px; border-radius: var(--r-pill);
+    border: 1px solid var(--navy-line);
+  }
+  .recent { font-size: 12px; color: var(--navy-ink-3); display: flex; align-items: center; gap: 8px; }
+  .recent b { color: var(--navy-ink-2); font-weight: 510; }
+
+  /* Help me Improve body */
+  .bars { list-style: none; display: flex; flex-direction: column; gap: 10px; padding-top: 2px; }
+  .bars li { display: grid; grid-template-columns: 1fr auto; row-gap: 6px; column-gap: 10px; align-items: center; font-size: 13px; }
+  .b-label { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .b-label .l-sub { color: var(--navy-ink-2); }
+  .b-label .l-sub::before { content: "·"; margin: 0 5px; color: var(--navy-ink-3); }
+  .b-val { font-family: var(--mono); font-size: 11.5px; color: var(--navy-ink-3); font-variant-numeric: tabular-nums; }
+  .b-val.up { color: var(--sky); }
+  .b-track { grid-column: 1 / -1; height: 3px; border-radius: 2px; background: rgba(255, 255, 255, .10); overflow: hidden; }
+  .b-track i { display: block; height: 100%; width: var(--v); background: var(--sky); border-radius: inherit; }
+
+  .tile-foot {
+    margin-top: auto; padding-top: 12px;
+    border-top: 1px solid var(--navy-line);
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    font-size: 12.5px; color: var(--navy-ink-2);
   }
   .tile-foot strong { color: var(--navy-ink); font-weight: 590; }
-  .arrow { color: var(--navy-ink-2); transition: transform .18s ease, color .18s ease; }
-  .tile:hover .arrow { color: var(--navy-ink); transform: translateX(3px); }
+  .open {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-weight: 510; color: var(--navy-ink-2);
+    transition: color .15s ease;
+  }
+  .open svg { transition: transform .18s ease; }
+  .tile:hover .open { color: var(--navy-ink); }
+  .tile:hover .open svg { transform: translateX(2px); }
 
-  .progress { height: 4px; border-radius: 9999px; background: var(--navy-line); overflow: hidden; width: 72px; }
-  .progress span { display: block; height: 100%; background: #7fa6ff; border-radius: inherit; }
-
-  /* ---------- My items panel ---------- */
-  .panel {
-    position: sticky; top: 64px;
-    height: calc(100vh - 64px);
+  /* ------------------------------------------------------------------
+     My items rail — flush right, sticky under the top bar
+  ------------------------------------------------------------------ */
+  .rail {
+    position: sticky; top: var(--bar-h);
+    height: calc(100vh - var(--bar-h));
     overflow-y: auto;
     background: var(--surface);
     border-left: 1px solid var(--line);
+    display: flex; flex-direction: column;
   }
-  .panel-head {
-    padding: 22px 24px 16px;
-    display: flex; align-items: baseline; justify-content: space-between;
-    border-bottom: 1px solid var(--line);
+  .rail-head {
+    padding: 18px 20px 10px;
+    display: flex; align-items: center; justify-content: space-between;
   }
-  .panel-head h2 { font-size: 15px; font-weight: 590; letter-spacing: -.01em; }
-  .panel-head span { font-size: 13px; color: var(--ink-3); }
-  .items { list-style: none; padding: 8px 12px; }
-  .items li + li .item { border-top: 1px solid var(--line); }
-  .items li:hover + li .item, .items li:hover .item { border-top-color: transparent; }
+  .rail-head h2 { font-size: 14px; font-weight: 590; letter-spacing: -.012em; }
+  .count {
+    font-family: var(--mono); font-size: 11px; line-height: 1;
+    padding: 4px 6px; border-radius: 5px;
+    color: var(--ink-3); background: var(--surface-2); border: 1px solid var(--line);
+  }
+  .items { list-style: none; padding: 0 10px 20px; display: flex; flex-direction: column; }
+  .items .gap { height: 1px; background: var(--line); margin: 8px 10px; }
   .item {
     width: 100%;
     display: flex; align-items: center; gap: 12px;
-    padding: 11px 12px; border-radius: 10px;
-    text-align: left; font-size: 14px; font-weight: 510;
+    padding: 9px 10px; border-radius: 8px;
+    text-align: left; font-size: 13.5px; font-weight: 510; letter-spacing: -.01em;
+    color: var(--ink);
+    transition: background .15s ease;
   }
-  .item:hover { background: var(--accent-tint); }
-  .item:hover .item-ic { color: var(--accent); }
-  .item:hover .chev { color: var(--accent); }
-  .item:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-  .item-ic { color: var(--ink-2); }
-  .item-label { flex: 1; min-width: 0; }
-  .item-sub { display: block; font-weight: 400; font-size: 12.5px; color: var(--ink-3); }
-  .chev { color: var(--line-strong); }
+  .item:hover { background: var(--surface-2); }
+  .item:focus-visible { outline-offset: -2px; }
+  .item-ic { color: var(--ink-3); transition: color .15s ease; }
+  .item:hover .item-ic { color: var(--ink); }
+  .label { flex: 1; min-width: 0; line-height: 1.3; }
+  .sub { display: block; margin-top: 1px; font-weight: 400; font-size: 12px; color: var(--ink-3); }
+  .meta { flex: none; font-size: 12px; font-weight: 400; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .chev { color: var(--line-2); transition: color .15s ease, transform .15s ease; }
+  .item:hover .chev { color: var(--ink-3); transform: translateX(1px); }
   .badge {
-    font-size: 11.5px; font-weight: 510;
-    padding: 2px 8px; border-radius: 9999px;
+    flex: none;
+    font-size: 11px; font-weight: 510; letter-spacing: 0;
+    padding: 2px 7px; border-radius: var(--r-pill);
     color: var(--accent); background: var(--accent-tint);
   }
-  .status-ok {
-    font-size: 11.5px; font-weight: 510; color: var(--accent);
-    display: inline-flex; align-items: center; gap: 5px;
+  .status {
+    flex: none; display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 510; color: var(--ok);
   }
-  .status-ok::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px var(--ok-tint); }
 
-  /* ---------- responsive ---------- */
+  .items .track { margin-top: 6px; }
+  .item-track {
+    border: 1px solid var(--line); background: var(--canvas);
+    border-radius: 10px; padding: 11px 12px;
+  }
+  .item-track:hover { background: var(--surface-2); }
+
+  /* ------------------------------------------------------------------
+     Responsive
+  ------------------------------------------------------------------ */
   @media (max-width: 1100px) {
-    .layout { grid-template-columns: 1fr; }
-    .panel { position: static; height: auto; border-left: 0; border-top: 1px solid var(--line); }
+    .layout { grid-template-columns: 1fr; align-content: start; }
+    .page { padding-bottom: 40px; }
+    .rail { position: static; height: auto; overflow: visible; border-left: 0; border-top: 1px solid var(--line); }
+    .rail-head, .items { max-width: 1064px; margin: 0 auto; width: 100%; }
+    .rail-head { padding: 28px 40px 8px; }
+    .items { padding: 0 30px 40px; display: grid; grid-template-columns: 1fr 1fr; column-gap: 8px; }
+    .items .gap { grid-column: 1 / -1; }
+    .items .track { grid-column: 1 / -1; }
+  }
+  @media (max-width: 900px) {
+    .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .tile, .tile:nth-child(4), .tile:nth-child(5) { grid-column: auto; }
+    .tile:nth-child(5) { grid-column: 1 / -1; min-height: 0; }
+    .tabs { display: none; }
   }
   @media (max-width: 760px) {
-    .topbar { padding: 0 16px; gap: 12px; }
-    .search, .brand-school { display: none; }
-    .topbar-right { margin-left: auto; }
-    .page { padding: 28px 16px 40px; }
-    .hello h1 { font-size: 24px; }
+    .topbar { padding: 0 16px; gap: 10px; }
+    .search, .brand-role { display: none; }
+    .icon-btn.only-m { display: grid; }
+    .page { padding: 28px 16px 36px; }
+    h1 { font-size: 26px; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .stat { padding: 12px 14px 13px; }
+    .stat:nth-child(3) { border-left: 0; }
+    .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
+    .stat-v { white-space: normal; }
+    .section-head { margin-top: 28px; }
     .tiles { grid-template-columns: 1fr; gap: 12px; }
-    .tile, .tile:nth-child(4), .tile:nth-child(5) { grid-column: auto; min-height: 0; }
-    .tile-name { margin-top: 20px; }
+    .tile { min-height: 0; }
+    .rail-head { padding: 24px 16px 6px; }
+    .items { padding: 0 6px 32px; grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+    .tile:hover { transform: none; }
   }
 </style>
 </head>
 <body>
 
 <header class="topbar">
-  <div class="brand"><span class="brand-mark">C</span>Chom Learn <span class="brand-school">Student</span></div>
-  <div class="search">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    Search classes, tasks, people
-    <span class="kbd">⌘K</span>
-  </div>
+  <a class="brand" href="#" aria-label="Chom Learn home">
+    <span class="mark" aria-hidden="true">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M17.2 8.2A6.4 6.4 0 1 0 17.2 15.8"/></svg>
+    </span>
+    Chom Learn <span class="brand-role">Student</span>
+  </a>
+
+  <nav class="tabs" aria-label="Primary">
+    <a class="tab on" href="#" aria-current="page">Home</a>
+    <a class="tab" href="#">Timetable</a>
+    <a class="tab" href="#">Grades</a>
+    <a class="tab" href="#">Messages</a>
+  </nav>
+
   <div class="topbar-right">
-    <button class="icon-btn" aria-label="Notifications">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+    <button class="search" aria-label="Search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <span>Search classes, tasks, people</span>
+      <span class="kbd">⌘K</span>
+    </button>
+    <button class="icon-btn only-m" aria-label="Search">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    </button>
+    <button class="icon-btn" aria-label="Notifications, 1 unread">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
       <span class="dot"></span>
     </button>
-    <div class="avatar" aria-label="Your profile">AN</div>
+    <button class="avatar" aria-label="Your profile">AN</button>
   </div>
 </header>
 
 <div class="layout">
 <main class="page">
-  <section>
-    <div class="hello">
-      <p class="eyebrow">Tuesday, 6 October · Term 4, Week 2</p>
-      <h1>Good morning, Amara</h1>
-      <div class="summary">
-        <span class="chip"><i></i><b class="num">4</b> tasks today</span>
-        <span class="chip"><b class="num">2</b> assignments due Friday</span>
-        <span class="chip">Next class <b>Maths · 09:40</b></span>
+  <header>
+    <p class="eyebrow"><span id="today">Tuesday, 6 October</span><span class="sep"></span><span>Term 4, Week 2</span><span class="sep"></span><span>Grade 10B</span></p>
+    <h1 id="greet">Good morning, Amara</h1>
+
+    <div class="stats" role="list" aria-label="Today at a glance">
+      <div class="stat" role="listitem"><span class="stat-l">Due today</span><span class="stat-v"><b class="num">4</b> tasks</span></div>
+      <div class="stat" role="listitem"><span class="stat-l">Next class</span><span class="stat-v"><span class="live" aria-hidden="true"></span>Maths · <span class="num">09:40</span> <span class="muted">Room 12</span></span></div>
+      <div class="stat" role="listitem"><span class="stat-l">Assignments</span><span class="stat-v"><b class="num">2</b> due Friday</span></div>
+      <div class="stat" role="listitem"><span class="stat-l">Attendance</span><span class="stat-v"><b class="num">97%</b> <span class="muted">this term</span></span></div>
+    </div>
+  </header>
+
+  <div class="section-head">
+    <h2>Overview</h2>
+    <button class="ghost">Customise</button>
+  </div>
+
+  <div class="tiles">
+    <!-- 1 · Tasks -->
+    <button class="tile" aria-label="Tasks, 4 due today">
+      <div class="tile-head">
+        <span class="idx">01</span>
+        <span class="tile-title">Tasks</span>
+        <span class="pill hot"><span class="num">4</span> today</span>
       </div>
-    </div>
+      <ul class="ledger" aria-hidden="true">
+        <li><span class="l-check"></span><span class="l-text">Exercise 4.2<span class="l-sub">Maths</span></span><span class="l-meta hot">15:00</span></li>
+        <li><span class="l-check"></span><span class="l-text">Reading log, ch. 6<span class="l-sub">English</span></span><span class="l-meta hot">Today</span></li>
+        <li class="is-done"><span class="l-check done"></span><span class="l-text">Vocabulary set<span class="l-sub">Afrikaans</span></span><span class="l-meta">Done</span></li>
+        <li><span class="l-check"></span><span class="l-text">Lab prep sheet<span class="l-sub">Science</span></span><span class="l-meta">Tomorrow</span></li>
+      </ul>
+      <span class="tile-foot"><span><strong class="num">11</strong> this week</span><span class="open">Open<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+    </button>
 
-    <div class="section-head"><h2>Overview</h2></div>
+    <!-- 2 · Classes -->
+    <button class="tile" aria-label="Classes, next is Maths at 09:40">
+      <div class="tile-head">
+        <span class="idx">02</span>
+        <span class="tile-title">Classes</span>
+        <span class="pill sky">Next in 38 min</span>
+      </div>
+      <ul class="ledger" aria-hidden="true">
+        <li class="next"><span class="l-time">09:40</span><span class="l-text">Maths<span class="l-sub">Rm 12 · Mr Dlamini</span></span></li>
+        <li><span class="l-time">10:35</span><span class="l-text">English<span class="l-sub">Rm 4 · Ms Naidoo</span></span></li>
+        <li><span class="l-time">11:30</span><span class="l-text">Life Sciences<span class="l-sub">Lab 2</span></span></li>
+        <li><span class="l-time">12:25</span><span class="l-text">History<span class="l-sub">Rm 9</span></span></li>
+      </ul>
+      <span class="tile-foot"><span><strong class="num">6</strong> periods today</span><span class="open">Timetable<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+    </button>
 
-    <div class="tiles">
-      <button class="tile">
-        <div class="tile-top">
-          <span class="tile-idx num">01</span>
-          <span class="tile-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></span>
-        </div>
-        <span class="tile-name">Tasks</span>
-        <span class="tile-desc">Your to-dos across every subject</span>
-        <span class="tile-foot"><span><strong class="num">4</strong> due today</span><svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </button>
+    <!-- 3 · Assignments -->
+    <button class="tile" aria-label="Assignments, 2 due Friday">
+      <div class="tile-head">
+        <span class="idx">03</span>
+        <span class="tile-title">Assignments</span>
+        <span class="pill"><span class="num">2</span> due Fri</span>
+      </div>
+      <ul class="ledger" aria-hidden="true">
+        <li><span class="l-time">Fri 10</span><span class="l-text">WWI essay<span class="l-sub">History</span></span><span class="seg"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></li>
+        <li><span class="l-time">Fri 10</span><span class="l-text">Lab report<span class="l-sub">Life Sci</span></span><span class="seg"><i class="on"></i><i></i><i></i><i></i><i></i></span></li>
+        <li><span class="l-time">Wed 15</span><span class="l-text">Portfolio review<span class="l-sub">Art</span></span><span class="seg"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
+        <li><span class="l-time">Mon 20</span><span class="l-text">Oral task<span class="l-sub">Afrikaans</span></span><span class="seg"><i></i><i></i><i></i><i></i><i></i></span></li>
+      </ul>
+      <span class="tile-foot"><span>Last mark <strong class="num">78%</strong> · Geography</span><span class="open">Open<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+    </button>
 
-      <button class="tile">
-        <div class="tile-top">
-          <span class="tile-idx num">02</span>
-          <span class="tile-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5 12 3l9 4.5-9 4.5z"/><path d="M7 10v5c0 1.5 2.2 3 5 3s5-1.5 5-3v-5"/></svg></span>
-        </div>
-        <span class="tile-name">Classes</span>
-        <span class="tile-desc">Timetable, teachers and materials</span>
-        <span class="tile-foot"><span>Next <strong>Maths · 09:40</strong></span><svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </button>
+    <!-- 4 · Chom -->
+    <button class="tile" aria-label="Chom, your study assistant">
+      <div class="tile-head">
+        <span class="idx">04</span>
+        <span class="tile-title">Chom</span>
+        <span class="pill">Study assistant</span>
+      </div>
+      <div class="ask" aria-hidden="true">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.2 2.2M16.2 16.2l2.2 2.2M5.6 18.4l2.2-2.2M16.2 7.8l2.2-2.2"/></svg>
+        <span>Ask Chom about today's work</span>
+        <span class="kbd">↵</span>
+      </div>
+      <div class="chips" aria-hidden="true">
+        <span>Explain quadratic roots</span>
+        <span>Plan my Friday</span>
+        <span>Quiz me on osmosis</span>
+      </div>
+      <p class="recent" aria-hidden="true">Last session <b>Yesterday · Essay outline</b></p>
+      <span class="tile-foot"><span><strong class="num">12</strong> saved notes</span><span class="open">Open Chom<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+    </button>
 
-      <button class="tile">
-        <div class="tile-top">
-          <span class="tile-idx num">03</span>
-          <span class="tile-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
-        </div>
-        <span class="tile-name">Assignments</span>
-        <span class="tile-desc">Submit work and see feedback</span>
-        <span class="tile-foot"><span><strong class="num">2</strong> due Friday</span><svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </button>
-
-      <button class="tile">
-        <div class="tile-top">
-          <span class="tile-idx num">04</span>
-          <span class="tile-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h.01M12 11h.01M15 11h.01"/></svg></span>
-        </div>
-        <span class="tile-name">Chom</span>
-        <span class="tile-desc">Open your Chom space</span>
-        <span class="tile-foot"><span>Open Chom</span><svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </button>
-
-      <button class="tile">
-        <div class="tile-top">
-          <span class="tile-idx num">05</span>
-          <span class="tile-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 9 11l4 4 8-8"/><path d="M15 7h6v6"/></svg></span>
-        </div>
-        <span class="tile-name">Help me Improve</span>
-        <span class="tile-desc">Personal suggestions from your results</span>
-        <span class="tile-foot"><span><strong class="num">3</strong> suggestions</span><span class="progress" aria-hidden="true"><span style="width:60%"></span></span></span>
-      </button>
-    </div>
-  </section>
+    <!-- 5 · Help me Improve -->
+    <button class="tile" aria-label="Help me Improve, 3 suggestions">
+      <div class="tile-head">
+        <span class="idx">05</span>
+        <span class="tile-title">Help me Improve</span>
+        <span class="pill"><span class="num">3</span> suggestions</span>
+      </div>
+      <ul class="bars" aria-hidden="true">
+        <li><span class="b-label">Algebra<span class="l-sub">Maths</span></span><span class="b-val up">62% ↑</span><span class="b-track"><i style="--v:62%"></i></span></li>
+        <li><span class="b-label">Lab reports<span class="l-sub">Life Sciences</span></span><span class="b-val">48%</span><span class="b-track"><i style="--v:48%"></i></span></li>
+        <li><span class="b-label">Essay structure<span class="l-sub">English</span></span><span class="b-val up">71% ↑</span><span class="b-track"><i style="--v:71%"></i></span></li>
+      </ul>
+      <p class="recent" aria-hidden="true">Suggested next <b>20 min algebra drill · Thu</b></p>
+      <span class="tile-foot"><span>Based on <strong class="num">14</strong> recent results</span><span class="open">See plan<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+    </button>
+  </div>
 </main>
 
-  <aside class="panel" aria-labelledby="my-items">
-    <div class="panel-head"><h2 id="my-items">My items</h2><span class="num">9</span></div>
-    <ul class="items">
-      <li><button class="item">
-        <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-        <span class="item-label">Calendar</span>
-        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
-      </button></li>
-      <li><button class="item">
-        <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a14 14 0 0 0 0 18M12 3a14 14 0 0 1 0 18M3.5 9h17M3.5 15h17"/></svg>
-        <span class="item-label">My Extra Curricular<span class="item-sub">Sports + others</span></span>
-        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
-      </button></li>
-      <li><button class="item">
-        <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
-        <span class="item-label">My Results</span>
-        <span class="badge">New</span>
-      </button></li>
-      <li><button class="item">
-        <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v10a2 2 0 0 1-2 2M8 9h5M8 13h5M8 17h3"/></svg>
-        <span class="item-label">School News</span>
-        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
-      </button></li>
-      <li><button class="item">
-        <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 11h16M8 21l1-4M16 21l-1-4"/></svg>
-        <span class="item-label">Transport Services</span>
-        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
-      </button></li>
-      <li><button class="item">
-        <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg>
-        <span class="item-label">Speak to a counsellor</span>
-        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
-      </button></li>
-      <li><button class="item">
-        <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>
-        <span class="item-label">My Career</span>
-        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
-      </button></li>
-      <li><button class="item">
-        <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 3 6l2 5 2-1v11h10V10l2 1 2-5-5-3a4 4 0 0 1-8 0z"/></svg>
-        <span class="item-label">Uniform Shop</span>
-        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
-      </button></li>
-      <li><button class="item">
-        <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
-        <span class="item-label">Am I on track?</span>
-        <span class="status-ok">On track</span>
-      </button></li>
-    </ul>
-  </aside>
+<aside class="rail" aria-labelledby="my-items">
+  <div class="rail-head"><h2 id="my-items">My items</h2><span class="count">9</span></div>
+  <ul class="items">
+    <li><button class="item">
+      <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+      <span class="label">Calendar</span>
+      <span class="meta">3 today</span>
+      <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+    </button></li>
+    <li><button class="item">
+      <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a14 14 0 0 0 0 18M12 3a14 14 0 0 1 0 18M3.5 9h17M3.5 15h17"/></svg>
+      <span class="label">My Extra Curricular<span class="sub">Sports + others</span></span>
+      <span class="meta">Hockey · 15:30</span>
+      <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+    </button></li>
+    <li><button class="item">
+      <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+      <span class="label">My Results</span>
+      <span class="badge">New</span>
+      <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+    </button></li>
+
+    <li class="gap" role="presentation"></li>
+
+    <li><button class="item">
+      <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v10a2 2 0 0 1-2 2M8 9h5M8 13h5M8 17h3"/></svg>
+      <span class="label">School News</span>
+      <span class="meta">2 unread</span>
+      <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+    </button></li>
+    <li><button class="item">
+      <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M4 11h16M8 21l1-4M16 21l-1-4"/></svg>
+      <span class="label">Transport Services</span>
+      <span class="meta">Bus 14 · 15:55</span>
+      <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+    </button></li>
+    <li><button class="item">
+      <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg>
+      <span class="label">Speak to a counsellor</span>
+      <span class="meta">Private</span>
+      <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+    </button></li>
+    <li><button class="item">
+      <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></svg>
+      <span class="label">My Career</span>
+      <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+    </button></li>
+    <li><button class="item">
+      <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 3 6l2 5 2-1v11h10V10l2 1 2-5-5-3a4 4 0 0 1-8 0z"/></svg>
+      <span class="label">Uniform Shop</span>
+      <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+    </button></li>
+
+    <li class="track"><button class="item item-track">
+      <svg class="item-ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+      <span class="label">Am I on track?<span class="sub">Results, attendance and tasks</span></span>
+      <span class="status">On track</span>
+    </button></li>
+  </ul>
+</aside>
 </div>
 
+<script>
+  // Live greeting and date; everything else is static.
+  (function () {
+    var now = new Date(), h = now.getHours();
+    var word = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+    var greet = document.getElementById('greet');
+    var today = document.getElementById('today');
+    if (greet) greet.textContent = word + ', Amara';
+    if (today && window.Intl) {
+      try { today.textContent = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }); } catch (e) {}
+    }
+  })();
+</script>
 </body>
 </html>
