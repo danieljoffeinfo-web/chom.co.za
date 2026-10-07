@@ -1,0 +1,1 @@
+{"name":"chom-learn-prototypes","private":true,"scripts":{"build":"node scripts/build.mjs","build:teacher":"node scripts/build.mjs","build:student":"node scripts/build.mjs"}}
