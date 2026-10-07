@@ -2116,7 +2116,9 @@
         }
       }
     </style>
-  </head>
+  <link rel="stylesheet" href="/shared/subjects.css">
+<script src="/shared/school.js"></script>
+</head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <svg
@@ -2366,7 +2368,7 @@ SOFTWARE.
             id="nav-task-count"
             >3</span
           ></a
-        ><a href="#timetable" data-view="timetable"
+        ><a href="#subjects" data-view="subjects"><svg class="icon"><use href="#i-file" /></svg>My subjects</a><a href="#timetable" data-view="timetable"
           ><svg class="icon"><use href="#i-calendar" /></svg>Timetable</a
         ><a href="#assignments" data-view="assignments"
           ><svg class="icon"><use href="#i-file" /></svg>Assignments</a
@@ -2568,6 +2570,7 @@ SOFTWARE.
           lastFocused;
         const views = {
           dashboard: "My dashboard",
+          subjects: "My subjects",
           tasks: "My tasks",
           timetable: "Timetable",
           assignments: "Assignments",
@@ -2764,6 +2767,7 @@ SOFTWARE.
           $("#notification-dot").hidden = !!state.notificationsRead;
           let html = "";
           if (currentView === "dashboard") html = dashboard();
+          if (currentView === "subjects") html = School.student();
           if (currentView === "tasks")
             html =
               viewHeader(
@@ -2899,7 +2903,7 @@ SOFTWARE.
             $("#main").focus();
             return;
           }
-          currentView = Object.hasOwn(views, key) ? key : "dashboard";
+          currentView = Object.hasOwn(views, key.split("?")[0]) ? key.split("?")[0] : "dashboard";
           closeNav();
           render();
           window.scrollTo(0, 0);
