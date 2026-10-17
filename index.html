@@ -24,8 +24,6 @@
         --blue: #2860f5;
         --blue-hover: #174de2;
         --blue-soft: #eef3ff;
-        --apricot: #ffc6a6;
-        --apricot-soft: #fff2e9;
         --soft: #f3f3f5;
         --r: 22px;
         --sidebar: 224px;
@@ -101,7 +99,6 @@
       }
       h1,
       h2,
-      .study-title,
       .wordmark {
         font-family:
           -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
@@ -347,13 +344,13 @@
         place-items: center;
         width: 35px;
         height: 35px;
-        background: #f5d9c8;
+        background: var(--blue-soft);
         border: 3px solid #fff;
         box-shadow: 0 0 0 1px var(--line);
         border-radius: 50%;
         font-weight: 600;
         font-size: 11px;
-        color: #795e4a;
+        color: var(--blue);
       }
       .mobile-close {
         display: none;
@@ -407,134 +404,6 @@
         flex-direction: column;
         gap: 24px;
         min-width: 0;
-      }
-      .study-card {
-        background: white;
-        border: 1px solid var(--line);
-        border-radius: var(--r);
-        padding: 28px 30px 24px;
-        position: relative;
-        overflow: hidden;
-      }
-      .study-overline {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-        font-size: 12px;
-        font-weight: 500;
-        color: #737379;
-      }
-      .study-status {
-        width: 6px;
-        height: 6px;
-        background: var(--blue);
-        border-radius: 50%;
-        display: block;
-      }
-      .study-title {
-        font-size: 57px;
-        line-height: 1.045;
-        letter-spacing: -2.6px;
-        font-weight: 700;
-        margin: 24px 0 17px;
-        color: var(--ink);
-        max-width: none;
-      }
-      .headline-line {
-        display: flex;
-        align-items: center;
-        gap: 13px;
-        white-space: nowrap;
-      }
-      .headline-line + .headline-line {
-        margin-top: 4px;
-      }
-      .app-tile {
-        display: inline-grid;
-        place-items: center;
-        width: 52px;
-        height: 52px;
-        border-radius: 14px;
-        vertical-align: middle;
-        position: relative;
-        background: linear-gradient(160deg, #3d74ff, var(--blue) 70%);
-        box-shadow:
-          inset 0 1px 1px #ffffff60,
-          0 3px 5px #2860f518;
-        flex: none;
-        color: white;
-      }
-      .app-tile > .icon {
-        width: 31px;
-        height: 31px;
-      }
-      .study-description {
-        font-size: 14px;
-        line-height: 1.55;
-        color: var(--muted);
-        max-width: 360px;
-      }
-      .study-input {
-        display: flex;
-        align-items: center;
-        background: #f6f6f8;
-        border: 1px solid #ebebef;
-        border-radius: 13px;
-        padding: 8px 8px 8px 15px;
-        gap: 10px;
-        margin-top: 24px;
-      }
-      .study-input > .icon {
-        color: #88888e;
-        width: 18px;
-        height: 18px;
-      }
-      .study-input input {
-        border: 0;
-        outline: none;
-        min-width: 0;
-        flex: 1;
-        font-size: 13px;
-        background: transparent;
-      }
-      .study-input:focus-within {
-        border-color: #b3c5f8;
-        outline: 3px solid #2860f518;
-      }
-      .study-input input:focus-visible {
-        outline: none;
-      }
-      .send-button {
-        width: 34px;
-        height: 34px;
-        border-radius: 9px;
-        background: var(--blue);
-        color: #fff;
-        display: grid;
-        place-items: center;
-        transition: background 0.15s;
-      }
-      .send-button:hover {
-        background: var(--blue-hover);
-      }
-      .prompt-chips {
-        display: flex;
-        gap: 7px;
-        flex-wrap: wrap;
-        margin-top: 12px;
-      }
-      .prompt-chips button {
-        border: 1px solid #e4e4e9;
-        background: #fff;
-        font-size: 11px;
-        padding: 6px 10px;
-        border-radius: 20px;
-        color: #6c6c72;
-        transition: background 0.15s;
-      }
-      .prompt-chips button:hover {
-        background: var(--soft);
-        color: var(--ink);
       }
       .panel {
         background: #fff;
@@ -718,7 +587,7 @@
         background: var(--blue);
       }
       .subject-dot.English {
-        background: #e3a67e;
+        background: #9db5f7;
       }
       .subject-dot.History {
         background: #8c9bbb;
@@ -736,9 +605,9 @@
       }
       .due {
         font-size: 10px;
-        color: #89532f;
+        color: var(--blue);
         padding: 4px 8px;
-        background: var(--apricot-soft);
+        background: var(--blue-soft);
         border-radius: 5px;
         white-space: nowrap;
       }
@@ -771,103 +640,276 @@
         font-size: 11px;
         margin-top: 4px;
       }
+      .icon-link {
+        width: 32px;
+        height: 32px;
+        display: grid;
+        place-items: center;
+        border-radius: 9px;
+        color: #77777d;
+      }
+      .icon-link:hover {
+        background: var(--soft);
+        color: var(--blue);
+      }
       .schedule-days {
         display: flex;
-        margin: 0 20px 22px;
-        gap: 5px;
-        justify-content: space-between;
+        margin: 0 24px 20px;
+        padding: 4px;
+        gap: 2px;
+        background: var(--soft);
+        border-radius: 12px;
       }
       .day {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 6px;
+        gap: 2px;
         flex: 1;
-        padding: 8px 3px;
-        border-radius: 10px;
+        padding: 7px 2px 8px;
+        border-radius: 9px;
         color: #7c7c82;
         font-size: 10px;
+        position: relative;
+        transition: background 0.15s;
       }
       .day b {
         font-size: 14px;
         font-weight: 550;
         color: var(--ink);
       }
-      .day.selected {
+      .day.today:after {
+        content: "";
+        position: absolute;
+        bottom: 3px;
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
         background: var(--blue);
-        color: #e5ecff;
       }
-      .day.selected b {
-        color: white;
+      .day.selected {
+        background: #fff;
+        color: var(--ink);
+        box-shadow:
+          0 1px 2px #1717230f,
+          0 0 0 1px #17172308;
       }
       .day:hover:not(.selected) {
-        background: var(--soft);
+        background: #ebebee;
       }
       .schedule-list {
-        padding: 0 24px 6px;
-      }
-      .class-row {
-        display: flex;
-        gap: 14px;
-        padding: 0 0 18px;
+        list-style: none;
+        margin: 0;
+        padding: 0 24px 10px;
         position: relative;
       }
-      .class-time {
+      .schedule-list:before {
+        content: "";
+        position: absolute;
+        left: 81px;
+        top: 18px;
+        bottom: 28px;
+        width: 1px;
+        background: var(--line);
+      }
+      .slot {
+        display: grid;
+        grid-template-columns: 38px minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+      }
+      .slot-time {
         font-size: 11px;
-        line-height: 1.5;
-        color: #696971;
-        width: 35px;
-        flex-shrink: 0;
-        padding-top: 9px;
+        color: #6f6f76;
+        padding-top: 11px;
         font-variant-numeric: tabular-nums;
       }
-      .class-time small {
-        font-size: 10px;
-        display: block;
-        color: #8b8b92;
-        margin-top: 3px;
+      .slot-body {
+        position: relative;
+        padding: 9px 12px 10px 26px;
+        border-radius: 12px;
+        margin-bottom: 2px;
       }
-      .class-card {
-        flex: 1;
-        min-width: 0;
-        padding: 12px 13px;
-        border-left: 2px solid #98b2fa;
-        background: #f0f4ff;
-        border-radius: 0 10px 10px 0;
+      .slot-body:before {
+        content: "";
+        position: absolute;
+        left: 4px;
+        top: 15px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #fff;
+        border: 1.5px solid #c9c9d1;
+        box-sizing: border-box;
       }
-      .class-card.english {
-        background: #fff5ed;
-        border-color: #ebc4a8;
-      }
-      .class-card.science {
-        background: #f7f7f9;
-        border-color: #d5d5dd;
-      }
-      .class-card.history {
-        background: #f5f7fa;
-        border-color: #c1ccdf;
-      }
-      .class-card h3 {
-        font-size: 12px;
+      .slot-body h3 {
+        font-size: 13px;
+        font-weight: 550;
         display: flex;
-        justify-content: space-between;
-        gap: 6px;
         align-items: center;
-        color: var(--ink);
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .slot-body p {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .slot.now .slot-time {
+        color: var(--blue);
         font-weight: 550;
       }
-      .class-card p {
-        font-size: 10px;
-        color: #74747d;
-        margin-top: 4px;
+      .slot.now .slot-body {
+        background: var(--blue-soft);
       }
-      .class-tag {
-        font-size: 9px;
-        font-weight: 500;
-        padding: 1px 5px;
-        border-radius: 4px;
+      .slot.now .slot-body:before {
+        background: var(--blue);
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px #2860f526;
+      }
+      .now-tag {
+        font-size: 10px;
+        font-weight: 550;
         color: var(--blue);
-        background: #e3ecff;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .now-tag:before,
+      .subject-tile-next i {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--blue);
+        display: inline-block;
+      }
+      .slot.break .slot-time {
+        padding-top: 7px;
+        color: #9a9aa1;
+      }
+      .slot.break .slot-body {
+        padding-top: 6px;
+        padding-bottom: 6px;
+      }
+      .slot.break .slot-body:before {
+        top: 12px;
+        left: 5px;
+        width: 5px;
+        height: 5px;
+        border: 0;
+        background: #d4d4da;
+      }
+      .slot.break .slot-body p {
+        margin: 0;
+        font-style: italic;
+        color: #8b8b92;
+      }
+      .subject-tiles {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: 12px;
+        padding: 0 24px 24px;
+      }
+      .subject-tile {
+        grid-column: span 3;
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        min-width: 0;
+        padding: 16px 16px 14px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: #fff;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s,
+          transform 0.15s;
+      }
+      .subject-tile:nth-child(n + 5) {
+        grid-column: span 4;
+      }
+      .subject-tile:hover {
+        border-color: #c9d6fb;
+        box-shadow: 0 6px 18px #2860f512;
+        transform: translateY(-1px);
+      }
+      .subject-tile-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 22px;
+      }
+      .subject-tile-top .icon {
+        color: #b4b4bb;
+        transition:
+          color 0.15s,
+          transform 0.15s;
+      }
+      .subject-tile:hover .subject-tile-top .icon {
+        color: var(--blue);
+        transform: translateX(2px);
+      }
+      .subject-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+        display: grid;
+        place-items: center;
+        background: var(--soft);
+        color: var(--ink);
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: -0.2px;
+      }
+      .subject-tile.live .subject-mark {
+        background: var(--blue);
+        color: #fff;
+      }
+      .subject-tile-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ink);
+        letter-spacing: -0.2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .subject-tile-meta {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .subject-tile-next {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px solid #f0f0f3;
+        font-size: 11px;
+        color: #55555c;
+        font-variant-numeric: tabular-nums;
+      }
+      .subject-tile.live .subject-tile-next {
+        color: var(--blue);
+        font-weight: 550;
+      }
+      .lesson-list {
+        list-style: none;
+        padding: 0;
+        margin: 12px 0 0;
+      }
+      .lesson-list li {
+        display: flex;
+        justify-content: space-between;
+        padding: 11px 0;
+        border-top: 1px solid var(--line);
+        font-size: 13px;
+      }
+      .lesson-list li span:last-child {
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
       }
       .schedule-footer {
         padding: 1px 24px 20px;
@@ -908,8 +950,8 @@
         color: var(--blue);
       }
       .subject-icon.mint {
-        background: var(--apricot-soft);
-        color: #b07b59;
+        background: var(--soft);
+        color: #55555c;
       }
       .assignment-copy {
         flex: 1;
@@ -951,8 +993,8 @@
       }
       .progress-panel {
         padding: 23px 24px;
-        background: #fff4ec;
-        border: 1px solid #f5e5d9;
+        background: #fff;
+        border: 1px solid var(--line);
         border-radius: var(--r);
       }
       .progress-head {
@@ -961,7 +1003,7 @@
         justify-content: space-between;
       }
       .progress-head .icon {
-        color: #a67f64;
+        color: #77777d;
       }
       .progress-visual {
         display: flex;
@@ -986,7 +1028,7 @@
       }
       .progress-ring strong {
         font-size: 20px;
-        color: #282220;
+        color: var(--ink);
         letter-spacing: -0.65px;
         font-weight: 600;
       }
@@ -997,7 +1039,7 @@
       .progress-message p {
         font-size: 11px;
         line-height: 1.6;
-        color: #827065;
+        color: var(--muted);
         max-width: 175px;
         margin-top: 5px;
       }
@@ -1005,15 +1047,15 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-top: 1px solid #eedfd4;
+        border-top: 1px solid var(--line);
         padding-top: 15px;
         font-size: 11px;
-        color: #85736a;
+        color: var(--muted);
       }
       .progress-foot button {
         font-size: 11px;
         font-weight: 550;
-        color: #655247;
+        color: var(--blue);
         display: flex;
         align-items: center;
         gap: 5px;
@@ -1403,8 +1445,8 @@
         opacity: 1;
       }
       .quiz-answer.incorrect {
-        border-color: #e0b799;
-        background: var(--apricot-soft);
+        border-color: #c4c4cc;
+        background: var(--soft);
         opacity: 1;
       }
       .quiz-feedback {
@@ -1441,9 +1483,9 @@
         margin: 0 0 22px;
         padding: 14px 16px;
         border-radius: 12px;
-        background: var(--apricot-soft);
+        background: var(--soft);
         font-size: 13px;
-        color: #875e41;
+        color: #55555c;
       }
       .note-card {
         white-space: pre-wrap;
@@ -1500,23 +1542,6 @@
         .view-header p {
           animation: text-focus 0.65s cubic-bezier(0.22, 1, 0.36, 1) 60ms both;
         }
-        .headline-line {
-          animation: text-focus 0.7s cubic-bezier(0.22, 1, 0.36, 1) 80ms both;
-        }
-        .headline-line + .headline-line {
-          animation-delay: 140ms;
-        }
-        .study-description {
-          animation: text-focus 0.65s cubic-bezier(0.22, 1, 0.36, 1) 180ms both;
-        }
-      }
-      @media (min-width: 1450px) {
-        .study-title {
-          font-size: 63px;
-        }
-        .study-card {
-          padding: 30px 32px 26px;
-        }
       }
       @media (max-width: 1200px) {
         :root {
@@ -1537,28 +1562,6 @@
         .main-column,
         .right-column {
           gap: 20px;
-        }
-        .study-title {
-          font-size: 48px;
-          letter-spacing: -2px;
-        }
-        .app-tile {
-          width: 43px;
-          height: 43px;
-          border-radius: 12px;
-        }
-        .app-tile > .icon {
-          width: 27px;
-          height: 27px;
-        }
-        .headline-line {
-          gap: 10px;
-        }
-        .study-card {
-          padding: 25px;
-        }
-        .study-description {
-          font-size: 13px;
         }
         h1 {
           font-size: 32px;
@@ -1618,32 +1621,6 @@
           display: grid;
           grid-template-columns: 1fr 1fr;
           align-items: start;
-        }
-        .schedule-panel {
-          grid-row: span 2;
-        }
-        .school-panel {
-          align-self: stretch;
-        }
-        .study-title {
-          font-size: 57px;
-          letter-spacing: -2.4px;
-        }
-        .app-tile {
-          width: 51px;
-          height: 51px;
-          border-radius: 14px;
-        }
-        .app-tile > .icon {
-          width: 31px;
-          height: 31px;
-        }
-        .study-description {
-          font-size: 14px;
-          max-width: 420px;
-        }
-        .study-input {
-          margin-top: 26px;
         }
         .content-grid {
           gap: 18px;
@@ -1711,9 +1688,6 @@
           font-size: 13px;
           margin-top: 10px;
         }
-        .study-card {
-          padding: 28px;
-        }
         .right-column {
           grid-template-columns: 1fr 1fr;
         }
@@ -1749,55 +1723,6 @@
           font-size: 12px;
           max-width: 290px;
           line-height: 1.5;
-        }
-        .study-card {
-          padding: 24px 22px 22px;
-          border-radius: 20px;
-        }
-        .study-title {
-          font-size: 43px;
-          letter-spacing: -1.8px;
-          line-height: 1.05;
-          margin: 23px 0 18px;
-        }
-        .headline-line {
-          gap: 9px;
-        }
-        .app-tile {
-          width: 39px;
-          height: 39px;
-          border-radius: 11px;
-        }
-        .app-tile > .icon {
-          width: 24px;
-          height: 24px;
-        }
-        .study-description {
-          font-size: 13px;
-          max-width: 260px;
-          line-height: 1.5;
-        }
-        .study-overline {
-          font-size: 11px;
-        }
-        .study-input {
-          margin-top: 22px;
-          padding: 7px 7px 7px 12px;
-          gap: 8px;
-        }
-        .study-input input {
-          font-size: 12px;
-        }
-        .study-input > .icon {
-          display: none;
-        }
-        .prompt-chips {
-          gap: 6px;
-          flex-wrap: wrap;
-        }
-        .prompt-chips button {
-          font-size: 10px;
-          padding: 6px 9px;
         }
         .panel {
           border-radius: 20px;
@@ -1854,18 +1779,29 @@
         }
         .right-column {
           display: flex;
+          align-items: stretch;
+        }
+        .subject-tiles {
+          padding: 0 20px 20px;
+          gap: 10px;
+        }
+        .subject-tile,
+        .subject-tile:nth-child(n + 5) {
+          grid-column: span 6;
+        }
+        .subject-tile:last-child {
+          grid-column: span 12;
         }
         .schedule-days {
-          gap: 6px;
+          margin-left: 20px;
+          margin-right: 20px;
         }
-        .class-card {
-          padding: 13px;
+        .schedule-list {
+          padding-left: 20px;
+          padding-right: 20px;
         }
-        .class-card h3 {
-          font-size: 13px;
-        }
-        .class-card p {
-          font-size: 11px;
+        .schedule-list:before {
+          left: 77px;
         }
         .progress-message p {
           max-width: 220px;
@@ -1922,42 +1858,12 @@
         }
       }
       @media (max-width: 359px) {
-        .study-title {
-          font-size: 38px;
-          letter-spacing: -1.6px;
-        }
-        .app-tile {
-          width: 34px;
-          height: 34px;
-          border-radius: 10px;
-        }
-        .app-tile > .icon {
-          width: 22px;
-          height: 22px;
-        }
-        .headline-line {
-          gap: 8px;
-        }
         .greeting h1 {
           font-size: 26px;
-        }
-        .prompt-chips {
-          gap: 5px;
-        }
-        .prompt-chips button {
-          padding: 5px 7px;
-          font-size: 9px;
         }
         .page {
           padding-left: 14px;
           padding-right: 14px;
-        }
-        .study-card {
-          padding-left: 19px;
-          padding-right: 19px;
-        }
-        .study-input input {
-          font-size: 11px;
         }
         .filter-row {
           gap: 14px;
@@ -2116,7 +2022,9 @@
         }
       }
     </style>
-  </head>
+  <link rel="stylesheet" href="/shared/subjects.css">
+<script src="/shared/school.js"></script>
+</head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <svg
@@ -2366,7 +2274,7 @@ SOFTWARE.
             id="nav-task-count"
             >3</span
           ></a
-        ><a href="#timetable" data-view="timetable"
+        ><a href="#subjects" data-view="subjects"><svg class="icon"><use href="#i-file" /></svg>My subjects</a><a href="#timetable" data-view="timetable"
           ><svg class="icon"><use href="#i-calendar" /></svg>Timetable</a
         ><a href="#assignments" data-view="assignments"
           ><svg class="icon"><use href="#i-file" /></svg>Assignments</a
@@ -2568,6 +2476,7 @@ SOFTWARE.
           lastFocused;
         const views = {
           dashboard: "My dashboard",
+          subjects: "My subjects",
           tasks: "My tasks",
           timetable: "Timetable",
           assignments: "Assignments",
@@ -2577,40 +2486,26 @@ SOFTWARE.
           messages: "Messages",
           settings: "Settings",
         };
-        const periods = [
-          {
-            time: "09:40",
-            end: "10:30",
-            title: "Mathematics",
-            room: "Room 12",
-            teacher: "Mr Dlamini",
-            type: "maths",
-          },
-          {
-            time: "10:35",
-            end: "11:25",
-            title: "English",
-            room: "Room 4",
-            teacher: "Ms Naidoo",
-            type: "english",
-          },
-          {
-            time: "11:30",
-            end: "12:20",
-            title: "Life Sciences",
-            room: "Lab 2",
-            teacher: "",
-            type: "science",
-          },
-          {
-            time: "12:25",
-            end: "13:15",
-            title: "History",
-            room: "Room 9",
-            teacher: "",
-            type: "history",
-          },
+        const slotTimes = [
+          ["09:40", "10:30"],
+          ["10:35", "11:25"],
+          ["11:30", "12:20"],
+          ["12:25", "13:15"],
+          ["13:45", "14:35"],
+          ["14:40", "15:30"],
         ];
+        const subjectList = [
+          { id: "maths", name: "Mathematics", short: "Ma", room: "Room 12", teacher: "Mr Dlamini" },
+          { id: "english", name: "English", short: "En", room: "Room 4", teacher: "Ms Naidoo" },
+          { id: "afrikaans", name: "Afrikaans", short: "Af", room: "Room 7", teacher: "" },
+          { id: "life-sciences", name: "Life Sciences", short: "Ls", room: "Lab 2", teacher: "" },
+          { id: "geography", name: "Geography", short: "Gg", room: "Room 15", teacher: "" },
+          { id: "history", name: "History", short: "Hi", room: "Room 9", teacher: "" },
+          { id: "art", name: "Art", short: "Ar", room: "Art studio", teacher: "" },
+        ];
+        // Sample "now": Tuesday, during period 1.
+        const today = 1,
+          nowSlot = 0;
         const weekly = [
           [
             "English",
@@ -2690,8 +2585,34 @@ SOFTWARE.
         function footer() {
           return `<footer class="page-footer"><span>${icon("heart")}A little support. A lot of possibility.</span><span>Sample school data · Your changes stay on this device</span></footer>`;
         }
-        function studyCard() {
-          return `<section class="study-card" aria-labelledby="study-title"><div class="study-overline"><span class="study-status" aria-hidden="true"></span>Study with Chom</div><h2 class="study-title" id="study-title"><span class="headline-line">Big ideas.</span><span class="headline-line">Small <span class="app-tile" aria-hidden="true">${icon("book")}</span> steps.</span></h2><p class="study-description">Understand a tricky topic.<br>Find a little more clarity.</p><form class="study-input" id="study-form">${icon("message", true)}<input aria-label="What would you like to study?" name="question" placeholder="What’s on your mind?" maxlength="200" autocomplete="off"><button class="send-button" aria-label="Explore study help">${icon("up", true)}</button></form><div class="prompt-chips"><button data-action="study" data-topic="algebra">Explain algebra</button><button data-action="study" data-topic="quiz">Quiz me on osmosis</button><button data-action="study" data-topic="plan">Help me plan</button></div></section>`;
+        function subjectInfo(name) {
+          return subjectList.find((x) => x.name === name);
+        }
+        function lessonsOf(subject) {
+          return weekly.flatMap((titles, day) =>
+            titles.flatMap((t, slot) => (t === subject.name ? [{ day, slot }] : [])),
+          );
+        }
+        function nextLesson(subject) {
+          const lessons = lessonsOf(subject);
+          return (
+            lessons.find(
+              (l) => l.day > today || (l.day === today && l.slot >= nowSlot),
+            ) || lessons[0]
+          );
+        }
+        function lessonLabel(l) {
+          if (l.day === today && l.slot === nowSlot) return "On now";
+          return `${l.day === today ? "Today" : dayNames[l.day].slice(0, 3)} · ${slotTimes[l.slot][0]}`;
+        }
+        function subjectsPanel() {
+          return `<section class="panel subjects-panel" aria-labelledby="subjects-title"><div class="panel-head"><div><h2 id="subjects-title">Your subjects</h2><p class="schedule-subtitle">Grade 10 · ${subjectList.length} subjects this term</p></div><a class="text-button" href="#subjects">All subjects ${icon("arrow", true)}</a></div><div class="subject-tiles">${subjectList
+            .map((x) => {
+              const next = nextLesson(x),
+                live = next.day === today && next.slot === nowSlot;
+              return `<button class="subject-tile ${live ? "live" : ""}" data-action="subject" data-subject="${x.id}"><span class="subject-tile-top"><span class="subject-mark" aria-hidden="true">${x.short}</span>${icon("arrow", true)}</span><span class="subject-tile-name">${x.name}</span><span class="subject-tile-meta">${lessonsOf(x).length} lessons a week</span><span class="subject-tile-next">${live ? '<i aria-hidden="true"></i>' : ""}${lessonLabel(next)}</span></button>`;
+            })
+            .join("")}</div></section>`;
         }
         function tasksMarkup() {
           const list = state.tasks.filter((t) =>
@@ -2703,34 +2624,24 @@ SOFTWARE.
           );
           return `<div class="filter-row" role="tablist" aria-label="Task filters">${["today", "upcoming", "done"].map((f) => `<button class="filter ${taskFilter === f ? "active" : ""}" role="tab" aria-selected="${taskFilter === f}" aria-controls="task-results" data-filter="${f}">${{ today: "Today", upcoming: "Upcoming", done: "Completed" }[f]}<span>${state.tasks.filter((t) => (f === "done" ? t.done : f === "upcoming" ? t.when === "upcoming" && !t.done : t.when === "today")).length}</span></button>`).join("")}</div><div class="task-list" id="task-results" role="tabpanel" aria-label="${taskFilter} tasks">${list.length ? list.map((t) => `<div class="task-row ${t.done ? "completed" : ""}"><label class="task-check"><input type="checkbox" data-task="${esc(t.id)}" aria-label="Complete ${esc(t.title)}" ${t.done ? "checked" : ""}></label><div class="task-content"><span class="task-name">${esc(t.title)}</span><span class="task-sub"><i class="subject-dot ${esc(t.subject)}"></i>${esc(t.subject)}</span></div><span class="due ${t.done ? "done" : ""}">${t.done ? "Completed" : esc(t.time === "Done" ? "Today" : t.time)}</span></div>`).join("") : `<p class="task-empty">${taskFilter === "done" ? "Your completed tasks will appear here." : taskFilter === "upcoming" ? "A little breathing room. No upcoming tasks." : "Nothing due today. You’re all caught up."}</p>`}</div>`;
         }
-        function tasksPanel() {
-          return `<section class="panel"><div class="panel-head"><div class="panel-title"><h2>Your tasks</h2><span class="count" id="task-count">${remaining()}</span></div><button class="text-button" data-action="add-task">${icon("plus", true)}Add task</button></div><div id="tasks-content">${tasksMarkup()}</div><button class="task-more" data-action="navigate" data-view="tasks">View all tasks ${icon("arrow", true).replace('class="icon small"', 'class="icon small" style="display:inline;vertical-align:middle;margin-left:5px"')}</button></section>`;
-        }
         function scheduleRows(day) {
-          const classes =
-            day === 1
-              ? periods
-              : weekly[day].slice(0, 4).map((title, i) => ({
-                  ...periods[i],
-                  title,
-                  room: "Sample timetable",
-                  teacher: "",
-                }));
-          return classes
-            .map(
-              (p, i) =>
-                `<div class="class-row"><time class="class-time">${p.time}<small>${p.end}</small></time><div class="class-card ${p.type}"><h3>${p.title}${i === 0 && day === 1 ? '<span class="class-tag">Period 1</span>' : ""}</h3><p>${p.room}${p.teacher ? " · " + p.teacher : ""}</p></div></div>`,
-            )
-            .join("");
+          const slot = (i) => {
+            const x = subjectInfo(weekly[day][i]),
+              now = day === today && i === nowSlot;
+            return `<li class="slot ${now ? "now" : ""}"><time class="slot-time">${slotTimes[i][0]}</time><div class="slot-body"><h3>${x.name}${now ? '<span class="now-tag">Now</span>' : ""}</h3><p>${x.room}${x.teacher ? " · " + x.teacher : ""}</p></div></li>`;
+          };
+          return [0, 1, 2, 3].map(slot).join("") +
+            `<li class="slot break"><time class="slot-time">13:15</time><div class="slot-body"><p>Lunch break · 30 min</p></div></li>` +
+            [4, 5].map(slot).join("");
         }
         function schedulePanel() {
-          return `<section class="panel schedule-panel"><div class="panel-head"><div><h2>Your day at a glance</h2><p class="schedule-subtitle">${dayNames[selectedDay]} · 6 classes</p></div>${icon("calendar", true)}</div><div class="schedule-days" aria-label="School days">${dayNames.map((d, i) => `<button class="day ${i === selectedDay ? "selected" : ""}" data-day="${i}" aria-label="${d} ${5 + i} October" aria-pressed="${i === selectedDay}">${d.slice(0, 3)}<b>${5 + i}</b></button>`).join("")}</div><div class="schedule-list">${scheduleRows(selectedDay)}</div><div class="schedule-footer"><a href="#timetable">View full timetable ${icon("arrow", true)}</a></div></section>`;
+          return `<section class="panel schedule-panel"><div class="panel-head"><div><h2>Your day at a glance</h2><p class="schedule-subtitle">${dayNames[selectedDay]}, ${5 + selectedDay} October · 6 classes</p></div><a class="icon-link" href="#timetable" aria-label="Open timetable">${icon("calendar", true)}</a></div><div class="schedule-days" aria-label="School days">${dayNames.map((d, i) => `<button class="day ${i === selectedDay ? "selected" : ""} ${i === today ? "today" : ""}" data-day="${i}" aria-label="${d} ${5 + i} October${i === today ? ", today" : ""}" aria-pressed="${i === selectedDay}">${d.slice(0, 3)}<b>${5 + i}</b></button>`).join("")}</div><ol class="schedule-list">${scheduleRows(selectedDay)}</ol><div class="schedule-footer"><a href="#timetable">View full timetable ${icon("arrow", true)}</a></div></section>`;
         }
         function assignmentRows() {
           return ["history", "science"]
             .map(
               (id, i) =>
-                `<button class="assignment-row" data-action="assignment" data-id="${id}"><span class="subject-icon ${i ? "mint" : ""}">${icon(i ? "flask" : "file")}</span><span class="assignment-copy"><span class="assignment-name">${i ? "Osmosis lab report" : "World War I essay"}</span><span class="assignment-meta">${i ? "Life Sciences" : "History"} · Due Fri, 9 Oct</span></span><span class="assignment-progress">${state.assignmentProgress[id]}% drafted<span class="track"><i style="--value:${state.assignmentProgress[id]}%;${i ? "background:#d69d77" : ""}"></i></span></span>${icon("chevron", true)}</button>`,
+                `<button class="assignment-row" data-action="assignment" data-id="${id}"><span class="subject-icon ${i ? "mint" : ""}">${icon(i ? "flask" : "file")}</span><span class="assignment-copy"><span class="assignment-name">${i ? "Osmosis lab report" : "World War I essay"}</span><span class="assignment-meta">${i ? "Life Sciences" : "History"} · Due Fri, 9 Oct</span></span><span class="assignment-progress">${state.assignmentProgress[id]}% drafted<span class="track"><i style="--value:${state.assignmentProgress[id]}%"></i></span></span>${icon("chevron", true)}</button>`,
             )
             .join("");
         }
@@ -2738,13 +2649,13 @@ SOFTWARE.
           return `<section class="panel"><div class="panel-head"><h2>Upcoming assignments</h2><a class="text-button" href="#assignments">View all ${icon("arrow", true)}</a></div><div class="assignment-list">${assignmentRows()}</div></section>`;
         }
         function progressPanel() {
-          return `<section class="progress-panel"><div class="progress-head"><h2>Your progress</h2>${icon("leaf")}</div><div class="progress-visual"><div class="progress-ring"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="none" stroke="#f2dfd1" stroke-width="6"/><circle cx="40" cy="40" r="34" fill="none" stroke="#d69d77" stroke-width="6" stroke-linecap="round" stroke-dasharray="207 214"/></svg><strong>97%</strong></div><div class="progress-message"><strong>Showing up matters.</strong><p>Your attendance this term. Keep making space for learning.</p></div></div><div class="progress-foot"><span>One day at a time.</span><button data-action="navigate" data-view="results">My progress ${icon("arrow", true)}</button></div></section>`;
+          return `<section class="progress-panel"><div class="progress-head"><h2>Your progress</h2>${icon("leaf")}</div><div class="progress-visual"><div class="progress-ring"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="none" stroke="#e6ecfd" stroke-width="6"/><circle cx="40" cy="40" r="34" fill="none" stroke="#2860f5" stroke-width="6" stroke-linecap="round" stroke-dasharray="207 214"/></svg><strong>97%</strong></div><div class="progress-message"><strong>Showing up matters.</strong><p>Your attendance this term. Keep making space for learning.</p></div></div><div class="progress-foot"><span>One day at a time.</span><button data-action="navigate" data-view="results">My progress ${icon("arrow", true)}</button></div></section>`;
         }
         function schoolPanel() {
           return `<section class="panel school-panel"><div class="panel-head"><h2>Beyond the classroom</h2></div><div class="school-links"><button class="school-link" data-action="service" data-service="sport">${icon("ball")}<span>Sports & activities</span><small>Hockey, 15:30</small></button><button class="school-link" data-action="service" data-service="transport">${icon("bus")}<span>My transport</span><small>Bus 14</small></button><button class="school-link" data-action="service" data-service="support">${icon("heart")}<span>Someone to talk to</span>${icon("chevron", true)}</button></div></section>`;
         }
         function dashboard() {
-          return `<header class="page-heading"><div><div class="greeting"><h1>Hey, Amara.</h1></div><p>You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></div><span class="date-pill">${icon("calendar", true)}Tuesday, 6 October 2026</span></header><div class="dashboard"><div class="main-column">${studyCard()}${tasksPanel()}${assignmentsPanel()}</div><div class="right-column">${schedulePanel()}${progressPanel()}${schoolPanel()}</div></div>`;
+          return `<header class="page-heading"><div><div class="greeting"><h1>Hey, Amara.</h1></div><p>You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></div><span class="date-pill">${icon("calendar", true)}Tuesday, 6 October 2026</span></header><div class="dashboard"><div class="main-column">${subjectsPanel()}${assignmentsPanel()}${schoolPanel()}</div><div class="right-column">${schedulePanel()}${progressPanel()}</div></div>`;
         }
         function viewHeader(title, copy, extra = "") {
           return `<header class="view-header"><div><h1>${title}</h1><p>${copy}</p></div>${extra}</header>`;
@@ -2764,6 +2675,7 @@ SOFTWARE.
           $("#notification-dot").hidden = !!state.notificationsRead;
           let html = "";
           if (currentView === "dashboard") html = dashboard();
+          if (currentView === "subjects") html = School.student();
           if (currentView === "tasks")
             html =
               viewHeader(
@@ -2899,7 +2811,7 @@ SOFTWARE.
             $("#main").focus();
             return;
           }
-          currentView = Object.hasOwn(views, key) ? key : "dashboard";
+          currentView = Object.hasOwn(views, key.split("?")[0]) ? key.split("?")[0] : "dashboard";
           closeNav();
           render();
           window.scrollTo(0, 0);
@@ -2935,6 +2847,20 @@ SOFTWARE.
               closeModal();
           }
         });
+        function subjectDialog(id) {
+          const x = subjectList.find((y) => y.id === id);
+          if (!x) return;
+          const shared = window.School?.subjects.some((y) => y.id === id);
+          modal(
+            x.name,
+            `<p>Grade 10 · ${x.room}${x.teacher ? " · " + x.teacher : ""}</p><h3>This week</h3><ul class="lesson-list">${lessonsOf(x)
+              .map(
+                (l) =>
+                  `<li><span>${dayNames[l.day]}</span><span>${slotTimes[l.slot].join("–")}</span></li>`,
+              )
+              .join("")}</ul>${shared ? `<div class="form-actions"><button class="button secondary" data-action="navigate" data-view="timetable">View timetable</button><a class="button" href="#subjects?subject=${id}" data-action="close-dialog">Open class material</a></div>` : `<div class="notice">No class material has been shared for ${x.name} yet. When your teacher adds notes or worksheets, you’ll find them here.</div><div class="form-actions"><button class="button secondary" data-action="navigate" data-view="timetable">View timetable</button></div>`}`,
+          );
+        }
         function addTask() {
           modal(
             "One more thing on your list.",
@@ -3151,6 +3077,7 @@ SOFTWARE.
           if (a === "close-dialog") closeModal();
           if (a === "navigate") go(b.dataset.view);
           if (a === "add-task") addTask();
+          if (a === "subject") subjectDialog(b.dataset.subject);
           if (a === "assignment") assignment(b.dataset.id);
           if (a === "study") study(b.dataset.topic);
           if (a === "search") search();
@@ -3247,20 +3174,6 @@ SOFTWARE.
           }
         });
         document.addEventListener("submit", (e) => {
-          if (e.target.id === "study-form") {
-            e.preventDefault();
-            const q = new FormData(e.target).get("question").trim();
-            const topic = /algebra|quadratic|math/i.test(q)
-              ? "algebra"
-              : /osmosis|quiz|biology/i.test(q)
-                ? "quiz"
-                : /plan|week|task|friday/i.test(q)
-                  ? "plan"
-                  : /essay|writ/i.test(q)
-                    ? "essay"
-                    : "topics";
-            study(topic, q);
-          }
           if (e.target.id === "add-task-form") {
             e.preventDefault();
             const f = new FormData(e.target),
