@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#2860f5" />
+    <meta name="theme-color" content="#ffffff" />
     <meta
       name="description"
       content="A little more clarity for your school day. Plan your tasks, see your classes and study with Chom Learn."
@@ -11,21 +11,27 @@
     <title>Chom Learn — Your school day, sorted</title>
     <link
       rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%232860f5'/%3E%3Cpath d='M28 13a11 11 0 1 0 0 14' fill='none' stroke='%23ffffff' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%231a73e8'/%3E%3Cpath d='M28 13a11 11 0 1 0 0 14' fill='none' stroke='%23ffffff' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
     />
     <style>
       :root {
-        --bg: #f7f7f8;
+        --bg: #fff;
         --paper: #fff;
-        --ink: #171717;
-        --text: #272729;
-        --muted: #707075;
-        --line: #eaeaed;
-        --blue: #2860f5;
-        --blue-hover: #174de2;
-        --blue-soft: #eef3ff;
-        --soft: #f3f3f5;
-        --r: 22px;
+        --ink: #202124;
+        --text: #3c4043;
+        --muted: #5f6368;
+        --line: #dadce0;
+        --blue: #1a73e8;
+        --blue-hover: #1967d2;
+        --blue-soft: #e8f0fe;
+        --soft: #f1f3f4;
+        --r: 8px;
         --sidebar: 224px;
       }
       * {
@@ -36,11 +42,9 @@
         background: var(--bg);
         color: var(--text);
         font:
-          14px/1.5 -apple-system,
-          BlinkMacSystemFont,
-          "SF Pro Text",
-          "Segoe UI",
-          system-ui,
+          14px/1.5 "Google Sans Text",
+          Roboto,
+          Arial,
           sans-serif;
         -webkit-font-smoothing: antialiased;
       }
@@ -83,7 +87,7 @@
       input:focus-visible,
       textarea:focus-visible,
       select:focus-visible {
-        outline: 3px solid #2860f580;
+        outline: 3px solid #1967d280;
         outline-offset: 4px;
       }
       h1,
@@ -101,23 +105,22 @@
       h2,
       .wordmark {
         font-family:
-          -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
-          system-ui, sans-serif;
+          "Google Sans", Roboto, Arial, sans-serif;
       }
       h1 {
         font-size: 36px;
         line-height: 1.15;
-        letter-spacing: -1.3px;
-        font-weight: 650;
+        letter-spacing: -0.43px;
+        font-weight: 400;
       }
       h2 {
         font-size: 18px;
-        letter-spacing: -0.45px;
-        font-weight: 600;
+        letter-spacing: -0.15px;
+        font-weight: 500;
       }
       h3 {
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 500;
       }
       input,
       textarea,
@@ -126,7 +129,7 @@
       }
       input::placeholder,
       textarea::placeholder {
-        color: #77777c;
+        color: #80868b;
         opacity: 1;
       }
       .icon {
@@ -154,7 +157,7 @@
         padding: 12px 20px;
         background: var(--blue);
         color: white;
-        border-radius: 10px;
+        border-radius: 8px;
       }
       .skip-link:focus {
         top: 10px;
@@ -168,14 +171,14 @@
         z-index: 40;
         display: flex;
         flex-direction: column;
-        padding: 30px 18px 18px;
+        padding: 24px 18px 18px 0;
         overflow-y: auto;
       }
       .brand {
         display: flex;
         gap: 9px;
         align-items: center;
-        padding: 0 13px;
+        padding: 0 13px 0 26px;
       }
       .brand-mark {
         width: 32px;
@@ -185,12 +188,12 @@
         font-size: 30px;
         font-weight: 700;
         line-height: 1;
-        letter-spacing: -1.4px;
+        letter-spacing: -0.47px;
       }
       .wordmark span {
         font-size: 12px;
         font-weight: 400;
-        letter-spacing: -0.2px;
+        letter-spacing: -0.07px;
         margin-left: 5px;
         color: var(--muted);
       }
@@ -198,7 +201,7 @@
         display: flex;
         align-items: center;
         gap: 9px;
-        margin: 33px 10px 26px;
+        margin: 30px 10px 22px 23px;
         padding-bottom: 22px;
         border-bottom: 1px solid var(--line);
         font-size: 11px;
@@ -207,22 +210,22 @@
       .school-icon {
         width: 32px;
         height: 32px;
-        border-radius: 9px;
+        border-radius: 8px;
         background: var(--soft);
         display: grid;
         place-items: center;
-        color: #747477;
+        color: #80868b;
       }
       .school-switch strong {
         font-size: 12px;
-        font-weight: 550;
+        font-weight: 500;
         color: var(--ink);
         display: block;
       }
       .nav-label {
         font-size: 11px;
         color: var(--muted);
-        margin: 0 13px 10px;
+        margin: 0 13px 10px 26px;
       }
       .nav {
         display: flex;
@@ -230,11 +233,11 @@
         gap: 5px;
       }
       .nav a {
-        padding: 11px 13px;
+        padding: 11px 13px 11px 26px;
         display: flex;
         align-items: center;
         gap: 11px;
-        border-radius: 10px;
+        border-radius: 0 24px 24px 0;
         font-weight: 500;
         font-size: 13px;
         min-height: 43px;
@@ -245,7 +248,7 @@
       .nav a > .icon {
         width: 18px;
         height: 18px;
-        color: #8a8a90;
+        color: #80868b;
       }
       .nav a:hover {
         background: var(--soft);
@@ -253,7 +256,7 @@
       .nav a.active {
         background: var(--blue-soft);
         color: var(--blue);
-        font-weight: 600;
+        font-weight: 500;
       }
       .nav a.active > .icon {
         color: var(--blue);
@@ -264,13 +267,13 @@
         min-width: 20px;
         height: 20px;
         border-radius: 6px;
-        background: #ededf0;
-        color: #646469;
+        background: #e8eaed;
+        color: #5f6368;
         display: grid;
         place-items: center;
       }
       .nav a.active .badge {
-        background: #dae5ff;
+        background: #d2e3fc;
         color: var(--blue);
       }
       .nav.secondary {
@@ -279,10 +282,11 @@
       .sidebar-bottom {
         margin-top: auto;
         padding-top: 34px;
+        padding-left: 18px;
       }
       .mini-chom {
-        border-radius: 16px;
-        background: #f5f6f9;
+        border-radius: 8px;
+        background: #f8f9fa;
         padding: 16px;
       }
       .mini-chom .mini-title {
@@ -290,7 +294,7 @@
         align-items: center;
         gap: 8px;
         font-size: 13px;
-        font-weight: 600;
+        font-weight: 500;
         color: var(--ink);
       }
       .mini-chom .mini-title .icon {
@@ -304,7 +308,7 @@
       }
       .mini-chom button {
         font-size: 11px;
-        font-weight: 550;
+        font-weight: 500;
         margin-top: 15px;
         display: flex;
         align-items: center;
@@ -317,13 +321,13 @@
         align-items: center;
         gap: 6px;
         font-size: 10px;
-        color: #77777c;
+        color: #80868b;
         padding: 17px 11px 0;
       }
       .sidebar-footer i {
         width: 5px;
         height: 5px;
-        background: #aaaab0;
+        background: #9aa0a6;
         border-radius: 50%;
       }
       .shell {
@@ -348,7 +352,7 @@
         border: 3px solid #fff;
         box-shadow: 0 0 0 1px var(--line);
         border-radius: 50%;
-        font-weight: 600;
+        font-weight: 500;
         font-size: 11px;
         color: var(--blue);
       }
@@ -379,7 +383,7 @@
       }
       .page-heading p strong {
         font-weight: 500;
-        color: #505055;
+        color: #3c4043;
       }
       .date-pill {
         display: flex;
@@ -387,11 +391,11 @@
         gap: 8px;
         background: white;
         border: 1px solid var(--line);
-        border-radius: 9px;
+        border-radius: 8px;
         padding: 9px 12px;
         white-space: nowrap;
         font-size: 11px;
-        color: #68686e;
+        color: #5f6368;
       }
       .dashboard {
         display: grid;
@@ -419,7 +423,7 @@
         gap: 12px;
       }
       .panel-head > .icon {
-        color: #77777d;
+        color: #80868b;
       }
       .panel-title {
         display: flex;
@@ -432,10 +436,10 @@
         display: grid;
         place-items: center;
         border-radius: 6px;
-        background: #f0f0f3;
+        background: #f1f3f4;
         font-size: 11px;
         font-weight: 500;
-        color: #6b6b71;
+        color: #5f6368;
       }
       .text-button {
         font-size: 12px;
@@ -452,26 +456,28 @@
       .button {
         background: var(--blue);
         color: #fff;
-        padding: 11px 18px;
-        border-radius: 11px;
+        padding: 8px 24px;
+        border-radius: 4px;
         display: inline-flex;
         justify-content: center;
         align-items: center;
         gap: 8px;
-        font-size: 13px;
-        font-weight: 550;
-        min-height: 42px;
+        font-size: 14px;
+        letter-spacing: 0.25px;
+        font-weight: 500;
+        min-height: 36px;
         transition: background 0.15s;
       }
       .button:hover {
         background: var(--blue-hover);
       }
       .button.secondary {
-        background: var(--soft);
-        color: var(--ink);
+        background: #fff;
+        color: var(--blue);
+        box-shadow: inset 0 0 0 1px var(--line);
       }
       .button.secondary:hover {
-        background: #e8e8ed;
+        background: #f8fbff;
       }
       .button.outline {
         background: white;
@@ -495,7 +501,7 @@
       }
       .filter.active {
         color: var(--ink);
-        font-weight: 550;
+        font-weight: 500;
       }
       .filter.active:after {
         position: absolute;
@@ -513,8 +519,8 @@
         line-height: 16px;
         min-width: 16px;
         border-radius: 4px;
-        background: #f0f0f3;
-        color: #75757c;
+        background: #f1f3f4;
+        color: #80868b;
       }
       .task-list {
         padding: 0 24px;
@@ -524,7 +530,7 @@
         align-items: center;
         gap: 12px;
         padding: 17px 0;
-        border-bottom: 1px solid #f0f0f3;
+        border-bottom: 1px solid #f1f3f4;
         min-height: 72px;
       }
       .task-row:last-child {
@@ -540,7 +546,7 @@
         appearance: none;
         width: 18px;
         height: 18px;
-        border: 1.5px solid #d4d4db;
+        border: 1.5px solid #dadce0;
         border-radius: 5px;
         margin: 0;
         cursor: pointer;
@@ -587,19 +593,19 @@
         background: var(--blue);
       }
       .subject-dot.English {
-        background: #9db5f7;
+        background: #8ab4f8;
       }
       .subject-dot.History {
-        background: #8c9bbb;
+        background: #9aa0a6;
       }
       .subject-dot.Afrikaans {
-        background: #a3a3ab;
+        background: #9aa0a6;
       }
       .subject-dot.Science {
-        background: #6f8cc8;
+        background: #4285f4;
       }
       .task-row.completed .task-name {
-        color: #85858b;
+        color: #80868b;
         text-decoration: line-through;
         font-weight: 400;
       }
@@ -613,7 +619,7 @@
       }
       .due.done {
         background: none;
-        color: #808087;
+        color: #80868b;
         padding-right: 0;
       }
       .task-more {
@@ -645,8 +651,8 @@
         height: 32px;
         display: grid;
         place-items: center;
-        border-radius: 9px;
-        color: #77777d;
+        border-radius: 8px;
+        color: #80868b;
       }
       .icon-link:hover {
         background: var(--soft);
@@ -654,48 +660,47 @@
       }
       .schedule-days {
         display: flex;
-        margin: 0 24px 20px;
-        padding: 4px;
-        gap: 2px;
-        background: var(--soft);
-        border-radius: 12px;
+        margin: 0 24px 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--line);
       }
       .day {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 2px;
+        gap: 4px;
         flex: 1;
-        padding: 7px 2px 8px;
-        border-radius: 9px;
-        color: #7c7c82;
-        font-size: 10px;
-        position: relative;
-        transition: background 0.15s;
+        padding: 4px 0;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
       }
       .day b {
-        font-size: 14px;
-        font-weight: 550;
-        color: var(--ink);
-      }
-      .day.today:after {
-        content: "";
-        position: absolute;
-        bottom: 3px;
-        width: 4px;
-        height: 4px;
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
         border-radius: 50%;
+        font-size: 18px;
+        font-weight: 400;
+        letter-spacing: 0;
+        color: var(--text);
+        transition: background 0.15s;
+      }
+      .day.today {
+        color: var(--blue);
+      }
+      .day.today b {
+        color: var(--blue);
+      }
+      .day.selected b {
         background: var(--blue);
+        color: #fff;
       }
-      .day.selected {
-        background: #fff;
-        color: var(--ink);
-        box-shadow:
-          0 1px 2px #1717230f,
-          0 0 0 1px #17172308;
-      }
-      .day:hover:not(.selected) {
-        background: #ebebee;
+      .day:hover:not(.selected) b {
+        background: var(--soft);
       }
       .schedule-list {
         list-style: none;
@@ -720,14 +725,14 @@
       }
       .slot-time {
         font-size: 11px;
-        color: #6f6f76;
+        color: #5f6368;
         padding-top: 11px;
         font-variant-numeric: tabular-nums;
       }
       .slot-body {
         position: relative;
         padding: 9px 12px 10px 26px;
-        border-radius: 12px;
+        border-radius: 8px;
         margin-bottom: 2px;
       }
       .slot-body:before {
@@ -738,13 +743,13 @@
         width: 7px;
         height: 7px;
         border-radius: 50%;
-        background: #fff;
-        border: 1.5px solid #c9c9d1;
+        background: var(--c);
+        border: 0;
         box-sizing: border-box;
       }
       .slot-body h3 {
         font-size: 13px;
-        font-weight: 550;
+        font-weight: 500;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -757,7 +762,7 @@
       }
       .slot.now .slot-time {
         color: var(--blue);
-        font-weight: 550;
+        font-weight: 500;
       }
       .slot.now .slot-body {
         background: var(--blue-soft);
@@ -765,28 +770,19 @@
       .slot.now .slot-body:before {
         background: var(--blue);
         border-color: var(--blue);
-        box-shadow: 0 0 0 3px #2860f526;
+        box-shadow: 0 0 0 3px #1967d226;
       }
       .now-tag {
         font-size: 10px;
-        font-weight: 550;
+        font-weight: 500;
         color: var(--blue);
         display: flex;
         align-items: center;
         gap: 5px;
       }
-      .now-tag:before,
-      .subject-tile-next i {
-        content: "";
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--blue);
-        display: inline-block;
-      }
       .slot.break .slot-time {
         padding-top: 7px;
-        color: #9a9aa1;
+        color: #9aa0a6;
       }
       .slot.break .slot-body {
         padding-top: 6px;
@@ -798,102 +794,137 @@
         width: 5px;
         height: 5px;
         border: 0;
-        background: #d4d4da;
+        background: #dadce0;
       }
       .slot.break .slot-body p {
         margin: 0;
         font-style: italic;
-        color: #8b8b92;
+        color: #80868b;
+      }
+      .classes {
+        margin-bottom: 28px;
+      }
+      .classes-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+      .classes-head h2 {
+        font-size: 22px;
+        font-weight: 400;
       }
       .subject-tiles {
         display: grid;
         grid-template-columns: repeat(12, minmax(0, 1fr));
-        gap: 12px;
-        padding: 0 24px 24px;
+        gap: 24px;
       }
-      .subject-tile {
+      .course-card {
         grid-column: span 3;
         display: flex;
         flex-direction: column;
         text-align: left;
         min-width: 0;
-        padding: 16px 16px 14px;
         border: 1px solid var(--line);
-        border-radius: 16px;
+        border-radius: 8px;
+        overflow: hidden;
         background: #fff;
-        transition:
-          border-color 0.15s,
-          box-shadow 0.15s,
-          transform 0.15s;
+        transition: box-shadow 0.2s;
       }
-      .subject-tile:nth-child(n + 5) {
+      .course-card:nth-child(n + 5) {
         grid-column: span 4;
       }
-      .subject-tile:hover {
-        border-color: #c9d6fb;
-        box-shadow: 0 6px 18px #2860f512;
-        transform: translateY(-1px);
+      .course-card:hover {
+        box-shadow:
+          0 1px 2px 0 rgba(60, 64, 67, 0.3),
+          0 2px 6px 2px rgba(60, 64, 67, 0.15);
       }
-      .subject-tile-top {
+      .course-banner {
+        position: relative;
         display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        margin-bottom: 22px;
-      }
-      .subject-tile-top .icon {
-        color: #b4b4bb;
-        transition:
-          color 0.15s,
-          transform 0.15s;
-      }
-      .subject-tile:hover .subject-tile-top .icon {
-        color: var(--blue);
-        transform: translateX(2px);
-      }
-      .subject-mark {
-        width: 38px;
-        height: 38px;
-        border-radius: 11px;
-        display: grid;
-        place-items: center;
-        background: var(--soft);
-        color: var(--ink);
-        font-size: 13px;
-        font-weight: 600;
-        letter-spacing: -0.2px;
-      }
-      .subject-tile.live .subject-mark {
-        background: var(--blue);
+        flex-direction: column;
+        min-height: 100px;
+        padding: 16px 84px 16px 16px;
         color: #fff;
+        background:
+          radial-gradient(circle at 88% 135%, #ffffff29 0 34%, transparent 34.5%),
+          radial-gradient(circle at 102% -20%, #ffffff1f 0 26%, transparent 26.5%),
+          var(--c);
       }
-      .subject-tile-name {
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--ink);
-        letter-spacing: -0.2px;
+      .course-name {
+        font-size: 22px;
+        line-height: 1.25;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
-      .subject-tile-meta {
-        font-size: 11px;
-        color: var(--muted);
-        margin-top: 2px;
+      .course-card:hover .course-name {
+        text-decoration: underline;
       }
-      .subject-tile-next {
+      .course-sub {
+        font-size: 13px;
+        margin-top: 4px;
+        opacity: 0.92;
+      }
+      .course-avatar {
+        position: absolute;
+        right: 16px;
+        bottom: -36px;
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: color-mix(in srgb, var(--c) 78%, #000);
+        border: 3px solid #fff;
+        font-size: 22px;
+        color: #fff;
+      }
+      .course-body {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 16px 96px 18px 16px;
+        min-height: 82px;
+      }
+      .course-label {
+        font-size: 12px;
+        color: var(--muted);
+        letter-spacing: 0.2px;
+      }
+      .course-next {
         display: flex;
         align-items: center;
         gap: 6px;
-        margin-top: 14px;
-        padding-top: 12px;
-        border-top: 1px solid #f0f0f3;
-        font-size: 11px;
-        color: #55555c;
+        font-size: 14px;
+        color: var(--ink);
         font-variant-numeric: tabular-nums;
       }
-      .subject-tile.live .subject-tile-next {
-        color: var(--blue);
-        font-weight: 550;
+      .course-card.live .course-next {
+        color: #1e8e3e;
+        font-weight: 500;
+      }
+      .course-next i,
+      .now-tag:before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #1e8e3e;
+        display: inline-block;
+      }
+      .course-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: auto;
+        padding: 10px 16px;
+        border-top: 1px solid var(--line);
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .course-foot .icon {
+        color: var(--muted);
       }
       .lesson-list {
         list-style: none;
@@ -920,7 +951,7 @@
         justify-content: center;
         align-items: center;
         gap: 7px;
-        color: #5f6068;
+        color: #5f6368;
       }
       .schedule-footer a:hover {
         color: var(--blue);
@@ -945,13 +976,13 @@
         height: 39px;
         display: grid;
         place-items: center;
-        border-radius: 10px;
+        border-radius: 8px;
         background: var(--blue-soft);
         color: var(--blue);
       }
       .subject-icon.mint {
         background: var(--soft);
-        color: #55555c;
+        color: #5f6368;
       }
       .assignment-copy {
         flex: 1;
@@ -980,8 +1011,8 @@
       .track {
         height: 4px;
         display: block;
-        border-radius: 10px;
-        background: #eeeef3;
+        border-radius: 8px;
+        background: #f1f3f4;
         overflow: hidden;
       }
       .track i {
@@ -989,7 +1020,7 @@
         height: 100%;
         width: var(--value);
         background: var(--blue);
-        border-radius: 10px;
+        border-radius: 8px;
       }
       .progress-panel {
         padding: 23px 24px;
@@ -1003,7 +1034,7 @@
         justify-content: space-between;
       }
       .progress-head .icon {
-        color: #77777d;
+        color: #80868b;
       }
       .progress-visual {
         display: flex;
@@ -1029,12 +1060,12 @@
       .progress-ring strong {
         font-size: 20px;
         color: var(--ink);
-        letter-spacing: -0.65px;
-        font-weight: 600;
+        letter-spacing: -0.22px;
+        font-weight: 500;
       }
       .progress-message strong {
         font-size: 14px;
-        font-weight: 550;
+        font-weight: 500;
       }
       .progress-message p {
         font-size: 11px;
@@ -1054,7 +1085,7 @@
       }
       .progress-foot button {
         font-size: 11px;
-        font-weight: 550;
+        font-weight: 500;
         color: var(--blue);
         display: flex;
         align-items: center;
@@ -1073,13 +1104,13 @@
         text-align: left;
         gap: 11px;
         padding: 13px 0;
-        border-bottom: 1px solid #f0f0f3;
+        border-bottom: 1px solid #f1f3f4;
       }
       .school-link:last-child {
         border: 0;
       }
       .school-link > .icon {
-        color: #86868e;
+        color: #80868b;
         width: 18px;
         height: 18px;
       }
@@ -1090,7 +1121,7 @@
       }
       .school-link small {
         font-size: 10px;
-        color: #77777f;
+        color: #80868b;
       }
       .school-link:hover span {
         text-decoration: underline;
@@ -1100,7 +1131,7 @@
         justify-content: space-between;
         gap: 15px;
         margin-top: 28px;
-        color: #85858d;
+        color: #80868b;
         font-size: 10px;
       }
       .page-footer span:first-child {
@@ -1156,8 +1187,8 @@
       }
       .large-stat {
         font-size: 42px;
-        font-weight: 650;
-        letter-spacing: -1.5px;
+        font-weight: 400;
+        letter-spacing: -0.50px;
         color: var(--ink);
         margin-top: 14px;
       }
@@ -1195,9 +1226,9 @@
       }
       .info-strip {
         padding: 15px 19px;
-        border-radius: 12px;
+        border-radius: 8px;
         background: var(--blue-soft);
-        color: #5470aa;
+        color: #5f6368;
         font-size: 12px;
         margin-bottom: 24px;
       }
@@ -1216,9 +1247,9 @@
         margin-bottom: 18px;
       }
       .week-class {
-        border-left: 2px solid #abc2fb;
-        border-radius: 0 9px 9px 0;
-        background: #f0f4ff;
+        border-left: 4px solid var(--c);
+        border-radius: 0 8px 8px 0;
+        background: color-mix(in srgb, var(--c) 7%, #fff);
         padding: 12px;
         margin-bottom: 11px;
         font-size: 12px;
@@ -1227,7 +1258,7 @@
         display: block;
         margin: 4px 0;
         font-size: 12px;
-        font-weight: 550;
+        font-weight: 500;
       }
       .week-class small {
         font-size: 10px;
@@ -1235,14 +1266,14 @@
       }
       .week-class time {
         font-size: 11px;
-        color: #677da9;
+        color: #80868b;
       }
       .notes-area {
         width: 100%;
-        border: 1px solid #e0e0e6;
+        border: 1px solid #dadce0;
         padding: 14px;
-        border-radius: 12px;
-        background: #fafafb;
+        border-radius: 8px;
+        background: #f8f9fa;
         min-height: 170px;
         resize: vertical;
         font-size: 13px;
@@ -1254,15 +1285,15 @@
       .field label {
         display: block;
         font-size: 12px;
-        font-weight: 550;
+        font-weight: 500;
         margin-bottom: 8px;
       }
       .field input,
       .field select {
         display: block;
         width: 100%;
-        border: 1px solid #dedee5;
-        border-radius: 10px;
+        border: 1px solid #dadce0;
+        border-radius: 8px;
         padding: 11px 13px;
         background: #fff;
       }
@@ -1280,24 +1311,24 @@
       .notice {
         font-size: 12px;
         line-height: 1.65;
-        background: #f5f5f7;
-        color: #6f6f78;
+        background: #f1f3f4;
+        color: #5f6368;
         padding: 14px 16px;
-        border-radius: 11px;
+        border-radius: 8px;
         margin-top: 22px;
       }
       .dialog {
-        border: 1px solid #e5e5eb;
-        border-radius: 24px;
+        border: 1px solid #e8eaed;
+        border-radius: 8px;
         width: min(580px, calc(100% - 32px));
         padding: 0;
         color: var(--text);
-        box-shadow: 0 24px 100px #17172525;
+        box-shadow: 0 24px 100px #20212425;
         max-height: calc(100dvh - 48px);
         background: #fff;
       }
       .dialog::backdrop {
-        background: #1b1c2c45;
+        background: #20212445;
         backdrop-filter: blur(5px);
       }
       .dialog-header {
@@ -1310,7 +1341,7 @@
       }
       .dialog-header h2 {
         font-size: 21px;
-        letter-spacing: -0.6px;
+        letter-spacing: -0.20px;
       }
       .dialog-close {
         width: 30px;
@@ -1319,7 +1350,7 @@
         display: grid;
         place-items: center;
         background: var(--soft);
-        color: #717178;
+        color: #5f6368;
       }
       .dialog-body {
         padding: 24px 26px 28px;
@@ -1335,7 +1366,7 @@
       .dialog-body ul,
       .dialog-body ol {
         padding-left: 20px;
-        color: #65656e;
+        color: #5f6368;
       }
       .dialog-body li {
         margin: 10px 0;
@@ -1344,8 +1375,8 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        border: 1px solid #dedee7;
-        border-radius: 12px;
+        border: 1px solid #dadce0;
+        border-radius: 8px;
         padding: 12px 13px;
       }
       .search-field input {
@@ -1355,8 +1386,8 @@
         background: none;
       }
       .search-field:focus-within {
-        outline: 3px solid #2860f51c;
-        border-color: #aac0f6;
+        outline: 3px solid #1967d21c;
+        border-color: #aecbfa;
       }
       .search-results {
         margin-top: 16px;
@@ -1369,7 +1400,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 14px 11px;
-        border-radius: 10px;
+        border-radius: 8px;
         text-align: left;
       }
       .search-result:hover {
@@ -1392,8 +1423,8 @@
       .topic-option {
         text-align: left;
         padding: 16px;
-        border: 1px solid #e6e6ec;
-        border-radius: 12px;
+        border: 1px solid #e8eaed;
+        border-radius: 8px;
         background: white;
         display: flex;
         align-items: center;
@@ -1418,12 +1449,12 @@
       .study-example {
         padding: 22px;
         background: var(--blue-soft);
-        border-radius: 14px;
+        border-radius: 8px;
         margin: 20px 0;
         font-size: 19px;
-        font-weight: 550;
+        font-weight: 500;
         text-align: center;
-        color: #325cba;
+        color: #1967d2;
       }
       .quiz-answers {
         display: grid;
@@ -1431,8 +1462,8 @@
         margin-top: 20px;
       }
       .quiz-answer {
-        border: 1px solid #e0e0e6;
-        border-radius: 11px;
+        border: 1px solid #dadce0;
+        border-radius: 8px;
         padding: 14px;
         text-align: left;
       }
@@ -1440,19 +1471,19 @@
         background: var(--soft);
       }
       .quiz-answer.correct {
-        border-color: #86a6f8;
+        border-color: #8ab4f8;
         background: var(--blue-soft);
         opacity: 1;
       }
       .quiz-answer.incorrect {
-        border-color: #c4c4cc;
+        border-color: #bdc1c6;
         background: var(--soft);
         opacity: 1;
       }
       .quiz-feedback {
         font-size: 13px;
         margin-top: 20px;
-        color: #5069a3;
+        color: #5f6368;
         min-height: 26px;
       }
       .toast {
@@ -1461,11 +1492,11 @@
         left: calc(50% + var(--sidebar) / 2);
         transform: translate(-50%, 12px);
         padding: 13px 21px;
-        background: #202022;
+        background: #202124;
         color: #fff;
         font-size: 13px;
-        border-radius: 12px;
-        box-shadow: 0 6px 22px #17172815;
+        border-radius: 8px;
+        box-shadow: 0 6px 22px #20212415;
         z-index: 100;
         opacity: 0;
         pointer-events: none;
@@ -1482,19 +1513,19 @@
       .storage-warning {
         margin: 0 0 22px;
         padding: 14px 16px;
-        border-radius: 12px;
+        border-radius: 8px;
         background: var(--soft);
         font-size: 13px;
-        color: #55555c;
+        color: #5f6368;
       }
       .note-card {
         white-space: pre-wrap;
         overflow-wrap: anywhere;
         background: var(--blue-soft);
         padding: 20px;
-        border-radius: 12px;
+        border-radius: 8px;
         line-height: 1.75;
-        color: #526b9b;
+        color: #5f6368;
         margin: 18px 0;
       }
       .switch-row {
@@ -1630,6 +1661,13 @@
         :root {
           --sidebar: 0px;
         }
+        .course-card,
+        .course-card:nth-child(n + 5) {
+          grid-column: span 6;
+        }
+        .course-card:last-child {
+          grid-column: span 12;
+        }
         .sidebar {
           width: 245px;
           transform: translateX(-100%);
@@ -1665,7 +1703,7 @@
           display: block;
           position: fixed;
           inset: 0;
-          background: #1717233f;
+          background: #2021243f;
           z-index: 35;
           backdrop-filter: blur(3px);
         }
@@ -1682,7 +1720,7 @@
         }
         h1 {
           font-size: 32px;
-          letter-spacing: -1.1px;
+          letter-spacing: -0.37px;
         }
         .page-heading p {
           font-size: 13px;
@@ -1717,7 +1755,7 @@
         }
         .greeting h1 {
           font-size: 29px;
-          letter-spacing: -1.05px;
+          letter-spacing: -0.35px;
         }
         .page-heading p {
           font-size: 12px;
@@ -1725,7 +1763,7 @@
           line-height: 1.5;
         }
         .panel {
-          border-radius: 20px;
+          border-radius: 8px;
         }
         .panel-head {
           padding: 21px 20px 17px;
@@ -1782,15 +1820,39 @@
           align-items: stretch;
         }
         .subject-tiles {
-          padding: 0 20px 20px;
-          gap: 10px;
+          gap: 12px;
         }
-        .subject-tile,
-        .subject-tile:nth-child(n + 5) {
-          grid-column: span 6;
+        .course-name {
+          font-size: 17px;
         }
-        .subject-tile:last-child {
-          grid-column: span 12;
+        .course-banner {
+          min-height: 76px;
+          padding: 12px;
+        }
+        .course-sub {
+          font-size: 11px;
+        }
+        .course-avatar {
+          width: 40px;
+          height: 40px;
+          bottom: -20px;
+          right: 12px;
+          font-size: 14px;
+          border-width: 2px;
+        }
+        .course-body {
+          padding: 14px 12px;
+          min-height: 0;
+        }
+        .course-label {
+          font-size: 11px;
+        }
+        .course-next {
+          font-size: 13px;
+        }
+        .course-foot {
+          padding: 8px 12px;
+          font-size: 11px;
         }
         .schedule-days {
           margin-left: 20px;
@@ -1851,7 +1913,7 @@
           padding: 15px;
         }
         .progress-panel {
-          border-radius: 20px;
+          border-radius: 8px;
         }
         .content-card {
           padding: 23px;
@@ -1921,12 +1983,12 @@
         align-items: center;
         gap: 4px;
         padding: 7px;
-        border: 1px solid #e0e2e8;
-        border-radius: 23px;
+        border: 1px solid #dadce0;
+        border-radius: 8px;
         background: rgba(255, 255, 255, 0.94);
         box-shadow:
-          0 8px 32px #18244112,
-          0 2px 6px #18244105;
+          0 8px 32px #174ea612,
+          0 2px 6px #174ea605;
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
       }
@@ -1937,8 +1999,8 @@
         width: 44px;
         height: 44px;
         flex: none;
-        border-radius: 15px;
-        color: #65666f;
+        border-radius: 8px;
+        color: #5f6368;
         transition:
           background 0.15s,
           color 0.15s;
@@ -1970,7 +2032,7 @@
         transform: translate(-50%, 3px);
         padding: 6px 9px;
         border-radius: 7px;
-        background: #24252a;
+        background: #202124;
         color: white;
         font-size: 11px;
         line-height: 1.4;
@@ -1988,7 +2050,7 @@
       .dock-divider {
         width: 1px;
         height: 22px;
-        background: #e7e8ed;
+        background: #e8eaed;
         margin: 0 4px;
       }
       .quick-actions .mobile-menu,
@@ -2238,7 +2300,7 @@ SOFTWARE.
     <aside class="sidebar" id="sidebar" aria-label="Main navigation">
       <a class="brand" href="#dashboard" aria-label="Chom Learn home"
         ><svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
-          <rect x="1" y="1" width="38" height="38" rx="11" fill="#2860f5" />
+          <rect x="1" y="1" width="38" height="38" rx="11" fill="#1967d2" />
           <path
             d="M27 12.5a10 10 0 1 0 0 15"
             fill="none"
@@ -2495,13 +2557,13 @@ SOFTWARE.
           ["14:40", "15:30"],
         ];
         const subjectList = [
-          { id: "maths", name: "Mathematics", short: "Ma", room: "Room 12", teacher: "Mr Dlamini" },
-          { id: "english", name: "English", short: "En", room: "Room 4", teacher: "Ms Naidoo" },
-          { id: "afrikaans", name: "Afrikaans", short: "Af", room: "Room 7", teacher: "" },
-          { id: "life-sciences", name: "Life Sciences", short: "Ls", room: "Lab 2", teacher: "" },
-          { id: "geography", name: "Geography", short: "Gg", room: "Room 15", teacher: "" },
-          { id: "history", name: "History", short: "Hi", room: "Room 9", teacher: "" },
-          { id: "art", name: "Art", short: "Ar", room: "Art studio", teacher: "" },
+          { id: "maths", name: "Mathematics", short: "Ma", room: "Room 12", teacher: "Mr Dlamini", color: "#1967d2" },
+          { id: "english", name: "English", short: "En", room: "Room 4", teacher: "Ms Naidoo", color: "#129eaf" },
+          { id: "afrikaans", name: "Afrikaans", short: "Af", room: "Room 7", teacher: "", color: "#e8710a" },
+          { id: "life-sciences", name: "Life Sciences", short: "Ls", room: "Lab 2", teacher: "", color: "#1e8e3e" },
+          { id: "geography", name: "Geography", short: "Gg", room: "Room 15", teacher: "", color: "#9334e6" },
+          { id: "history", name: "History", short: "Hi", room: "Room 9", teacher: "", color: "#c5221f" },
+          { id: "art", name: "Art", short: "Ar", room: "Art studio", teacher: "", color: "#e52592" },
         ];
         // Sample "now": Tuesday, during period 1.
         const today = 1,
@@ -2606,11 +2668,11 @@ SOFTWARE.
           return `${l.day === today ? "Today" : dayNames[l.day].slice(0, 3)} · ${slotTimes[l.slot][0]}`;
         }
         function subjectsPanel() {
-          return `<section class="panel subjects-panel" aria-labelledby="subjects-title"><div class="panel-head"><div><h2 id="subjects-title">Your subjects</h2><p class="schedule-subtitle">Grade 10 · ${subjectList.length} subjects this term</p></div><a class="text-button" href="#subjects">All subjects ${icon("arrow", true)}</a></div><div class="subject-tiles">${subjectList
+          return `<section class="classes" aria-labelledby="subjects-title"><div class="classes-head"><h2 id="subjects-title">Your classes</h2><a class="text-button" href="#subjects">All subjects ${icon("arrow", true)}</a></div><div class="subject-tiles">${subjectList
             .map((x) => {
               const next = nextLesson(x),
                 live = next.day === today && next.slot === nowSlot;
-              return `<button class="subject-tile ${live ? "live" : ""}" data-action="subject" data-subject="${x.id}"><span class="subject-tile-top"><span class="subject-mark" aria-hidden="true">${x.short}</span>${icon("arrow", true)}</span><span class="subject-tile-name">${x.name}</span><span class="subject-tile-meta">${lessonsOf(x).length} lessons a week</span><span class="subject-tile-next">${live ? '<i aria-hidden="true"></i>' : ""}${lessonLabel(next)}</span></button>`;
+              return `<button class="course-card ${live ? "live" : ""}" style="--c:${x.color}" data-action="subject" data-subject="${x.id}"><span class="course-banner"><span class="course-name">${x.name}</span><span class="course-sub">Grade 10B${x.teacher ? " · " + x.teacher : ""}</span><span class="course-avatar" aria-hidden="true">${x.short}</span></span><span class="course-body"><span class="course-label">${live ? "Happening now" : "Next lesson"}</span><span class="course-next">${live ? `<i aria-hidden="true"></i>${x.room}` : lessonLabel(next)}</span></span><span class="course-foot"><span>${lessonsOf(x).length} lessons a week</span>${icon("file", true)}</span></button>`;
             })
             .join("")}</div></section>`;
         }
@@ -2628,7 +2690,7 @@ SOFTWARE.
           const slot = (i) => {
             const x = subjectInfo(weekly[day][i]),
               now = day === today && i === nowSlot;
-            return `<li class="slot ${now ? "now" : ""}"><time class="slot-time">${slotTimes[i][0]}</time><div class="slot-body"><h3>${x.name}${now ? '<span class="now-tag">Now</span>' : ""}</h3><p>${x.room}${x.teacher ? " · " + x.teacher : ""}</p></div></li>`;
+            return `<li class="slot ${now ? "now" : ""}" style="--c:${x.color}"><time class="slot-time">${slotTimes[i][0]}</time><div class="slot-body"><h3>${x.name}${now ? '<span class="now-tag">Now</span>' : ""}</h3><p>${x.room}${x.teacher ? " · " + x.teacher : ""}</p></div></li>`;
           };
           return [0, 1, 2, 3].map(slot).join("") +
             `<li class="slot break"><time class="slot-time">13:15</time><div class="slot-body"><p>Lunch break · 30 min</p></div></li>` +
@@ -2649,13 +2711,13 @@ SOFTWARE.
           return `<section class="panel"><div class="panel-head"><h2>Upcoming assignments</h2><a class="text-button" href="#assignments">View all ${icon("arrow", true)}</a></div><div class="assignment-list">${assignmentRows()}</div></section>`;
         }
         function progressPanel() {
-          return `<section class="progress-panel"><div class="progress-head"><h2>Your progress</h2>${icon("leaf")}</div><div class="progress-visual"><div class="progress-ring"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="none" stroke="#e6ecfd" stroke-width="6"/><circle cx="40" cy="40" r="34" fill="none" stroke="#2860f5" stroke-width="6" stroke-linecap="round" stroke-dasharray="207 214"/></svg><strong>97%</strong></div><div class="progress-message"><strong>Showing up matters.</strong><p>Your attendance this term. Keep making space for learning.</p></div></div><div class="progress-foot"><span>One day at a time.</span><button data-action="navigate" data-view="results">My progress ${icon("arrow", true)}</button></div></section>`;
+          return `<section class="progress-panel"><div class="progress-head"><h2>Your progress</h2>${icon("leaf")}</div><div class="progress-visual"><div class="progress-ring"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="none" stroke="#e8f0fe" stroke-width="6"/><circle cx="40" cy="40" r="34" fill="none" stroke="#1967d2" stroke-width="6" stroke-linecap="round" stroke-dasharray="207 214"/></svg><strong>97%</strong></div><div class="progress-message"><strong>Showing up matters.</strong><p>Your attendance this term. Keep making space for learning.</p></div></div><div class="progress-foot"><span>One day at a time.</span><button data-action="navigate" data-view="results">My progress ${icon("arrow", true)}</button></div></section>`;
         }
         function schoolPanel() {
           return `<section class="panel school-panel"><div class="panel-head"><h2>Beyond the classroom</h2></div><div class="school-links"><button class="school-link" data-action="service" data-service="sport">${icon("ball")}<span>Sports & activities</span><small>Hockey, 15:30</small></button><button class="school-link" data-action="service" data-service="transport">${icon("bus")}<span>My transport</span><small>Bus 14</small></button><button class="school-link" data-action="service" data-service="support">${icon("heart")}<span>Someone to talk to</span>${icon("chevron", true)}</button></div></section>`;
         }
         function dashboard() {
-          return `<header class="page-heading"><div><div class="greeting"><h1>Hey, Amara.</h1></div><p>You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></div><span class="date-pill">${icon("calendar", true)}Tuesday, 6 October 2026</span></header><div class="dashboard"><div class="main-column">${subjectsPanel()}${assignmentsPanel()}${schoolPanel()}</div><div class="right-column">${schedulePanel()}${progressPanel()}</div></div>`;
+          return `<header class="page-heading"><div><div class="greeting"><h1>Hey, Amara.</h1></div><p>You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></div><span class="date-pill">${icon("calendar", true)}Tuesday, 6 October 2026</span></header>${subjectsPanel()}<div class="dashboard"><div class="main-column">${assignmentsPanel()}${progressPanel()}${schoolPanel()}</div><div class="right-column">${schedulePanel()}</div></div>`;
         }
         function viewHeader(title, copy, extra = "") {
           return `<header class="view-header"><div><h1>${title}</h1><p>${copy}</p></div>${extra}</header>`;
@@ -2690,7 +2752,7 @@ SOFTWARE.
                 "A little structure for your week.",
                 "5–9 October 2026 · Grade 10B · Sample school timetable",
               ) +
-              `<section class="panel"><div class="panel-head"><h2>This week</h2><span class="date-pill">Term 4 · Week 2</span></div><div class="table-wrap"><div class="week-grid">${dayNames.map((d, di) => `<div class="week-col"><h3>${d.slice(0, 3)} <span class="muted">${di + 5} Oct</span></h3>${weekly[di].map((s, i) => `<div class="week-class"><time>${["09:40", "10:35", "11:30", "12:25", "13:45", "14:40"][i]}</time><strong>${s}</strong><small>Period ${i + 1}</small></div>`).join("")}</div>`).join("")}</div></div></section><div class="notice">Lunch break: 13:15–13:45. School activities and transport are in School life. On small screens, scroll the timetable sideways to see the week.</div>`;
+              `<section class="panel"><div class="panel-head"><h2>This week</h2><span class="date-pill">Term 4 · Week 2</span></div><div class="table-wrap"><div class="week-grid">${dayNames.map((d, di) => `<div class="week-col"><h3>${d.slice(0, 3)} <span class="muted">${di + 5} Oct</span></h3>${weekly[di].map((s, i) => `<div class="week-class" style="--c:${subjectInfo(s).color}"><time>${["09:40", "10:35", "11:30", "12:25", "13:45", "14:40"][i]}</time><strong>${s}</strong><small>Period ${i + 1}</small></div>`).join("")}</div>`).join("")}</div></div></section><div class="notice">Lunch break: 13:15–13:45. School activities and transport are in School life. On small screens, scroll the timetable sideways to see the week.</div>`;
           if (currentView === "assignments")
             html =
               viewHeader(
