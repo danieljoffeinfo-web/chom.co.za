@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#eeebda" />
+    <meta name="theme-color" content="#f5f3e9" />
     <meta name="color-scheme" content="light" />
     <meta
       name="description"
@@ -24,22 +24,22 @@
       /* Chom Business design tokens. Light is the default; dark is opt-in from Settings. */
       :root {
         color-scheme: light;
-        --bg: #eeebda;
-        --paper: #f7f5eb;
-        --card: #f7f5eb;
+        --bg: #f5f3e9;
+        --paper: #fbfaf4;
+        --card: #fbfaf4;
         --ink: #282b4a;
         --text: #282b4a;
         --muted: #5f6178;
         --line: #dcd8c3;
-        --soft: #e4e0cb;
+        --soft: #ebe8d8;
         --orange: #282b4a;
-        --on-orange: #eeebda;
+        --on-orange: #f5f3e9;
         --peach: #dcd8c3;
         --blue: #282b4a;
         --blue-hover: #383c63;
         --blue-soft: #e4e0cb;
         --ink-hover: #383c63;
-        --accent-on-fill: #eeebda;
+        --accent-on-fill: #f5f3e9;
         --r: 24px;
         --sidebar: 248px;
       }
@@ -3442,7 +3442,7 @@ SOFTWARE.
           const dark = state.theme === "dark";
           document.documentElement.dataset.theme = dark ? "dark" : "light";
           const meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) meta.content = dark ? "#282b4a" : "#eeebda";
+          if (meta) meta.content = dark ? "#282b4a" : "#f5f3e9";
         }
         function save() {
           try {
