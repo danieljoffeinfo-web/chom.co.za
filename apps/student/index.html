@@ -138,10 +138,6 @@
 
       /* Hero */
       .hero {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
-        gap: 48px;
-        align-items: center;
         padding-top: clamp(32px, 7vw, 88px);
         padding-bottom: clamp(48px, 8vw, 104px);
       }
@@ -152,7 +148,7 @@
       }
       .hero h1 {
         margin-top: 12px;
-        font-size: clamp(44px, 5.6vw, 76px);
+        font-size: clamp(44px, 8vw, 104px);
         line-height: 0.98;
         font-weight: 800;
         letter-spacing: -3px;
@@ -162,8 +158,8 @@
       }
       .hero p.lede {
         margin-top: 24px;
-        max-width: 30ch;
-        font-size: clamp(19px, 2vw, 22px);
+        max-width: 46ch;
+        font-size: clamp(19px, 2vw, 24px);
         line-height: 1.4;
       }
       .cta {
@@ -176,105 +172,6 @@
         margin-top: 16px;
         font-size: 14px;
         color: var(--muted);
-      }
-
-      /* Product preview */
-      .preview {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        padding: 20px;
-        border: 1px solid var(--line);
-        border-radius: 28px;
-        background: var(--card);
-      }
-      .p-now {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 12px 16px;
-        padding: 18px 20px;
-        border-radius: 20px;
-        background: var(--ink);
-        color: var(--card);
-      }
-      .pill {
-        display: inline-flex;
-        align-items: center;
-        height: 26px;
-        padding: 0 11px;
-        border-radius: 999px;
-        background: var(--bg);
-        color: var(--ink);
-        font-size: 11px;
-        font-weight: 800;
-        letter-spacing: 1.5px;
-      }
-      .p-now strong {
-        display: block;
-        font-size: 20px;
-        font-weight: 800;
-        letter-spacing: -0.3px;
-      }
-      .p-now small {
-        font-size: 13px;
-      }
-      .p-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        padding: 8px 4px 0;
-        font-size: 17px;
-        font-weight: 800;
-      }
-      .p-head span {
-        font-size: 13px;
-        font-weight: 700;
-        color: var(--muted);
-      }
-      .p-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 14px;
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        background: var(--bg);
-      }
-      .p-row b {
-        flex: 1;
-        min-width: 0;
-        font-size: 15px;
-      }
-      .p-row b small {
-        display: block;
-        font-size: 13px;
-        font-weight: 500;
-        color: var(--muted);
-      }
-      .due {
-        padding: 5px 10px;
-        border-radius: 999px;
-        background: var(--line);
-        font-size: 12px;
-        font-weight: 700;
-        white-space: nowrap;
-      }
-      .box {
-        width: 24px;
-        height: 24px;
-        flex-shrink: 0;
-        border: 2px solid var(--ink);
-        border-radius: 7px;
-      }
-      .box.on {
-        background: var(--ink)
-          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f7f5eb' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12 4 4 8-8'/%3E%3C/svg%3E")
-          center / 16px no-repeat;
-      }
-      .p-row.done b {
-        color: var(--muted);
-        text-decoration: line-through;
       }
 
       /* Features */
@@ -400,17 +297,6 @@
             <a class="btn ghost" href="#features">See how it works</a>
           </div>
           <p class="note">Student preview with sample school data. No account needed yet.</p>
-        </div>
-
-        <div class="preview" aria-label="Preview of the Chom Learn dashboard" role="img">
-          <div class="p-now">
-            <span class="pill">ON NOW</span>
-            <div><strong>Mathematics</strong><small>Room 12 · 09:40–10:30</small></div>
-          </div>
-          <div class="p-head">Due today <span>2 left</span></div>
-          <div class="p-row"><b>Exercise 4.2: quadratic equations<small>Maths</small></b><span class="due">Due by 15:00</span><span class="box"></span></div>
-          <div class="p-row"><b>Reading log, chapter 6<small>English</small></b><span class="due">Due today</span><span class="box"></span></div>
-          <div class="p-row done"><b>Practise your vocabulary set<small>Afrikaans</small></b><span class="box on"></span></div>
         </div>
       </section>
 
