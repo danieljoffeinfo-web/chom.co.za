@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="var(--card)" />
     <meta
       name="description"
       content="A little more clarity for your school day. Plan your tasks, see your classes and study with Chom Learn."
@@ -11,28 +11,53 @@
     <title>Chom Learn — Your school day, sorted</title>
     <link
       rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%231a73e8'/%3E%3Cpath d='M28 13a11 11 0 1 0 0 14' fill='none' stroke='%23ffffff' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23ff5a1f'/%3E%3Cpath d='M28 13a11 11 0 1 0 0 14' fill='none' stroke='%23141414' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap"
     />
     <style>
+      /* Chom Business design tokens (light, with a dark theme below) */
       :root {
-        --bg: #fff;
-        --paper: #fff;
-        --ink: #202124;
-        --text: #3c4043;
-        --muted: #5f6368;
-        --line: #dadce0;
-        --blue: #1a73e8;
-        --blue-hover: #1967d2;
-        --blue-soft: #e8f0fe;
-        --soft: #f1f3f4;
-        --r: 8px;
-        --sidebar: 224px;
+        color-scheme: light dark;
+        --bg: #f6f5f1;
+        --paper: #fdfcfa;
+        --card: #fdfcfa;
+        --ink: #141414;
+        --text: #141414;
+        --muted: #6b6862;
+        --line: #e4e1da;
+        --soft: #efede7;
+        --orange: #ff5a1f;
+        --on-orange: #141414;
+        --peach: #ffe3d3;
+        --blue: #c8400f;
+        --blue-hover: #a83409;
+        --blue-soft: #fff1e9;
+        --ink-hover: #2c2b28;
+        --accent-on-fill: #ff7a45;
+        --r: 24px;
+        --sidebar: 248px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #141414;
+          --paper: #232220;
+          --card: #232220;
+          --ink: #f6f5f1;
+          --text: #f6f5f1;
+          --muted: #9c988f;
+          --line: #3a3835;
+          --soft: #2c2b28;
+          --blue: #ff7a45;
+          --blue-hover: #ff9466;
+          --blue-soft: #3a2419;
+          --ink-hover: #dcd9d2;
+          --accent-on-fill: #c8400f;
+        }
       }
       * {
         box-sizing: border-box;
@@ -42,10 +67,7 @@
         background: var(--bg);
         color: var(--text);
         font:
-          14px/1.5 "Google Sans Text",
-          Roboto,
-          Arial,
-          sans-serif;
+          14px/1.5 "Inter Tight", Inter, system-ui, sans-serif;
         -webkit-font-smoothing: antialiased;
       }
       button,
@@ -87,7 +109,7 @@
       input:focus-visible,
       textarea:focus-visible,
       select:focus-visible {
-        outline: 3px solid #1967d280;
+        outline: 3px solid var(--orange);
         outline-offset: 4px;
       }
       h1,
@@ -105,7 +127,7 @@
       h2,
       .wordmark {
         font-family:
-          "Google Sans", Roboto, Arial, sans-serif;
+          "Inter Tight", Inter, system-ui, sans-serif;
       }
       h1 {
         font-size: 36px;
@@ -129,7 +151,7 @@
       }
       input::placeholder,
       textarea::placeholder {
-        color: #80868b;
+        color: var(--muted);
         opacity: 1;
       }
       .icon {
@@ -155,8 +177,8 @@
         left: 20px;
         z-index: 100;
         padding: 12px 20px;
-        background: var(--blue);
-        color: white;
+        background: var(--ink);
+        color: var(--card);
         border-radius: 8px;
       }
       .skip-link:focus {
@@ -214,7 +236,7 @@
         background: var(--soft);
         display: grid;
         place-items: center;
-        color: #80868b;
+        color: var(--muted);
       }
       .school-switch strong {
         font-size: 12px;
@@ -248,7 +270,7 @@
       .nav a > .icon {
         width: 18px;
         height: 18px;
-        color: #80868b;
+        color: var(--muted);
       }
       .nav a:hover {
         background: var(--soft);
@@ -267,13 +289,13 @@
         min-width: 20px;
         height: 20px;
         border-radius: 6px;
-        background: #e8eaed;
-        color: #5f6368;
+        background: var(--line);
+        color: var(--muted);
         display: grid;
         place-items: center;
       }
       .nav a.active .badge {
-        background: #d2e3fc;
+        background: var(--blue-soft);
         color: var(--blue);
       }
       .nav.secondary {
@@ -286,7 +308,7 @@
       }
       .mini-chom {
         border-radius: 8px;
-        background: #f8f9fa;
+        background: var(--soft);
         padding: 16px;
       }
       .mini-chom .mini-title {
@@ -321,13 +343,13 @@
         align-items: center;
         gap: 6px;
         font-size: 10px;
-        color: #80868b;
+        color: var(--muted);
         padding: 17px 11px 0;
       }
       .sidebar-footer i {
         width: 5px;
         height: 5px;
-        background: #9aa0a6;
+        background: var(--muted);
         border-radius: 50%;
       }
       .shell {
@@ -340,8 +362,8 @@
         width: 5px;
         height: 5px;
         border-radius: 50%;
-        background: var(--blue);
-        box-shadow: 0 0 0 2px white;
+        background: var(--ink);
+        box-shadow: 0 0 0 2px var(--card);
       }
       .avatar {
         display: grid;
@@ -349,7 +371,7 @@
         width: 35px;
         height: 35px;
         background: var(--blue-soft);
-        border: 3px solid #fff;
+        border: 3px solid var(--card);
         box-shadow: 0 0 0 1px var(--line);
         border-radius: 50%;
         font-weight: 500;
@@ -383,19 +405,19 @@
       }
       .page-heading p strong {
         font-weight: 500;
-        color: #3c4043;
+        color: var(--ink);
       }
       .date-pill {
         display: flex;
         align-items: center;
         gap: 8px;
-        background: white;
+        background: var(--card);
         border: 1px solid var(--line);
         border-radius: 8px;
         padding: 9px 12px;
         white-space: nowrap;
         font-size: 11px;
-        color: #5f6368;
+        color: var(--muted);
       }
       .dashboard {
         display: grid;
@@ -410,7 +432,7 @@
         min-width: 0;
       }
       .panel {
-        background: #fff;
+        background: var(--card);
         border: 1px solid var(--line);
         border-radius: var(--r);
         overflow: hidden;
@@ -423,7 +445,7 @@
         gap: 12px;
       }
       .panel-head > .icon {
-        color: #80868b;
+        color: var(--muted);
       }
       .panel-title {
         display: flex;
@@ -436,10 +458,10 @@
         display: grid;
         place-items: center;
         border-radius: 6px;
-        background: #f1f3f4;
+        background: var(--soft);
         font-size: 11px;
         font-weight: 500;
-        color: #5f6368;
+        color: var(--muted);
       }
       .text-button {
         font-size: 12px;
@@ -454,8 +476,8 @@
         text-decoration: underline;
       }
       .button {
-        background: var(--blue);
-        color: #fff;
+        background: var(--ink);
+        color: var(--card);
         padding: 8px 24px;
         border-radius: 4px;
         display: inline-flex;
@@ -469,18 +491,18 @@
         transition: background 0.15s;
       }
       .button:hover {
-        background: var(--blue-hover);
+        background: var(--ink-hover);
       }
       .button.secondary {
-        background: #fff;
+        background: var(--card);
         color: var(--blue);
         box-shadow: inset 0 0 0 1px var(--line);
       }
       .button.secondary:hover {
-        background: #f8fbff;
+        background: var(--soft);
       }
       .button.outline {
-        background: white;
+        background: var(--card);
         border: 1px solid var(--line);
         color: var(--ink);
       }
@@ -519,8 +541,8 @@
         line-height: 16px;
         min-width: 16px;
         border-radius: 4px;
-        background: #f1f3f4;
-        color: #80868b;
+        background: var(--soft);
+        color: var(--muted);
       }
       .task-list {
         padding: 0 24px;
@@ -530,7 +552,7 @@
         align-items: center;
         gap: 12px;
         padding: 17px 0;
-        border-bottom: 1px solid #f1f3f4;
+        border-bottom: 1px solid var(--soft);
         min-height: 72px;
       }
       .task-row:last-child {
@@ -546,24 +568,24 @@
         appearance: none;
         width: 18px;
         height: 18px;
-        border: 1.5px solid #dadce0;
+        border: 1.5px solid var(--line);
         border-radius: 5px;
         margin: 0;
         cursor: pointer;
-        background: #fff;
+        background: var(--card);
         display: grid;
         place-items: center;
       }
       .task-check input:checked {
-        background: var(--blue);
-        border-color: var(--blue);
+        background: var(--ink);
+        border-color: var(--ink);
       }
       .task-check input:checked:after {
         content: "";
         display: block;
         width: 7px;
         height: 4px;
-        border: solid white;
+        border: solid var(--card);
         border-width: 0 0 1.7px 1.7px;
         transform: rotate(-45deg) translateY(-1px);
       }
@@ -590,22 +612,22 @@
         height: 5px;
         border-radius: 50%;
         display: inline-block;
-        background: var(--blue);
+        background: var(--ink);
       }
       .subject-dot.English {
-        background: #8ab4f8;
+        background: var(--ink);
       }
       .subject-dot.History {
-        background: #9aa0a6;
+        background: var(--muted);
       }
       .subject-dot.Afrikaans {
-        background: #9aa0a6;
+        background: var(--muted);
       }
       .subject-dot.Science {
-        background: #4285f4;
+        background: var(--ink);
       }
       .task-row.completed .task-name {
-        color: #80868b;
+        color: var(--muted);
         text-decoration: line-through;
         font-weight: 400;
       }
@@ -619,7 +641,7 @@
       }
       .due.done {
         background: none;
-        color: #80868b;
+        color: var(--muted);
         padding-right: 0;
       }
       .task-more {
@@ -630,7 +652,7 @@
         border-top: 1px solid var(--line);
         display: block;
         width: 100%;
-        background: #fff;
+        background: var(--card);
       }
       .task-more:hover {
         background: var(--soft);
@@ -652,7 +674,7 @@
         display: grid;
         place-items: center;
         border-radius: 8px;
-        color: #80868b;
+        color: var(--muted);
       }
       .icon-link:hover {
         background: var(--soft);
@@ -696,8 +718,8 @@
         color: var(--blue);
       }
       .day.selected b {
-        background: var(--blue);
-        color: #fff;
+        background: var(--ink);
+        color: var(--card);
       }
       .day:hover:not(.selected) b {
         background: var(--soft);
@@ -725,7 +747,7 @@
       }
       .slot-time {
         font-size: 11px;
-        color: #5f6368;
+        color: var(--muted);
         padding-top: 11px;
         font-variant-numeric: tabular-nums;
       }
@@ -768,9 +790,9 @@
         background: var(--blue-soft);
       }
       .slot.now .slot-body:before {
-        background: var(--blue);
-        border-color: var(--blue);
-        box-shadow: 0 0 0 3px #1967d226;
+        background: var(--ink);
+        border-color: var(--ink);
+        box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.2);
       }
       .now-tag {
         font-size: 10px;
@@ -782,7 +804,7 @@
       }
       .slot.break .slot-time {
         padding-top: 7px;
-        color: #9aa0a6;
+        color: var(--muted);
       }
       .slot.break .slot-body {
         padding-top: 6px;
@@ -794,12 +816,12 @@
         width: 5px;
         height: 5px;
         border: 0;
-        background: #dadce0;
+        background: var(--line);
       }
       .slot.break .slot-body p {
         margin: 0;
         font-style: italic;
-        color: #80868b;
+        color: var(--muted);
       }
       .classes {
         margin-bottom: 28px;
@@ -828,7 +850,7 @@
         border: 1px solid color-mix(in srgb, var(--c) 18%, var(--line));
         border-radius: 12px;
         overflow: hidden;
-        background: #fff;
+        background: var(--card);
         transition:
           box-shadow 0.2s,
           border-color 0.2s;
@@ -837,7 +859,7 @@
         grid-column: span 4;
       }
       .course-card:hover {
-        border-color: color-mix(in srgb, var(--c) 40%, #fff);
+        border-color: color-mix(in srgb, var(--c) 40%, var(--card));
         box-shadow:
           0 1px 2px 0 rgba(60, 64, 67, 0.3),
           0 2px 6px 2px rgba(60, 64, 67, 0.15);
@@ -852,7 +874,7 @@
         border-top: 4px solid var(--c);
         background:
           radial-gradient(circle at 88% 135%, color-mix(in srgb, var(--c) 10%, transparent) 0 34%, transparent 34.5%),
-          color-mix(in srgb, var(--c) 9%, #fff);
+          color-mix(in srgb, var(--c) 9%, var(--card));
       }
       .course-name {
         font-size: 22px;
@@ -867,7 +889,7 @@
       .course-sub {
         font-size: 13px;
         margin-top: 4px;
-        color: color-mix(in srgb, var(--c) 45%, #3c4043);
+        color: color-mix(in srgb, var(--c) 45%, var(--ink));
       }
       .course-avatar {
         position: absolute;
@@ -878,8 +900,8 @@
         border-radius: 50%;
         display: grid;
         place-items: center;
-        background: color-mix(in srgb, var(--c) 20%, #fff);
-        border: 3px solid #fff;
+        background: color-mix(in srgb, var(--c) 20%, var(--card));
+        border: 3px solid var(--card);
         box-shadow: 0 1px 3px rgba(60, 64, 67, 0.18);
         font-size: 22px;
         font-weight: 500;
@@ -956,7 +978,7 @@
         justify-content: center;
         align-items: center;
         gap: 7px;
-        color: #5f6368;
+        color: var(--muted);
       }
       .schedule-footer a:hover {
         color: var(--blue);
@@ -987,7 +1009,7 @@
       }
       .subject-icon.mint {
         background: var(--soft);
-        color: #5f6368;
+        color: var(--muted);
       }
       .assignment-copy {
         flex: 1;
@@ -1017,19 +1039,19 @@
         height: 4px;
         display: block;
         border-radius: 8px;
-        background: #f1f3f4;
+        background: var(--soft);
         overflow: hidden;
       }
       .track i {
         display: block;
         height: 100%;
         width: var(--value);
-        background: var(--blue);
+        background: var(--ink);
         border-radius: 8px;
       }
       .progress-panel {
         padding: 23px 24px;
-        background: #fff;
+        background: var(--card);
         border: 1px solid var(--line);
         border-radius: var(--r);
       }
@@ -1039,7 +1061,7 @@
         justify-content: space-between;
       }
       .progress-head .icon {
-        color: #80868b;
+        color: var(--muted);
       }
       .progress-visual {
         display: flex;
@@ -1109,13 +1131,13 @@
         text-align: left;
         gap: 11px;
         padding: 13px 0;
-        border-bottom: 1px solid #f1f3f4;
+        border-bottom: 1px solid var(--soft);
       }
       .school-link:last-child {
         border: 0;
       }
       .school-link > .icon {
-        color: #80868b;
+        color: var(--muted);
         width: 18px;
         height: 18px;
       }
@@ -1126,7 +1148,7 @@
       }
       .school-link small {
         font-size: 10px;
-        color: #80868b;
+        color: var(--muted);
       }
       .school-link:hover span {
         text-decoration: underline;
@@ -1136,7 +1158,7 @@
         justify-content: space-between;
         gap: 15px;
         margin-top: 28px;
-        color: #80868b;
+        color: var(--muted);
         font-size: 10px;
       }
       .page-footer span:first-child {
@@ -1171,7 +1193,7 @@
       }
       .content-card {
         padding: 27px;
-        background: white;
+        background: var(--card);
         border: 1px solid var(--line);
         border-radius: var(--r);
       }
@@ -1233,7 +1255,7 @@
         padding: 15px 19px;
         border-radius: 8px;
         background: var(--blue-soft);
-        color: #5f6368;
+        color: var(--muted);
         font-size: 12px;
         margin-bottom: 24px;
       }
@@ -1254,7 +1276,7 @@
       .week-class {
         border-left: 4px solid var(--c);
         border-radius: 0 8px 8px 0;
-        background: color-mix(in srgb, var(--c) 7%, #fff);
+        background: color-mix(in srgb, var(--c) 7%, var(--card));
         padding: 12px;
         margin-bottom: 11px;
         font-size: 12px;
@@ -1271,14 +1293,14 @@
       }
       .week-class time {
         font-size: 11px;
-        color: #80868b;
+        color: var(--muted);
       }
       .notes-area {
         width: 100%;
-        border: 1px solid #dadce0;
+        border: 1px solid var(--line);
         padding: 14px;
         border-radius: 8px;
-        background: #f8f9fa;
+        background: var(--soft);
         min-height: 170px;
         resize: vertical;
         font-size: 13px;
@@ -1297,10 +1319,10 @@
       .field select {
         display: block;
         width: 100%;
-        border: 1px solid #dadce0;
+        border: 1px solid var(--line);
         border-radius: 8px;
         padding: 11px 13px;
-        background: #fff;
+        background: var(--card);
       }
       .form-row {
         display: grid;
@@ -1316,21 +1338,21 @@
       .notice {
         font-size: 12px;
         line-height: 1.65;
-        background: #f1f3f4;
-        color: #5f6368;
+        background: var(--soft);
+        color: var(--muted);
         padding: 14px 16px;
         border-radius: 8px;
         margin-top: 22px;
       }
       .dialog {
-        border: 1px solid #e8eaed;
+        border: 1px solid var(--line);
         border-radius: 8px;
         width: min(580px, calc(100% - 32px));
         padding: 0;
         color: var(--text);
         box-shadow: 0 24px 100px #20212425;
         max-height: calc(100dvh - 48px);
-        background: #fff;
+        background: var(--card);
       }
       .dialog::backdrop {
         background: #20212445;
@@ -1355,7 +1377,7 @@
         display: grid;
         place-items: center;
         background: var(--soft);
-        color: #5f6368;
+        color: var(--muted);
       }
       .dialog-body {
         padding: 24px 26px 28px;
@@ -1371,7 +1393,7 @@
       .dialog-body ul,
       .dialog-body ol {
         padding-left: 20px;
-        color: #5f6368;
+        color: var(--muted);
       }
       .dialog-body li {
         margin: 10px 0;
@@ -1380,7 +1402,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        border: 1px solid #dadce0;
+        border: 1px solid var(--line);
         border-radius: 8px;
         padding: 12px 13px;
       }
@@ -1391,8 +1413,8 @@
         background: none;
       }
       .search-field:focus-within {
-        outline: 3px solid #1967d21c;
-        border-color: #aecbfa;
+        outline: 3px solid rgba(255, 90, 31, 0.2);
+        border-color: var(--line);
       }
       .search-results {
         margin-top: 16px;
@@ -1428,9 +1450,9 @@
       .topic-option {
         text-align: left;
         padding: 16px;
-        border: 1px solid #e8eaed;
+        border: 1px solid var(--line);
         border-radius: 8px;
-        background: white;
+        background: var(--card);
         display: flex;
         align-items: center;
         gap: 12px;
@@ -1459,7 +1481,7 @@
         font-size: 19px;
         font-weight: 500;
         text-align: center;
-        color: #1967d2;
+        color: var(--blue);
       }
       .quiz-answers {
         display: grid;
@@ -1467,7 +1489,7 @@
         margin-top: 20px;
       }
       .quiz-answer {
-        border: 1px solid #dadce0;
+        border: 1px solid var(--line);
         border-radius: 8px;
         padding: 14px;
         text-align: left;
@@ -1476,19 +1498,19 @@
         background: var(--soft);
       }
       .quiz-answer.correct {
-        border-color: #8ab4f8;
+        border-color: var(--ink);
         background: var(--blue-soft);
         opacity: 1;
       }
       .quiz-answer.incorrect {
-        border-color: #bdc1c6;
+        border-color: var(--muted);
         background: var(--soft);
         opacity: 1;
       }
       .quiz-feedback {
         font-size: 13px;
         margin-top: 20px;
-        color: #5f6368;
+        color: var(--muted);
         min-height: 26px;
       }
       .toast {
@@ -1497,8 +1519,8 @@
         left: calc(50% + var(--sidebar) / 2);
         transform: translate(-50%, 12px);
         padding: 13px 21px;
-        background: #202124;
-        color: #fff;
+        background: var(--ink);
+        color: var(--card);
         font-size: 13px;
         border-radius: 8px;
         box-shadow: 0 6px 22px #20212415;
@@ -1521,7 +1543,7 @@
         border-radius: 8px;
         background: var(--soft);
         font-size: 13px;
-        color: #5f6368;
+        color: var(--muted);
       }
       .note-card {
         white-space: pre-wrap;
@@ -1530,7 +1552,7 @@
         padding: 20px;
         border-radius: 8px;
         line-height: 1.75;
-        color: #5f6368;
+        color: var(--muted);
         margin: 18px 0;
       }
       .switch-row {
@@ -1988,12 +2010,12 @@
         align-items: center;
         gap: 4px;
         padding: 7px;
-        border: 1px solid #dadce0;
+        border: 1px solid var(--line);
         border-radius: 8px;
-        background: rgba(255, 255, 255, 0.94);
+        background: var(--card);
         box-shadow:
-          0 8px 32px #174ea612,
-          0 2px 6px #174ea605;
+          0 8px 32px rgba(20, 20, 20, 0.06),
+          0 2px 6px rgba(20, 20, 20, 0.06);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
       }
@@ -2005,7 +2027,7 @@
         height: 44px;
         flex: none;
         border-radius: 8px;
-        color: #5f6368;
+        color: var(--muted);
         transition:
           background 0.15s,
           color 0.15s;
@@ -2026,7 +2048,7 @@
       .quick-button .avatar {
         width: 32px;
         height: 32px;
-        border: 2px solid white;
+        border: 2px solid var(--card);
         font-size: 10px;
       }
       .quick-button::after {
@@ -2037,8 +2059,8 @@
         transform: translate(-50%, 3px);
         padding: 6px 9px;
         border-radius: 7px;
-        background: #202124;
-        color: white;
+        background: var(--ink);
+        color: var(--card);
         font-size: 11px;
         line-height: 1.4;
         white-space: nowrap;
@@ -2055,7 +2077,7 @@
       .dock-divider {
         width: 1px;
         height: 22px;
-        background: #e8eaed;
+        background: var(--line);
         margin: 0 4px;
       }
       .quick-actions .mobile-menu,
@@ -2086,6 +2108,786 @@
         }
         .toast {
           bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+        }
+      }
+      /* ---------- Chom Business redesign ---------- */
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-size: 15px;
+        font-weight: 500;
+      }
+      h1 {
+        font-weight: 800;
+        letter-spacing: -1.5px;
+      }
+      h2 {
+        font-weight: 800;
+        letter-spacing: -0.3px;
+      }
+      h3 {
+        font-weight: 700;
+      }
+      .sidebar {
+        background: var(--card);
+        padding: 28px 16px 20px;
+      }
+      .brand {
+        padding: 0 8px;
+        gap: 10px;
+      }
+      .wordmark,
+      .wordmark span {
+        font-size: 24px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        color: var(--ink);
+      }
+      .wordmark span {
+        margin-left: 6px;
+      }
+      .school-switch {
+        margin: 24px 0 24px;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--bg);
+        font-size: 13px;
+      }
+      .school-switch strong {
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .school-icon {
+        background: var(--card);
+        color: var(--blue);
+        border-radius: 999px;
+      }
+      .nav-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin: 0 12px 8px;
+      }
+      .nav {
+        gap: 4px;
+      }
+      .nav a {
+        padding: 0 12px;
+        border-radius: 16px;
+        font-size: 15px;
+        font-weight: 600;
+        min-height: 44px;
+        color: var(--ink);
+      }
+      .nav a > .icon,
+      .nav a.active > .icon {
+        color: currentColor;
+      }
+      .nav a:hover {
+        background: var(--soft);
+      }
+      .nav a.active {
+        background: var(--ink);
+        color: var(--card);
+        font-weight: 700;
+      }
+      .nav .badge,
+      .nav a.active .badge {
+        background: var(--orange);
+        color: var(--on-orange);
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+        min-width: 24px;
+        height: 24px;
+      }
+      .nav.secondary {
+        margin-top: 24px;
+      }
+      .sidebar-bottom {
+        padding-left: 0;
+      }
+      .mini-chom {
+        background: var(--ink);
+        color: var(--card);
+        border-radius: 24px;
+        padding: 20px;
+      }
+      .mini-chom .mini-title {
+        color: var(--accent-on-fill);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+      .mini-chom .mini-title .icon {
+        color: var(--orange);
+      }
+      .mini-chom p {
+        color: var(--card);
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.3;
+        margin-top: 10px;
+      }
+      .mini-chom button {
+        width: auto;
+        gap: 8px;
+        margin-top: 16px;
+        min-height: 44px;
+        padding: 0 18px;
+        border-radius: 999px;
+        background: var(--orange);
+        color: var(--on-orange);
+        font-size: 14px;
+        font-weight: 800;
+      }
+      .sidebar-footer {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .sidebar-footer i {
+        background: var(--orange);
+      }
+      .quick-actions {
+        border-radius: 999px;
+        border-color: var(--line);
+        background: var(--card);
+        box-shadow: 0 8px 32px rgba(20, 20, 20, 0.08);
+      }
+      .quick-button {
+        border-radius: 999px;
+        color: var(--ink);
+      }
+      .quick-button:hover,
+      .quick-button:focus-visible {
+        background: var(--soft);
+        color: var(--ink);
+      }
+      .avatar,
+      .quick-button .avatar {
+        background: var(--ink);
+        color: var(--card);
+        border-color: var(--card);
+        font-weight: 800;
+      }
+      .notification-dot,
+      .quick-button .notification-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--orange);
+        box-shadow: 0 0 0 2px var(--card);
+      }
+      .panel {
+        background: var(--card);
+        border-radius: 24px;
+      }
+      .button {
+        border-radius: 999px;
+        font-weight: 700;
+        min-height: 44px;
+      }
+      .text-button {
+        font-size: 14px;
+        font-weight: 700;
+        min-height: 44px;
+      }
+      .date-pill {
+        border-radius: 999px;
+        background: var(--card);
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      /* Tasks */
+      .filter-row {
+        gap: 8px;
+        flex-wrap: wrap;
+        padding: 0 24px 8px;
+        border: 0;
+      }
+      .filter {
+        min-height: 40px;
+        padding: 0 16px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .filter.active {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--card);
+        font-weight: 700;
+      }
+      .filter.active:after {
+        display: none;
+      }
+      .filter span {
+        background: none;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 800;
+      }
+      .filter.active span {
+        color: var(--accent-on-fill);
+      }
+      .task-row {
+        border-bottom-color: var(--line);
+        gap: 16px;
+      }
+      .task-name {
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .task-sub {
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .subject-dot {
+        display: none;
+      }
+      .task-check input {
+        width: 22px;
+        height: 22px;
+        border: 2px solid var(--muted);
+        border-radius: 6px;
+        background: var(--card);
+      }
+      .task-check input:checked:after {
+        width: 9px;
+        height: 5px;
+        border-width: 0 0 2px 2px;
+      }
+      .task-row.completed .task-name {
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .due {
+        font-size: 13px;
+        font-weight: 800;
+        color: #141414;
+        background: var(--peach);
+        border-radius: 999px;
+        padding: 6px 12px;
+      }
+      .due.done {
+        color: var(--muted);
+        background: none;
+        font-weight: 700;
+      }
+
+      /* Day schedule */
+      .schedule-panel .schedule-days {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+        margin: 0 24px 16px;
+        padding: 0;
+        border: 0;
+      }
+      .schedule-panel .day {
+        min-height: 60px;
+        padding: 8px 0;
+        gap: 2px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0;
+        text-transform: none;
+        color: var(--muted);
+      }
+      .schedule-panel .day b {
+        width: auto;
+        height: auto;
+        background: none;
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--ink);
+      }
+      .schedule-panel .day.today {
+        color: var(--blue);
+      }
+      .schedule-panel .day.selected {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--card);
+      }
+      .schedule-panel .day.selected b {
+        background: none;
+        color: var(--card);
+      }
+      .schedule-panel .day:hover:not(.selected) {
+        background: var(--soft);
+      }
+      .schedule-panel .day:hover:not(.selected) b {
+        background: none;
+      }
+      .schedule-panel .schedule-list {
+        padding: 0 24px 8px;
+      }
+      .schedule-panel .schedule-list:before,
+      .schedule-panel .slot-body:before {
+        display: none;
+      }
+      .schedule-panel .slot {
+        grid-template-columns: 48px minmax(0, 1fr);
+        gap: 16px;
+        align-items: center;
+        padding: 0 12px;
+        border-bottom: 1px solid var(--line);
+      }
+      .schedule-panel .slot:last-child {
+        border-bottom: 0;
+      }
+      .schedule-panel .slot-time {
+        padding: 0;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+      .schedule-panel .slot-body {
+        padding: 14px 0;
+        margin: 0;
+        border-radius: 0;
+      }
+      .schedule-panel .slot-body h3 {
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .schedule-panel .slot-body p {
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .schedule-panel .slot.now {
+        background: var(--peach);
+        border-radius: 16px;
+        border-bottom-color: transparent;
+      }
+      .schedule-panel .slot.now .slot-body {
+        background: none;
+      }
+      .schedule-panel .slot.now .slot-time,
+      .schedule-panel .slot.now h3,
+      .schedule-panel .slot.now p {
+        color: #141414;
+      }
+      .schedule-panel .slot.now h3 {
+        font-weight: 800;
+      }
+      .now-tag {
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: var(--orange);
+        color: var(--on-orange);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+      }
+      .schedule-panel .slot.break {
+        border-bottom-style: dashed;
+      }
+      .schedule-panel .slot.break .slot-body {
+        padding: 10px 0;
+      }
+      .schedule-panel .slot.break .slot-body p {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .schedule-panel .schedule-footer {
+        padding: 8px 24px 24px;
+        border: 0;
+      }
+      .schedule-panel .schedule-footer a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        min-height: 48px;
+        border: 1px solid var(--ink);
+        border-radius: 999px;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .schedule-panel .schedule-footer a:hover {
+        background: var(--ink);
+        color: var(--card);
+      }
+
+      /* Dashboard layout */
+      .cd {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        max-width: 1180px;
+        margin: 0 auto;
+      }
+      .cd-label {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--blue);
+      }
+      .cd-hero {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .cd-title {
+        font-size: clamp(40px, 6vw, 64px);
+        line-height: 1;
+        letter-spacing: -2px;
+      }
+      .cd-lede {
+        font-size: 19px;
+        line-height: 1.4;
+        color: var(--text);
+      }
+      .cd-lede strong {
+        font-weight: 800;
+      }
+      .cd-now {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px 32px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 28px;
+        border-radius: 24px;
+        background: var(--ink);
+        color: var(--card);
+      }
+      .cd-now-main {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 24px;
+        align-items: center;
+      }
+      .cd-now-main > div {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .cd-now-title {
+        font-size: 28px;
+        line-height: 1.1;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+      .cd-now-side {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 16px;
+        align-items: center;
+      }
+      .cd-pill {
+        display: inline-flex;
+        align-items: center;
+        height: 28px;
+        padding: 0 12px;
+        border-radius: 999px;
+        background: var(--orange);
+        color: var(--on-orange);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      .cd-pill.small {
+        height: 24px;
+        padding: 0 10px;
+        font-size: 11px;
+        letter-spacing: 1.5px;
+      }
+      .cd-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 48px;
+        padding: 0 22px;
+        border-radius: 999px;
+        background: var(--orange);
+        color: var(--on-orange);
+        font-size: 15px;
+        font-weight: 800;
+      }
+      .cd-cta:hover {
+        background: #ff7a45;
+      }
+      .cd-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 32px;
+      }
+      .cd-stat {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding-top: 16px;
+        border-top: 4px solid var(--ink);
+      }
+      .cd-num {
+        font-size: 60px;
+        line-height: 1;
+        font-weight: 800;
+        letter-spacing: -2px;
+        color: var(--ink);
+      }
+      .cd-num.accent {
+        color: var(--blue);
+      }
+      .cd-stat strong {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .cd-stat small {
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .cd-split {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 32px;
+        align-items: flex-start;
+      }
+      .cd-col {
+        flex: 2 1 520px;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+      }
+      .cd-split > .schedule-panel {
+        flex: 1 1 340px;
+        min-width: 0;
+      }
+      .cd-head {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding: 28px 24px 16px;
+      }
+      .cd-head h2 {
+        font-size: 28px;
+        line-height: 1.1;
+        margin-top: 8px;
+      }
+      .cd-head .schedule-subtitle {
+        font-size: 14px;
+        margin-top: 8px;
+      }
+      .cd-section .cd-head {
+        padding: 0 0 20px;
+      }
+      .cd-assign {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+        padding: 0 24px 24px;
+      }
+      .cd-acard,
+      .cd-class,
+      .cd-service {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+        padding: 20px;
+        border: 1px solid var(--line);
+        text-align: left;
+        color: var(--ink);
+        transition: border-color 0.15s;
+      }
+      .cd-acard:hover,
+      .cd-class:hover,
+      .cd-service:hover {
+        border-color: var(--ink);
+      }
+      .cd-acard {
+        border-radius: 16px;
+        background: var(--bg);
+      }
+      .cd-aicon {
+        width: 48px;
+        height: 48px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        background: var(--blue-soft);
+        color: var(--blue);
+      }
+      .cd-acard strong,
+      .cd-class strong,
+      .cd-service strong {
+        display: block;
+        font-size: 18px;
+        font-weight: 800;
+      }
+      .cd-acard small,
+      .cd-service small {
+        display: block;
+        margin-top: 4px;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .cd-bar-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .cd-bar {
+        display: block;
+        height: 8px;
+        margin-top: 8px;
+        border-radius: 8px;
+        background: var(--line);
+        overflow: hidden;
+      }
+      .cd-bar i {
+        display: block;
+        height: 100%;
+        width: var(--value);
+        border-radius: 8px;
+        background: var(--orange);
+      }
+      .cd-classes {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+      }
+      .cd-class {
+        border-radius: 24px;
+        background: var(--card);
+      }
+      .cd-class-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+      }
+      .cd-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        background: var(--bg);
+        border: 1px solid var(--line);
+        font-size: 15px;
+        font-weight: 800;
+      }
+      .cd-class small {
+        display: block;
+        margin-top: 4px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .cd-next {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+      }
+      .cd-next span {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .cd-next b {
+        font-size: 15px;
+        font-weight: 700;
+      }
+      .cd-class.live {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--card);
+      }
+      .cd-class.live small {
+        color: var(--card);
+      }
+      .cd-class.live .cd-avatar {
+        background: var(--orange);
+        border-color: var(--orange);
+        color: var(--on-orange);
+      }
+      .cd-class.live .cd-next {
+        border-top-color: var(--muted);
+      }
+      .cd-class.live .cd-next span {
+        color: var(--accent-on-fill);
+      }
+      .cd-beyond {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+      .cd-service {
+        gap: 20px;
+        padding: 24px;
+        border-radius: 24px;
+        background: var(--card);
+      }
+      .cd-service > .icon {
+        width: 40px;
+        height: 40px;
+        color: var(--orange);
+      }
+      .page-footer {
+        color: var(--muted);
+        border-color: var(--line);
+        font-size: 13px;
+        flex-wrap: wrap;
+      }
+      .now-tag:before {
+        display: none;
+      }
+      @media (max-width: 520px) {
+        .cd {
+          gap: 32px;
+        }
+        .cd-head {
+          padding: 20px 20px 12px;
+        }
+        .cd-assign {
+          padding: 0 20px 20px;
+        }
+        .cd-now {
+          padding: 20px;
+        }
+        .cd-num {
+          font-size: 44px;
+        }
+        .cd-stats,
+        .cd-classes {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 16px;
+        }
+        .cd-class {
+          padding: 16px;
+        }
+        .schedule-panel .schedule-days,
+        .schedule-panel .schedule-list,
+        .schedule-panel .schedule-footer {
+          margin-left: 16px;
+          margin-right: 16px;
+          padding-left: 0;
+          padding-right: 0;
         }
       }
     </style>
@@ -2305,11 +3107,11 @@ SOFTWARE.
     <aside class="sidebar" id="sidebar" aria-label="Main navigation">
       <a class="brand" href="#dashboard" aria-label="Chom Learn home"
         ><svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
-          <rect x="1" y="1" width="38" height="38" rx="11" fill="#1967d2" />
+          <rect x="1" y="1" width="38" height="38" rx="19" fill="#ff5a1f" />
           <path
             d="M27 12.5a10 10 0 1 0 0 15"
             fill="none"
-            stroke="white"
+            stroke="#141414"
             stroke-width="5"
             stroke-linecap="round"
           /></svg
@@ -2673,11 +3475,11 @@ SOFTWARE.
           return `${l.day === today ? "Today" : dayNames[l.day].slice(0, 3)} · ${slotTimes[l.slot][0]}`;
         }
         function subjectsPanel() {
-          return `<section class="classes" aria-labelledby="subjects-title"><div class="classes-head"><h2 id="subjects-title">Your classes</h2><a class="text-button" href="#subjects">All subjects ${icon("arrow", true)}</a></div><div class="subject-tiles">${subjectList
+          return `<section class="cd-section" aria-labelledby="subjects-title"><div class="cd-head"><div><span class="cd-label">My subjects</span><h2 id="subjects-title">Your classes</h2></div><a class="text-button" href="#subjects">All subjects ${icon("arrow", true)}</a></div><div class="cd-classes">${subjectList
             .map((x) => {
               const next = nextLesson(x),
                 live = next.day === today && next.slot === nowSlot;
-              return `<button class="course-card ${live ? "live" : ""}" style="--c:${x.color}" data-action="subject" data-subject="${x.id}"><span class="course-banner"><span class="course-name">${x.name}</span><span class="course-sub">Grade 10B${x.teacher ? " · " + x.teacher : ""}</span><span class="course-avatar" aria-hidden="true">${x.short}</span></span><span class="course-body"><span class="course-label">${live ? "Happening now" : "Next lesson"}</span><span class="course-next">${live ? `<i aria-hidden="true"></i>${x.room}` : lessonLabel(next)}</span></span><span class="course-foot"><span>${lessonsOf(x).length} lessons a week</span>${icon("file", true)}</span></button>`;
+              return `<button class="cd-class ${live ? "live" : ""}" data-action="subject" data-subject="${x.id}"><span class="cd-class-top"><span class="cd-avatar" aria-hidden="true">${x.short}</span>${live ? '<span class="cd-pill small">Live</span>' : ""}</span><span><strong>${x.name}</strong><small>Grade 10B · ${x.teacher || x.room}</small></span><span class="cd-next"><span>${live ? "Happening now" : "Next lesson"}</span><b>${live ? x.room : lessonLabel(next)}</b></span></button>`;
             })
             .join("")}</div></section>`;
         }
@@ -2702,30 +3504,29 @@ SOFTWARE.
             [4, 5].map(slot).join("");
         }
         function schedulePanel() {
-          return `<section class="panel schedule-panel"><div class="panel-head"><div><h2>Your day at a glance</h2><p class="schedule-subtitle">${dayNames[selectedDay]}, ${5 + selectedDay} October · 6 classes</p></div><a class="icon-link" href="#timetable" aria-label="Open timetable">${icon("calendar", true)}</a></div><div class="schedule-days" aria-label="School days">${dayNames.map((d, i) => `<button class="day ${i === selectedDay ? "selected" : ""} ${i === today ? "today" : ""}" data-day="${i}" aria-label="${d} ${5 + i} October${i === today ? ", today" : ""}" aria-pressed="${i === selectedDay}">${d.slice(0, 3)}<b>${5 + i}</b></button>`).join("")}</div><ol class="schedule-list">${scheduleRows(selectedDay)}</ol><div class="schedule-footer"><a href="#timetable">View full timetable ${icon("arrow", true)}</a></div></section>`;
+          return `<section class="panel schedule-panel" aria-labelledby="day-title"><div class="cd-head"><div><span class="cd-label">Your day</span><h2 id="day-title">${dayNames[selectedDay]}, ${5 + selectedDay} October</h2><p class="schedule-subtitle">6 classes · lunch at 13:15</p></div></div><div class="schedule-days" aria-label="School days">${dayNames.map((d, i) => `<button class="day ${i === selectedDay ? "selected" : ""} ${i === today ? "today" : ""}" data-day="${i}" aria-label="${d} ${5 + i} October${i === today ? ", today" : ""}" aria-pressed="${i === selectedDay}">${d.slice(0, 3)}<b>${5 + i}</b></button>`).join("")}</div><ol class="schedule-list">${scheduleRows(selectedDay)}</ol><div class="schedule-footer"><a href="#timetable">View full timetable ${icon("arrow", true)}</a></div></section>`;
         }
         function assignmentRows() {
           return ["history", "science"]
             .map(
               (id, i) =>
-                `<button class="assignment-row" data-action="assignment" data-id="${id}"><span class="subject-icon ${i ? "mint" : ""}">${icon(i ? "flask" : "file")}</span><span class="assignment-copy"><span class="assignment-name">${i ? "Osmosis lab report" : "World War I essay"}</span><span class="assignment-meta">${i ? "Life Sciences" : "History"} · Due Fri, 9 Oct</span></span><span class="assignment-progress">${state.assignmentProgress[id]}% drafted<span class="track"><i style="--value:${state.assignmentProgress[id]}%"></i></span></span>${icon("chevron", true)}</button>`,
+                `<button class="cd-acard" data-action="assignment" data-id="${id}"><span class="cd-aicon">${icon(i ? "flask" : "file")}</span><span><strong>${i ? "Osmosis lab report" : "World War I essay"}</strong><small>${i ? "Life Sciences" : "History"} · Due Fri, 9 Oct</small></span><span><span class="cd-bar-label"><span>Drafted</span><span>${state.assignmentProgress[id]}%</span></span><span class="cd-bar"><i style="--value:${state.assignmentProgress[id]}%"></i></span></span></button>`,
             )
             .join("");
         }
         function assignmentsPanel() {
-          return `<section class="panel"><div class="panel-head"><h2>Upcoming assignments</h2><a class="text-button" href="#assignments">View all ${icon("arrow", true)}</a></div><div class="assignment-list">${assignmentRows()}</div></section>`;
+          return `<section class="panel" aria-labelledby="assign-title"><div class="cd-head"><div><span class="cd-label">Assignments</span><h2 id="assign-title">Due this week</h2></div><a class="text-button" href="#assignments">View all ${icon("arrow", true)}</a></div><div class="cd-assign">${assignmentRows()}</div></section>`;
         }
         function progressPanel() {
-          return `<section class="progress-panel"><div class="progress-head"><h2>Your progress</h2>${icon("leaf")}</div><div class="progress-visual"><div class="progress-ring"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="none" stroke="#e8f0fe" stroke-width="6"/><circle cx="40" cy="40" r="34" fill="none" stroke="#1967d2" stroke-width="6" stroke-linecap="round" stroke-dasharray="207 214"/></svg><strong>97%</strong></div><div class="progress-message"><strong>Showing up matters.</strong><p>Your attendance this term. Keep making space for learning.</p></div></div><div class="progress-foot"><span>One day at a time.</span><button data-action="navigate" data-view="results">My progress ${icon("arrow", true)}</button></div></section>`;
+          return `<section class="progress-panel"><div class="progress-head"><h2>Your progress</h2>${icon("leaf")}</div><div class="progress-visual"><div class="progress-ring"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="none" style="stroke:var(--line)" stroke-width="6"/><circle cx="40" cy="40" r="34" fill="none" style="stroke:var(--orange)" stroke-width="6" stroke-linecap="round" stroke-dasharray="207 214"/></svg><strong>97%</strong></div><div class="progress-message"><strong>Showing up matters.</strong><p>Your attendance this term. Keep making space for learning.</p></div></div><div class="progress-foot"><span>One day at a time.</span><button data-action="navigate" data-view="results">My progress ${icon("arrow", true)}</button></div></section>`;
         }
         function schoolPanel() {
-          return `<section class="panel school-panel"><div class="panel-head"><h2>Beyond the classroom</h2></div><div class="school-links"><button class="school-link" data-action="service" data-service="sport">${icon("ball")}<span>Sports & activities</span><small>Hockey, 15:30</small></button><button class="school-link" data-action="service" data-service="transport">${icon("bus")}<span>My transport</span><small>Bus 14</small></button><button class="school-link" data-action="service" data-service="support">${icon("heart")}<span>Someone to talk to</span>${icon("chevron", true)}</button></div></section>`;
+          return `<section class="cd-section" aria-labelledby="beyond-title"><div class="cd-head"><div><span class="cd-label">School life</span><h2 id="beyond-title">Beyond the classroom</h2></div></div><div class="cd-beyond"><button class="cd-service" data-action="service" data-service="sport">${icon("ball")}<span><strong>Sports &amp; activities</strong><small>Hockey, 15:30</small></span></button><button class="cd-service" data-action="service" data-service="transport">${icon("bus")}<span><strong>My transport</strong><small>Bus 14</small></span></button><button class="cd-service" data-action="service" data-service="support">${icon("heart")}<span><strong>Someone to talk to</strong><small>Private, whenever you need it</small></span></button></div></section>`;
         }
         function dashboard() {
-          return `<header class="page-heading"><div><div class="greeting"><h1>Hey, Amara.</h1></div><p>You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></div><span class="date-pill">${icon("calendar", true)}Tuesday, 6 October 2026</span></header>${subjectsPanel()}<div class="dashboard"><div class="main-column">${assignmentsPanel()}${progressPanel()}${schoolPanel()}</div><div class="right-column">${schedulePanel()}</div></div>`;
-        }
-        function viewHeader(title, copy, extra = "") {
-          return `<header class="view-header"><div><h1>${title}</h1><p>${copy}</p></div>${extra}</header>`;
+          const nowClass = subjectInfo(weekly[today][nowSlot]),
+            nextClass = subjectInfo(weekly[today][nowSlot + 1]);
+          return `<div class="cd"><header class="cd-hero"><span class="cd-label">Tuesday · 6 October 2026</span><h1 class="cd-title">Hey, Amara.</h1><p class="cd-lede">You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></header><section class="cd-now" aria-label="Happening now"><div class="cd-now-main"><span class="cd-pill">On now</span><div><span class="cd-now-title">${nowClass.name}</span><span>${nowClass.room}${nowClass.teacher ? " · " + nowClass.teacher : ""} · ${slotTimes[nowSlot][0]}–${slotTimes[nowSlot][1]}</span></div></div><div class="cd-now-side"><span>Next: ${nextClass.name}, ${slotTimes[nowSlot + 1][0]}</span><button class="cd-cta" data-action="subject" data-subject="${nowClass.id}">Open class ${icon("arrow", true)}</button></div></section><section class="cd-stats" aria-label="Your week in numbers"><div class="cd-stat"><span class="cd-num" id="task-count">${remaining()}</span><strong>Tasks due today</strong><small>Tick them off as you go</small></div><div class="cd-stat"><span class="cd-num">2</span><strong>Assignments due</strong><small>Friday, 9 October</small></div><div class="cd-stat"><span class="cd-num accent">97%</span><strong>Attendance this term</strong><small>Showing up matters.</small></div><div class="cd-stat"><span class="cd-num">78%</span><strong>Latest result</strong><small>Geography assessment</small></div></section><div class="cd-split"><div class="cd-col"><section class="panel" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="text-button" href="#tasks">All tasks ${icon("arrow", true)}</a></div><div id="tasks-content">${tasksMarkup()}</div></section>${assignmentsPanel()}</div>${schedulePanel()}</div>${subjectsPanel()}${schoolPanel()}</div>`;
         }
         function render() {
           document.body.classList.toggle("focus-mode", !!state.focus);
