@@ -11,7 +11,7 @@
     <title>Chom Learn — Your school day, sorted</title>
     <link
       rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23ff5a1f'/%3E%3Cpath d='M28 13a11 11 0 1 0 0 14' fill='none' stroke='%23282b4a' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23282b4a'/%3E%3Cpath d='M28 13a11 11 0 1 0 0 14' fill='none' stroke='%23eeebda' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,14 +31,14 @@
         --muted: #5f6178;
         --line: #dcd8c3;
         --soft: #e4e0cb;
-        --orange: #ff5a1f;
-        --on-orange: #282b4a;
-        --peach: #ffe3d3;
-        --blue: #b23a0c;
-        --blue-hover: #962f08;
-        --blue-soft: #fff1e9;
+        --orange: #282b4a;
+        --on-orange: #eeebda;
+        --peach: #dcd8c3;
+        --blue: #282b4a;
+        --blue-hover: #383c63;
+        --blue-soft: #e4e0cb;
         --ink-hover: #383c63;
-        --accent-on-fill: #ff7a45;
+        --accent-on-fill: #eeebda;
         --r: 24px;
         --sidebar: 248px;
       }
@@ -52,11 +52,14 @@
           --muted: #aba9b8;
           --line: #464a70;
           --soft: #3c4068;
-          --blue: #ff7a45;
-          --blue-hover: #ff9466;
-          --blue-soft: #4a3036;
+          --blue: #eeebda;
+          --blue-hover: #dcd8c3;
+          --blue-soft: #3c4068;
           --ink-hover: #dcd8c3;
-          --accent-on-fill: #b23a0c;
+          --accent-on-fill: #282b4a;
+          --orange: #eeebda;
+          --on-orange: #282b4a;
+          --peach: #464a70;
         }
       }
       * {
@@ -2369,7 +2372,7 @@
       .due {
         font-size: 13px;
         font-weight: 800;
-        color: #282b4a;
+        color: var(--ink);
         background: var(--peach);
         border-radius: 999px;
         padding: 6px 12px;
@@ -2474,7 +2477,7 @@
       .schedule-panel .slot.now .slot-time,
       .schedule-panel .slot.now h3,
       .schedule-panel .slot.now p {
-        color: #282b4a;
+        color: var(--ink);
       }
       .schedule-panel .slot.now h3 {
         font-weight: 800;
@@ -2621,7 +2624,15 @@
         font-weight: 800;
       }
       .cd-cta:hover {
-        background: #ff7a45;
+        opacity: 0.88;
+      }
+      /* Inside navy (or, in dark mode, vanilla) fills the highlight flips to the page colour */
+      .cd-now,
+      .cd-class.live,
+      .mini-chom,
+      .nav a.active {
+        --orange: var(--bg);
+        --on-orange: var(--ink);
       }
       .cd-stats {
         display: grid;
@@ -3107,11 +3118,11 @@ SOFTWARE.
     <aside class="sidebar" id="sidebar" aria-label="Main navigation">
       <a class="brand" href="#dashboard" aria-label="Chom Learn home"
         ><svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
-          <rect x="1" y="1" width="38" height="38" rx="19" fill="#ff5a1f" />
+          <rect x="1" y="1" width="38" height="38" rx="19" fill="#282b4a" />
           <path
             d="M27 12.5a10 10 0 1 0 0 15"
             fill="none"
-            stroke="#282b4a"
+            stroke="#eeebda"
             stroke-width="5"
             stroke-linecap="round"
           /></svg
