@@ -2533,11 +2533,11 @@
       }
       .cd-label {
         display: block;
-        font-size: 12px;
+        font-size: 15px;
+        line-height: 1.2;
         font-weight: 700;
-        letter-spacing: 3px;
-        text-transform: uppercase;
-        color: var(--blue);
+        letter-spacing: -0.2px;
+        color: var(--muted);
       }
       .cd-hero {
         display: flex;
@@ -2912,6 +2912,157 @@
           margin-right: 16px;
           padding-left: 0;
           padding-right: 0;
+        }
+      }
+      /* Dashboard task list */
+      .dt-all {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 0 18px;
+        border: 1px solid var(--ink);
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      .dt-all:hover {
+        background: var(--ink);
+        color: var(--card);
+      }
+      .dt-group {
+        padding: 8px 24px 16px;
+      }
+      .dt-group + .dt-group {
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+      }
+      .dt-group:last-child {
+        padding-bottom: 24px;
+      }
+      .dt-group-title {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 8px;
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: -0.2px;
+        color: var(--ink);
+      }
+      .dt-group-title span {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+      .dt-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .dt-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        min-height: 64px;
+        padding: 12px 16px 12px 20px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--bg);
+        cursor: pointer;
+        transition: border-color 0.15s;
+      }
+      .dt-row:hover {
+        border-color: var(--ink);
+      }
+      .dt-copy {
+        flex: 1 1 auto;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .dt-name {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ink);
+        overflow-wrap: anywhere;
+      }
+      .dt-subject {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .dt-due {
+        flex-shrink: 0;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: var(--peach);
+        color: var(--ink);
+        font-size: 13px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .dt-due.is-done {
+        background: none;
+        color: var(--muted);
+        padding-right: 0;
+      }
+      .dt-check {
+        appearance: none;
+        flex-shrink: 0;
+        width: 28px;
+        height: 28px;
+        margin: 0;
+        border: 2px solid var(--ink);
+        border-radius: 8px;
+        background: var(--card);
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+      }
+      .dt-check:checked {
+        background: var(--ink);
+      }
+      .dt-check:checked:after {
+        content: "";
+        width: 10px;
+        height: 6px;
+        border: solid var(--card);
+        border-width: 0 0 2.5px 2.5px;
+        transform: rotate(-45deg) translateY(-1px);
+      }
+      .dt-row.done {
+        background: none;
+      }
+      .dt-row.done .dt-name {
+        color: var(--muted);
+        text-decoration: line-through;
+        font-weight: 600;
+      }
+      @media (max-width: 520px) {
+        .dt-group {
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+        .dt-row {
+          flex-wrap: wrap;
+          padding: 12px 14px;
+          gap: 8px 12px;
+        }
+        .dt-copy {
+          flex-basis: calc(100% - 44px);
+        }
+        .dt-due {
+          order: 3;
+        }
+        .dt-check {
+          order: 2;
         }
       }
     </style>
@@ -3514,6 +3665,20 @@ SOFTWARE.
             })
             .join("")}</div></section>`;
         }
+        function dueLabel(t) {
+          if (t.done) return "Done";
+          if (t.when === "upcoming") return "Due " + String(t.time).toLowerCase();
+          return /^\d/.test(t.time) ? "Due by " + t.time : "Due today";
+        }
+        function dashTaskRow(t) {
+          return `<li><label class="dt-row ${t.done ? "done" : ""}"><span class="dt-copy"><span class="dt-name">${esc(t.title)}</span><span class="dt-subject">${esc(t.subject)}</span></span><span class="dt-due ${t.done ? "is-done" : ""}">${esc(dueLabel(t))}</span><input type="checkbox" class="dt-check" data-task="${esc(t.id)}" aria-label="Mark ${esc(t.title)} as done" ${t.done ? "checked" : ""}></label></li>`;
+        }
+        function dashTasks() {
+          const today = state.tasks.filter((t) => t.when === "today"),
+            upcoming = state.tasks.filter((t) => t.when === "upcoming"),
+            left = remaining();
+          return `<div class="dt-group"><h3 class="dt-group-title">Due today <span>${left ? left + " left" : "All done"}</span></h3>${today.length ? `<ul class="dt-list">${today.map(dashTaskRow).join("")}</ul>` : `<p class="task-empty">Nothing due today. You’re all caught up.</p>`}</div>${upcoming.length ? `<div class="dt-group"><h3 class="dt-group-title">Coming up</h3><ul class="dt-list">${upcoming.map(dashTaskRow).join("")}</ul></div>` : ""}`;
+        }
         function tasksMarkup() {
           const list = state.tasks.filter((t) =>
             taskFilter === "done"
@@ -3557,7 +3722,7 @@ SOFTWARE.
         function dashboard() {
           const nowClass = subjectInfo(weekly[today][nowSlot]),
             nextClass = subjectInfo(weekly[today][nowSlot + 1]);
-          return `<div class="cd"><div class="cd-top"><header class="cd-hero"><span class="cd-label">Tuesday · 6 October 2026</span><h1 class="cd-title">Hey, Amara.</h1><p class="cd-lede">You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></header><section class="cd-stats" aria-label="Your week in numbers"><div class="cd-stat"><span class="cd-num" id="task-count">${remaining()}</span><strong>Tasks due today</strong><small>Tick them off as you go</small></div><div class="cd-stat"><span class="cd-num">2</span><strong>Assignments due</strong><small>Friday, 9 October</small></div><div class="cd-stat"><span class="cd-num accent">97%</span><strong>Attendance this term</strong><small>Showing up matters.</small></div><div class="cd-stat"><span class="cd-num">78%</span><strong>Latest result</strong><small>Geography assessment</small></div></section></div><section class="cd-now" aria-label="Happening now"><div class="cd-now-main"><span class="cd-pill">On now</span><div><span class="cd-now-title">${nowClass.name}</span><span>${nowClass.room}${nowClass.teacher ? " · " + nowClass.teacher : ""} · ${slotTimes[nowSlot][0]}–${slotTimes[nowSlot][1]}</span></div></div><div class="cd-now-side"><span>Next: ${nextClass.name}, ${slotTimes[nowSlot + 1][0]}</span><button class="cd-cta" data-action="subject" data-subject="${nowClass.id}">Open class ${icon("arrow", true)}</button></div></section><div class="cd-split"><div class="cd-col"><section class="panel" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="text-button" href="#tasks">All tasks ${icon("arrow", true)}</a></div><div id="tasks-content">${tasksMarkup()}</div></section>${assignmentsPanel()}</div></div>${subjectsPanel()}${schoolPanel()}</div>`;
+          return `<div class="cd"><div class="cd-top"><header class="cd-hero"><span class="cd-label">Tuesday · 6 October 2026</span><h1 class="cd-title">Hey, Amara.</h1><p class="cd-lede">You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></header><section class="cd-stats" aria-label="Your week in numbers"><div class="cd-stat"><span class="cd-num" id="task-count">${remaining()}</span><strong>Tasks due today</strong><small>Tick them off as you go</small></div><div class="cd-stat"><span class="cd-num">2</span><strong>Assignments due</strong><small>Friday, 9 October</small></div><div class="cd-stat"><span class="cd-num accent">97%</span><strong>Attendance this term</strong><small>Showing up matters.</small></div><div class="cd-stat"><span class="cd-num">78%</span><strong>Latest result</strong><small>Geography assessment</small></div></section></div><section class="cd-now" aria-label="Happening now"><div class="cd-now-main"><span class="cd-pill">On now</span><div><span class="cd-now-title">${nowClass.name}</span><span>${nowClass.room}${nowClass.teacher ? " · " + nowClass.teacher : ""} · ${slotTimes[nowSlot][0]}–${slotTimes[nowSlot][1]}</span></div></div><div class="cd-now-side"><span>Next: ${nextClass.name}, ${slotTimes[nowSlot + 1][0]}</span><button class="cd-cta" data-action="subject" data-subject="${nowClass.id}">Open class ${icon("arrow", true)}</button></div></section><div class="cd-split"><div class="cd-col"><section class="panel dt-panel" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="dt-all" href="#tasks">See all tasks ${icon("arrow", true)}</a></div><div id="dash-tasks">${dashTasks()}</div></section>${assignmentsPanel()}</div></div>${subjectsPanel()}${schoolPanel()}</div>`;
         }
         function viewHeader(title, copy, extra = "") {
           return `<header class="view-header"><div><h1>${title}</h1><p>${copy}</p></div>${extra}</header>`;
@@ -4043,7 +4208,8 @@ SOFTWARE.
             t.done = done;
             const id = t.id;
             save();
-            $("#tasks-content").innerHTML = tasksMarkup();
+            if ($("#tasks-content")) $("#tasks-content").innerHTML = tasksMarkup();
+            if ($("#dash-tasks")) $("#dash-tasks").innerHTML = dashTasks();
             $("#nav-task-count").textContent = remaining();
             if ($("#task-count")) $("#task-count").textContent = remaining();
             if ($("#tasks-summary"))
@@ -4054,7 +4220,8 @@ SOFTWARE.
               (el) => el.dataset.task === id,
             );
             if (replacement) replacement.focus();
-            else $(`[data-filter="${taskFilter}"]`).focus();
+            else if ($(`[data-filter="${taskFilter}"]`))
+              $(`[data-filter="${taskFilter}"]`).focus();
             announce(
               storageAvailable
                 ? done
