@@ -20,6 +20,8 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap"
     />
+    <link rel="stylesheet" href="home.css" />
+    <script src="home.js" defer></script>
     <style>
       :root {
         --bg: #eeebda;
@@ -240,14 +242,16 @@
         chom learn
       </a>
       <nav class="top-links" aria-label="Main">
+        <a class="link" href="#explore">Explore Chom</a>
         <a class="btn" href="app/">Sign in</a>
       </nav>
     </header>
 
     <main id="main">
       <section class="wrap hero" aria-labelledby="hero-title">
-        <div>
-          <h1 id="hero-title">Everything at <span class="nowrap">your fingertips.</span></h1>
+        <div class="hero-copy">
+          <p class="eyebrow">A little more clarity for your school day</p>
+          <h1 id="hero-title">Everything at<br>your fingertips.</h1>
           <p class="lede">
             <strong>Study the right way with Chom.</strong> Your tasks, classes and assignments in one place, so you can focus on learning.
           </p>
@@ -256,8 +260,52 @@
               >Sign in
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg
             ></a>
+            <a class="btn ghost" href="app/">Explore the demo <span aria-hidden="true">↗</span></a>
           </div>
           <p class="note">Student preview with sample school data. No account needed yet.</p>
+        </div>
+        <div class="product-preview" id="explore" aria-label="Explore Chom features">
+          <div class="preview-stage">
+            <div class="preview-scene">
+              <div class="device">
+                <div class="browser-chrome"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span>chom learn / your school day</span><span aria-hidden="true">↗</span></div>
+                <div class="mini-app">
+                  <aside class="mini-sidebar" aria-hidden="true">
+                    <b class="mini-brand">◔ <span>chom</span></b>
+                    <span class="mini-nav selected">▦ <span>Dashboard</span></span>
+                    <span class="mini-nav">▤ <span>My subjects</span></span>
+                    <span class="mini-nav">✓ <span>My tasks</span></span>
+                    <span class="mini-nav">▦ <span>Timetable</span></span>
+                    <span class="mini-nav">▱ <span>Assignments</span></span>
+                    <span class="mini-nav">✧ <span>Study with Chom</span></span>
+                    <span class="mini-profile"><i>A</i><span>Amara<br><small>Grade 10B</small></span></span>
+                  </aside>
+                  <div class="mini-content" id="feature-screen">
+                    <div class="screen-kicker">TUESDAY, 6 OCTOBER</div>
+                    <h2>Hey, Amara.</h2><p class="screen-subtitle">A little focus. A good day ahead.</p>
+                    <div class="class-banner"><span class="live-dot"></span><div><small>ON NOW · 09:40–10:30</small><b>Mathematics</b><span>Room 12 · Mr Dlamini</span></div><span class="banner-arrow">↗</span></div>
+                    <div class="mini-section-heading"><b>Today’s list</b><span>3 left</span></div>
+                    <div class="mini-task"><i></i><div><b>Quadratic equations</b><small>Mathematics · Exercise 4.2</small></div><span>15:00</span></div>
+                    <div class="mini-task"><i></i><div><b>Reading log, chapter 6</b><small>English</small></div></div>
+                    <div class="mini-task"><i></i><div><b>Outline your WWI essay</b><small>History</small></div></div>
+                    <div class="mini-task complete"><i>✓</i><div><b>Practise vocabulary</b><small>Afrikaans</small></div></div>
+                    <div class="mini-bottom"><span>One thing at a time.</span><span>View all tasks ↗</span></div>
+                  </div>
+                </div>
+              </div>
+              <a class="float-card schedule-card" href="app/#timetable"><span class="feature-icon blue" aria-hidden="true">▦</span><div><small>UP NEXT · 10:35</small><strong>English with Ms Naidoo</strong><span>Room 4 · Your day, planned.</span></div></a>
+              <a class="float-card assignment-card" href="app/#assignments"><div class="floating-label"><span class="feature-icon peach" aria-hidden="true">▱</span><small>ASSIGNMENTS</small><span class="due-pill">Friday</span></div><strong>A head start on your history essay.</strong><div class="progress-label"><span>Draft in progress</span><b>60%</b></div><div class="progress-track"><span></span></div></a>
+              <a class="float-card study-card" href="app/#chom"><span class="feature-icon navy" aria-hidden="true">✧</span><div><small>STUDY WITH CHOM</small><strong>Let’s make algebra click.</strong><span>One clear step at a time.</span></div><span aria-hidden="true">↗</span></a>
+              <div class="scene-ground" aria-hidden="true"></div>
+            </div>
+          </div>
+          <div class="feature-switcher" role="group" aria-label="Choose a feature to preview">
+            <button type="button" data-feature="dashboard" aria-pressed="true" aria-controls="feature-screen">Overview</button>
+            <button type="button" data-feature="timetable" aria-pressed="false" aria-controls="feature-screen">Timetable</button>
+            <button type="button" data-feature="assignments" aria-pressed="false" aria-controls="feature-screen">Assignments</button>
+            <button type="button" data-feature="chom" aria-pressed="false" aria-controls="feature-screen">Study</button>
+          </div>
+          <p class="preview-caption" id="preview-caption" role="status">Your school day, together in one place.</p>
         </div>
       </section>
 
