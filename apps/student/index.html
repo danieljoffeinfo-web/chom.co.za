@@ -3064,6 +3064,40 @@
           order: 2;
         }
       }
+      /* Panel headers: title left, action right, navy rule underneath */
+      .cd .panel > .cd-head {
+        align-items: center;
+        padding: 24px 24px 20px;
+        margin-bottom: 20px;
+        border-bottom: 3px solid var(--ink);
+      }
+      .cd .panel > .cd-head .text-button,
+      .cd .panel > .cd-head .dt-all {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 0 18px;
+        border: 1px solid var(--ink);
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .cd .panel > .cd-head .text-button:hover,
+      .cd .panel > .cd-head .dt-all:hover {
+        background: var(--ink);
+        color: var(--card);
+      }
+      .dt-group {
+        padding-top: 0;
+      }
+      @media (max-width: 520px) {
+        .cd .panel > .cd-head {
+          padding: 20px 16px 16px;
+        }
+      }
     </style>
   <link rel="stylesheet" href="/shared/subjects.css">
 <script src="/shared/school.js"></script>
@@ -3710,7 +3744,7 @@ SOFTWARE.
             .join("");
         }
         function assignmentsPanel() {
-          return `<section class="panel" aria-labelledby="assign-title"><div class="cd-head"><div><span class="cd-label">Assignments</span><h2 id="assign-title">Due this week</h2></div><a class="text-button" href="#assignments">View all ${icon("arrow", true)}</a></div><div class="cd-assign">${assignmentRows()}</div></section>`;
+          return `<section class="panel" aria-labelledby="assign-title"><div class="cd-head"><div><span class="cd-label">Assignments</span><h2 id="assign-title">Due this week</h2></div><a class="text-button" href="#assignments">See all assignments ${icon("arrow", true)}</a></div><div class="cd-assign">${assignmentRows()}</div></section>`;
         }
         function progressPanel() {
           return `<section class="progress-panel"><div class="progress-head"><h2>Your progress</h2>${icon("leaf")}</div><div class="progress-visual"><div class="progress-ring"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="none" style="stroke:var(--line)" stroke-width="6"/><circle cx="40" cy="40" r="34" fill="none" style="stroke:var(--orange)" stroke-width="6" stroke-linecap="round" stroke-dasharray="207 214"/></svg><strong>97%</strong></div><div class="progress-message"><strong>Showing up matters.</strong><p>Your attendance this term. Keep making space for learning.</p></div></div><div class="progress-foot"><span>One day at a time.</span><button data-action="navigate" data-view="results">My progress ${icon("arrow", true)}</button></div></section>`;
