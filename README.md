@@ -2,7 +2,8 @@
 
 Two static applications in one repository. No framework, dependencies or backend.
 
-- `apps/student/index.html`: original learner dashboard, extended with My Subjects.
+- `apps/student/index.html`: public home page (signed-out landing). "Sign in" opens the app.
+- `apps/student/app/index.html`: learner dashboard at `/app/`, with My Subjects. "Sign out" returns to the home page.
 - `apps/teacher/`: teacher overview, subject resources, tasks, assignments and calendar.
 - `packages/shared/`: shared sample school data, local persistence and subject UI styles.
 - `scripts/build.mjs`: builds both independently deployable static directories.
@@ -22,7 +23,7 @@ The root vercel.json defaults to the existing learner deployment. For the teache
 
 ## Preview behaviour
 
-Teacher URL includes `/student/#subjects` so both views can demonstrate shared browser-only state. The existing learner URL has its own sample state because separate origins cannot share localStorage or IndexedDB. No school accounts, real submissions, messages or backend uploads exist. Uploaded files (10 MB maximum) are stored in IndexedDB on the current browser. Metadata and sample work are stored in localStorage. Clearing site data clears changes.
+Teacher URL includes `/student/app/#subjects` so both views can demonstrate shared browser-only state. The existing learner URL has its own sample state because separate origins cannot share localStorage or IndexedDB. No school accounts, real submissions, messages or backend uploads exist. Uploaded files (10 MB maximum) are stored in IndexedDB on the current browser. Metadata and sample work are stored in localStorage. Clearing site data clears changes.
 
 Sample profile, dates, classes, counts and resources are illustrative. The learner preview is Grade 10B; material assigned to 10A is intentionally absent. Downloadable sample resources are small text documents.
 
