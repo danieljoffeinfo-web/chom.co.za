@@ -177,49 +177,6 @@
         color: var(--muted);
       }
 
-      /* Features */
-      .features {
-        padding-top: clamp(48px, 7vw, 88px);
-        padding-bottom: clamp(48px, 7vw, 88px);
-        border-top: 1px solid var(--line);
-      }
-      .features h2,
-      .closing h2 {
-        font-size: clamp(32px, 4.5vw, 52px);
-        line-height: 1.05;
-        font-weight: 800;
-        letter-spacing: -1.5px;
-        max-width: 18ch;
-      }
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 16px;
-        margin-top: 40px;
-      }
-      .feature {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        padding: 28px;
-        border: 1px solid var(--line);
-        border-radius: 24px;
-        background: var(--card);
-      }
-      .feature svg {
-        width: 36px;
-        height: 36px;
-      }
-      .feature h3 {
-        margin-top: 8px;
-        font-size: 20px;
-        font-weight: 800;
-        letter-spacing: -0.3px;
-      }
-      .feature p {
-        color: var(--muted);
-      }
-
       /* Closing */
       .closing {
         display: flex;
@@ -234,6 +191,10 @@
         color: var(--card);
       }
       .closing h2 {
+        font-size: clamp(32px, 4.5vw, 52px);
+        line-height: 1.05;
+        font-weight: 800;
+        letter-spacing: -1.5px;
         max-width: 16ch;
       }
       .closing .btn {
@@ -279,7 +240,6 @@
         chom learn
       </a>
       <nav class="top-links" aria-label="Main">
-        <a class="link" href="#features">How it works</a>
         <a class="btn" href="app/">Sign in</a>
       </nav>
     </header>
@@ -297,38 +257,11 @@
               >Sign in
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg
             ></a>
-            <a class="btn ghost" href="#features">See how it works</a>
           </div>
           <p class="note">Student preview with sample school data. No account needed yet.</p>
         </div>
       </section>
 
-      <section class="wrap features" id="features" aria-labelledby="features-title">
-        <p class="eyebrow">How it works</p>
-        <h2 id="features-title" style="margin-top: 12px">Everything for today, in one place.</h2>
-        <div class="grid">
-          <article class="feature">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
-            <h3>See what’s on now</h3>
-            <p>Your current class, room and teacher, with what’s next straight after.</p>
-          </article>
-          <article class="feature">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4" /><path d="m8.5 12 2.5 2.5 4.5-5" /></svg>
-            <h3>Tick off today’s list</h3>
-            <p>Every task shows when it’s due. Tick it off and move on.</p>
-          </article>
-          <article class="feature">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" /><path d="M14 3v6h6M8 17h3M8 13h8" /></svg>
-            <h3>Stay ahead of assignments</h3>
-            <p>Due dates and how far you’ve drafted, side by side.</p>
-          </article>
-          <article class="feature">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" /></svg>
-            <h3>Study with Chom</h3>
-            <p>Make a little time for something you want to understand.</p>
-          </article>
-        </div>
-      </section>
 
       <section class="wrap" aria-labelledby="closing-title">
         <div class="closing">
