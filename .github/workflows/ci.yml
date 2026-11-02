@@ -41,3 +41,23 @@ jobs:
 
       - name: Build static site (live chom.co.za)
         run: pnpm build:site
+
+  database:
+    name: Supabase migrations and RLS tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start local Supabase
+        run: supabase start
+
+      - name: Reset database (apply migrations + seed)
+        run: supabase db reset
+
+      - name: Run pgTAP RLS tests
+        run: supabase test db

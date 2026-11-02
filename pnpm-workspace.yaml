@@ -1,8 +1,10 @@
 # Only real packages live in the workspace. The static site and prototypes
 # (apps/site, apps/teacher-prototype, packages/prototype-data) have no
 # dependencies and are built by scripts/build.mjs.
+# Database SQL lives in supabase/ (CLI project), not as an npm workspace package.
 packages:
   - apps/web
   - apps/mobile
+  - packages/api
   - packages/tokens
   - packages/tsconfig

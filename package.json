@@ -12,7 +12,11 @@
     "dev:web": "turbo run dev --filter=@chom/web",
     "dev:mobile": "pnpm --filter @chom/mobile start",
     "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset",
+    "db:test": "supabase test db"
   },
   "devDependencies": {
     "turbo": "2.11.10",
