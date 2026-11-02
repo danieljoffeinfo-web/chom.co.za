@@ -86,14 +86,14 @@ export function Onboarding({ student }: { student: StudentContext }) {
       student_profile_id: student.profileId,
     };
 
-    // Study habits.
+    // Study habits. Completion is never written here: it is set once, below, only
+    // after every answer has saved, and editing answers later never clears it.
     const { error: profileError } = await supabase.from('student_study_profiles').upsert(
       {
         ...base,
         session_length: answers.sessionLength,
         study_methods: answers.methods,
         study_times: answers.times,
-        onboarding_completed_at: finished ? new Date().toISOString() : null,
       },
       { onConflict: 'school_id,academic_year_id,student_profile_id' },
     );
@@ -119,6 +119,18 @@ export function Onboarding({ student }: { student: StudentContext }) {
       .from('student_subject_goals')
       .upsert(rows, { onConflict: 'school_id,academic_year_id,student_profile_id,subject_id' });
     if (goalsError) throw goalsError;
+
+    // Mark onboarding finished the first time, now that everything else has saved.
+    if (finished && !student.studyProfile?.onboarding_completed_at) {
+      const { error: completionError } = await supabase
+        .from('student_study_profiles')
+        .update({ onboarding_completed_at: new Date().toISOString() })
+        .eq('school_id', student.schoolId)
+        .eq('academic_year_id', student.academicYearId)
+        .eq('student_profile_id', student.profileId)
+        .is('onboarding_completed_at', null);
+      if (completionError) throw completionError;
+    }
   }
 
   async function next() {
