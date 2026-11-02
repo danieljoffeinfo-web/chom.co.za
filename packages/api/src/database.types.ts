@@ -1,0 +1,657 @@
+// Generated from the database schema by `pnpm db:types`. Do not edit by hand.
+
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+
+export type Database = {
+  public: {
+    Tables: {
+      academic_years: {
+        Row: {
+          created_at: string;
+          curriculum_id: string;
+          ends_on: string;
+          id: string;
+          is_current: boolean;
+          label: string;
+          school_id: string;
+          starts_on: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          curriculum_id: string;
+          ends_on: string;
+          id?: string;
+          is_current?: boolean;
+          label: string;
+          school_id: string;
+          starts_on: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          curriculum_id?: string;
+          ends_on?: string;
+          id?: string;
+          is_current?: boolean;
+          label?: string;
+          school_id?: string;
+          starts_on?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'academic_years_curriculum_id_fkey';
+            columns: ['curriculum_id'];
+            isOneToOne: false;
+            referencedRelation: 'curricula';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'academic_years_school_id_fkey';
+            columns: ['school_id'];
+            isOneToOne: false;
+            referencedRelation: 'schools';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      class_subjects: {
+        Row: {
+          class_id: string;
+          created_at: string;
+          id: string;
+          qualification_level: string | null;
+          school_id: string;
+          subject_id: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          class_id: string;
+          created_at?: string;
+          id?: string;
+          qualification_level?: string | null;
+          school_id: string;
+          subject_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          class_id?: string;
+          created_at?: string;
+          id?: string;
+          qualification_level?: string | null;
+          school_id?: string;
+          subject_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'class_subjects_class_id_school_id_fkey';
+            columns: ['class_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'classes';
+            referencedColumns: ['id', 'school_id'];
+          },
+          {
+            foreignKeyName: 'class_subjects_subject_id_school_id_fkey';
+            columns: ['subject_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'subjects';
+            referencedColumns: ['id', 'school_id'];
+          },
+        ];
+      };
+      classes: {
+        Row: {
+          academic_year_id: string;
+          created_at: string;
+          ednana_id: string | null;
+          grade: number;
+          id: string;
+          kind: Database['public']['Enums']['class_kind'];
+          name: string;
+          school_id: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          academic_year_id: string;
+          created_at?: string;
+          ednana_id?: string | null;
+          grade: number;
+          id?: string;
+          kind?: Database['public']['Enums']['class_kind'];
+          name: string;
+          school_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          academic_year_id?: string;
+          created_at?: string;
+          ednana_id?: string | null;
+          grade?: number;
+          id?: string;
+          kind?: Database['public']['Enums']['class_kind'];
+          name?: string;
+          school_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'classes_academic_year_id_school_id_fkey';
+            columns: ['academic_year_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'academic_years';
+            referencedColumns: ['id', 'school_id'];
+          },
+        ];
+      };
+      curricula: {
+        Row: {
+          code: string;
+          created_at: string;
+          id: string;
+          name: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          code: string;
+          created_at?: string;
+          id?: string;
+          name: string;
+          updated_at?: string;
+        };
+        Update: {
+          code?: string;
+          created_at?: string;
+          id?: string;
+          name?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      curriculum_subjects: {
+        Row: {
+          code: string | null;
+          created_at: string;
+          curriculum_id: string;
+          id: string;
+          max_grade: number;
+          min_grade: number;
+          name: string;
+          qualification_level: string | null;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          code?: string | null;
+          created_at?: string;
+          curriculum_id: string;
+          id?: string;
+          max_grade: number;
+          min_grade: number;
+          name: string;
+          qualification_level?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          code?: string | null;
+          created_at?: string;
+          curriculum_id?: string;
+          id?: string;
+          max_grade?: number;
+          min_grade?: number;
+          name?: string;
+          qualification_level?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'curriculum_subjects_curriculum_id_fkey';
+            columns: ['curriculum_id'];
+            isOneToOne: false;
+            referencedRelation: 'curricula';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      enrolments: {
+        Row: {
+          class_id: string;
+          created_at: string;
+          ednana_id: string | null;
+          id: string;
+          school_id: string;
+          student_profile_id: string;
+          student_role: Database['public']['Enums']['membership_role'];
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          class_id: string;
+          created_at?: string;
+          ednana_id?: string | null;
+          id?: string;
+          school_id: string;
+          student_profile_id: string;
+          student_role?: Database['public']['Enums']['membership_role'];
+          updated_at?: string;
+        };
+        Update: {
+          class_id?: string;
+          created_at?: string;
+          ednana_id?: string | null;
+          id?: string;
+          school_id?: string;
+          student_profile_id?: string;
+          student_role?: Database['public']['Enums']['membership_role'];
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'enrolments_class_id_school_id_fkey';
+            columns: ['class_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'classes';
+            referencedColumns: ['id', 'school_id'];
+          },
+          {
+            foreignKeyName: 'enrolments_school_id_student_profile_id_student_role_fkey';
+            columns: ['school_id', 'student_profile_id', 'student_role'];
+            isOneToOne: false;
+            referencedRelation: 'school_memberships';
+            referencedColumns: ['school_id', 'profile_id', 'role'];
+          },
+        ];
+      };
+      guardianships: {
+        Row: {
+          created_at: string;
+          ednana_id: string | null;
+          id: string;
+          parent_profile_id: string;
+          parent_role: Database['public']['Enums']['membership_role'];
+          relationship: string | null;
+          school_id: string;
+          student_profile_id: string;
+          student_role: Database['public']['Enums']['membership_role'];
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          ednana_id?: string | null;
+          id?: string;
+          parent_profile_id: string;
+          parent_role?: Database['public']['Enums']['membership_role'];
+          relationship?: string | null;
+          school_id: string;
+          student_profile_id: string;
+          student_role?: Database['public']['Enums']['membership_role'];
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          ednana_id?: string | null;
+          id?: string;
+          parent_profile_id?: string;
+          parent_role?: Database['public']['Enums']['membership_role'];
+          relationship?: string | null;
+          school_id?: string;
+          student_profile_id?: string;
+          student_role?: Database['public']['Enums']['membership_role'];
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'guardianships_school_id_parent_profile_id_parent_role_fkey';
+            columns: ['school_id', 'parent_profile_id', 'parent_role'];
+            isOneToOne: false;
+            referencedRelation: 'school_memberships';
+            referencedColumns: ['school_id', 'profile_id', 'role'];
+          },
+          {
+            foreignKeyName: 'guardianships_school_id_student_profile_id_student_role_fkey';
+            columns: ['school_id', 'student_profile_id', 'student_role'];
+            isOneToOne: false;
+            referencedRelation: 'school_memberships';
+            referencedColumns: ['school_id', 'profile_id', 'role'];
+          },
+        ];
+      };
+      profiles: {
+        Row: {
+          created_at: string;
+          full_name: string;
+          id: string;
+          preferred_name: string | null;
+          updated_at: string;
+          user_id: string | null;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          full_name: string;
+          id?: string;
+          preferred_name?: string | null;
+          updated_at?: string;
+          user_id?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          full_name?: string;
+          id?: string;
+          preferred_name?: string | null;
+          updated_at?: string;
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
+      school_memberships: {
+        Row: {
+          created_at: string;
+          ednana_id: string | null;
+          id: string;
+          profile_id: string;
+          role: Database['public']['Enums']['membership_role'];
+          school_id: string;
+          status: Database['public']['Enums']['membership_status'];
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          ednana_id?: string | null;
+          id?: string;
+          profile_id: string;
+          role: Database['public']['Enums']['membership_role'];
+          school_id: string;
+          status?: Database['public']['Enums']['membership_status'];
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          ednana_id?: string | null;
+          id?: string;
+          profile_id?: string;
+          role?: Database['public']['Enums']['membership_role'];
+          school_id?: string;
+          status?: Database['public']['Enums']['membership_status'];
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'school_memberships_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'school_memberships_school_id_fkey';
+            columns: ['school_id'];
+            isOneToOne: false;
+            referencedRelation: 'schools';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      schools: {
+        Row: {
+          created_at: string;
+          ednana_id: string | null;
+          id: string;
+          name: string;
+          slug: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          ednana_id?: string | null;
+          id?: string;
+          name: string;
+          slug: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          ednana_id?: string | null;
+          id?: string;
+          name?: string;
+          slug?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      subjects: {
+        Row: {
+          code: string | null;
+          created_at: string;
+          curriculum_subject_id: string | null;
+          ednana_id: string | null;
+          id: string;
+          name: string;
+          school_id: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          code?: string | null;
+          created_at?: string;
+          curriculum_subject_id?: string | null;
+          ednana_id?: string | null;
+          id?: string;
+          name: string;
+          school_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          code?: string | null;
+          created_at?: string;
+          curriculum_subject_id?: string | null;
+          ednana_id?: string | null;
+          id?: string;
+          name?: string;
+          school_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'subjects_curriculum_subject_id_fkey';
+            columns: ['curriculum_subject_id'];
+            isOneToOne: false;
+            referencedRelation: 'curriculum_subjects';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'subjects_school_id_fkey';
+            columns: ['school_id'];
+            isOneToOne: false;
+            referencedRelation: 'schools';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      teaching_allocations: {
+        Row: {
+          class_subject_id: string;
+          created_at: string;
+          ednana_id: string | null;
+          id: string;
+          school_id: string;
+          teacher_profile_id: string;
+          teacher_role: Database['public']['Enums']['membership_role'];
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          class_subject_id: string;
+          created_at?: string;
+          ednana_id?: string | null;
+          id?: string;
+          school_id: string;
+          teacher_profile_id: string;
+          teacher_role?: Database['public']['Enums']['membership_role'];
+          updated_at?: string;
+        };
+        Update: {
+          class_subject_id?: string;
+          created_at?: string;
+          ednana_id?: string | null;
+          id?: string;
+          school_id?: string;
+          teacher_profile_id?: string;
+          teacher_role?: Database['public']['Enums']['membership_role'];
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'teaching_allocations_class_subject_id_school_id_fkey';
+            columns: ['class_subject_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'class_subjects';
+            referencedColumns: ['id', 'school_id'];
+          },
+          {
+            foreignKeyName: 'teaching_allocations_school_id_teacher_profile_id_teacher__fkey';
+            columns: ['school_id', 'teacher_profile_id', 'teacher_role'];
+            isOneToOne: false;
+            referencedRelation: 'school_memberships';
+            referencedColumns: ['school_id', 'profile_id', 'role'];
+          },
+        ];
+      };
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      [_ in never]: never;
+    };
+    Enums: {
+      class_kind: 'register' | 'subject_group';
+      membership_role: 'student' | 'teacher' | 'parent' | 'school_admin';
+      membership_status: 'active' | 'inactive';
+      staff_level: 'support' | 'operations' | 'owner';
+    };
+    CompositeTypes: {
+      [_ in never]: never;
+    };
+  };
+};
+
+type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>;
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, 'public'>];
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
+      Row: infer R;
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    ? (DefaultSchema['Tables'] & DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R;
+      }
+      ? R
+      : never
+    : never;
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    keyof DefaultSchema['Tables'] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+      Insert: infer I;
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I;
+      }
+      ? I
+      : never
+    : never;
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    keyof DefaultSchema['Tables'] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+      Update: infer U;
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U;
+      }
+      ? U
+      : never
+    : never;
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    keyof DefaultSchema['Enums'] | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
+    : never) = never,
+> = DefaultSchemaEnumNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
+    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
+    : never;
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    keyof DefaultSchema['CompositeTypes'] | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+    : never) = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof DatabaseWithoutInternals }
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
+    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+    : never;
+
+export const Constants = {
+  public: {
+    Enums: {
+      class_kind: ['register', 'subject_group'],
+      membership_role: ['student', 'teacher', 'parent', 'school_admin'],
+      membership_status: ['active', 'inactive'],
+      staff_level: ['support', 'operations', 'owner'],
+    },
+  },
+} as const;
