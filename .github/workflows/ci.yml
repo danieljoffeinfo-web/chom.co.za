@@ -89,6 +89,25 @@ jobs:
             exit 1
           fi
 
+      - name: New migrations come after every migration on main
+        # Production refuses a migration older than its latest one, which would block
+        # every later deploy. Rename the file with a newer timestamp
+        # (supabase migration new) if main moved on.
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          latest=$(git ls-tree --name-only "$BASE_SHA" supabase/migrations/ | sed -n 's|.*/\([0-9]\{14\}\)_.*\.sql$|\1|p' | sort | tail -n 1)
+          added=$(git diff --name-only --diff-filter=A --no-renames "$BASE_SHA" HEAD -- supabase/migrations | sed -n 's|.*/\([0-9]\{14\}\)_.*\.sql$|\1|p' | sort)
+          bad=""
+          for version in $added; do
+            if [ -n "$latest" ] && [ "$version" -le "$latest" ]; then bad="$bad $version"; fi
+          done
+          if [ -n "$bad" ]; then
+            echo "::error::Migration(s)$bad are not newer than main's latest ($latest). Give them a newer timestamp."
+            exit 1
+          fi
+
       - uses: pnpm/action-setup@v4
 
       - uses: actions/setup-node@v4

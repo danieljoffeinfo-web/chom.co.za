@@ -140,15 +140,16 @@ select private.expose_table('public.my_table', 'select, insert, update, delete')
 Merging a pull request that adds a migration is all it takes: once CI passes on `main`, the **Deploy database** workflow applies it to production. It deploys the exact commit CI tested, one deploy at a time.
 
 - It stops without changing anything if production has a migration the repo doesn't, which means someone changed the database outside the repo.
-- Migrations already on `main` can't be edited (CI fails); add a new one instead.
-- To check what would be applied, run the workflow by hand from the Actions tab. **Dry run** is ticked by default.
+- Migrations already on `main` can't be edited, and a new migration must be newer than every migration on `main` (CI fails otherwise).
+- To check what would be applied, run the workflow by hand from the Actions tab, on `main`. **Dry run** is ticked by default.
 
 **One-time setup.** The workflow needs a Supabase access token, kept as a GitHub secret:
 
 1. Create a token at [supabase.com/dashboard/account/tokens](https://supabase.com/dashboard/account/tokens), named `github-deploy-database`. If it offers scopes, limit it to the `chom.co.za` project.
-2. In GitHub: **Settings → Environments → New environment**, named `production`.
+2. In GitHub: **Settings → Environments → New environment**, named `productionchom`.
 3. In that environment, under **Environment secrets**, add `SUPABASE_ACCESS_TOKEN` with the token.
-4. Optional: tick **Required reviewers** and add yourself, so each deploy waits for your click.
+4. Under **Deployment branches and tags**, choose **Selected branches and tags** and add `main`, so only merged code can use the token.
+5. Optional: tick **Required reviewers** and add yourself, so each deploy waits for your click.
 
 ## Checks
 
