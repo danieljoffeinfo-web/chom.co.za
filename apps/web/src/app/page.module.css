@@ -30,3 +30,17 @@
 .lede strong {
   font-weight: 800;
 }
+
+.cta {
+  align-self: flex-start;
+  font-weight: 700;
+  text-decoration: none;
+  background: var(--chom-primary);
+  color: var(--chom-on-primary);
+  border-radius: var(--chom-radius-pill);
+  padding: 14px 28px;
+}
+
+.cta:hover {
+  background: var(--chom-primary-hover);
+}
