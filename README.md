@@ -16,10 +16,11 @@ packages/               Shared workspace packages (picked up automatically)
   tokens/               Design tokens: colours, type, spacing, radius.
                         TypeScript for mobile, tokens.css for web
   tsconfig/             Shared TypeScript settings
-static/                 No-build HTML, outside the workspace, deployed as-is
-  site/                 Live static site: public home page (/) and the
-                        student prototype (/app/). Deployed to chom.co.za
-  teacher-prototype/    Static teacher prototype (design reference only)
+static/                 No-build HTML prototypes, the design target for the app.
+                        Copied into apps/web at build time and served at
+                        chom.co.za/app (student) and chom.co.za/teacher
+  site/                 Old static home page and the student prototype (app/)
+  teacher-prototype/    Teacher prototype
   prototype-data/       Sample data used only by the static prototypes
 supabase/               The database: migrations (structure and access rules),
                         test seed data and automated access tests
@@ -28,7 +29,6 @@ docs/
 scripts/
   build.mjs             Builds static/ into dist/
   gen-db-types.sh       Regenerates the database types (pnpm db:types)
-  vercel-ignore.sh      Skips chom.co.za deploys when static/ didn't change
 ```
 
 To add a shared package, create a folder under `packages/` with a `package.json` named `@chom/<name>`. No other registration is needed.
@@ -141,13 +141,11 @@ select private.expose_table('public.my_table', 'select, insert, update, delete')
 
 ## Deployments
 
-| What                                        | Where                                      | How                                                                                                                                                                                                                     |
-| ------------------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Static site (home page + student prototype) | chom.co.za (Vercel project `chom-co-za`)   | Root `vercel.json`: skips dependency install, runs `node scripts/build.mjs`, serves `dist/student`. Skips the deploy when nothing in `static/` or its build changed since the last successful deploy                    |
-| Teacher prototype                           | Vercel project `chom-teacher`              | Same build, output directory `dist/teacher`                                                                                                                                                                             |
-| Database                                    | Supabase project `chom.co.za`              | `.github/workflows/deploy-database.yml`: after CI passes on `main`, applies new files in `supabase/migrations/` to production with the pinned Supabase CLI. Never loads the seed. See below                             |
-| Web app (sign-in, student onboarding)       | app.chom.co.za (Vercel project `chom-app`) | Root Directory `apps/web`. Needs `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (see `apps/web/.env.example`). Supabase Auth must allow `https://app.chom.co.za/auth/callback` as a redirect URL |
-| Mobile app                                  | Not published yet                          | Will be built and submitted with Expo EAS                                                                                                                                                                               |
+| What                                                                                                | Where                                    | How                                                                                                                                                                                                                                                                                                                       |
+| --------------------------------------------------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Web app: home page, sign-in, onboarding, and the HTML prototypes at `/app` (student) and `/teacher` | chom.co.za (Vercel project `chom-co-za`) | Root Directory `apps/web`, Next.js. Before each build, `apps/web/scripts/copy-prototypes.mjs` copies the prototypes from `static/` into `public/`. Needs `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (see `apps/web/.env.example`). Supabase Auth must allow `https://chom.co.za/auth/callback` |
+| Database                                                                                            | Supabase project `chom.co.za`            | `.github/workflows/deploy-database.yml`: after CI passes on `main`, applies new files in `supabase/migrations/` to production with the pinned Supabase CLI. Never loads the seed. See below                                                                                                                               |
+| Mobile app                                                                                          | Not published yet                        | Will be built and submitted with Expo EAS                                                                                                                                                                                                                                                                                 |
 
 ### Database deploys
 

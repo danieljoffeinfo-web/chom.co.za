@@ -72,6 +72,9 @@ export default async function Home() {
         </dl>
       </section>
 
+      <a className={styles.dashboard} href="/app">
+        Open my dashboard
+      </a>
       <Link className={styles.edit} href="/onboarding">
         Edit my answers
       </Link>

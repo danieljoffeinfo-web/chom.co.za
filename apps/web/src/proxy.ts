@@ -32,7 +32,17 @@ export async function proxy(request: NextRequest) {
   const signedIn = Boolean(data?.claims);
 
   const path = request.nextUrl.pathname;
-  const isPublic = path === '/' || path.startsWith('/sign-in') || path.startsWith('/auth/');
+  // The HTML prototypes use sample data only, so they stay viewable signed out
+  // (for showing schools).
+  const isPrototype = ['/app', '/teacher', '/shared'].some(
+    (p) => path === p || path.startsWith(`${p}/`),
+  );
+  const isPublic =
+    path === '/' ||
+    path.startsWith('/sign-in') ||
+    path === '/sign-out' ||
+    path.startsWith('/auth/') ||
+    isPrototype;
   if (!signedIn && !isPublic) {
     const signIn = request.nextUrl.clone();
     signIn.pathname = '/sign-in';

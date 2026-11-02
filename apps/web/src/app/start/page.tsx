@@ -59,5 +59,5 @@ export default async function Start() {
     );
   }
 
-  redirect(student.studyProfile?.onboarding_completed_at ? '/home' : '/onboarding');
+  redirect(student.studyProfile?.onboarding_completed_at ? '/app' : '/onboarding');
 }

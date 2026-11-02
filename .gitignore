@@ -19,3 +19,8 @@ next-env.d.ts
 # Local tooling and OS files
 .vercel
 .DS_Store
+
+# HTML prototypes copied into the web app at build time (originals in static/)
+apps/web/public/app/
+apps/web/public/teacher/
+apps/web/public/shared/

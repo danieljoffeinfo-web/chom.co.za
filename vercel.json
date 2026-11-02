@@ -1,7 +1,0 @@
-{
-  "installCommand": "echo \"Static site: no dependencies to install\"",
-  "buildCommand": "node scripts/build.mjs",
-  "outputDirectory": "dist/student",
-  "ignoreCommand": "bash scripts/vercel-ignore.sh",
-  "framework": null
-}

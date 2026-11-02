@@ -4,7 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prototypes": "node scripts/copy-prototypes.mjs",
+    "predev": "node scripts/copy-prototypes.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/copy-prototypes.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings 0",

@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 
 import {
@@ -39,7 +38,6 @@ function validTarget(value: string | undefined): boolean {
 }
 
 export function Onboarding({ student }: { student: StudentContext }) {
-  const router = useRouter();
   const [stepIndex, setStepIndex] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -154,8 +152,9 @@ export function Onboarding({ student }: { student: StudentContext }) {
       setSaving(false);
     }
     if (isLast) {
-      router.push('/home');
-      router.refresh();
+      // The dashboard (the student prototype for now) is a static page: full load.
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- /app is a static HTML page, not a Next.js route
+      window.location.assign('/app');
     } else {
       setStepIndex(stepIndex + 1);
     }
