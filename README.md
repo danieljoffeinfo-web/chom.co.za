@@ -131,8 +131,25 @@ select private.expose_table('public.my_table', 'select, insert, update, delete')
 | ------------------------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Static site (home page + student prototype) | chom.co.za (Vercel project `chom-co-za`) | Root `vercel.json`: skips dependency install, runs `node scripts/build.mjs`, serves `dist/student`. Skips the deploy when nothing in `static/` or its build changed since the last successful deploy |
 | Teacher prototype                           | Vercel project `chom-teacher`            | Same build, output directory `dist/teacher`                                                                                                                                                          |
+| Database                                    | Supabase project `chom.co.za`            | `.github/workflows/deploy-database.yml`: after CI passes on `main`, applies new files in `supabase/migrations/` to production with the pinned Supabase CLI. Never loads the seed. See below          |
 | Web app                                     | Not deployed yet                         | Will be a new Vercel project with Root Directory `apps/web`                                                                                                                                          |
 | Mobile app                                  | Not published yet                        | Will be built and submitted with Expo EAS                                                                                                                                                            |
+
+### Database deploys
+
+Merging a pull request that adds a migration is all it takes: once CI passes on `main`, the **Deploy database** workflow applies it to production. It always deploys the latest `main`, one deploy at a time, and only once CI has passed on that exact commit.
+
+- It stops without changing anything if production has a migration the repo doesn't, which means someone changed the database outside the repo.
+- Migrations already on `main` can't be edited, and a new migration must be newer than every migration on `main` (CI fails otherwise).
+- To check what would be applied, run the workflow by hand from the Actions tab, on `main`. **Dry run** is ticked by default.
+
+**One-time setup.** The workflow needs a Supabase access token, kept as a GitHub secret:
+
+1. Create a token at [supabase.com/dashboard/account/tokens](https://supabase.com/dashboard/account/tokens), named `github-deploy-database`. If it offers scopes, limit it to the `chom.co.za` project.
+2. In GitHub: **Settings → Environments → New environment**, named `productionchom`.
+3. In that environment, under **Environment secrets**, add `SUPABASE_ACCESS_TOKEN` with the token.
+4. Under **Deployment branches and tags**, choose **Selected branches and tags** and add `main`, so only merged code can use the token.
+5. Optional: tick **Required reviewers** and add yourself, so each deploy waits for your click.
 
 ## Checks
 

@@ -4,7 +4,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(28);
+select plan(29);
 
 -- ---------------------------------------------------------------------------------
 -- Subjects and their details
@@ -167,6 +167,11 @@ select is(
   (select count(*)::int from public.curriculum_subject_aliases),
   14,
   'Signed-in users can read all 14 aliases'
+);
+select isnt(
+  public.resolve_curriculum_subject('IEB', 'Maths Lit', 11),
+  null,
+  'Signed-in users can use the subject matcher'
 );
 select throws_ok(
   $$ insert into public.curriculum_subject_aliases (curriculum_id, curriculum_subject_id, alias, min_grade, max_grade)
