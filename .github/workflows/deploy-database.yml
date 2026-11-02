@@ -1,7 +1,9 @@
 name: Deploy database
 
 # Applies new migrations in supabase/migrations/ to the production Supabase project,
-# after CI has passed on main. It deploys exactly the commit CI tested.
+# after CI has passed on main. It always deploys the latest main, so a run that
+# waited or was replaced never leaves a newer migration behind. (Pull requests must
+# be up to date with main and pass CI before merging, so main is always tested code.)
 #
 # Needs the SUPABASE_ACCESS_TOKEN secret on the "productionchom" environment
 # (GitHub: Settings > Environments > productionchom). See README "Deployments".
@@ -21,14 +23,6 @@ on:
 permissions:
   contents: read
 
-# One deploy at a time, never cancelled halfway. Manual previews use their own queue,
-# so they can never replace a waiting deploy. (A newer waiting deploy may replace an
-# older one; that's safe because main only moves forward, so the newer commit
-# includes every migration the older one had.)
-concurrency:
-  group: deploy-database-${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && 'preview' || 'apply' }}
-  cancel-in-progress: false
-
 env:
   # The chom.co.za project (eu-west-1). Not a secret.
   SUPABASE_PROJECT_REF: xgbayvzxbwgvpspdrmme
@@ -44,14 +38,22 @@ jobs:
       (github.event.workflow_run.conclusion == 'success' &&
        github.event.workflow_run.event == 'push' &&
        github.event.workflow_run.head_branch == 'main')
+    # One deploy at a time, never cancelled halfway. Set on the job, so runs skipped
+    # by the condition above (failed CI, pull requests) never join the queue. Manual
+    # previews use their own queue, so they can't replace a waiting deploy. A waiting
+    # deploy may be replaced by a newer one; both deploy the latest main, so nothing
+    # is lost.
+    concurrency:
+      group: deploy-database-${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && 'preview' || 'apply' }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment: productionchom
     steps:
       - uses: actions/checkout@v4
         with:
-          # The commit CI tested (automatic runs) or the latest main (manual runs).
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          # Always the latest main, even if this run was triggered by an older commit.
+          ref: main
           persist-credentials: false
 
       - uses: pnpm/action-setup@v4

@@ -137,7 +137,7 @@ select private.expose_table('public.my_table', 'select, insert, update, delete')
 
 ### Database deploys
 
-Merging a pull request that adds a migration is all it takes: once CI passes on `main`, the **Deploy database** workflow applies it to production. It deploys the exact commit CI tested, one deploy at a time.
+Merging a pull request that adds a migration is all it takes: once CI passes on `main`, the **Deploy database** workflow applies it to production. It always deploys the latest `main`, one deploy at a time.
 
 - It stops without changing anything if production has a migration the repo doesn't, which means someone changed the database outside the repo.
 - Migrations already on `main` can't be edited, and a new migration must be newer than every migration on `main` (CI fails otherwise).

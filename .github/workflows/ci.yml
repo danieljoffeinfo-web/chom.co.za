@@ -98,7 +98,14 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           latest=$(git ls-tree --name-only "$BASE_SHA" supabase/migrations/ | sed -n 's|.*/\([0-9]\{14\}\)_.*\.sql$|\1|p' | sort | tail -n 1)
-          added=$(git diff --name-only --diff-filter=A --no-renames "$BASE_SHA" HEAD -- supabase/migrations | sed -n 's|.*/\([0-9]\{14\}\)_.*\.sql$|\1|p' | sort)
+          added_paths=$(git diff --name-only --diff-filter=A --no-renames "$BASE_SHA" HEAD -- supabase/migrations)
+          invalid=$(printf '%s\n' "$added_paths" | grep '\.sql$' | grep -v '^supabase/migrations/[0-9]\{14\}_[^/]*\.sql$' || true)
+          if [ -n "$invalid" ]; then
+            echo "::error::Migration file names must start with a 14-digit timestamp (supabase migration new):"
+            echo "$invalid"
+            exit 1
+          fi
+          added=$(printf '%s\n' "$added_paths" | sed -n 's|.*/\([0-9]\{14\}\)_.*\.sql$|\1|p' | sort)
           bad=""
           for version in $added; do
             if [ -n "$latest" ] && [ "$version" -le "$latest" ]; then bad="$bad $version"; fi
