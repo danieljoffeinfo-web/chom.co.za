@@ -4,8 +4,10 @@
 -- Setup (inside this test's transaction):
 --   * Demo High's domain demo-high.test signs in with Microsoft, tenant T1.
 --   * Sipho (09) is on Demo High's roster, never signed in.
---   * New roster people: Nomsa (21, student), Rosa (22, parent with a personal email),
---     two profiles sharing one email (23, 24), and an inactive learner (25).
+--   * New roster people: Nomsa and Noah (21, 26, students), Rosa, Ruth and Raj (22, 28,
+--     29, parents with personal emails), two profiles sharing one email (23, 24), and
+--     an inactive learner (25).
+--   * Supabase allows one login per email, so every scenario uses its own person.
 
 begin;
 create extension if not exists pgtap with schema extensions;
@@ -24,44 +26,54 @@ insert into public.profiles (id, full_name) values
   ('40000000-0000-4000-8000-000000000022', 'Rosa Pillay'),
   ('40000000-0000-4000-8000-000000000023', 'Twin One'),
   ('40000000-0000-4000-8000-000000000024', 'Twin Two'),
-  ('40000000-0000-4000-8000-000000000025', 'Left School');
+  ('40000000-0000-4000-8000-000000000025', 'Left School'),
+  ('40000000-0000-4000-8000-000000000026', 'Noah Khan'),
+  ('40000000-0000-4000-8000-000000000028', 'Ruth Adams'),
+  ('40000000-0000-4000-8000-000000000029', 'Raj Patel');
 
 insert into public.school_memberships (school_id, profile_id, role, email, status) values
   ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000021', 'student', 'nomsa.zulu@demo-high.test', 'active'),
   ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000022', 'parent', 'rosa.pillay@personal.test', 'active'),
   ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000023', 'parent', 'shared@personal.test', 'active'),
   ('10000000-0000-4000-8000-000000000002', '40000000-0000-4000-8000-000000000024', 'parent', 'shared@personal.test', 'active'),
-  ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000025', 'student', 'left@demo-high.test', 'inactive');
+  ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000025', 'student', 'left@demo-high.test', 'inactive'),
+  ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000026', 'student', 'noah.khan@demo-high.test', 'active'),
+  ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000028', 'parent', 'ruth.adams@personal.test', 'active'),
+  ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000029', 'parent', 'raj.patel@personal.test', 'active');
+
+-- The school changed Amara's roster email after she had already signed in.
+update public.school_memberships set email = 'amara.new@demo-high.test'
+where profile_id = '40000000-0000-4000-8000-000000000004';
 
 -- Logins, as Supabase Auth would create them. Each has one identity: how they signed in.
 insert into auth.users (id, email, email_confirmed_at) values
   ('30000000-0000-4000-8000-000000000009', 'Sipho.Mthembu@demo-high.test', now()), -- Microsoft, right tenant
   ('30000000-0000-4000-8000-000000000021', 'nomsa.zulu@demo-high.test', now()),    -- Microsoft, other tenant
-  ('30000000-0000-4000-8000-000000000031', 'nomsa.zulu@demo-high.test', now()),    -- email link
+  ('30000000-0000-4000-8000-000000000031', 'noah.khan@demo-high.test', now()),     -- email link
   ('30000000-0000-4000-8000-000000000022', 'rosa.pillay@personal.test', now()),    -- email link
-  ('30000000-0000-4000-8000-000000000032', 'rosa.pillay@personal.test', now()),    -- Microsoft, any tenant
-  ('30000000-0000-4000-8000-000000000033', 'rosa.pillay@personal.test', null),     -- email link, not yet confirmed
+  ('30000000-0000-4000-8000-000000000032', 'ruth.adams@personal.test', now()),     -- Microsoft, any tenant
+  ('30000000-0000-4000-8000-000000000033', 'raj.patel@personal.test', null),       -- email link, not yet confirmed
   ('30000000-0000-4000-8000-000000000023', 'shared@personal.test', now()),         -- email link
   ('30000000-0000-4000-8000-000000000025', 'left@demo-high.test', now()),          -- Microsoft, right tenant
   ('30000000-0000-4000-8000-000000000026', 'stranger@personal.test', now()),       -- email link
-  ('30000000-0000-4000-8000-000000000027', 'amara.nwosu@demo-high.test', now());   -- Microsoft, right tenant
+  ('30000000-0000-4000-8000-000000000027', 'amara.new@demo-high.test', now());     -- Microsoft, right tenant
 
 insert into auth.identities (user_id, provider, provider_id, identity_data) values
   ('30000000-0000-4000-8000-000000000009', 'azure', 'ms-9',
    '{"email":"Sipho.Mthembu@demo-high.test","iss":"https://login.microsoftonline.com/aaaaaaaa-0000-4000-8000-000000000001/v2.0"}'),
   ('30000000-0000-4000-8000-000000000021', 'azure', 'ms-21',
    '{"email":"nomsa.zulu@demo-high.test","custom_claims":{"tid":"bbbbbbbb-0000-4000-8000-000000000002"}}'),
-  ('30000000-0000-4000-8000-000000000031', 'email', 'e-31', '{"email":"nomsa.zulu@demo-high.test"}'),
+  ('30000000-0000-4000-8000-000000000031', 'email', 'e-31', '{"email":"noah.khan@demo-high.test"}'),
   ('30000000-0000-4000-8000-000000000022', 'email', 'e-22', '{"email":"rosa.pillay@personal.test"}'),
   ('30000000-0000-4000-8000-000000000032', 'azure', 'ms-32',
-   '{"email":"rosa.pillay@personal.test","custom_claims":{"tid":"bbbbbbbb-0000-4000-8000-000000000002"}}'),
-  ('30000000-0000-4000-8000-000000000033', 'email', 'e-33', '{"email":"rosa.pillay@personal.test"}'),
+   '{"email":"ruth.adams@personal.test","custom_claims":{"tid":"bbbbbbbb-0000-4000-8000-000000000002"}}'),
+  ('30000000-0000-4000-8000-000000000033', 'email', 'e-33', '{"email":"raj.patel@personal.test"}'),
   ('30000000-0000-4000-8000-000000000023', 'email', 'e-23', '{"email":"shared@personal.test"}'),
   ('30000000-0000-4000-8000-000000000025', 'azure', 'ms-25',
    '{"email":"left@demo-high.test","custom_claims":{"tid":"aaaaaaaa-0000-4000-8000-000000000001"}}'),
   ('30000000-0000-4000-8000-000000000026', 'email', 'e-26', '{"email":"stranger@personal.test"}'),
   ('30000000-0000-4000-8000-000000000027', 'azure', 'ms-27',
-   '{"email":"amara.nwosu@demo-high.test","custom_claims":{"tid":"aaaaaaaa-0000-4000-8000-000000000001"}}');
+   '{"email":"amara.new@demo-high.test","custom_claims":{"tid":"aaaaaaaa-0000-4000-8000-000000000001"}}');
 
 -- Calls link_my_account() as the given login.
 create function pg_temp.link_as(p_user_id text)
@@ -104,9 +116,11 @@ select is(pg_temp.link_as('30000000-0000-4000-8000-000000000021'), 'wrong_sign_i
 select is(pg_temp.link_as('30000000-0000-4000-8000-000000000031'), 'wrong_sign_in_method',
   'An email link to a school address does not link: that school uses Microsoft');
 select is(
-  (select user_id from public.profiles where id = '40000000-0000-4000-8000-000000000021'),
-  null,
-  'Nomsa''s profile stays unlinked after both refused attempts'
+  (select count(*)::int from public.profiles
+   where id in ('40000000-0000-4000-8000-000000000021', '40000000-0000-4000-8000-000000000026')
+     and user_id is not null),
+  0,
+  'Neither refused student was linked'
 );
 
 -- ---------------------------------------------------------------------------------
