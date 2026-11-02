@@ -73,6 +73,21 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 0
+
+      - name: Merged migrations are never edited
+        # Production only runs each migration once, so editing or deleting one that is
+        # already on main would never reach it. Add a new migration instead.
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          changed=$(git diff --name-status --no-renames "$BASE_SHA" HEAD -- supabase/migrations | grep -v '^A' || true)
+          if [ -n "$changed" ]; then
+            echo "::error::These migrations are already on main and must not change. Add a new migration instead:"
+            echo "$changed"
+            exit 1
+          fi
 
       - uses: pnpm/action-setup@v4
 
