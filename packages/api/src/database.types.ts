@@ -492,10 +492,75 @@ export type Database = {
         };
         Relationships: [];
       };
+      school_group_domains: {
+        Row: {
+          created_at: string;
+          domain: string;
+          id: string;
+          microsoft_tenant_id: string | null;
+          provider: Database['public']['Enums']['sign_in_provider'];
+          school_group_id: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          domain: string;
+          id?: string;
+          microsoft_tenant_id?: string | null;
+          provider: Database['public']['Enums']['sign_in_provider'];
+          school_group_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          domain?: string;
+          id?: string;
+          microsoft_tenant_id?: string | null;
+          provider?: Database['public']['Enums']['sign_in_provider'];
+          school_group_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'school_group_domains_school_group_id_fkey';
+            columns: ['school_group_id'];
+            isOneToOne: false;
+            referencedRelation: 'school_groups';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      school_groups: {
+        Row: {
+          created_at: string;
+          id: string;
+          name: string;
+          slug: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          id?: string;
+          name: string;
+          slug: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          name?: string;
+          slug?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       school_memberships: {
         Row: {
           created_at: string;
           ednana_id: string | null;
+          email: string | null;
           id: string;
           profile_id: string;
           role: Database['public']['Enums']['membership_role'];
@@ -507,6 +572,7 @@ export type Database = {
         Insert: {
           created_at?: string;
           ednana_id?: string | null;
+          email?: string | null;
           id?: string;
           profile_id: string;
           role: Database['public']['Enums']['membership_role'];
@@ -517,6 +583,7 @@ export type Database = {
         Update: {
           created_at?: string;
           ednana_id?: string | null;
+          email?: string | null;
           id?: string;
           profile_id?: string;
           role?: Database['public']['Enums']['membership_role'];
@@ -547,6 +614,7 @@ export type Database = {
           ednana_id: string | null;
           id: string;
           name: string;
+          school_group_id: string;
           slug: string;
           updated_at: string;
         };
@@ -556,6 +624,7 @@ export type Database = {
           ednana_id?: string | null;
           id?: string;
           name: string;
+          school_group_id: string;
           slug: string;
           updated_at?: string;
         };
@@ -564,10 +633,139 @@ export type Database = {
           ednana_id?: string | null;
           id?: string;
           name?: string;
+          school_group_id?: string;
           slug?: string;
           updated_at?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'schools_school_group_id_fkey';
+            columns: ['school_group_id'];
+            isOneToOne: false;
+            referencedRelation: 'school_groups';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      student_study_profiles: {
+        Row: {
+          academic_year_id: string;
+          created_at: string;
+          id: string;
+          onboarding_completed_at: string | null;
+          school_id: string;
+          session_length: Database['public']['Enums']['study_session_length'] | null;
+          student_profile_id: string;
+          student_role: Database['public']['Enums']['membership_role'];
+          study_methods: Database['public']['Enums']['study_method'][];
+          study_times: Database['public']['Enums']['study_time'][];
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          academic_year_id: string;
+          created_at?: string;
+          id?: string;
+          onboarding_completed_at?: string | null;
+          school_id: string;
+          session_length?: Database['public']['Enums']['study_session_length'] | null;
+          student_profile_id: string;
+          student_role?: Database['public']['Enums']['membership_role'];
+          study_methods?: Database['public']['Enums']['study_method'][];
+          study_times?: Database['public']['Enums']['study_time'][];
+          updated_at?: string;
+        };
+        Update: {
+          academic_year_id?: string;
+          created_at?: string;
+          id?: string;
+          onboarding_completed_at?: string | null;
+          school_id?: string;
+          session_length?: Database['public']['Enums']['study_session_length'] | null;
+          student_profile_id?: string;
+          student_role?: Database['public']['Enums']['membership_role'];
+          study_methods?: Database['public']['Enums']['study_method'][];
+          study_times?: Database['public']['Enums']['study_time'][];
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'student_study_profiles_academic_year_id_school_id_fkey';
+            columns: ['academic_year_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'academic_years';
+            referencedColumns: ['id', 'school_id'];
+          },
+          {
+            foreignKeyName: 'student_study_profiles_school_id_student_profile_id_studen_fkey';
+            columns: ['school_id', 'student_profile_id', 'student_role'];
+            isOneToOne: false;
+            referencedRelation: 'school_memberships';
+            referencedColumns: ['school_id', 'profile_id', 'role'];
+          },
+        ];
+      };
+      student_subject_goals: {
+        Row: {
+          academic_year_id: string;
+          created_at: string;
+          id: string;
+          is_focus: boolean;
+          school_id: string;
+          student_profile_id: string;
+          student_role: Database['public']['Enums']['membership_role'];
+          subject_id: string;
+          target_percent: number | null;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          academic_year_id: string;
+          created_at?: string;
+          id?: string;
+          is_focus?: boolean;
+          school_id: string;
+          student_profile_id: string;
+          student_role?: Database['public']['Enums']['membership_role'];
+          subject_id: string;
+          target_percent?: number | null;
+          updated_at?: string;
+        };
+        Update: {
+          academic_year_id?: string;
+          created_at?: string;
+          id?: string;
+          is_focus?: boolean;
+          school_id?: string;
+          student_profile_id?: string;
+          student_role?: Database['public']['Enums']['membership_role'];
+          subject_id?: string;
+          target_percent?: number | null;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'student_subject_goals_academic_year_id_school_id_fkey';
+            columns: ['academic_year_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'academic_years';
+            referencedColumns: ['id', 'school_id'];
+          },
+          {
+            foreignKeyName: 'student_subject_goals_school_id_student_profile_id_student_fkey';
+            columns: ['school_id', 'student_profile_id', 'student_role'];
+            isOneToOne: false;
+            referencedRelation: 'school_memberships';
+            referencedColumns: ['school_id', 'profile_id', 'role'];
+          },
+          {
+            foreignKeyName: 'student_subject_goals_subject_id_school_id_fkey';
+            columns: ['subject_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'subjects';
+            referencedColumns: ['id', 'school_id'];
+          },
+        ];
       };
       subjects: {
         Row: {
@@ -672,6 +870,7 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      link_my_account: { Args: Record<PropertyKey, never>; Returns: string };
       resolve_curriculum_subject: {
         Args: { p_curriculum_code: string; p_grade: number; p_name: string };
         Returns: string;
@@ -682,7 +881,12 @@ export type Database = {
       language_level: 'home' | 'first_additional' | 'second_additional';
       membership_role: 'student' | 'teacher' | 'parent' | 'school_admin';
       membership_status: 'active' | 'inactive';
+      sign_in_provider: 'microsoft' | 'google';
       staff_level: 'support' | 'operations' | 'owner';
+      study_method:
+        'pen_and_paper' | 'videos' | 'ai_chat' | 'past_papers' | 'flashcards' | 'study_group';
+      study_session_length: 'minutes_15' | 'minutes_30' | 'minutes_45' | 'minutes_60_plus';
+      study_time: 'afternoon' | 'evening' | 'late_night' | 'weekends';
       subject_rule_type: 'mutually_exclusive' | 'requires' | 'max_from_group';
     };
     CompositeTypes: {
@@ -799,7 +1003,18 @@ export const Constants = {
       language_level: ['home', 'first_additional', 'second_additional'],
       membership_role: ['student', 'teacher', 'parent', 'school_admin'],
       membership_status: ['active', 'inactive'],
+      sign_in_provider: ['microsoft', 'google'],
       staff_level: ['support', 'operations', 'owner'],
+      study_method: [
+        'pen_and_paper',
+        'videos',
+        'ai_chat',
+        'past_papers',
+        'flashcards',
+        'study_group',
+      ],
+      study_session_length: ['minutes_15', 'minutes_30', 'minutes_45', 'minutes_60_plus'],
+      study_time: ['afternoon', 'evening', 'late_night', 'weekends'],
       subject_rule_type: ['mutually_exclusive', 'requires', 'max_from_group'],
     },
   },
