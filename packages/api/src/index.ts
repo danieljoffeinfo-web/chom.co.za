@@ -1,4 +1,5 @@
 export { createChomClient, type ChomClient, type ChomClientConfig } from './client';
+export { isServerOnlyKey } from './keys';
 export {
   Constants,
   type Database,
