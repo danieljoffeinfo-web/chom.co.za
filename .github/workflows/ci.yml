@@ -53,6 +53,9 @@ jobs:
       - name: Lint (ESLint, plus design token drift check)
         run: pnpm lint
 
+      - name: Unit tests
+        run: pnpm test
+
       - name: Build web
         run: pnpm build
 

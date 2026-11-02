@@ -5,7 +5,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(17);
+select plan(19);
 
 -- ---------------------------------------------------------------------------------
 -- Students, teachers and parents cannot change records
@@ -148,6 +148,17 @@ select is(
      and action = 'UPDATE' and old_data ->> 'status' = 'active' and new_data ->> 'status' = 'inactive'),
   1,
   'The audit log keeps the before and after of a change'
+);
+select is(
+  (select array_agg(distinct actor_db_role) from private.audit_log
+   where actor_user_id = '30000000-0000-4000-8000-000000000001'),
+  array['authenticated'],
+  'The audit log records the admin''s changes as an app user, not as the database owner'
+);
+select is(
+  (select array_agg(distinct actor_db_role) from private.audit_log where actor_user_id is null),
+  array['postgres'],
+  'Changes made directly as the database owner (setup, migrations) are recorded as such'
 );
 
 select * from finish();

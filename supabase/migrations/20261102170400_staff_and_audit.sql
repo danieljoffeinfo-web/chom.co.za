@@ -19,7 +19,9 @@ create table private.audit_log (
   id bigint generated always as identity primary key,
   occurred_at timestamptz not null default now(),
   actor_user_id uuid,
-  actor_db_role text not null default current_user,
+  -- The caller's database role: authenticated (an app user), service_role (server
+  -- code) or postgres (a migration or admin session). Set by the trigger below.
+  actor_db_role text not null,
   school_id uuid,
   table_name text not null,
   record_id uuid,
@@ -47,9 +49,12 @@ as $$
 declare
   row_data jsonb := case when tg_op = 'DELETE' then to_jsonb(old) else to_jsonb(new) end;
 begin
-  insert into private.audit_log (actor_user_id, school_id, table_name, record_id, action, old_data, new_data)
+  -- This function runs as its owner, so current_user is always the owner. The
+  -- session's role setting is the caller's real role (set by the API or SET ROLE).
+  insert into private.audit_log (actor_user_id, actor_db_role, school_id, table_name, record_id, action, old_data, new_data)
   values (
     (select auth.uid()),
+    coalesce(nullif(current_setting('role', true), 'none'), session_user),
     (row_data ->> 'school_id')::uuid,
     tg_table_name,
     (row_data ->> 'id')::uuid,

@@ -5,6 +5,7 @@ import {
 } from '@supabase/supabase-js';
 
 import type { Database } from './database.types';
+import { isServerOnlyKey } from './keys';
 
 /** A Supabase client typed against the Chom database schema. */
 export type ChomClient = SupabaseClient<Database>;
@@ -28,7 +29,7 @@ export type ChomClientConfig = {
 export function createChomClient({ url, publishableKey, options }: ChomClientConfig): ChomClient {
   if (!url) throw new Error('createChomClient: missing Supabase URL');
   if (!publishableKey) throw new Error('createChomClient: missing Supabase publishable key');
-  if (publishableKey.startsWith('sb_secret_')) {
+  if (isServerOnlyKey(publishableKey)) {
     throw new Error('createChomClient: a secret key was passed; apps must use the publishable key');
   }
   return createClient<Database>(url, publishableKey, options);

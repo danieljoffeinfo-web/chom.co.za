@@ -47,6 +47,7 @@ pnpm install
 | `pnpm dev:mobile`   | Start Expo. Open on a phone with Expo Go, or an iOS/Android simulator        |
 | `pnpm typecheck`    | Type-check every package                                                     |
 | `pnpm lint`         | ESLint for web and mobile (no warnings allowed), plus the design-token check |
+| `pnpm test`         | Unit tests (for example the check that blocks secret keys in apps)           |
 | `pnpm format`       | Format everything with Prettier                                              |
 | `pnpm format:check` | Check formatting without changing files (what CI runs)                       |
 | `pnpm build`        | Production build of the web app                                              |
@@ -137,9 +138,10 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request and every
 3. Formatting (Prettier)
 4. Type check
 5. Lint (ESLint and the design-token check)
-6. Web build
-7. iOS and Android bundles
-8. Static site build
+6. Unit tests
+7. Web build
+8. iOS and Android bundles
+9. Static site build
 
 A second job starts a local Supabase, applies every migration and the test seed, runs the database tests in `supabase/tests/`, and checks that the generated database types are up to date.
 
