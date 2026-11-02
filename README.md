@@ -1,33 +1,69 @@
-# Chom Learn HTML prototypes
+# Chom Learn
 
-Two static applications in one repository. No framework, dependencies or backend.
+One platform for students, teachers and parents across many schools. This repository is a monorepo: every app and shared package lives here, managed with [pnpm](https://pnpm.io) workspaces and [Turborepo](https://turborepo.com).
 
-- `apps/student/index.html`: public home page (signed-out landing). "Sign in" opens the app.
-- `apps/student/app/index.html`: learner dashboard at `/app/`, with My Subjects. "Sign out" returns to the home page.
-- `apps/teacher/`: teacher overview, subject resources, tasks, assignments and calendar.
-- `packages/shared/`: shared sample school data, local persistence and subject UI styles.
-- `scripts/build.mjs`: builds both independently deployable static directories.
+## Layout
 
-Run `npm run build`. Serve `dist/teacher` or `dist/student` with any static server.
+```
+apps/
+  web/                  Next.js web app: teacher dashboard, school admin,
+                        and the web version for students and parents
+  mobile/               Expo (React Native) app for iOS and Android: one app,
+                        the signed-in person's role picks the experience
+  site/                 Live static site: public home page (/) and the
+                        student prototype (/app/). Deployed to chom.co.za
+  teacher-prototype/    Static teacher prototype (design reference only)
+packages/
+  tokens/               Design tokens: colours, type, spacing, radius.
+                        TypeScript for mobile, tokens.css for web
+  tsconfig/             Shared TypeScript settings
+  prototype-data/       Sample data used only by the static prototypes
+docs/
+  decisions/            Architecture decision records (start with 0001)
+scripts/
+  build.mjs             Builds the static site and prototypes into dist/
+```
 
-## Vercel projects
+Coming next: `supabase/` (database migrations, row-level security and their tests) and `packages/api` (one typed data client shared by web and mobile).
 
-Both projects use this repository with the repository root as Root Directory.
+## Getting started
 
-| Project | Build command | Output directory |
+Requires Node 22+ and pnpm 10 (`corepack enable` installs the right version).
+
+```bash
+pnpm install
+```
+
+| Command | What it does |
+|---|---|
+| `pnpm dev:web` | Run the web app at http://localhost:3000 |
+| `pnpm dev:mobile` | Start Expo. Open on a phone with Expo Go, or an iOS/Android simulator |
+| `pnpm typecheck` | Type-check every package |
+| `pnpm lint` | Lint, including the design-token drift check |
+| `pnpm build` | Production build of the web app |
+| `pnpm build:site` | Build the static site into `dist/` (no install needed) |
+
+## Design tokens
+
+`packages/tokens` is the single source of truth for the Chom look: navy `#282B4A` as the main colour, vanilla `#EEEBDA` as the background, Inter Tight, light mode by default and dark mode opt-in.
+
+- Mobile imports the values directly: `import { colors, space } from '@chom/tokens'`.
+- Web imports `@chom/tokens/tokens.css` and uses the `--chom-*` CSS variables.
+- `pnpm lint` fails if `tokens.css` and `src/index.ts` disagree, so change both together.
+
+## Deployments
+
+| What | Where | How |
 |---|---|---|
-| chom-co-za (existing learner) | `node scripts/build.mjs` | `dist/student` |
-| chom-teacher (new teacher) | `node scripts/build.mjs` | `dist/teacher` |
+| Static site (home page + student prototype) | chom.co.za (Vercel project `chom-co-za`) | Root `vercel.json`: skips dependency install, runs `node scripts/build.mjs`, serves `dist/student` |
+| Teacher prototype | Vercel project `chom-teacher` | Same build, output directory `dist/teacher` |
+| Web app | Not deployed yet | Will be a new Vercel project with Root Directory `apps/web` |
+| Mobile app | Not published yet | Will be built and submitted with Expo EAS |
 
-The root vercel.json defaults to the existing learner deployment. For the teacher project, override Output Directory to `dist/teacher` in its project settings, or deploy the prebuilt `dist/teacher` directory directly. The current teacher deployment uses static source upload of that directory; it is not automatically Git-linked.
+## Checks
 
-## Preview behaviour
+GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request and every push to `main`: install, type check, lint, web build, iOS and Android bundles, and the static site build.
 
-Teacher URL includes `/student/app/#subjects` so both views can demonstrate shared browser-only state. The existing learner URL has its own sample state because separate origins cannot share localStorage or IndexedDB. No school accounts, real submissions, messages or backend uploads exist. Uploaded files (10 MB maximum) are stored in IndexedDB on the current browser. Metadata and sample work are stored in localStorage. Clearing site data clears changes.
+## Prototype notes
 
-Sample profile, dates, classes, counts and resources are illustrative. The learner preview is Grade 10B; material assigned to 10A is intentionally absent. Downloadable sample resources are small text documents.
-
-## Design reference
-
-Primary: existing Chom student site, commit e861749. Preserve #2860f5 actions, #f7f7f8 canvas, white 22px rounded panels, system sans-serif, 224px sidebar and apricot supporting card.
-Secondary: Google Classroom assignment screen (Refero 503f8c38-8c8f-46fd-bdfe-c2000c9f40c5) informs subject/class/due-date/marks fields; the monochrome UI style reference informs quiet dividers and restrained form surfaces only. No new illustration assets are required.
+The static site and teacher prototype use sample data only. Changes are stored in the browser (localStorage and IndexedDB) and do not sync. The teacher prototype links to the student prototype at `/student/app/#subjects` so both can show shared browser-only state.

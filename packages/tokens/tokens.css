@@ -1,0 +1,50 @@
+/*
+ * Chom design tokens as CSS custom properties, for the web app.
+ * Keep in step with src/index.ts (checked by `pnpm --filter @chom/tokens test`).
+ *
+ * Light is the default. Dark mode is opt-in: set data-theme="dark" on <html>.
+ */
+:root {
+  color-scheme: light;
+  --chom-background: #eeebda;
+  --chom-surface: #f7f5eb;
+  --chom-text: #282b4a;
+  --chom-text-muted: #5f6178;
+  --chom-border: #dcd8c3;
+  --chom-subtle: #e4e0cb;
+  --chom-primary: #282b4a;
+  --chom-on-primary: #eeebda;
+  --chom-primary-hover: #383c63;
+  --chom-highlight: #dcd8c3;
+
+  --chom-font-sans: "Inter Tight", Inter, system-ui, sans-serif;
+
+  --chom-radius-sm: 8px;
+  --chom-radius-md: 16px;
+  --chom-radius-lg: 24px;
+  --chom-radius-pill: 999px;
+
+  --chom-space-1: 4px;
+  --chom-space-2: 8px;
+  --chom-space-3: 12px;
+  --chom-space-4: 16px;
+  --chom-space-5: 20px;
+  --chom-space-6: 24px;
+  --chom-space-8: 32px;
+  --chom-space-10: 40px;
+  --chom-space-12: 48px;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --chom-background: #282b4a;
+  --chom-surface: #33375c;
+  --chom-text: #eeebda;
+  --chom-text-muted: #aba9b8;
+  --chom-border: #464a70;
+  --chom-subtle: #3c4068;
+  --chom-primary: #eeebda;
+  --chom-on-primary: #282b4a;
+  --chom-primary-hover: #dcd8c3;
+  --chom-highlight: #464a70;
+}

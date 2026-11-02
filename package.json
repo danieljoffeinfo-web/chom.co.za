@@ -1,1 +1,21 @@
-{"name":"chom-learn-prototypes","private":true,"scripts":{"build":"node scripts/build.mjs","build:teacher":"node scripts/build.mjs","build:student":"node scripts/build.mjs"}}
+{
+  "name": "chom",
+  "private": true,
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "build:site": "node scripts/build.mjs",
+    "dev": "turbo run dev",
+    "dev:web": "turbo run dev --filter=@chom/web",
+    "dev:mobile": "pnpm --filter @chom/mobile start",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck"
+  },
+  "devDependencies": {
+    "turbo": "2.11.10",
+    "typescript": "~6.0.3"
+  }
+}

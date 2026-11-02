@@ -1,0 +1,21 @@
+{
+  "name": "@chom/tokens",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens.css": "./tokens.css"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "node scripts/check-css.mjs",
+    "test": "node scripts/check-css.mjs"
+  },
+  "devDependencies": {
+    "@chom/tsconfig": "workspace:*",
+    "typescript": "~6.0.3"
+  }
+}
