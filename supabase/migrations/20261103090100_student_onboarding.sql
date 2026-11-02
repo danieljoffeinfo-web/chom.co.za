@@ -119,7 +119,11 @@ begin
         and g.academic_year_id = new.academic_year_id
         and g.student_profile_id = new.student_profile_id
         and g.is_focus
+        -- Not this row: on update it has the same id; on an upsert (insert ... on
+        -- conflict do update) this trigger runs before the conflict is found and
+        -- new.id is a fresh one, so match the existing row by its subject too.
         and g.id <> new.id
+        and g.subject_id <> new.subject_id
     ) >= 3 then
       raise exception 'A student can have at most 3 focus subjects'
         using errcode = '23514';

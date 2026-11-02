@@ -5,7 +5,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(23);
+select plan(24);
 
 -- Extra subjects in Amara's class 10B (so she takes 5), plus one she doesn't take.
 insert into public.subjects (id, school_id, name) values
@@ -60,6 +60,15 @@ select throws_ok(
      where subject_id = '50000000-0000-4000-8000-000000000004' $$,
   '23514', null,
   'Turning a 4th subject into a focus subject is refused too'
+);
+select lives_ok(
+  $$ insert into public.student_subject_goals
+       (school_id, academic_year_id, student_profile_id, subject_id, is_focus, target_percent)
+     values ('10000000-0000-4000-8000-000000000001', '20000000-0000-4000-8000-000000000001',
+             '40000000-0000-4000-8000-000000000004', '50000000-0000-4000-8000-000000000001', true, 78)
+     on conflict (school_id, academic_year_id, student_profile_id, subject_id)
+     do update set is_focus = excluded.is_focus, target_percent = excluded.target_percent $$,
+  'Re-saving one of her 3 focus subjects (an upsert) is allowed'
 );
 select lives_ok(
   $$ update public.student_subject_goals set is_focus = false
