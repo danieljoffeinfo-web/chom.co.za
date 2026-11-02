@@ -1,0 +1,32 @@
+.main {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(32px, 8vw, 96px) clamp(16px, 4vw, 40px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--chom-space-6);
+}
+
+.brand {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.title {
+  font-size: clamp(44px, 8vw, 104px);
+  line-height: 0.98;
+  font-weight: 800;
+  letter-spacing: -3px;
+  max-width: 12ch;
+}
+
+.lede {
+  max-width: 46ch;
+  font-size: clamp(19px, 2vw, 24px);
+  line-height: 1.4;
+}
+
+.lede strong {
+  font-weight: 800;
+}

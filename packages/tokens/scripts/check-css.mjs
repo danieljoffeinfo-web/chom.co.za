@@ -1,0 +1,37 @@
+// Fails if tokens.css drifts from the colour values in src/index.ts.
+import { readFile } from 'node:fs/promises';
+
+const ts = await readFile(new URL('../src/index.ts', import.meta.url), 'utf8');
+const css = await readFile(new URL('../tokens.css', import.meta.url), 'utf8');
+
+const palette = Object.fromEntries(
+  [...ts.matchAll(/^\s+(\w+): '(#[0-9A-Fa-f]{6})',$/gm)].map(([, k, v]) => [k, v.toLowerCase()]),
+);
+
+const scheme = (name) => {
+  const block = ts.match(new RegExp(`export const ${name}: ColorScheme = \\{([\\s\\S]*?)\\};`))[1];
+  return Object.fromEntries(
+    [...block.matchAll(/(\w+): palette\.(\w+)/g)].map(([, role, key]) => [role, palette[key]]),
+  );
+};
+
+const kebab = (s) => s.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
+const cssBlock = (selector) => {
+  const start = css.indexOf(`${selector} {`);
+  return css.slice(start, css.indexOf('}', start));
+};
+
+let failures = 0;
+for (const [name, selector] of [['light', ':root'], ['dark', ':root[data-theme="dark"]']]) {
+  const block = cssBlock(selector);
+  for (const [role, value] of Object.entries(scheme(name))) {
+    const match = block.match(new RegExp(`--chom-${kebab(role)}: (#[0-9a-f]{6});`));
+    if (!match || match[1] !== value) {
+      console.error(`${name}.${role}: expected ${value}, tokens.css has ${match?.[1] ?? 'nothing'}`);
+      failures++;
+    }
+  }
+}
+
+if (failures) process.exit(1);
+console.log('tokens.css matches src/index.ts');

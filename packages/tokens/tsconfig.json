@@ -1,0 +1,4 @@
+{
+  "extends": "@chom/tsconfig/base.json",
+  "include": ["src"]
+}

@@ -1,0 +1,8 @@
+# Only real packages live in the workspace. The static site and prototypes
+# (apps/site, apps/teacher-prototype, packages/prototype-data) have no
+# dependencies and are built by scripts/build.mjs.
+packages:
+  - apps/web
+  - apps/mobile
+  - packages/tokens
+  - packages/tsconfig
