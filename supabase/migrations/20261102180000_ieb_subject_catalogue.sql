@@ -144,7 +144,8 @@ create policy "Signed-in users can read subject rule members"
 -- ---------------------------------------------------------------------------------
 
 -- Returns the catalogue subject a name refers to in a given grade, or null if there is
--- no match. Official names win over aliases. Case and extra spaces are ignored.
+-- no match. Official names win over aliases. Case and extra whitespace (spaces, tabs,
+-- line breaks) are ignored.
 --   select public.resolve_curriculum_subject('IEB', 'Maths Lit', 11);
 create function public.resolve_curriculum_subject(
   p_curriculum_code text,
@@ -158,7 +159,8 @@ security invoker
 set search_path = ''
 as $$
   with wanted as (
-    select lower(regexp_replace(trim(p_name), '\s+', ' ', 'g')) as name
+    -- Collapse every run of whitespace (tabs, line breaks) to one space, then trim.
+    select lower(trim(regexp_replace(p_name, '\s+', ' ', 'g'))) as name
   ),
   curriculum as (
     select id from public.curricula where code = upper(trim(p_curriculum_code))

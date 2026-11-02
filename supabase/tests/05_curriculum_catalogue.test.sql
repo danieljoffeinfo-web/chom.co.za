@@ -4,7 +4,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(27);
+select plan(28);
 
 -- ---------------------------------------------------------------------------------
 -- Subjects and their details
@@ -86,6 +86,11 @@ select is(
   public.resolve_curriculum_subject('ieb', '  further   studies MATHEMATICS ', 12),
   (select id from public.curriculum_subjects where name = 'Advanced Programme Mathematics'),
   'Matching ignores case and extra spaces'
+);
+select is(
+  public.resolve_curriculum_subject('IEB', E'\tMaths Lit\r\n', 11),
+  (select id from public.curriculum_subjects where name = 'Mathematical Literacy'),
+  'Matching ignores tabs and line breaks around a name (common in spreadsheet imports)'
 );
 select is(
   public.resolve_curriculum_subject('IEB', 'Life Orientation', 8),
