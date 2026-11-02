@@ -81,7 +81,9 @@ Supabase (PostgreSQL), as decided in [ADR 0001](docs/decisions/0001-database-pla
 | `curriculum_subject_aliases`      | Other names for a subject ("Maths Lit", "CAT"), valid for a grade range. Never ambiguous within a grade                                                                                   |
 | `curriculum_subject_rules`        | Subject combination rules (e.g. Mathematics or Mathematical Literacy, never both). Stored now, enforced when subject choice is built                                                      |
 | `curriculum_subject_rule_members` | The subjects each rule applies to                                                                                                                                                         |
-| `schools`                         | Each school                                                                                                                                                                               |
+| `school_groups`                   | A school, or a franchise of schools (e.g. Curro), sharing email domains and sign-in. A single school is a group of one                                                                    |
+| `school_group_domains`            | A group's email domains and the only sign-in trusted for each (Microsoft with the school's tenant, or Google)                                                                             |
+| `schools`                         | Each school, in a group                                                                                                                                                                   |
 | `academic_years`                  | A school's years and the curriculum it follows that year; one is current                                                                                                                  |
 | `profiles`                        | One row per person, across schools. Linked to a login once they have one                                                                                                                  |
 | `school_memberships`              | A person's role at a school (student, teacher, parent, school admin). One person can hold several                                                                                         |
@@ -91,6 +93,18 @@ Supabase (PostgreSQL), as decided in [ADR 0001](docs/decisions/0001-database-pla
 | `class_subjects`                  | A subject taught to a class                                                                                                                                                               |
 | `teaching_allocations`            | Which teacher teaches it                                                                                                                                                                  |
 | `enrolments`                      | Which learner is in which class                                                                                                                                                           |
+| `student_study_profiles`          | A student's study habits for a school year, from onboarding: session length, how and when they study                                                                                      |
+| `student_subject_goals`           | A student's target percentage per subject, and up to 3 focus subjects                                                                                                                     |
+
+**Signing in.** The roster decides who someone is: each membership carries the email the school knows them by. After every sign-in the app calls `link_my_account()`, which links the login to the one roster profile with that email, but only if the login proves it the way the school allows:
+
+- A registered school domain (e.g. `curro.co.za`) only trusts that school's own sign-in: Microsoft from the school's tenant, or Google Workspace. A franchise registers its domain once for all campuses; the roster decides the campus.
+- Any other email (parents, testing) only trusts a one-time email link or Google.
+- It links nothing, and says why, when the email is on no roster, is on more than one profile, or the profile already has another login.
+
+The Microsoft tenant check reads the `tid` claim Supabase stores for Microsoft logins; it must be confirmed against a real Microsoft sign-in before the first school goes live.
+
+**Onboarding answers** (study habits, targets, focus subjects) can be seen by the student, their teachers, their parents and school admins, and changed only by the student. Goal changes are kept in the audit log.
 
 **The IEB catalogue** (42 subjects, 14 aliases, 4 combination rules) comes from Chom's "Available IEB Subjects" spreadsheet, which cites IEB's NSC requirements. To match a name from a spreadsheet or Ednana to the official subject, use `resolve_curriculum_subject('IEB', 'Maths Lit', 11)`. It checks official names first, then aliases, and respects grades: "Science" means Natural Sciences in Grades 8-9 and Physical Sciences in Grades 10-12.
 

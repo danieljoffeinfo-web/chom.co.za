@@ -43,7 +43,7 @@ select is_empty(
 
 select is_empty(
   $$ select p.proname from pg_proc p join pg_namespace n on n.oid = p.pronamespace
-     where n.nspname = 'private' and p.prosecdef
+     where n.nspname in ('public', 'private') and p.prosecdef
        and not exists (select 1 from unnest(coalesce(p.proconfig, '{}')) cfg where cfg like 'search_path=%') $$,
   'Every privileged (security definer) function pins its search_path'
 );

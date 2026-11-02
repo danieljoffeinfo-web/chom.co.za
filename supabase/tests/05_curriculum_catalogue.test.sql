@@ -4,7 +4,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(29);
+select plan(30);
 
 -- ---------------------------------------------------------------------------------
 -- Subjects and their details
@@ -172,6 +172,11 @@ select isnt(
   public.resolve_curriculum_subject('IEB', 'Maths Lit', 11),
   null,
   'Signed-in users can use the subject matcher'
+);
+select is(
+  public.resolve_curriculum_subject('IEB', 'Maths Lit', 11),
+  (select id from public.curriculum_subjects where name = 'Mathematical Literacy'),
+  'Signed-in users get the right subject from the matcher'
 );
 select throws_ok(
   $$ insert into public.curriculum_subject_aliases (curriculum_id, curriculum_subject_id, alias, min_grade, max_grade)
