@@ -8,6 +8,7 @@
     "ios": "expo start --ios",
     "android": "expo start --android",
     "dev": "expo start",
+    "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "bundle": "expo export --platform ios --platform android --output-dir dist",
     "doctor": "npx -y expo-doctor"
@@ -32,6 +33,9 @@
   "devDependencies": {
     "@chom/tsconfig": "workspace:*",
     "@types/react": "~19.3.0",
+    "eslint": "^9.39.5",
+    "eslint-config-expo": "~58.0.4",
+    "eslint-config-prettier": "^10.1.8",
     "typescript": "~6.0.3"
   }
 }

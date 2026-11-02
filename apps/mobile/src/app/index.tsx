@@ -13,8 +13,8 @@ export default function Welcome() {
         <View style={styles.hero}>
           <Text style={styles.title}>Everything at your fingertips.</Text>
           <Text style={styles.lede}>
-            <Text style={styles.ledeStrong}>Study the right way with Chom.</Text> Your tasks, classes
-            and assignments in one place, so you can focus on learning.
+            <Text style={styles.ledeStrong}>Study the right way with Chom.</Text> Your tasks,
+            classes and assignments in one place, so you can focus on learning.
           </Text>
         </View>
         <Pressable

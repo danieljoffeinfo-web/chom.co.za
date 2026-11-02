@@ -17,7 +17,7 @@
   --chom-primary-hover: #383c63;
   --chom-highlight: #dcd8c3;
 
-  --chom-font-sans: "Inter Tight", Inter, system-ui, sans-serif;
+  --chom-font-sans: 'Inter Tight', Inter, system-ui, sans-serif;
 
   --chom-radius-sm: 8px;
   --chom-radius-md: 16px;
@@ -35,7 +35,7 @@
   --chom-space-12: 48px;
 }
 
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   color-scheme: dark;
   --chom-background: #282b4a;
   --chom-surface: #33375c;
