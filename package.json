@@ -11,10 +11,13 @@
     "dev": "turbo run dev",
     "dev:web": "turbo run dev --filter=@chom/web",
     "dev:mobile": "pnpm --filter @chom/mobile start",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
+    "prettier": "^3.9.10",
     "turbo": "2.11.10",
     "typescript": "~6.0.3"
   }
