@@ -173,39 +173,181 @@ export type Database = {
         };
         Relationships: [];
       };
-      curriculum_subjects: {
+      curriculum_subject_aliases: {
         Row: {
-          code: string | null;
+          alias: string;
           created_at: string;
           curriculum_id: string;
+          curriculum_subject_id: string;
           id: string;
           max_grade: number;
           min_grade: number;
-          name: string;
-          qualification_level: string | null;
           updated_at: string;
         };
         ComputedFields: never;
         Insert: {
-          code?: string | null;
+          alias: string;
           created_at?: string;
           curriculum_id: string;
+          curriculum_subject_id: string;
           id?: string;
+          max_grade: number;
+          min_grade: number;
+          updated_at?: string;
+        };
+        Update: {
+          alias?: string;
+          created_at?: string;
+          curriculum_id?: string;
+          curriculum_subject_id?: string;
+          id?: string;
+          max_grade?: number;
+          min_grade?: number;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'curriculum_subject_aliases_curriculum_subject_id_curriculu_fkey';
+            columns: ['curriculum_subject_id', 'curriculum_id'];
+            isOneToOne: false;
+            referencedRelation: 'curriculum_subjects';
+            referencedColumns: ['id', 'curriculum_id'];
+          },
+        ];
+      };
+      curriculum_subject_rule_members: {
+        Row: {
+          curriculum_id: string;
+          curriculum_subject_id: string;
+          member_role: string;
+          rule_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          curriculum_id: string;
+          curriculum_subject_id: string;
+          member_role?: string;
+          rule_id: string;
+        };
+        Update: {
+          curriculum_id?: string;
+          curriculum_subject_id?: string;
+          member_role?: string;
+          rule_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'curriculum_subject_rule_membe_curriculum_subject_id_curric_fkey';
+            columns: ['curriculum_subject_id', 'curriculum_id'];
+            isOneToOne: false;
+            referencedRelation: 'curriculum_subjects';
+            referencedColumns: ['id', 'curriculum_id'];
+          },
+          {
+            foreignKeyName: 'curriculum_subject_rule_members_rule_id_curriculum_id_fkey';
+            columns: ['rule_id', 'curriculum_id'];
+            isOneToOne: false;
+            referencedRelation: 'curriculum_subject_rules';
+            referencedColumns: ['id', 'curriculum_id'];
+          },
+        ];
+      };
+      curriculum_subject_rules: {
+        Row: {
+          created_at: string;
+          curriculum_id: string;
+          description: string;
+          id: string;
+          max_count: number | null;
+          max_grade: number;
+          min_grade: number;
+          rule_type: Database['public']['Enums']['subject_rule_type'];
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          curriculum_id: string;
+          description: string;
+          id?: string;
+          max_count?: number | null;
+          max_grade: number;
+          min_grade: number;
+          rule_type: Database['public']['Enums']['subject_rule_type'];
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          curriculum_id?: string;
+          description?: string;
+          id?: string;
+          max_count?: number | null;
+          max_grade?: number;
+          min_grade?: number;
+          rule_type?: Database['public']['Enums']['subject_rule_type'];
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'curriculum_subject_rules_curriculum_id_fkey';
+            columns: ['curriculum_id'];
+            isOneToOne: false;
+            referencedRelation: 'curricula';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      curriculum_subjects: {
+        Row: {
+          category: string | null;
+          code: string | null;
+          counts_toward_certificate: boolean;
+          created_at: string;
+          curriculum_id: string;
+          externally_examined: boolean;
+          id: string;
+          is_compulsory: boolean;
+          language_level: Database['public']['Enums']['language_level'] | null;
+          max_grade: number;
+          min_grade: number;
+          name: string;
+          qualification_level: string | null;
+          sort_order: number | null;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          category?: string | null;
+          code?: string | null;
+          counts_toward_certificate?: boolean;
+          created_at?: string;
+          curriculum_id: string;
+          externally_examined?: boolean;
+          id?: string;
+          is_compulsory?: boolean;
+          language_level?: Database['public']['Enums']['language_level'] | null;
           max_grade: number;
           min_grade: number;
           name: string;
           qualification_level?: string | null;
+          sort_order?: number | null;
           updated_at?: string;
         };
         Update: {
+          category?: string | null;
           code?: string | null;
+          counts_toward_certificate?: boolean;
           created_at?: string;
           curriculum_id?: string;
+          externally_examined?: boolean;
           id?: string;
+          is_compulsory?: boolean;
+          language_level?: Database['public']['Enums']['language_level'] | null;
           max_grade?: number;
           min_grade?: number;
           name?: string;
           qualification_level?: string | null;
+          sort_order?: number | null;
           updated_at?: string;
         };
         Relationships: [
@@ -530,13 +672,18 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      resolve_curriculum_subject: {
+        Args: { p_curriculum_code: string; p_grade: number; p_name: string };
+        Returns: string;
+      };
     };
     Enums: {
       class_kind: 'register' | 'subject_group';
+      language_level: 'home' | 'first_additional' | 'second_additional';
       membership_role: 'student' | 'teacher' | 'parent' | 'school_admin';
       membership_status: 'active' | 'inactive';
       staff_level: 'support' | 'operations' | 'owner';
+      subject_rule_type: 'mutually_exclusive' | 'requires' | 'max_from_group';
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -649,9 +796,11 @@ export const Constants = {
   public: {
     Enums: {
       class_kind: ['register', 'subject_group'],
+      language_level: ['home', 'first_additional', 'second_additional'],
       membership_role: ['student', 'teacher', 'parent', 'school_admin'],
       membership_status: ['active', 'inactive'],
       staff_level: ['support', 'operations', 'owner'],
+      subject_rule_type: ['mutually_exclusive', 'requires', 'max_from_group'],
     },
   },
 } as const;

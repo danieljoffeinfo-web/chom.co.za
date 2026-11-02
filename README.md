@@ -74,20 +74,25 @@ Supabase (PostgreSQL), as decided in [ADR 0001](docs/decisions/0001-database-pla
 
 **Core tables.**
 
-| Table                  | Holds                                                                                             |
-| ---------------------- | ------------------------------------------------------------------------------------------------- |
-| `curricula`            | Curricula (IEB now; CAPS, Cambridge later as rows, not code)                                      |
-| `curriculum_subjects`  | Each curriculum's official subjects. Cambridge levels (IGCSE, AS, A) sit on the subject           |
-| `schools`              | Each school                                                                                       |
-| `academic_years`       | A school's years and the curriculum it follows that year; one is current                          |
-| `profiles`             | One row per person, across schools. Linked to a login once they have one                          |
-| `school_memberships`   | A person's role at a school (student, teacher, parent, school admin). One person can hold several |
-| `guardianships`        | Which parent is linked to which child                                                             |
-| `subjects`             | The subjects a school offers, usually linked to the curriculum catalogue                          |
-| `classes`              | Classes per school year: a grade number for sorting plus a free-text name (10B, 10LSI, ...)       |
-| `class_subjects`       | A subject taught to a class                                                                       |
-| `teaching_allocations` | Which teacher teaches it                                                                          |
-| `enrolments`           | Which learner is in which class                                                                   |
+| Table                             | Holds                                                                                                                                                                                     |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `curricula`                       | Curricula (IEB now; CAPS, Cambridge later as rows, not code)                                                                                                                              |
+| `curriculum_subjects`             | Each curriculum's official subjects: grades, category, language level, compulsory, externally examined, counts toward the certificate. Cambridge levels (IGCSE, AS, A) sit on the subject |
+| `curriculum_subject_aliases`      | Other names for a subject ("Maths Lit", "CAT"), valid for a grade range. Never ambiguous within a grade                                                                                   |
+| `curriculum_subject_rules`        | Subject combination rules (e.g. Mathematics or Mathematical Literacy, never both). Stored now, enforced when subject choice is built                                                      |
+| `curriculum_subject_rule_members` | The subjects each rule applies to                                                                                                                                                         |
+| `schools`                         | Each school                                                                                                                                                                               |
+| `academic_years`                  | A school's years and the curriculum it follows that year; one is current                                                                                                                  |
+| `profiles`                        | One row per person, across schools. Linked to a login once they have one                                                                                                                  |
+| `school_memberships`              | A person's role at a school (student, teacher, parent, school admin). One person can hold several                                                                                         |
+| `guardianships`                   | Which parent is linked to which child                                                                                                                                                     |
+| `subjects`                        | The subjects a school offers, usually linked to the curriculum catalogue                                                                                                                  |
+| `classes`                         | Classes per school year: a grade number for sorting plus a free-text name (10B, 10LSI, ...)                                                                                               |
+| `class_subjects`                  | A subject taught to a class                                                                                                                                                               |
+| `teaching_allocations`            | Which teacher teaches it                                                                                                                                                                  |
+| `enrolments`                      | Which learner is in which class                                                                                                                                                           |
+
+**The IEB catalogue** (42 subjects, 14 aliases, 4 combination rules) comes from Chom's "Available IEB Subjects" spreadsheet, which cites IEB's NSC requirements. To match a name from a spreadsheet or Ednana to the official subject, use `resolve_curriculum_subject('IEB', 'Maths Lit', 11)`. It checks official names first, then aliases, and respects grades: "Science" means Natural Sciences in Grades 8-9 and Physical Sciences in Grades 10-12.
 
 Every table keeps an `ednana_id` where relevant, for the future Ednana sync. Staff accounts and the audit log live in the `private` schema, which the apps can never reach.
 
