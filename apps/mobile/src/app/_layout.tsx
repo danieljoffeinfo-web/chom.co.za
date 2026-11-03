@@ -1,10 +1,8 @@
-import {
-  InterTight_500Medium,
-  InterTight_600SemiBold,
-  InterTight_700Bold,
-  InterTight_800ExtraBold,
-  useFonts,
-} from '@expo-google-fonts/inter-tight';
+import { InterTight_500Medium } from '@expo-google-fonts/inter-tight/500Medium';
+import { InterTight_600SemiBold } from '@expo-google-fonts/inter-tight/600SemiBold';
+import { InterTight_700Bold } from '@expo-google-fonts/inter-tight/700Bold';
+import { InterTight_800ExtraBold } from '@expo-google-fonts/inter-tight/800ExtraBold';
+import { useFonts } from 'expo-font';
 import { colors } from '@chom/tokens';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
