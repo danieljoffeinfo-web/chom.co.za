@@ -42,8 +42,7 @@ select is(
   'He teaches one subject'
 );
 select is(
-  public.my_staff_dashboard() -> 'classes' -> 0
-    - 'class_subject_id' - 'class_id',
+  ((public.my_staff_dashboard() -> 'classes' -> 0) - 'class_subject_id') - 'class_id',
   '{"class_name":"10B","grade":10,"subject_name":"Mathematics","learners":2,"onboarded":1}'::jsonb,
   'Maths 10B: 2 learners, 1 of them has finished onboarding'
 );
