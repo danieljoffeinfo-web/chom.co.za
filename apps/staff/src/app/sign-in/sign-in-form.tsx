@@ -11,13 +11,19 @@ type State = { status: 'idle' | 'sending' | 'sent' } | { status: 'error'; messag
 
 const GENERIC_ERROR = 'We couldn’t send your sign-in link. Please try again in a moment.';
 
-/** Plain words for the errors people can actually hit when asking for a link. */
+/**
+ * Plain words for the errors people can actually hit when asking for a link. Supabase
+ * error codes: https://supabase.com/docs/guides/auth/debugging/error-codes
+ */
 function signInErrorMessage(error: AuthError): string {
-  if (error.status === 429 || error.code?.startsWith('over_')) {
-    return 'Too many sign-in emails were sent in the last hour. Please wait a few minutes, then try again. Use only the newest email we send you.';
+  if (error.code === 'over_email_send_rate_limit') {
+    return 'Too many sign-in emails have been asked for. Please wait a few minutes before asking for a new one, and use only the newest email we send you.';
   }
-  if (error.code === 'email_address_invalid' || error.code === 'validation_failed') {
-    return 'That email address doesn’t look right. Please check it and try again.';
+  if (error.status === 429 || error.code === 'over_request_rate_limit') {
+    return 'Too many attempts. Please wait a few minutes, then try again.';
+  }
+  if (error.code === 'email_address_invalid') {
+    return 'We can’t send sign-in emails to that address. Please use your school email.';
   }
   return GENERIC_ERROR;
 }

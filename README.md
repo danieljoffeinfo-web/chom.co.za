@@ -38,7 +38,7 @@ To add a shared package, create a folder under `packages/` with a `package.json`
 
 ## Getting started
 
-Requires Node 22+ and pnpm 10 (`corepack enable` installs the right version).
+Requires Node 22.6+ (the unit tests run TypeScript directly) and pnpm 10 (`corepack enable` installs the right version).
 
 ```bash
 pnpm install
@@ -159,7 +159,7 @@ Merging a pull request that adds a migration is all it takes: once CI passes on 
 - It stops without changing anything if production has a migration the repo doesn't, which means someone changed the database outside the repo.
 - Migrations already on `main` can't be edited, and a new migration must be newer than every migration on `main` (CI fails otherwise).
 - To check what would be applied, run the workflow by hand from the Actions tab, on `main`. **Dry run** is ticked by default.
-- **Database first, then the app.** Vercel deploys the apps as soon as a pull request merges, a minute or two before the migration lands. App code that needs a new table or function must not merge in the same pull request as its migration: merge the migration first, then the app change.
+- **Database first, then the app.** Vercel deploys the apps as soon as a pull request merges. App code that needs a new table or function must not merge in the same pull request as its migration. Merge the migration first, wait until the **Deploy database** run for it has succeeded (Actions tab), then merge the app change.
 
 **One-time setup.** The workflow needs a Supabase access token, kept as a GitHub secret:
 
