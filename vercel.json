@@ -2,5 +2,25 @@
   "installCommand": "echo \"Static site: no dependencies to install\"",
   "buildCommand": "node scripts/build.mjs",
   "outputDirectory": "dist/student",
-  "framework": null
+  "framework": null,
+  "headers": [
+    {
+      "source": "/fonts/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/student/fonts/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
 }
