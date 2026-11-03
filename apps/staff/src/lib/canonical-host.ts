@@ -18,3 +18,12 @@ export function canonicalRedirect(
   if (!host || host.toLowerCase() === STAFF_HOST) return null;
   return `https://${STAFF_HOST}${pathAndQuery}`;
 }
+
+/**
+ * Where a signed-out staff member signs in. In production that is the Teacher sign-in
+ * on chom.co.za (one front door for everyone; the sign-in is shared with this site).
+ * Previews and local development keep their own /sign-in page.
+ */
+export function staffSignInUrl(vercelEnv: string | undefined): string {
+  return vercelEnv === 'production' ? 'https://chom.co.za/sign-in?as=staff' : '/sign-in';
+}

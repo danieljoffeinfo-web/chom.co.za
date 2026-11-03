@@ -3,6 +3,7 @@
 import type { AuthError } from '@supabase/supabase-js';
 import { type FormEvent, useState } from 'react';
 
+import { LOGIN_AS_COOKIE, type LoginAs } from '@/lib/login-intent';
 import { createClient } from '@/lib/supabase/browser';
 
 import styles from './sign-in.module.css';
@@ -28,13 +29,18 @@ function signInErrorMessage(error: AuthError): string {
   return GENERIC_ERROR;
 }
 
-export function SignInForm() {
+export function SignInForm({ loginAs }: { loginAs: LoginAs }) {
   const [email, setEmail] = useState('');
   const [state, setState] = useState<State>({ status: 'idle' });
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setState({ status: 'sending' });
+    // Remember which door was used until the email link is clicked (one hour).
+    document.cookie =
+      loginAs === 'staff'
+        ? `${LOGIN_AS_COOKIE}=staff; path=/; max-age=3600; samesite=lax`
+        : `${LOGIN_AS_COOKIE}=; path=/; max-age=0; samesite=lax`;
     let error: AuthError | null;
     try {
       const supabase = createClient();

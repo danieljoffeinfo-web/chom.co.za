@@ -1,10 +1,12 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
+import { LOGIN_AS_COOKIE, parseLoginAs } from '@/lib/login-intent';
 import { createClient } from '@/lib/supabase/server';
 
 /**
  * Where the one-time sign-in link (and later, Microsoft) sends people back to. Swaps
- * the one-time code for a session, then continues to /start.
+ * the one-time code for a session, then continues to /start, passing on which door
+ * they used (Teacher login or the normal one) and forgetting it.
  */
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
@@ -13,7 +15,14 @@ export async function GET(request: NextRequest) {
   if (code) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) return NextResponse.redirect(`${origin}/start`);
+    if (!error) {
+      const loginAs = parseLoginAs(request.cookies.get(LOGIN_AS_COOKIE)?.value);
+      const response = NextResponse.redirect(
+        `${origin}/start${loginAs === 'staff' ? '?as=staff' : ''}`,
+      );
+      response.cookies.delete(LOGIN_AS_COOKIE);
+      return response;
+    }
   }
 
   return NextResponse.redirect(`${origin}/sign-in?error=link`);

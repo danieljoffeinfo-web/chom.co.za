@@ -1,4 +1,5 @@
 export { createChomClient, type ChomClient, type ChomClientConfig } from './client';
+export { AUTH_COOKIE_NAME, SIGN_IN_ORIGIN, STAFF_ORIGIN, authCookieOptions } from './auth-cookies';
 export { isServerOnlyKey } from './keys';
 export {
   Constants,

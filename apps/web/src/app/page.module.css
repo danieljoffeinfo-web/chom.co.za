@@ -31,8 +31,14 @@
   font-weight: 800;
 }
 
-.cta {
-  align-self: flex-start;
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--chom-space-3);
+}
+
+.cta,
+.secondary {
   font-weight: 700;
   text-decoration: none;
   background: var(--chom-primary);
@@ -43,4 +49,15 @@
 
 .cta:hover {
   background: var(--chom-primary-hover);
+}
+
+.secondary {
+  color: var(--chom-text);
+  background: transparent;
+  border: 1px solid var(--chom-primary);
+  padding: 13px 27px;
+}
+
+.secondary:hover {
+  background: var(--chom-subtle);
 }

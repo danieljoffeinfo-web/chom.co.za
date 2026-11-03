@@ -112,3 +112,12 @@
   align-self: flex-start;
   margin-top: var(--chom-space-2);
 }
+
+.switch {
+  margin-top: var(--chom-space-4);
+  padding-top: var(--chom-space-4);
+  border-top: 1px solid var(--chom-border);
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+}

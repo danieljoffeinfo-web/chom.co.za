@@ -1,7 +1,8 @@
+import { authCookieOptions } from '@chom/api';
 import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 
-import { canonicalRedirect } from '@/lib/canonical-host';
+import { canonicalRedirect, staffSignInUrl } from '@/lib/canonical-host';
 import { supabaseEnv } from '@/lib/supabase/env';
 
 /**
@@ -17,10 +18,18 @@ export async function proxy(request: NextRequest) {
   );
   if (canonical) return NextResponse.redirect(canonical, 308);
 
+  // Everyone signs in at chom.co.za; this site shares that sign-in.
+  const signInUrl = staffSignInUrl(process.env.VERCEL_ENV);
+  const path = request.nextUrl.pathname;
+  if (signInUrl.startsWith('https://') && path.startsWith('/sign-in')) {
+    return NextResponse.redirect(signInUrl);
+  }
+
   const { url, publishableKey } = supabaseEnv();
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(url, publishableKey, {
+    cookieOptions: authCookieOptions(request.headers.get('host')),
     cookies: {
       getAll() {
         return request.cookies.getAll();
@@ -40,13 +49,9 @@ export async function proxy(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const signedIn = Boolean(data?.claims);
 
-  const path = request.nextUrl.pathname;
   const isPublic = path.startsWith('/sign-in') || path === '/sign-out' || path.startsWith('/auth/');
   if (!signedIn && !isPublic) {
-    const signIn = request.nextUrl.clone();
-    signIn.pathname = '/sign-in';
-    signIn.search = '';
-    return NextResponse.redirect(signIn);
+    return NextResponse.redirect(new URL(signInUrl, request.nextUrl));
   }
 
   return response;

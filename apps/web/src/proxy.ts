@@ -1,3 +1,4 @@
+import { authCookieOptions } from '@chom/api';
 import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 
@@ -12,6 +13,7 @@ export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(url, publishableKey, {
+    cookieOptions: authCookieOptions(request.headers.get('host')),
     cookies: {
       getAll() {
         return request.cookies.getAll();
