@@ -40,3 +40,40 @@
 div.cd-class:hover {
   border-color: var(--line);
 }
+
+/* Loading skeleton, shown instantly when switching tabs. */
+.skeleton-block {
+  border-radius: 16px;
+  background: var(--soft);
+}
+.skeleton-title {
+  width: min(520px, 80%);
+  height: 56px;
+}
+.skeleton-line {
+  width: min(360px, 60%);
+  height: 18px;
+  margin-top: -24px;
+}
+.skeleton-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+.skeleton-card {
+  height: 200px;
+  border-radius: 24px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .skeleton-block {
+    animation: skeleton-pulse 1.4s ease-in-out infinite;
+  }
+}
+@keyframes skeleton-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+.empty-message .button {
+  margin-top: 20px;
+}
