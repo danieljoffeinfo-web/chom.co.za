@@ -1,13 +1,22 @@
 import { createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 
+import { canonicalRedirect } from '@/lib/canonical-host';
 import { supabaseEnv } from '@/lib/supabase/env';
 
 /**
- * Runs before every page: refreshes the signed-in user's session so its cookies stay
- * valid, and sends signed-out visitors to the sign-in page.
+ * Runs before every page: sends production visitors on any other address to
+ * staff.chom.co.za, refreshes the signed-in user's session so its cookies stay valid,
+ * and sends signed-out visitors to the sign-in page.
  */
 export async function proxy(request: NextRequest) {
+  const canonical = canonicalRedirect(
+    request.headers.get('host'),
+    request.nextUrl.pathname + request.nextUrl.search,
+    process.env.VERCEL_ENV,
+  );
+  if (canonical) return NextResponse.redirect(canonical, 308);
+
   const { url, publishableKey } = supabaseEnv();
   let response = NextResponse.next({ request });
 
