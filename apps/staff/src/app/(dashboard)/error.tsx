@@ -1,13 +1,17 @@
 'use client';
 
-/** If loading a page fails (for example the database is briefly unreachable). */
-export default function DashboardError({ reset }: { error: Error; reset: () => void }) {
+/**
+ * If loading a page's content fails, inside the dashboard frame. Failures in the
+ * frame itself (the dashboard layout) are caught by app/error.tsx.
+ */
+export default function DashboardError({ retry }: { error: Error; retry: () => void }) {
   return (
     <section className="panel">
       <div className="empty-message">
         <h2>We couldn’t load this page</h2>
         <p>Please try again in a moment.</p>
-        <button className="button secondary" type="button" onClick={reset}>
+        {/* retry asks the server again; reset alone would redraw the same failure. */}
+        <button className="button secondary" type="button" onClick={retry}>
           Try again
         </button>
       </div>
