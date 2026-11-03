@@ -1,4 +1,5 @@
-import { STAFF_ORIGIN } from '@chom/api';
+import { staffOriginFor } from '@chom/api';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { Message } from '@/components/message';
@@ -55,11 +56,29 @@ export default async function Start({ searchParams }: { searchParams: Promise<{ 
   }
 
   // Staff go to the staff dashboard on staff.chom.co.za, which shares this sign-in.
-  const { data: staff } = await supabase.rpc('my_staff_dashboard');
+  const { data: staff, error: staffError } = await supabase.rpc('my_staff_dashboard');
+  if (staffError) {
+    // Never tell a teacher they aren't staff because the lookup failed.
+    return (
+      <Message title="Something went wrong" signOut>
+        We couldn’t finish signing you in. Please try again in a moment.
+      </Message>
+    );
+  }
   const isStaff = Boolean(staff);
+  const staffOrigin = staffOriginFor((await headers()).get('host'));
+  const staffDestination = (
+    <Message title="You’re signed in as staff" signOut>
+      This preview can’t open the staff dashboard. Sign in on the staff site’s own preview, or at
+      chom.co.za.
+    </Message>
+  );
 
   if (loginAs === 'staff') {
-    if (isStaff) redirect(STAFF_ORIGIN);
+    if (isStaff) {
+      if (staffOrigin) redirect(staffOrigin);
+      return staffDestination;
+    }
     return (
       <Message title="This isn’t a staff account" signOut>
         Your email isn’t on your school’s staff list. If you’re a student or parent, sign out and
@@ -72,7 +91,10 @@ export default async function Start({ searchParams }: { searchParams: Promise<{ 
   if (student) {
     redirect(student.studyProfile?.onboarding_completed_at ? '/app' : '/onboarding');
   }
-  if (isStaff) redirect(STAFF_ORIGIN);
+  if (isStaff) {
+    if (staffOrigin) redirect(staffOrigin);
+    return staffDestination;
+  }
 
   return (
     <Message title="You’re signed in" signOut>

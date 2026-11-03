@@ -27,3 +27,16 @@ export function authCookieOptions(host: string | null | undefined): {
   const shared = hostname === SHARED_DOMAIN || hostname.endsWith(`.${SHARED_DOMAIN}`);
   return shared ? { name: AUTH_COOKIE_NAME, domain: SHARED_DOMAIN } : { name: AUTH_COOKIE_NAME };
 }
+
+/**
+ * Where to send a signed-in staff member from the chom.co.za sign-in, for a request
+ * to `host`. On chom.co.za that is staff.chom.co.za (the sign-in cookie is shared).
+ * On localhost it is the local staff app (cookies ignore the port, so the sign-in
+ * carries over). Anywhere else (previews) there is no shared sign-in, so null.
+ */
+export function staffOriginFor(host: string | null | undefined): string | null {
+  const hostname = (host ?? '').split(':')[0]?.toLowerCase() ?? '';
+  if (hostname === SHARED_DOMAIN || hostname.endsWith(`.${SHARED_DOMAIN}`)) return STAFF_ORIGIN;
+  if (hostname === 'localhost') return 'http://localhost:3001';
+  return null;
+}

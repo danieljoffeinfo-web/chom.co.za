@@ -22,7 +22,11 @@ export async function proxy(request: NextRequest) {
   const signInUrl = staffSignInUrl(process.env.VERCEL_ENV);
   const path = request.nextUrl.pathname;
   if (signInUrl.startsWith('https://') && path.startsWith('/sign-in')) {
-    return NextResponse.redirect(signInUrl);
+    // Keep "that link expired" (error=link) for the chom.co.za sign-in page.
+    const target = new URL(signInUrl);
+    const error = request.nextUrl.searchParams.get('error');
+    if (error) target.searchParams.set('error', error);
+    return NextResponse.redirect(target);
   }
 
   const { url, publishableKey } = supabaseEnv();

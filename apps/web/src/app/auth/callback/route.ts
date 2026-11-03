@@ -12,11 +12,12 @@ export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
   const code = searchParams.get('code');
 
+  const loginAs = parseLoginAs(request.cookies.get(LOGIN_AS_COOKIE)?.value);
+
   if (code) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      const loginAs = parseLoginAs(request.cookies.get(LOGIN_AS_COOKIE)?.value);
       const response = NextResponse.redirect(
         `${origin}/start${loginAs === 'staff' ? '?as=staff' : ''}`,
       );
@@ -25,5 +26,8 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.redirect(`${origin}/sign-in?error=link`);
+  // A failed link keeps the door they chose, so the retry is a Teacher sign-in again.
+  return NextResponse.redirect(
+    `${origin}/sign-in?error=link${loginAs === 'staff' ? '&as=staff' : ''}`,
+  );
 }
