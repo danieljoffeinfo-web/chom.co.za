@@ -5,6 +5,11 @@ on:
   push:
     branches: [main]
 
+# The workflow only reads the code. Its GitHub token cannot push, comment,
+# or change settings.
+permissions:
+  contents: read
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -16,6 +21,18 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: No environment files committed
+        # .gitignore stops accidental commits; this also catches `git add -f`.
+        run: |
+          found=$(git ls-files | grep -E '(^|/)\.env($|\.)' | grep -vE '(^|/)\.env\.example$' || true)
+          if [ -n "$found" ]; then
+            echo "::error::Environment files must not be committed:"
+            echo "$found"
+            exit 1
+          fi
 
       - uses: pnpm/action-setup@v4
 
@@ -27,13 +44,19 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      - name: Formatting
+        run: pnpm format:check
+
       - name: Type check
         run: pnpm typecheck
 
-      - name: Lint (includes design token drift check)
+      - name: Lint (ESLint, plus design token drift check)
         run: pnpm lint
 
-      - name: Build web
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Build web and staff apps
         run: pnpm build
 
       - name: Bundle mobile (iOS + Android)
@@ -41,3 +64,81 @@ jobs:
 
       - name: Build static site (live chom.co.za)
         run: pnpm build:site
+
+  database:
+    name: Database migrations, access rules and types
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Merged migrations are never edited
+        # Production only runs each migration once, so editing or deleting one that is
+        # already on main would never reach it. Add a new migration instead.
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          changed=$(git diff --name-status --no-renames "$BASE_SHA" HEAD -- supabase/migrations | grep -v '^A' || true)
+          if [ -n "$changed" ]; then
+            echo "::error::These migrations are already on main and must not change. Add a new migration instead:"
+            echo "$changed"
+            exit 1
+          fi
+
+      - name: New migrations come after every migration on main
+        # Production refuses a migration older than its latest one, which would block
+        # every later deploy. Rename the file with a newer timestamp
+        # (supabase migration new) if main moved on.
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          latest=$(git ls-tree --name-only "$BASE_SHA" supabase/migrations/ | sed -n 's|.*/\([0-9]\{14\}\)_.*\.sql$|\1|p' | sort | tail -n 1)
+          added_paths=$(git diff --name-only --diff-filter=A --no-renames "$BASE_SHA" HEAD -- supabase/migrations)
+          invalid=$(printf '%s\n' "$added_paths" | grep '\.sql$' | grep -v '^supabase/migrations/[0-9]\{14\}_[^/]*\.sql$' || true)
+          if [ -n "$invalid" ]; then
+            echo "::error::Migration file names must start with a 14-digit timestamp (supabase migration new):"
+            echo "$invalid"
+            exit 1
+          fi
+          added=$(printf '%s\n' "$added_paths" | sed -n 's|.*/\([0-9]\{14\}\)_.*\.sql$|\1|p' | sort)
+          bad=""
+          for version in $added; do
+            if [ -n "$latest" ] && [ "$version" -le "$latest" ]; then bad="$bad $version"; fi
+          done
+          if [ -n "$bad" ]; then
+            echo "::error::Migration(s)$bad are not newer than main's latest ($latest). Give them a newer timestamp."
+            exit 1
+          fi
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install (includes the pinned Supabase CLI)
+        run: pnpm install --frozen-lockfile
+
+      - name: Start local Supabase (applies every migration and the test seed)
+        run: pnpm db:start
+
+      - name: Access-rule and integrity tests
+        run: pnpm db:test
+
+      - name: Generated database types are up to date
+        run: |
+          pnpm db:types
+          if ! git diff --exit-code -- packages/api/src/database.types.ts; then
+            echo "::error::packages/api/src/database.types.ts is out of date. Run 'pnpm db:types' and commit the result."
+            exit 1
+          fi
+
+      - name: Stop local Supabase
+        if: always()
+        run: pnpm db:stop

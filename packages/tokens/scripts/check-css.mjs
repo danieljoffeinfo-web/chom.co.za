@@ -16,18 +16,30 @@ const scheme = (name) => {
 };
 
 const kebab = (s) => s.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
-const cssBlock = (selector) => {
-  const start = css.indexOf(`${selector} {`);
-  return css.slice(start, css.indexOf('}', start));
+// Returns the body of the first rule whose selector matches, or null.
+const cssBlock = (selectorPattern) => {
+  const match = css.match(new RegExp(`(?:^|\\n)${selectorPattern}\\s*\\{([^}]*)\\}`));
+  return match ? match[1] : null;
 };
 
 let failures = 0;
-for (const [name, selector] of [['light', ':root'], ['dark', ':root[data-theme="dark"]']]) {
-  const block = cssBlock(selector);
+for (const [name, selectorPattern, label] of [
+  ['light', ':root', ':root'],
+  // Either quote style, so formatters can't silently break the check.
+  ['dark', `:root\\[data-theme=["']dark["']\\]`, ':root[data-theme="dark"]'],
+]) {
+  const block = cssBlock(selectorPattern);
+  if (block === null) {
+    console.error(`tokens.css has no ${label} rule for the ${name} theme`);
+    failures++;
+    continue;
+  }
   for (const [role, value] of Object.entries(scheme(name))) {
     const match = block.match(new RegExp(`--chom-${kebab(role)}: (#[0-9a-f]{6});`));
     if (!match || match[1] !== value) {
-      console.error(`${name}.${role}: expected ${value}, tokens.css has ${match?.[1] ?? 'nothing'}`);
+      console.error(
+        `${name}.${role}: expected ${value}, tokens.css has ${match?.[1] ?? 'nothing'}`,
+      );
       failures++;
     }
   }

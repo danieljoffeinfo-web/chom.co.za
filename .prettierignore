@@ -1,0 +1,15 @@
+# Generated or vendored
+pnpm-lock.yaml
+dist
+.next
+.expo
+.turbo
+next-env.d.ts
+
+# Hand-written static HTML, deployed as-is to chom.co.za. Not reformatted so
+# the live site's files stay byte-for-byte unchanged.
+static
+
+# Architecture decision records are reviewed documents; keep their wording
+# and layout exactly as approved.
+docs/decisions
