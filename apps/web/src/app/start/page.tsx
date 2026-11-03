@@ -1,6 +1,9 @@
+import { staffOriginFor } from '@chom/api';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { Message } from '@/components/message';
+import { parseLoginAs } from '@/lib/login-intent';
 import { loadStudentContext } from '@/lib/student';
 import { createClient } from '@/lib/supabase/server';
 
@@ -26,10 +29,12 @@ const NOT_LINKED: Record<string, { title: string; body: string }> = {
 };
 
 /**
- * After every sign-in: link the login to the school roster, then send the student to
- * onboarding (first time) or home.
+ * After every sign-in: link the login to the school roster, then send each person to
+ * their dashboard. Teacher login → the staff dashboard. Otherwise students go to
+ * onboarding (first time) or their dashboard, and staff to the staff dashboard.
  */
-export default async function Start() {
+export default async function Start({ searchParams }: { searchParams: Promise<{ as?: string }> }) {
+  const loginAs = parseLoginAs((await searchParams).as);
   const supabase = await createClient();
 
   const { data: result, error } = await supabase.rpc('link_my_account');
@@ -50,14 +55,50 @@ export default async function Start() {
     );
   }
 
-  const student = await loadStudentContext(supabase);
-  if (!student) {
+  // Staff go to the staff dashboard on staff.chom.co.za, which shares this sign-in.
+  const { data: staff, error: staffError } = await supabase.rpc('my_staff_dashboard');
+  if (staffError) {
+    // Never tell a teacher they aren't staff because the lookup failed.
     return (
-      <Message title="You’re signed in" signOut>
-        Chom is only open to students for now. Teacher and parent accounts are coming soon.
+      <Message title="Something went wrong" signOut>
+        We couldn’t finish signing you in. Please try again in a moment.
+      </Message>
+    );
+  }
+  const isStaff = Boolean(staff);
+  const staffOrigin = staffOriginFor((await headers()).get('host'));
+  const staffDestination = (
+    <Message title="You’re signed in as staff" signOut>
+      This preview can’t open the staff dashboard. Sign in on the staff site’s own preview, or at
+      chom.co.za.
+    </Message>
+  );
+
+  if (loginAs === 'staff') {
+    if (isStaff) {
+      if (staffOrigin) redirect(staffOrigin);
+      return staffDestination;
+    }
+    return (
+      <Message title="This isn’t a staff account" signOut>
+        Your email isn’t on your school’s staff list. If you’re a student or parent, sign out and
+        use the normal Sign in. If you teach at the school, ask your school admin to add you.
       </Message>
     );
   }
 
-  redirect(student.studyProfile?.onboarding_completed_at ? '/app' : '/onboarding');
+  const student = await loadStudentContext(supabase);
+  if (student) {
+    redirect(student.studyProfile?.onboarding_completed_at ? '/app' : '/onboarding');
+  }
+  if (isStaff) {
+    if (staffOrigin) redirect(staffOrigin);
+    return staffDestination;
+  }
+
+  return (
+    <Message title="You’re signed in" signOut>
+      Chom is open to students and teachers for now. Parent accounts are coming soon.
+    </Message>
+  );
 }

@@ -17,9 +17,14 @@ export default async function Landing() {
       <p className={styles.lede}>
         <strong>Study the right way with Chom.</strong>
       </p>
-      <Link className={styles.cta} href="/sign-in">
-        Sign in
-      </Link>
+      <div className={styles.actions}>
+        <Link className={styles.cta} href="/sign-in">
+          Sign in
+        </Link>
+        <Link className={styles.secondary} href="/sign-in?as=staff">
+          Teacher login
+        </Link>
+      </div>
     </main>
   );
 }

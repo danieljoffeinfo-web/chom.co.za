@@ -1,5 +1,6 @@
 'use client';
 
+import type { AuthError } from '@supabase/supabase-js';
 import { type FormEvent, useState } from 'react';
 
 import { createClient } from '@/lib/supabase/browser';
@@ -8,6 +9,25 @@ import styles from './sign-in.module.css';
 
 type State = { status: 'idle' | 'sending' | 'sent' } | { status: 'error'; message: string };
 
+const GENERIC_ERROR = 'We couldn’t send your sign-in link. Please try again in a moment.';
+
+/**
+ * Plain words for the errors people can actually hit when asking for a link. Supabase
+ * error codes: https://supabase.com/docs/guides/auth/debugging/error-codes
+ */
+function signInErrorMessage(error: AuthError): string {
+  if (error.code === 'over_email_send_rate_limit') {
+    return 'Too many sign-in emails have been asked for. Please wait a few minutes before asking for a new one, and use only the newest email we send you.';
+  }
+  if (error.status === 429 || error.code === 'over_request_rate_limit') {
+    return 'Too many attempts. Please wait a few minutes, then try again.';
+  }
+  if (error.code === 'email_address_invalid') {
+    return 'We can’t send sign-in emails to that address. Please use your school email.';
+  }
+  return GENERIC_ERROR;
+}
+
 export function SignInForm() {
   const [email, setEmail] = useState('');
   const [state, setState] = useState<State>({ status: 'idle' });
@@ -15,12 +35,25 @@ export function SignInForm() {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setState({ status: 'sending' });
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email: email.trim(),
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
-    });
-    setState(error ? { status: 'error', message: error.message } : { status: 'sent' });
+    let error: AuthError | null;
+    try {
+      const supabase = createClient();
+      ({ error } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      }));
+    } catch (thrown) {
+      // Never leave the button stuck on "Sending…" (for example, no connection).
+      console.error('Sign-in link failed', thrown);
+      setState({ status: 'error', message: GENERIC_ERROR });
+      return;
+    }
+    if (error) {
+      console.error('Sign-in link failed', error.status, error.code, error.message);
+      setState({ status: 'error', message: signInErrorMessage(error) });
+      return;
+    }
+    setState({ status: 'sent' });
   }
 
   if (state.status === 'sent') {
