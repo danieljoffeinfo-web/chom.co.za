@@ -871,6 +871,7 @@ export type Database = {
     };
     Functions: {
       link_my_account: { Args: Record<PropertyKey, never>; Returns: string };
+      my_staff_dashboard: { Args: Record<PropertyKey, never>; Returns: Json };
       resolve_curriculum_subject: {
         Args: { p_curriculum_code: string; p_grade: number; p_name: string };
         Returns: string;
