@@ -24,3 +24,4 @@ next-env.d.ts
 apps/web/public/app/
 apps/web/public/teacher/
 apps/web/public/shared/
+apps/web/public/fonts/
