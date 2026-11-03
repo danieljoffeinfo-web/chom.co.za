@@ -1,0 +1,42 @@
+/*
+ * Small additions the staff dashboard needs on top of the learner dashboard's styles
+ * (dashboard.css). Keep this short: shared looks belong in dashboard.css.
+ */
+
+/* Sign out is a form button here (it was a link in the prototype). */
+.sidebar-bottom form {
+  margin: 0;
+}
+.sidebar-bottom .sign-out {
+  width: 100%;
+}
+
+/* Empty and coming-soon states. */
+.empty-message > .icon {
+  width: 32px;
+  height: 32px;
+  margin: 0 auto 15px;
+}
+.empty-message p {
+  margin-top: 10px;
+}
+.coming-list {
+  list-style: none;
+  margin: 16px auto 0;
+  padding: 0;
+  max-width: 460px;
+  display: grid;
+  gap: 8px;
+}
+.coming-list li {
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* Class cards are not links yet, so no hover outline. */
+div.cd-class:hover {
+  border-color: var(--line);
+}

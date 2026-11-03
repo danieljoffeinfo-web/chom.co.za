@@ -6,8 +6,10 @@ One platform for students, teachers and parents across many schools. This reposi
 
 ```
 apps/                   Workspace apps (every folder here is picked up automatically)
-  web/                  Next.js web app: teacher dashboard, school admin,
-                        and the web version for students and parents
+  web/                  Next.js web app at chom.co.za: sign-in, onboarding and
+                        the web version for students and parents
+  staff/                Next.js staff dashboard at staff.chom.co.za, for teachers
+                        and school admins. Its own Vercel project (chom-staff)
   mobile/               Expo (React Native) app for iOS and Android: one app,
                         the signed-in person's role picks the experience
 packages/               Shared workspace packages (picked up automatically)
@@ -26,6 +28,7 @@ supabase/               The database: migrations (structure and access rules),
                         test seed data and automated access tests
 docs/
   decisions/            Architecture decision records (start with 0001)
+  design/               Design spec shared by the learner and staff dashboards
 scripts/
   build.mjs             Builds static/ into dist/
   gen-db-types.sh       Regenerates the database types (pnpm db:types)
@@ -44,6 +47,7 @@ pnpm install
 | Command             | What it does                                                                 |
 | ------------------- | ---------------------------------------------------------------------------- |
 | `pnpm dev:web`      | Run the web app at http://localhost:3000                                     |
+| `pnpm dev:staff`    | Run the staff dashboard at http://localhost:3001                             |
 | `pnpm dev:mobile`   | Start Expo. Open on a phone with Expo Go, or an iOS/Android simulator        |
 | `pnpm typecheck`    | Type-check every package                                                     |
 | `pnpm lint`         | ESLint for web and mobile (no warnings allowed), plus the design-token check |
