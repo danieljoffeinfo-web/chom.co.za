@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 
 import { Message } from '@/components/message';
+import { loadGuardianLinks } from '@/lib/parent/parent';
 import { loadStudentContext } from '@/lib/student';
 import { createClient } from '@/lib/supabase/server';
 
@@ -26,8 +27,8 @@ const NOT_LINKED: Record<string, { title: string; body: string }> = {
 };
 
 /**
- * After every sign-in: link the login to the school roster, then send the student to
- * onboarding (first time) or home.
+ * After every sign-in: link the login to the school roster, then send students to
+ * onboarding (first time) or their dashboard, and parents to the parent dashboard.
  */
 export default async function Start() {
   const supabase = await createClient();
@@ -51,13 +52,19 @@ export default async function Start() {
   }
 
   const student = await loadStudentContext(supabase);
-  if (!student) {
-    return (
-      <Message title="You’re signed in" signOut>
-        Chom is only open to students for now. Teacher and parent accounts are coming soon.
-      </Message>
-    );
+  if (student) {
+    redirect(student.studyProfile?.onboarding_completed_at ? '/app' : '/onboarding');
   }
 
-  redirect(student.studyProfile?.onboarding_completed_at ? '/app' : '/onboarding');
+  // Parents (including teachers who are also parents) get the parent dashboard. It
+  // asks for consent first if any child still needs it.
+  const links = await loadGuardianLinks(supabase);
+  if (links.length) redirect('/parent');
+
+  return (
+    <Message title="You’re signed in" signOut>
+      Chom on this site is for students and parents. Teachers sign in at{' '}
+      <a href="https://staff.chom.co.za">staff.chom.co.za</a>.
+    </Message>
+  );
 }

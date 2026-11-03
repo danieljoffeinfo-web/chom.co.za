@@ -1,0 +1,54 @@
+import { notFound } from 'next/navigation';
+
+import { findChild } from '@/lib/parent/current-parent';
+
+import { SubjectList } from '../subject-list';
+
+export const metadata = { title: 'Academics · Chom Parent' };
+
+/** Academics (spec §5.2, §5.3): subjects now; marks, study time and attendance next. */
+export default async function Academics({ params }: { params: Promise<{ child: string }> }) {
+  const { child: childId } = await params;
+  const { child } = await findChild(childId);
+  if (!child) notFound();
+
+  return (
+    <>
+      <header className="view-header">
+        <div>
+          <h1>Academics</h1>
+          <p>
+            {child.name}’s subjects{child.yearLabel ? ` for ${child.yearLabel}` : ''}, their
+            teachers and the targets {child.name} set.
+          </p>
+        </div>
+      </header>
+
+      <SubjectList subjects={child.subjects} childName={child.name} />
+
+      <div className="parent-coming">
+        <section className="content-card">
+          <h2>Marks and readiness</h2>
+          <p>
+            Each subject’s marks and trend, how ready {child.name} is for upcoming tests, and the
+            topics to work on. Coming soon.
+          </p>
+        </section>
+        <section className="content-card">
+          <h2>Study time</h2>
+          <p>
+            Time spent studying on Chom each day and week, by subject and time of day, compared only
+            with {child.name}’s own usual. Coming soon.
+          </p>
+        </section>
+        <section className="content-card">
+          <h2>Attendance</h2>
+          <p>
+            Days present, absences and late arrivals, and a same-day alert if {child.name} is marked
+            absent, so you can give a reason straight away. Coming soon.
+          </p>
+        </section>
+      </div>
+    </>
+  );
+}

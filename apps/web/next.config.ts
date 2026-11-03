@@ -2,7 +2,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   // Shared workspace packages ship TypeScript source; let Next compile them.
-  transpilePackages: ['@chom/tokens', '@chom/api'],
+  transpilePackages: ['@chom/tokens', '@chom/api', '@chom/dashboard'],
   reactStrictMode: true,
   // The HTML prototypes (copied into public/ at build time) are served as folders.
   async rewrites() {

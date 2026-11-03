@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@chom/api": "workspace:*",
+    "@chom/dashboard": "workspace:*",
     "@chom/tokens": "workspace:*",
     "@supabase/ssr": "0.12.7",
     "@supabase/supabase-js": "2.118.0",

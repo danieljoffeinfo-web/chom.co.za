@@ -13,3 +13,6 @@ static
 # Architecture decision records are reviewed documents; keep their wording
 # and layout exactly as approved.
 docs/decisions
+
+# Generated from packages/dashboard/icons.svg
+packages/dashboard/src/sprite.ts

@@ -1,0 +1,61 @@
+'use client';
+
+import { useActionState } from 'react';
+
+import { type ConsentState, recordConsent } from './actions';
+
+/** The agreement tick box and channel choices. Nothing is saved until they agree. */
+export function ConsentForm({ version, agreement }: { version: string; agreement: string }) {
+  const [state, action, pending] = useActionState<ConsentState, FormData>(recordConsent, {
+    error: null,
+  });
+
+  return (
+    <form action={action} className="consent-form">
+      <input type="hidden" name="version" value={version} />
+
+      <fieldset className="consent-channels">
+        <legend>How should Chom reach you?</legend>
+        <p>Urgent alerts, like an absence, and your Sunday summary. You can change this later.</p>
+        <label className="switch-row">
+          <span>
+            <strong>WhatsApp</strong>
+            <small>The weekly summary and urgent alerts</small>
+          </span>
+          <input type="checkbox" name="whatsapp" defaultChecked />
+        </label>
+        <label className="switch-row">
+          <span>
+            <strong>Email</strong>
+            <small>The weekly summary, if WhatsApp isn’t for you</small>
+          </span>
+          <input type="checkbox" name="email" defaultChecked />
+        </label>
+        <label className="switch-row">
+          <span>
+            <strong>Notifications in this browser</strong>
+            <small>Alerts while you have Chom open on this device</small>
+          </span>
+          <input type="checkbox" name="push" />
+        </label>
+      </fieldset>
+
+      <label className="consent-agree">
+        <input type="checkbox" name="agree" required />
+        <span>{agreement}</span>
+      </label>
+
+      {state.error && (
+        <p className="form-error" role="alert">
+          {state.error}
+        </p>
+      )}
+
+      <div className="consent-actions">
+        <button className="button" type="submit" disabled={pending}>
+          {pending ? 'Saving…' : 'I agree, continue'}
+        </button>
+      </div>
+    </form>
+  );
+}

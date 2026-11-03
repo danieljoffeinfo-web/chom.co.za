@@ -6,8 +6,8 @@ One platform for students, teachers and parents across many schools. This reposi
 
 ```
 apps/                   Workspace apps (every folder here is picked up automatically)
-  web/                  Next.js web app at chom.co.za: sign-in, onboarding and
-                        the web version for students and parents
+  web/                  Next.js web app at chom.co.za: sign-in, student
+                        onboarding, and the parent dashboard at /parent
   staff/                Next.js staff dashboard at staff.chom.co.za, for teachers
                         and school admins. Its own Vercel project (chom-staff)
   mobile/               Expo (React Native) app for iOS and Android: one app,
@@ -15,6 +15,8 @@ apps/                   Workspace apps (every folder here is picked up automatic
 packages/               Shared workspace packages (picked up automatically)
   api/                  The typed data client shared by web and mobile, with
                         TypeScript types generated from the database
+  dashboard/            The dashboard look shared by the staff and parent
+                        dashboards: styles, icons, <Icon>, <ComingSoon>
   tokens/               Design tokens: colours, type, spacing, radius.
                         TypeScript for mobile, tokens.css for web
   tsconfig/             Shared TypeScript settings
@@ -91,7 +93,10 @@ Supabase (PostgreSQL), as decided in [ADR 0001](docs/decisions/0001-database-pla
 | `academic_years`                  | A school's years and the curriculum it follows that year; one is current                                                                                                                  |
 | `profiles`                        | One row per person, across schools. Linked to a login once they have one                                                                                                                  |
 | `school_memberships`              | A person's role at a school (student, teacher, parent, school admin). One person can hold several                                                                                         |
-| `guardianships`                   | Which parent is linked to which child                                                                                                                                                     |
+| `guardianships`                   | Which parent is linked to which child: relationship, primary contact, and a status (invited, active, blocked, consent withdrawn, revoked by the learner)                                  |
+| `parent_consent_versions`         | Versions of the parent POPIA consent; the latest published one is current. The wording lives in `apps/web/src/lib/parent/consent.ts`                                                      |
+| `parent_consents`                 | Each parent's consent, per child and version, with when and where it was given                                                                                                            |
+| `parent_notification_channels`    | Which channels (WhatsApp, email, push) each parent opted in to                                                                                                                            |
 | `subjects`                        | The subjects a school offers, usually linked to the curriculum catalogue                                                                                                                  |
 | `classes`                         | Classes per school year: a grade number for sorting plus a free-text name (10B, 10LSI, ...)                                                                                               |
 | `class_subjects`                  | A subject taught to a class                                                                                                                                                               |
@@ -107,6 +112,8 @@ Supabase (PostgreSQL), as decided in [ADR 0001](docs/decisions/0001-database-pla
 - It links nothing, and says why, when the email is on no roster, is on more than one profile, or the profile already has another login.
 
 The Microsoft tenant check reads the `tid` claim Supabase stores for Microsoft logins; it must be confirmed against a real Microsoft sign-in before the first school goes live.
+
+**Parents** see a child only while their link is active **and** they have consented to the current consent version for that child. Until then they see the child's name on the consent screen and nothing else. A school admin can block a guardian (with a reason, for example a court order); a blocked guardian sees nothing about that child, not even the link. Withdrawing consent hides the child at once, and publishing a new consent version makes every parent consent again. Parents with children at several schools see each child at their own school. See `docs/design/parent-dashboard.md`.
 
 **Onboarding answers** (study habits, targets, focus subjects) can be seen by the student, their teachers, their parents and school admins, and changed only by the student. Goal changes are kept in the audit log.
 
