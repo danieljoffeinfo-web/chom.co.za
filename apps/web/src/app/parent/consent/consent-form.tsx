@@ -5,13 +5,24 @@ import { useActionState, useState } from 'react';
 import { type ConsentState, recordConsent } from './actions';
 
 /** The agreement tick box and channel choices. Nothing is saved until they agree. */
-export function ConsentForm({ version, agreement }: { version: string; agreement: string }) {
+export function ConsentForm({
+  version,
+  agreement,
+  saved,
+}: {
+  version: string;
+  agreement: string;
+  saved: { whatsapp: boolean; email: boolean; push: boolean } | null;
+}) {
   const [state, action, pending] = useActionState<ConsentState, FormData>(recordConsent, {
     error: null,
   });
 
   // React resets the form after each submit; the defaults put back what they chose.
-  const choices = state.choices ?? { whatsapp: true, email: true, push: false, agree: false };
+  const choices = state.choices ?? {
+    ...(saved ?? { whatsapp: true, email: true, push: false }),
+    agree: false,
+  };
 
   // Hide an error once they change something; a new result shows again.
   const [dismissed, setDismissed] = useState<ConsentState | null>(null);

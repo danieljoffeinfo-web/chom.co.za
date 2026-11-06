@@ -16,7 +16,7 @@ export const metadata = { title: 'Before you start · Chom Learn' };
  */
 export default async function ConsentPage() {
   const supabase = await createClient();
-  const [links, { data: current, error }] = await Promise.all([
+  const [links, { data: current, error }, { data: saved, error: savedError }] = await Promise.all([
     currentLinks(),
     supabase
       .from('parent_consent_versions')
@@ -26,8 +26,11 @@ export default async function ConsentPage() {
       .order('version', { ascending: false })
       .limit(1)
       .maybeSingle(),
+    // Their channels from an earlier consent, so agreeing again doesn't reset them.
+    supabase.from('parent_notification_channels').select('whatsapp, email, push').maybeSingle(),
   ]);
   if (error) throw error;
+  if (savedError) throw savedError;
 
   // Withdrawn links can consent again from here; blocked ones never reach the app.
   const pending = links.filter(
@@ -56,6 +59,9 @@ export default async function ConsentPage() {
             <li key={l.guardianshipId}>
               <strong>{l.childName}</strong>
               <small>{[gradeLabel(l.grade), l.schoolName].filter(Boolean).join(' · ')}</small>
+              {l.status === 'consent_withdrawn' && (
+                <small>You withdrew consent for {l.childName}. Agreeing turns it back on.</small>
+              )}
             </li>
           ))}
         </ul>
@@ -93,7 +99,7 @@ export default async function ConsentPage() {
 
         <p className="consent-rights">{text.rights}</p>
 
-        <ConsentForm version={text.version} agreement={text.agreement} />
+        <ConsentForm version={text.version} agreement={text.agreement} saved={saved} />
 
         <form action="/sign-out" method="post" className="consent-signout">
           <button className="text-button" type="submit">
