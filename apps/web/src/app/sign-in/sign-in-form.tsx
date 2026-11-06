@@ -38,9 +38,9 @@ export function SignInForm({ loginAs }: { loginAs: LoginAs }) {
     setState({ status: 'sending' });
     // Remember which door was used until the email link is clicked (one hour).
     document.cookie =
-      loginAs === 'staff'
-        ? `${LOGIN_AS_COOKIE}=staff; path=/; max-age=3600; samesite=lax`
-        : `${LOGIN_AS_COOKIE}=; path=/; max-age=0; samesite=lax`;
+      loginAs === 'learner'
+        ? `${LOGIN_AS_COOKIE}=; path=/; max-age=0; samesite=lax`
+        : `${LOGIN_AS_COOKIE}=${loginAs}; path=/; max-age=3600; samesite=lax`;
     let error: AuthError | null;
     try {
       const supabase = createClient();

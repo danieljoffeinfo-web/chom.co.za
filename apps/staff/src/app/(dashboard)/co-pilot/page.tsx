@@ -1,4 +1,4 @@
-import { ComingSoon } from '../coming-soon';
+import { ComingSoon } from '@chom/dashboard';
 
 export const metadata = { title: 'Co-pilot · Chom Staff' };
 

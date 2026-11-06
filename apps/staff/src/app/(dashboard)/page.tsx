@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Icon } from '@/components/icon';
+import { Icon } from '@chom/dashboard';
 import { currentStaff } from '@/lib/current-staff';
 
 import { ClassCards, NoClasses } from './class-cards';

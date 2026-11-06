@@ -1,0 +1,393 @@
+/*
+ * The few additions the parent dashboard needs on top of the shared dashboard styles
+ * (@chom/dashboard). Keep this short: shared looks belong in the package. Colours only
+ * through the prototype names (--ink, --card, ...) that map to @chom/tokens.
+ */
+
+/* ---------- Bottom dock: the five sections on phones (spec §4) ---------- */
+
+/* On wide screens the sidebar has the sections; the dock keeps only the avatar. */
+.parent-tab {
+  display: none;
+}
+.quick-button.active {
+  background: var(--soft);
+}
+@media (max-width: 900px) {
+  /* Every section is in the dock, so phones don't need the slide-in sidebar. */
+  .parent-sidebar {
+    display: none;
+  }
+  .parent-dock {
+    gap: 2px;
+    padding: 5px;
+    max-width: calc(100vw - 24px);
+  }
+  .quick-button.parent-tab {
+    display: grid;
+    width: 58px;
+    height: 50px;
+    gap: 2px;
+    align-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .quick-button.parent-tab > .icon {
+    width: 18px;
+    height: 18px;
+    margin: 0 auto;
+  }
+  .quick-button.parent-tab.active {
+    background: var(--ink);
+    color: var(--card);
+  }
+}
+@media (max-width: 380px) {
+  .quick-button.parent-tab {
+    width: 46px;
+  }
+  .quick-button.parent-tab span {
+    display: none;
+  }
+}
+
+/* ---------- Sibling switcher, top of every page ---------- */
+
+.child-switch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.child-chip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 6px 16px 6px 6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  text-decoration: none;
+}
+.child-chip:hover {
+  border-color: var(--ink);
+}
+.child-chip .avatar {
+  width: 34px;
+  height: 34px;
+  font-size: 11px;
+}
+.child-chip strong,
+.child-chip small {
+  display: block;
+  line-height: 1.2;
+}
+.child-chip strong {
+  font-size: 14px;
+}
+.child-chip small {
+  font-size: 11px;
+  color: var(--muted);
+}
+.child-chip.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--card);
+}
+.child-chip.active small {
+  color: var(--card);
+  opacity: 0.75;
+}
+.child-chip.active .avatar {
+  background: var(--card);
+  color: var(--ink);
+}
+
+/* ---------- Home and Academics ---------- */
+
+.subject-rows {
+  margin: 0;
+  list-style: none;
+}
+.subject-rows .cd-avatar {
+  flex: none;
+}
+.focus-tag {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--soft);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  vertical-align: 2px;
+}
+.subject-figures {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+  text-align: right;
+}
+.subject-figures small {
+  font-size: 11px;
+  color: var(--muted);
+}
+/* Status bands (spec §5.1). Only "none" exists until marks arrive. */
+.band {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.band.none {
+  background: var(--soft);
+  color: var(--muted);
+}
+.cd-of {
+  font-size: 0.45em;
+  color: var(--muted);
+}
+.study-facts dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+  margin: 0;
+}
+.study-facts dt {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.study-facts dd {
+  margin: 4px 0 0;
+  font-weight: 700;
+}
+.parent-coming,
+.account-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+.account-grid {
+  margin-top: 0;
+  align-items: start;
+}
+.parent-coming .content-card h2,
+.account-grid .content-card h2 {
+  margin-top: 0;
+}
+
+/* ---------- Account ---------- */
+
+.linked-children {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+.linked-children li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.linked-children strong,
+.linked-children small {
+  display: block;
+}
+.linked-children small {
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.switch-row strong,
+.switch-row small {
+  display: block;
+}
+.switch-row small {
+  font-size: 12px;
+  color: var(--muted);
+}
+.form-note {
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.form-status {
+  margin-left: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.form-error {
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.text-button.danger {
+  color: var(--ink);
+  text-decoration: underline;
+}
+.withdraw-confirm {
+  flex-basis: 100%;
+  padding: 14px;
+  border-radius: 16px;
+  background: var(--soft);
+}
+.withdraw-confirm p {
+  margin: 0;
+  font-size: 13px;
+}
+.withdraw-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.withdraw-actions .button,
+.account-grid .content-card .withdraw-actions .button {
+  margin-top: 12px;
+}
+
+/* ---------- Consent screen (spec §3), outside the dashboard frame ---------- */
+
+.consent-page {
+  min-height: 100vh;
+  padding: 40px 16px 64px;
+}
+.consent-card {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 36px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--card);
+}
+.consent-card h1 {
+  margin: 10px 0 0;
+  font-size: 40px;
+  line-height: 1.05;
+}
+.consent-card h2 {
+  margin: 28px 0 0;
+  font-size: 17px;
+}
+.consent-lede {
+  margin-top: 12px;
+  font-size: 16px;
+  color: var(--muted);
+}
+.consent-children {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+}
+.consent-children li {
+  padding: 10px 16px;
+  border-radius: 16px;
+  background: var(--soft);
+}
+.consent-children strong,
+.consent-children small {
+  display: block;
+}
+.consent-children small {
+  font-size: 12px;
+  color: var(--muted);
+}
+.consent-points {
+  margin: 10px 0 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 6px;
+}
+.consent-points.yes li::marker {
+  content: '✓  ';
+}
+.consent-points.no li::marker {
+  content: '×  ';
+}
+.consent-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0 28px;
+}
+.consent-why,
+.consent-rights,
+.consent-version {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.consent-rights {
+  margin-top: 28px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--bg);
+}
+.consent-channels {
+  margin: 28px 0 0;
+  padding: 0;
+  border: 0;
+}
+.consent-channels legend {
+  font-size: 17px;
+  font-weight: 800;
+}
+.consent-channels > p {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.consent-agree {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 24px;
+  padding: 16px;
+  border: 1px solid var(--ink);
+  border-radius: 16px;
+  font-weight: 600;
+}
+.consent-agree input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  accent-color: var(--ink);
+}
+.consent-actions {
+  margin-top: 20px;
+}
+.consent-actions .button {
+  min-height: 48px;
+  border-radius: 999px;
+  width: 100%;
+  font-weight: 800;
+}
+.consent-signout {
+  margin-top: 14px;
+  text-align: center;
+}
+.consent-version {
+  text-align: center;
+}
+@media (max-width: 520px) {
+  .consent-page {
+    padding: 16px 12px 40px;
+  }
+  .consent-card {
+    padding: 24px 18px;
+  }
+  .consent-card h1 {
+    font-size: 32px;
+  }
+}

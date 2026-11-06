@@ -1,0 +1,28 @@
+{
+  "name": "@chom/dashboard",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./dashboard.css": "./dashboard.css",
+    "./app.css": "./app.css"
+  },
+  "scripts": {
+    "sprite": "node scripts/sprite.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "node scripts/sprite.mjs --check",
+    "test": "node scripts/sprite.mjs --check"
+  },
+  "peerDependencies": {
+    "react": "19.3.0"
+  },
+  "devDependencies": {
+    "@chom/tsconfig": "workspace:*",
+    "@types/react": "~19.3.0",
+    "react": "19.3.0",
+    "typescript": "~6.0.3"
+  }
+}
