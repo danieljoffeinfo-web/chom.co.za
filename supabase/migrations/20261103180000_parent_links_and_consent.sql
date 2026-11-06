@@ -165,6 +165,10 @@ create trigger parent_consents_audit after insert or update or delete on public.
 -- and moving the row would lift it from them (and could let a link at another school
 -- work again). Unblock it on purpose first, or add a new link.
 --
+-- A link marked consent_withdrawn or learner_revoked (by the parent, the learner or an
+-- admin) also withdraws its standing consent, so setting it back to active later
+-- can't restore access without the parent consenting again.
+--
 -- security definer, because admins can't write consents themselves.
 create function private.guardianship_reset_consent()
 returns trigger
@@ -187,6 +191,11 @@ begin
       new.status := 'invited';
       new.activated_at := null;
     end if;
+  elsif new.status in ('consent_withdrawn', 'learner_revoked')
+        and new.status is distinct from old.status then
+    update public.parent_consents
+    set withdrawn_at = now()
+    where guardianship_id = old.id and withdrawn_at is null;
   end if;
   return new;
 end;
@@ -195,7 +204,7 @@ $$;
 revoke execute on function private.guardianship_reset_consent() from public;
 
 create trigger guardianships_reset_consent
-  before update of parent_profile_id, student_profile_id, school_id on public.guardianships
+  before update of parent_profile_id, student_profile_id, school_id, status on public.guardianships
   for each row execute function private.guardianship_reset_consent();
 
 -- Which channels a parent agreed to hear from Chom on, chosen on the consent screen.

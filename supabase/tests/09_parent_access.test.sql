@@ -16,7 +16,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(64);
+select plan(67);
 
 -- Amara has onboarded, so there is study data to hide or show.
 insert into public.student_study_profiles
@@ -399,6 +399,37 @@ select is(
   0,
   'Moved school: her consent is withdrawn'
 );
+
+-- An admin marking a link consent_withdrawn withdraws the consent too, so setting it
+-- back to active doesn't bring access back. Liam's father (08) consents first.
+select set_config('request.jwt.claims', '{"sub":"30000000-0000-4000-8000-000000000008","role":"authenticated"}', true);
+set local role authenticated;
+select public.record_parent_consent('2026-12-v2', false, true, false);
+select is((select count(*)::int from public.profiles where id = '40000000-0000-4000-8000-000000000005'), 1, 'Liam''s father sees Liam after consenting');
+reset role;
+
+select set_config('request.jwt.claims', '{"sub":"30000000-0000-4000-8000-000000000001","role":"authenticated"}', true);
+set local role authenticated;
+update public.guardianships set status = 'consent_withdrawn'
+where parent_profile_id = '40000000-0000-4000-8000-000000000008'
+  and student_profile_id = '40000000-0000-4000-8000-000000000005';
+update public.guardianships set status = 'active'
+where parent_profile_id = '40000000-0000-4000-8000-000000000008'
+  and student_profile_id = '40000000-0000-4000-8000-000000000005';
+reset role;
+
+select is(
+  (select count(*)::int from public.parent_consents
+   where parent_profile_id = '40000000-0000-4000-8000-000000000008'
+     and student_profile_id = '40000000-0000-4000-8000-000000000005' and withdrawn_at is null),
+  0,
+  'Marked withdrawn by an admin: the consent is withdrawn'
+);
+
+select set_config('request.jwt.claims', '{"sub":"30000000-0000-4000-8000-000000000008","role":"authenticated"}', true);
+set local role authenticated;
+select is((select count(*)::int from public.profiles where id = '40000000-0000-4000-8000-000000000005'), 0, 'Set back to active: he needs to consent again');
+reset role;
 
 select * from finish();
 rollback;
