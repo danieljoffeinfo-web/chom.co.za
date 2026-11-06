@@ -5,3 +5,4 @@ Short documents that record a significant technical decision: what was decided, 
 | # | Decision | Status |
 |---|---|---|
 | [0001](0001-database-platform.md) | Managed Supabase (PostgreSQL) as the database and backend platform | Proposed |
+| [0002](0002-request-and-payload-budget.md) | One read per screen, and no extra origins | Accepted |

@@ -69,7 +69,7 @@ export const dark: ColorScheme = {
 export const colors = { light, dark } as const;
 
 export const fontFamily = {
-  /** Web: load from Google Fonts. Mobile: @expo-google-fonts/inter-tight. */
+  /** Web self-hosts Inter Tight. Mobile loads four weights from @expo-google-fonts/inter-tight. */
   sans: '"Inter Tight", Inter, system-ui, sans-serif',
 } as const;
 
