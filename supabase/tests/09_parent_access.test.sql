@@ -16,7 +16,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(67);
+select plan(70);
 
 -- Amara has onboarded, so there is study data to hide or show.
 insert into public.student_study_profiles
@@ -149,6 +149,29 @@ select is(
   '["Amara Nwosu"]'::jsonb,
   'Blocked at one school: Kai is not on her dashboard'
 );
+reset role;
+
+-- Withdrawn consent and a learner's revocation at Demo High work the same way.
+update public.guardianships set status = 'consent_withdrawn'
+where school_id = '10000000-0000-4000-8000-000000000001' and student_profile_id = '40000000-0000-4000-8000-000000000014';
+select set_config('request.jwt.claims', '{"sub":"30000000-0000-4000-8000-000000000007","role":"authenticated"}', true);
+set local role authenticated;
+select is((select count(*)::int from public.profiles where id = '40000000-0000-4000-8000-000000000014'), 0, 'Withdrawn at one school: cannot see Kai through the other school''s link');
+reset role;
+
+update public.guardianships set status = 'learner_revoked'
+where school_id = '10000000-0000-4000-8000-000000000001' and student_profile_id = '40000000-0000-4000-8000-000000000014';
+select set_config('request.jwt.claims', '{"sub":"30000000-0000-4000-8000-000000000007","role":"authenticated"}', true);
+set local role authenticated;
+select is((select count(*)::int from public.profiles where id = '40000000-0000-4000-8000-000000000014'), 0, 'Revoked by the learner at one school: cannot see Kai either');
+reset role;
+
+-- An invited link elsewhere doesn't hide him: her Other College consent still counts.
+update public.guardianships set status = 'invited'
+where school_id = '10000000-0000-4000-8000-000000000001' and student_profile_id = '40000000-0000-4000-8000-000000000014';
+select set_config('request.jwt.claims', '{"sub":"30000000-0000-4000-8000-000000000007","role":"authenticated"}', true);
+set local role authenticated;
+select is((select count(*)::int from public.profiles where id = '40000000-0000-4000-8000-000000000014'), 1, 'Only invited at one school: she still sees Kai through her consented link');
 reset role;
 
 delete from public.guardianships

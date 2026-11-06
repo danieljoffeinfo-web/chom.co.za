@@ -236,7 +236,10 @@ create trigger parent_notification_channels_set_updated_at
 --
 -- A block applies to the child at every school: a court order is about the person,
 -- not the campus, so a parent blocked at one school can't see the child's records
--- through a link at another.
+-- through a link at another. Withdrawn consent and a learner's revocation work the
+-- same way: they are about the child, so while any link to them is in one of those
+-- states the parent sees the child nowhere, until they consent again (or the learner
+-- lifts the revocation).
 create or replace function private.is_parent_of(p_student_profile_id uuid)
 returns boolean
 language sql
@@ -267,7 +270,7 @@ as $$
     from public.guardianships b
     where b.student_profile_id = p_student_profile_id
       and b.parent_profile_id = (select private.current_profile_id())
-      and b.status = 'blocked'
+      and b.status in ('blocked', 'consent_withdrawn', 'learner_revoked')
   )
 $$;
 
