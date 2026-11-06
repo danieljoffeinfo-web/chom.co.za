@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { Message } from '@/components/message';
 import { parseLoginAs } from '@/lib/login-intent';
+import { type GuardianLink, loadGuardianLinks } from '@/lib/parent/parent';
 import { loadStudentContext } from '@/lib/student';
 import { createClient } from '@/lib/supabase/server';
 
@@ -28,23 +29,24 @@ const NOT_LINKED: Record<string, { title: string; body: string }> = {
   },
 };
 
+const SOMETHING_WENT_WRONG = (
+  <Message title="Something went wrong" signOut>
+    We couldn’t finish signing you in. Please try again in a moment.
+  </Message>
+);
+
 /**
  * After every sign-in: link the login to the school roster, then send each person to
- * their dashboard. Teacher login → the staff dashboard. Otherwise students go to
- * onboarding (first time) or their dashboard, and staff to the staff dashboard.
+ * their dashboard. Teacher login → the staff dashboard; Parent login → the parent
+ * dashboard. Otherwise students go to onboarding (first time) or their dashboard, then
+ * staff to the staff dashboard, then parents to the parent dashboard.
  */
 export default async function Start({ searchParams }: { searchParams: Promise<{ as?: string }> }) {
   const loginAs = parseLoginAs((await searchParams).as);
   const supabase = await createClient();
 
   const { data: result, error } = await supabase.rpc('link_my_account');
-  if (error) {
-    return (
-      <Message title="Something went wrong" signOut>
-        We couldn’t finish signing you in. Please try again in a moment.
-      </Message>
-    );
-  }
+  if (error) return SOMETHING_WENT_WRONG;
 
   const problem = NOT_LINKED[result];
   if (problem) {
@@ -55,16 +57,28 @@ export default async function Start({ searchParams }: { searchParams: Promise<{ 
     );
   }
 
-  // Staff go to the staff dashboard on staff.chom.co.za, which shares this sign-in.
-  const { data: staff, error: staffError } = await supabase.rpc('my_staff_dashboard');
-  if (staffError) {
-    // Never tell a teacher they aren't staff because the lookup failed.
+  // Parent login: the parent dashboard asks for consent first if a child still needs
+  // it. A failed lookup never tells a parent they aren't one.
+  if (loginAs === 'parent') {
+    let links: GuardianLink[];
+    try {
+      links = await loadGuardianLinks(supabase);
+    } catch {
+      return SOMETHING_WENT_WRONG;
+    }
+    if (links.length) redirect('/parent');
     return (
-      <Message title="Something went wrong" signOut>
-        We couldn’t finish signing you in. Please try again in a moment.
+      <Message title="This isn’t a parent account" signOut>
+        Your email isn’t linked to a learner at your child’s school. Please check you used the email
+        you gave the school, or ask the school to add you.
       </Message>
     );
   }
+
+  // Staff go to the staff dashboard on staff.chom.co.za, which shares this sign-in.
+  const { data: staff, error: staffError } = await supabase.rpc('my_staff_dashboard');
+  // Never tell a teacher they aren't staff because the lookup failed.
+  if (staffError) return SOMETHING_WENT_WRONG;
   const isStaff = Boolean(staff);
   const staffOrigin = staffOriginFor((await headers()).get('host'));
   const staffDestination = (
@@ -82,7 +96,8 @@ export default async function Start({ searchParams }: { searchParams: Promise<{ 
     return (
       <Message title="This isn’t a staff account" signOut>
         Your email isn’t on your school’s staff list. If you’re a student or parent, sign out and
-        use the normal Sign in. If you teach at the school, ask your school admin to add you.
+        use the normal Sign in or the Parent login. If you teach at the school, ask your school
+        admin to add you.
       </Message>
     );
   }
@@ -96,9 +111,18 @@ export default async function Start({ searchParams }: { searchParams: Promise<{ 
     return staffDestination;
   }
 
+  let links: GuardianLink[];
+  try {
+    links = await loadGuardianLinks(supabase);
+  } catch {
+    return SOMETHING_WENT_WRONG;
+  }
+  if (links.length) redirect('/parent');
+
   return (
     <Message title="You’re signed in" signOut>
-      Chom is open to students and teachers for now. Parent accounts are coming soon.
+      We couldn’t find a student, staff or parent account for this email at a Chom school. Please
+      speak to your school.
     </Message>
   );
 }

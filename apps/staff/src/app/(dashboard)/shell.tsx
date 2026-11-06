@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { type ReactNode, useEffect, useState } from 'react';
 
-import { Icon, type IconName } from '@/components/icon';
+import { Icon, type IconName } from '@chom/dashboard';
 
 type NavItem = { href: string; label: string; icon: IconName };
 

@@ -1,5 +1,6 @@
 import '@chom/tokens/tokens.css';
-import './dashboard.css';
+import '@chom/dashboard/dashboard.css';
+import '@chom/dashboard/app.css';
 import './staff.css';
 import type { Metadata, Viewport } from 'next';
 import { Inter_Tight } from 'next/font/google';

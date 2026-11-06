@@ -24,6 +24,9 @@ export default async function Landing() {
         <Link className={styles.secondary} href="/sign-in?as=staff">
           Teacher login
         </Link>
+        <Link className={styles.secondary} href="/sign-in?as=parent">
+          Parent login
+        </Link>
       </div>
     </main>
   );
