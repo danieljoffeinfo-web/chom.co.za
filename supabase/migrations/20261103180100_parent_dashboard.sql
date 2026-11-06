@@ -7,7 +7,8 @@
 -- security decides what comes back. It adds no access. Each link must also be active,
 -- held through an active parent membership, and consented to the current version
 -- itself: a parent who can see the child another way (as their teacher, say) still
--- doesn't get the parent dashboard for that link without consent.
+-- doesn't get the parent dashboard for that link without consent, nor while they are
+-- blocked from the child at another school.
 --
 -- Children are returned across schools (a parent with children at two campuses gets
 -- both). Returns null if the signed-in person has no profile.
@@ -30,6 +31,8 @@ as $$
     join me on g.parent_profile_id = me.id
     where g.status = 'active'
       and private.has_role(g.school_id, 'parent')
+      -- Also no block on this child at any school.
+      and private.is_parent_of(g.student_profile_id)
       and exists (
         select 1 from public.parent_consents pc
         where pc.guardianship_id = g.id

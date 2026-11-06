@@ -7,7 +7,8 @@
 -- Plus: withdrawing consent, a new consent version, and who may change links.
 -- Also: a block applies to the child at every school, only admins can read why a link
 -- was blocked, moving a link voids its consent, the dashboard checks consent per link
--- even for a parent who also teaches the child, and consent is never recorded twice.
+-- even for a parent who also teaches the child, consent is never recorded twice, and
+-- a blocked link can't be moved.
 --
 -- Seed: Ngozi (07) is Amara's mother at Demo High and Kai's guardian at Other College.
 -- Lerato (17) is Kai's mother. Every seeded parent has consented to 2026-11-draft-1.
@@ -15,7 +16,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(56);
+select plan(62);
 
 -- Amara has onboarded, so there is study data to hide or show.
 insert into public.student_study_profiles
@@ -220,6 +221,28 @@ select is(
   'Blocked: the dashboard has only Kai'
 );
 select is(public.record_parent_consent('2026-11-draft-1', true, true, false), 1, 'Consenting again does not unblock Amara');
+reset role;
+
+select set_config('request.jwt.claims', '{"sub":"30000000-0000-4000-8000-000000000001","role":"authenticated"}', true);
+set local role authenticated;
+select is(
+  (select status::text from public.guardianships
+   where parent_profile_id = '40000000-0000-4000-8000-000000000007'
+     and student_profile_id = '40000000-0000-4000-8000-000000000004'),
+  'blocked',
+  'After consenting again, the admin still sees Amara''s link as blocked'
+);
+select throws_ok(
+  $$ update public.guardianships set parent_profile_id = '40000000-0000-4000-8000-000000000008'
+     where parent_profile_id = '40000000-0000-4000-8000-000000000007'
+       and student_profile_id = '40000000-0000-4000-8000-000000000004' $$,
+  '22023', 'A blocked link cannot be moved to another parent, child or school',
+  'A blocked link cannot be moved to another parent'
+);
+reset role;
+
+select set_config('request.jwt.claims', '{"sub":"30000000-0000-4000-8000-000000000007","role":"authenticated"}', true);
+set local role authenticated;
 
 -- ---------------------------------------------------------------------------------
 -- Withdrawing consent, and a new consent version
@@ -238,13 +261,23 @@ reset role;
 select set_config('request.jwt.claims', '{"sub":"30000000-0000-4000-8000-000000000017","role":"authenticated"}', true);
 set local role authenticated;
 select is((select count(*)::int from public.enrolments), 1, 'Lerato, Kai''s other parent, still sees him');
+reset role;
+
+-- Ngozi tries to withdraw Lerato's active link (its id read here, outside RLS).
+select set_config('test.lerato_link',
+  (select id::text from public.guardianships where parent_profile_id = '40000000-0000-4000-8000-000000000017'), true);
+select set_config('request.jwt.claims', '{"sub":"30000000-0000-4000-8000-000000000007","role":"authenticated"}', true);
+set local role authenticated;
 select throws_ok(
-  $$ select public.withdraw_parent_consent(
-       (select id from public.guardianships where parent_profile_id = '40000000-0000-4000-8000-000000000007' limit 1)) $$,
+  $$ select public.withdraw_parent_consent(current_setting('test.lerato_link')::uuid) $$,
   '22023', 'No active link to withdraw',
   'A parent cannot withdraw another parent''s consent'
 );
 reset role;
+select is(
+  (select status::text from public.guardianships where parent_profile_id = '40000000-0000-4000-8000-000000000017'), 'active',
+  'Lerato''s link is still active'
+);
 
 -- A new version of the consent text: everyone must consent again.
 insert into public.parent_consent_versions (version, published_at) values ('2026-12-v2', now() - interval '1 minute');
@@ -282,6 +315,26 @@ select is(
 );
 reset role;
 
+-- If Sizwe were blocked from Zoe at another school, teaching her must not bring her
+-- back onto his parent dashboard.
+insert into public.school_memberships (school_id, profile_id, role, email) values
+  ('10000000-0000-4000-8000-000000000002', '40000000-0000-4000-8000-000000000006', 'student', 'zoe.dlamini@other-college.test'),
+  ('10000000-0000-4000-8000-000000000002', '40000000-0000-4000-8000-000000000002', 'parent', 'sizwe.dlamini@parents.test');
+insert into public.guardianships (school_id, parent_profile_id, student_profile_id, relationship, status, blocked_reason) values
+  ('10000000-0000-4000-8000-000000000002', '40000000-0000-4000-8000-000000000002', '40000000-0000-4000-8000-000000000006', 'father', 'blocked', 'Court order 2026/300');
+
+select set_config('request.jwt.claims', '{"sub":"30000000-0000-4000-8000-000000000002","role":"authenticated"}', true);
+set local role authenticated;
+select is((select count(*)::int from public.profiles where id = '40000000-0000-4000-8000-000000000006'), 1, 'Blocked elsewhere: he still sees Zoe as her teacher');
+select is(jsonb_array_length(public.my_parent_dashboard() -> 'children'), 0, 'Blocked elsewhere: Zoe is not on his parent dashboard');
+reset role;
+
+delete from public.guardianships
+where school_id = '10000000-0000-4000-8000-000000000002' and student_profile_id = '40000000-0000-4000-8000-000000000006';
+delete from public.school_memberships
+where school_id = '10000000-0000-4000-8000-000000000002'
+  and profile_id in ('40000000-0000-4000-8000-000000000006', '40000000-0000-4000-8000-000000000002');
+
 -- ---------------------------------------------------------------------------------
 -- Moving a link to a different parent voids its consent
 -- ---------------------------------------------------------------------------------
@@ -312,6 +365,17 @@ select set_config('request.jwt.claims', '{"sub":"30000000-0000-4000-8000-0000000
 set local role authenticated;
 select is((select count(*)::int from public.profiles where id = '40000000-0000-4000-8000-000000000006'), 0, 'Moved link: the new parent sees nothing until he consents');
 reset role;
+
+-- Moving a link to another school voids its consent too.
+insert into public.school_memberships (school_id, profile_id, role, email) values
+  ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000014', 'student', 'kai.naidoo@demo-high.test'),
+  ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000017', 'parent', 'lerato.khumalo@parents.test');
+update public.guardianships set school_id = '10000000-0000-4000-8000-000000000001'
+where parent_profile_id = '40000000-0000-4000-8000-000000000017';
+select is(
+  (select status::text from public.guardianships where parent_profile_id = '40000000-0000-4000-8000-000000000017'), 'invited',
+  'Moved school: Lerato''s link goes back to invited'
+);
 
 select * from finish();
 rollback;

@@ -149,11 +149,17 @@ create index parent_consents_version_idx on public.parent_consents (consent_vers
 create trigger parent_consents_audit after insert or update or delete on public.parent_consents
   for each row execute function private.audit_row_change();
 
--- Moving a link to a different parent or child (a school admin correcting the roster)
--- voids its consent: whoever consented is no longer the person linked, or consented
--- for a different child. The consent is marked withdrawn and the link goes back to
--- invited, so the new pair must consent before anything is visible. Blocked stays
--- blocked. security definer, because admins can't write consents themselves.
+-- Moving a link to a different parent, child or school (a school admin correcting the
+-- roster) voids its consent: whoever consented is no longer the person linked, or
+-- consented for a different child or school. The consent is marked withdrawn and the
+-- link goes back to invited, so the new link must be consented before anything is
+-- visible.
+--
+-- A blocked link can't be moved at all. The block belongs to that parent and child,
+-- and moving the row would lift it from them (and could let a link at another school
+-- work again). Unblock it on purpose first, or add a new link.
+--
+-- security definer, because admins can't write consents themselves.
 create function private.guardianship_reset_consent()
 returns trigger
 language plpgsql
@@ -162,7 +168,12 @@ set search_path = ''
 as $$
 begin
   if new.parent_profile_id is distinct from old.parent_profile_id
-     or new.student_profile_id is distinct from old.student_profile_id then
+     or new.student_profile_id is distinct from old.student_profile_id
+     or new.school_id is distinct from old.school_id then
+    if old.status = 'blocked' then
+      raise exception 'A blocked link cannot be moved to another parent, child or school'
+        using errcode = '22023';
+    end if;
     update public.parent_consents
     set withdrawn_at = now()
     where guardianship_id = old.id and withdrawn_at is null;
@@ -178,7 +189,7 @@ $$;
 revoke execute on function private.guardianship_reset_consent() from public;
 
 create trigger guardianships_reset_consent
-  before update of parent_profile_id, student_profile_id on public.guardianships
+  before update of parent_profile_id, student_profile_id, school_id on public.guardianships
   for each row execute function private.guardianship_reset_consent();
 
 -- Which channels a parent agreed to hear from Chom on, chosen on the consent screen.
