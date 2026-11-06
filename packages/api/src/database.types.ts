@@ -411,38 +411,56 @@ export type Database = {
       };
       guardianships: {
         Row: {
+          activated_at: string | null;
+          blocked_at: string | null;
+          blocked_reason: string | null;
           created_at: string;
           ednana_id: string | null;
           id: string;
+          invited_at: string;
+          is_primary: boolean;
           parent_profile_id: string;
           parent_role: Database['public']['Enums']['membership_role'];
-          relationship: string | null;
+          relationship: Database['public']['Enums']['guardian_relationship'];
           school_id: string;
+          status: Database['public']['Enums']['guardianship_status'];
           student_profile_id: string;
           student_role: Database['public']['Enums']['membership_role'];
           updated_at: string;
         };
         ComputedFields: never;
         Insert: {
+          activated_at?: string | null;
+          blocked_at?: string | null;
+          blocked_reason?: string | null;
           created_at?: string;
           ednana_id?: string | null;
           id?: string;
+          invited_at?: string;
+          is_primary?: boolean;
           parent_profile_id: string;
           parent_role?: Database['public']['Enums']['membership_role'];
-          relationship?: string | null;
+          relationship?: Database['public']['Enums']['guardian_relationship'];
           school_id: string;
+          status?: Database['public']['Enums']['guardianship_status'];
           student_profile_id: string;
           student_role?: Database['public']['Enums']['membership_role'];
           updated_at?: string;
         };
         Update: {
+          activated_at?: string | null;
+          blocked_at?: string | null;
+          blocked_reason?: string | null;
           created_at?: string;
           ednana_id?: string | null;
           id?: string;
+          invited_at?: string;
+          is_primary?: boolean;
           parent_profile_id?: string;
           parent_role?: Database['public']['Enums']['membership_role'];
-          relationship?: string | null;
+          relationship?: Database['public']['Enums']['guardian_relationship'];
           school_id?: string;
+          status?: Database['public']['Enums']['guardianship_status'];
           student_profile_id?: string;
           student_role?: Database['public']['Enums']['membership_role'];
           updated_at?: string;
@@ -461,6 +479,133 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'school_memberships';
             referencedColumns: ['school_id', 'profile_id', 'role'];
+          },
+        ];
+      };
+      parent_consent_versions: {
+        Row: {
+          created_at: string;
+          published_at: string;
+          version: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          published_at?: string;
+          version: string;
+        };
+        Update: {
+          created_at?: string;
+          published_at?: string;
+          version?: string;
+        };
+        Relationships: [];
+      };
+      parent_consents: {
+        Row: {
+          consent_version: string;
+          created_at: string;
+          granted_at: string;
+          guardianship_id: string;
+          id: string;
+          ip: unknown;
+          parent_profile_id: string;
+          school_id: string;
+          student_profile_id: string;
+          user_agent: string | null;
+          withdrawn_at: string | null;
+        };
+        ComputedFields: never;
+        Insert: {
+          consent_version: string;
+          created_at?: string;
+          granted_at?: string;
+          guardianship_id: string;
+          id?: string;
+          ip?: unknown;
+          parent_profile_id: string;
+          school_id: string;
+          student_profile_id: string;
+          user_agent?: string | null;
+          withdrawn_at?: string | null;
+        };
+        Update: {
+          consent_version?: string;
+          created_at?: string;
+          granted_at?: string;
+          guardianship_id?: string;
+          id?: string;
+          ip?: unknown;
+          parent_profile_id?: string;
+          school_id?: string;
+          student_profile_id?: string;
+          user_agent?: string | null;
+          withdrawn_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'parent_consents_consent_version_fkey';
+            columns: ['consent_version'];
+            isOneToOne: false;
+            referencedRelation: 'parent_consent_versions';
+            referencedColumns: ['version'];
+          },
+          {
+            foreignKeyName: 'parent_consents_guardianship_id_fkey';
+            columns: ['guardianship_id'];
+            isOneToOne: false;
+            referencedRelation: 'guardianships';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'parent_consents_parent_profile_id_fkey';
+            columns: ['parent_profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'parent_consents_student_profile_id_fkey';
+            columns: ['student_profile_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      parent_notification_channels: {
+        Row: {
+          created_at: string;
+          email: boolean;
+          profile_id: string;
+          push: boolean;
+          updated_at: string;
+          whatsapp: boolean;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          email?: boolean;
+          profile_id: string;
+          push?: boolean;
+          updated_at?: string;
+          whatsapp?: boolean;
+        };
+        Update: {
+          created_at?: string;
+          email?: boolean;
+          profile_id?: string;
+          push?: boolean;
+          updated_at?: string;
+          whatsapp?: boolean;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'parent_notification_channels_profile_id_fkey';
+            columns: ['profile_id'];
+            isOneToOne: true;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
           },
         ];
       };
@@ -871,14 +1016,45 @@ export type Database = {
     };
     Functions: {
       link_my_account: { Args: Record<PropertyKey, never>; Returns: string };
+      my_guardian_links: {
+        Args: Record<PropertyKey, never>;
+        Returns: {
+          consented: boolean;
+          grade: number;
+          guardianship_id: string;
+          is_primary: boolean;
+          relationship: Database['public']['Enums']['guardian_relationship'];
+          school_id: string;
+          school_name: string;
+          status: Database['public']['Enums']['guardianship_status'];
+          student_name: string;
+          student_profile_id: string;
+        }[];
+      };
+      my_parent_dashboard: { Args: Record<PropertyKey, never>; Returns: Json };
       my_staff_dashboard: { Args: Record<PropertyKey, never>; Returns: Json };
+      record_parent_consent: {
+        Args: {
+          p_email: boolean;
+          p_ip?: unknown;
+          p_push: boolean;
+          p_user_agent?: string;
+          p_version: string;
+          p_whatsapp: boolean;
+        };
+        Returns: number;
+      };
       resolve_curriculum_subject: {
         Args: { p_curriculum_code: string; p_grade: number; p_name: string };
         Returns: string;
       };
+      withdraw_parent_consent: { Args: { p_guardianship_id: string }; Returns: undefined };
     };
     Enums: {
       class_kind: 'register' | 'subject_group';
+      guardian_relationship: 'mother' | 'father' | 'guardian' | 'other';
+      guardianship_status:
+        'invited' | 'active' | 'blocked' | 'consent_withdrawn' | 'learner_revoked';
       language_level: 'home' | 'first_additional' | 'second_additional';
       membership_role: 'student' | 'teacher' | 'parent' | 'school_admin';
       membership_status: 'active' | 'inactive';
@@ -1001,6 +1177,8 @@ export const Constants = {
   public: {
     Enums: {
       class_kind: ['register', 'subject_group'],
+      guardian_relationship: ['mother', 'father', 'guardian', 'other'],
+      guardianship_status: ['invited', 'active', 'blocked', 'consent_withdrawn', 'learner_revoked'],
       language_level: ['home', 'first_additional', 'second_additional'],
       membership_role: ['student', 'teacher', 'parent', 'school_admin'],
       membership_status: ['active', 'inactive'],
