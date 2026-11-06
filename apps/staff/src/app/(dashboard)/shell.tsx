@@ -55,6 +55,8 @@ export function Shell({
     return () => window.removeEventListener('keydown', onKey);
   }, [menuOpen]);
 
+  // prefetch: load every tab's page in the background as soon as the dashboard opens,
+  // so the first click on a tab is instant too.
   const navLinks = (items: NavItem[]) =>
     items.map((item) => {
       const active = isActive(path, item.href);
@@ -62,6 +64,7 @@ export function Shell({
         <Link
           key={item.href}
           href={item.href}
+          prefetch
           className={active ? 'active' : undefined}
           aria-current={active ? 'page' : undefined}
         >
