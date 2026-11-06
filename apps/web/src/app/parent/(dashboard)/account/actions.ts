@@ -20,7 +20,9 @@ export type ChannelsState = { saved: boolean; error: string | null };
 
 /** Saves which channels Chom may use to reach this parent. */
 export async function saveChannels(_: ChannelsState, form: FormData): Promise<ChannelsState> {
-  const [parent, links] = await Promise.all([currentParent(), currentLinks()]);
+  const loaded = await Promise.all([currentParent(), currentLinks()]).catch(() => null);
+  if (!loaded) return { saved: false, error: 'We couldn’t save that. Please try again.' };
+  const [parent, links] = loaded;
   if (!parent) return { saved: false, error: 'Please sign in again.' };
   // Only someone linked to a child as a parent has channels to save.
   if (!links.length) return { saved: false, error: 'This isn’t a parent account.' };
