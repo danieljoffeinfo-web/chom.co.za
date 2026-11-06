@@ -122,12 +122,24 @@ insert into public.school_memberships (school_id, profile_id, role, email) value
   ('10000000-0000-4000-8000-000000000002', '40000000-0000-4000-8000-000000000017', 'parent', 'lerato.khumalo@parents.test'),
   ('10000000-0000-4000-8000-000000000002', '40000000-0000-4000-8000-000000000007', 'parent', 'ngozi.nwosu@parents.test');
 
-insert into public.guardianships (school_id, parent_profile_id, student_profile_id, relationship) values
-  ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000007', '40000000-0000-4000-8000-000000000004', 'mother'),
-  ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000008', '40000000-0000-4000-8000-000000000005', 'father'),
-  ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000002', '40000000-0000-4000-8000-000000000006', 'father'),
-  ('10000000-0000-4000-8000-000000000002', '40000000-0000-4000-8000-000000000017', '40000000-0000-4000-8000-000000000014', 'mother'),
-  ('10000000-0000-4000-8000-000000000002', '40000000-0000-4000-8000-000000000007', '40000000-0000-4000-8000-000000000014', 'guardian');
+-- Every seeded parent has signed in and consented, so they see their children. Tests
+-- that need an invited, blocked or withdrawn parent change these inside the test.
+insert into public.guardianships (school_id, parent_profile_id, student_profile_id, relationship, is_primary, status, activated_at) values
+  ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000007', '40000000-0000-4000-8000-000000000004', 'mother', true, 'active', now()),
+  ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000008', '40000000-0000-4000-8000-000000000005', 'father', true, 'active', now()),
+  ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000002', '40000000-0000-4000-8000-000000000006', 'father', true, 'active', now()),
+  ('10000000-0000-4000-8000-000000000002', '40000000-0000-4000-8000-000000000017', '40000000-0000-4000-8000-000000000014', 'mother', true, 'active', now()),
+  ('10000000-0000-4000-8000-000000000002', '40000000-0000-4000-8000-000000000007', '40000000-0000-4000-8000-000000000014', 'guardian', false, 'active', now());
+
+insert into public.parent_consents (school_id, guardianship_id, parent_profile_id, student_profile_id, consent_version)
+select g.school_id, g.id, g.parent_profile_id, g.student_profile_id, '2026-11-draft-1'
+from public.guardianships g;
+
+insert into public.parent_notification_channels (profile_id, whatsapp, email, push) values
+  ('40000000-0000-4000-8000-000000000002', false, true, false),
+  ('40000000-0000-4000-8000-000000000007', true, true, false),
+  ('40000000-0000-4000-8000-000000000008', false, true, false),
+  ('40000000-0000-4000-8000-000000000017', true, true, true);
 
 -- ---------------------------------------------------------------------------------
 -- Subjects, classes, teaching, enrolment
