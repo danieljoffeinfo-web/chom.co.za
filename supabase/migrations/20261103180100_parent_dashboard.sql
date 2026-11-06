@@ -4,8 +4,10 @@
 -- habits and goals the child set at onboarding.
 --
 -- security invoker: it runs as the signed-in parent, so every table's row-level
--- security decides what comes back. A child appears only once private.is_parent_of()
--- lets the parent read their profile, i.e. after consent. It adds no access.
+-- security decides what comes back. It adds no access. Each link must also be active,
+-- held through an active parent membership, and consented to the current version
+-- itself: a parent who can see the child another way (as their teacher, say) still
+-- doesn't get the parent dashboard for that link without consent.
 --
 -- Children are returned across schools (a parent with children at two campuses gets
 -- both). Returns null if the signed-in person has no profile.
@@ -27,6 +29,13 @@ as $$
     from public.guardianships g
     join me on g.parent_profile_id = me.id
     where g.status = 'active'
+      and private.has_role(g.school_id, 'parent')
+      and exists (
+        select 1 from public.parent_consents pc
+        where pc.guardianship_id = g.id
+          and pc.consent_version = (select private.current_parent_consent_version())
+          and pc.withdrawn_at is null
+      )
   ),
   children as (
     select
@@ -41,7 +50,7 @@ as $$
       y.id as year_id,
       y.label as year_label
     from links l
-    -- RLS: only children the parent may see (consented) come through this join.
+    -- RLS still applies to the child's profile (a block at another school hides it).
     join public.profiles child on child.id = l.student_profile_id
     join public.schools s on s.id = l.school_id
     left join public.academic_years y on y.school_id = l.school_id and y.is_current

@@ -137,7 +137,9 @@ create table public.parent_consents (
 comment on table public.parent_consents is
   'A parent''s POPIA consent (s35) to Chom processing one child''s information, for one consent version. Written only by record_parent_consent().';
 
-create index parent_consents_guardianship_idx
+-- At most one standing consent per link and version, even if the consent screen is
+-- submitted twice at once. Withdrawn rows stay for the audit trail.
+create unique index parent_consents_guardianship_idx
   on public.parent_consents (guardianship_id, consent_version) where withdrawn_at is null;
 create index parent_consents_school_id_idx on public.parent_consents (school_id);
 create index parent_consents_parent_idx on public.parent_consents (parent_profile_id);
@@ -146,6 +148,38 @@ create index parent_consents_version_idx on public.parent_consents (consent_vers
 
 create trigger parent_consents_audit after insert or update or delete on public.parent_consents
   for each row execute function private.audit_row_change();
+
+-- Moving a link to a different parent or child (a school admin correcting the roster)
+-- voids its consent: whoever consented is no longer the person linked, or consented
+-- for a different child. The consent is marked withdrawn and the link goes back to
+-- invited, so the new pair must consent before anything is visible. Blocked stays
+-- blocked. security definer, because admins can't write consents themselves.
+create function private.guardianship_reset_consent()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if new.parent_profile_id is distinct from old.parent_profile_id
+     or new.student_profile_id is distinct from old.student_profile_id then
+    update public.parent_consents
+    set withdrawn_at = now()
+    where guardianship_id = old.id and withdrawn_at is null;
+    if new.status in ('active', 'consent_withdrawn') then
+      new.status := 'invited';
+      new.activated_at := null;
+    end if;
+  end if;
+  return new;
+end;
+$$;
+
+revoke execute on function private.guardianship_reset_consent() from public;
+
+create trigger guardianships_reset_consent
+  before update of parent_profile_id, student_profile_id on public.guardianships
+  for each row execute function private.guardianship_reset_consent();
 
 -- Which channels a parent agreed to hear from Chom on, chosen on the consent screen.
 -- Per person (one parent, many schools), so no school_id. The tiers and quiet hours
@@ -171,7 +205,12 @@ create trigger parent_notification_channels_set_updated_at
 -- ---------------------------------------------------------------------------------
 
 -- Does the signed-in person (as an active parent) have an active, consented link to
--- this child? Replaces the version that only checked the link existed.
+-- this child, and no blocked link to them anywhere? Replaces the version that only
+-- checked the link existed.
+--
+-- A block applies to the child at every school: a court order is about the person,
+-- not the campus, so a parent blocked at one school can't see the child's records
+-- through a link at another.
 create or replace function private.is_parent_of(p_student_profile_id uuid)
 returns boolean
 language sql
@@ -195,6 +234,13 @@ as $$
       and g.parent_profile_id = (select private.current_profile_id())
       and g.status = 'active'
   )
+  and not exists (
+    select 1
+    from public.guardianships b
+    where b.student_profile_id = p_student_profile_id
+      and b.parent_profile_id = (select private.current_profile_id())
+      and b.status = 'blocked'
+  )
 $$;
 
 -- A blocked guardian must not even learn that the link exists, so they no longer see
@@ -216,6 +262,19 @@ create policy "Visible to admins, the parent, the child and their teachers"
     )
     or private.teaches_student(student_profile_id)
   );
+
+-- Why a link was blocked (for example a court order reference) is for school admins
+-- only. Students and teachers can still see that a link exists and its status, so
+-- staff know not to release a child to a blocked guardian, but not the reason: every
+-- column except blocked_reason is readable. Admin screens will read the reason
+-- through a function; until then it is visible with the service role only. A column
+-- added to guardianships later must be added to this list to be readable.
+revoke select on public.guardianships from authenticated;
+grant select (
+  id, school_id, parent_profile_id, student_profile_id, parent_role, student_role,
+  relationship, ednana_id, created_at, updated_at,
+  status, is_primary, invited_at, activated_at, blocked_at
+) on public.guardianships to authenticated;
 
 -- ---------------------------------------------------------------------------------
 -- 4. Access rules for the new tables
@@ -377,7 +436,8 @@ begin
       where pc.guardianship_id = g.id
         and pc.consent_version = current_version
         and pc.withdrawn_at is null
-    );
+    )
+  on conflict (guardianship_id, consent_version) where withdrawn_at is null do nothing;
 
   update public.guardianships g
   set status = 'active', activated_at = coalesce(g.activated_at, now())
