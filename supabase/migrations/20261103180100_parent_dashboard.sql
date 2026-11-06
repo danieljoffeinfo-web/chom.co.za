@@ -36,6 +36,8 @@ as $$
       and exists (
         select 1 from public.parent_consents pc
         where pc.guardianship_id = g.id
+          and pc.parent_profile_id = g.parent_profile_id
+          and pc.student_profile_id = g.student_profile_id
           and pc.consent_version = (select private.current_parent_consent_version())
           and pc.withdrawn_at is null
       )

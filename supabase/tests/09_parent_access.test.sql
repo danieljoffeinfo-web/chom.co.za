@@ -16,7 +16,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(62);
+select plan(64);
 
 -- Amara has onboarded, so there is study data to hide or show.
 insert into public.student_study_profiles
@@ -366,6 +366,22 @@ set local role authenticated;
 select is((select count(*)::int from public.profiles where id = '40000000-0000-4000-8000-000000000006'), 0, 'Moved link: the new parent sees nothing until he consents');
 reset role;
 
+-- A consent saved for a different child than the link now points to (what a race
+-- with an admin's change could leave behind) doesn't count.
+insert into public.parent_consents (school_id, guardianship_id, parent_profile_id, student_profile_id, consent_version)
+select g.school_id, g.id, g.parent_profile_id, '40000000-0000-4000-8000-000000000005', '2026-12-v2'
+from public.guardianships g
+where g.parent_profile_id = '40000000-0000-4000-8000-000000000008'
+  and g.student_profile_id = '40000000-0000-4000-8000-000000000006';
+update public.guardianships set status = 'active'
+where parent_profile_id = '40000000-0000-4000-8000-000000000008'
+  and student_profile_id = '40000000-0000-4000-8000-000000000006';
+
+select set_config('request.jwt.claims', '{"sub":"30000000-0000-4000-8000-000000000008","role":"authenticated"}', true);
+set local role authenticated;
+select is((select count(*)::int from public.profiles where id = '40000000-0000-4000-8000-000000000006'), 0, 'A consent for a different child does not let him see Zoe');
+reset role;
+
 -- Moving a link to another school voids its consent too.
 insert into public.school_memberships (school_id, profile_id, role, email) values
   ('10000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000014', 'student', 'kai.naidoo@demo-high.test'),
@@ -375,6 +391,13 @@ where parent_profile_id = '40000000-0000-4000-8000-000000000017';
 select is(
   (select status::text from public.guardianships where parent_profile_id = '40000000-0000-4000-8000-000000000017'), 'invited',
   'Moved school: Lerato''s link goes back to invited'
+);
+select is(
+  (select count(*)::int from public.parent_consents pc
+   join public.guardianships g on g.id = pc.guardianship_id
+   where g.parent_profile_id = '40000000-0000-4000-8000-000000000017' and pc.withdrawn_at is null),
+  0,
+  'Moved school: her consent is withdrawn'
 );
 
 select * from finish();

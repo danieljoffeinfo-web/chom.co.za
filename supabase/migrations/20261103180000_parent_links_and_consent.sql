@@ -137,10 +137,16 @@ create table public.parent_consents (
 comment on table public.parent_consents is
   'A parent''s POPIA consent (s35) to Chom processing one child''s information, for one consent version. Written only by record_parent_consent().';
 
--- At most one standing consent per link and version, even if the consent screen is
--- submitted twice at once. Withdrawn rows stay for the audit trail.
+-- A consent counts only for the exact parent and child it was given for: every check
+-- matches the link's current parent_profile_id and student_profile_id as well as its
+-- id. So a consent recorded while an admin re-points the link (a race the trigger
+-- below can't see) never covers the new child or parent.
+--
+-- At most one standing consent per link, parent, child and version, even if the
+-- consent screen is submitted twice at once. Withdrawn rows stay for the audit trail.
 create unique index parent_consents_guardianship_idx
-  on public.parent_consents (guardianship_id, consent_version) where withdrawn_at is null;
+  on public.parent_consents (guardianship_id, parent_profile_id, student_profile_id, consent_version)
+  where withdrawn_at is null;
 create index parent_consents_school_id_idx on public.parent_consents (school_id);
 create index parent_consents_parent_idx on public.parent_consents (parent_profile_id);
 create index parent_consents_student_idx on public.parent_consents (student_profile_id);
@@ -239,6 +245,8 @@ as $$
      and m.status = 'active'
     join public.parent_consents pc
       on pc.guardianship_id = g.id
+     and pc.parent_profile_id = g.parent_profile_id
+     and pc.student_profile_id = g.student_profile_id
      and pc.consent_version = (select private.current_parent_consent_version())
      and pc.withdrawn_at is null
     where g.student_profile_id = p_student_profile_id
@@ -377,6 +385,8 @@ as $$
     exists (
       select 1 from public.parent_consents pc
       where pc.guardianship_id = g.id
+        and pc.parent_profile_id = g.parent_profile_id
+        and pc.student_profile_id = g.student_profile_id
         and pc.consent_version = (select private.current_parent_consent_version())
         and pc.withdrawn_at is null
     )
@@ -430,6 +440,11 @@ begin
     raise exception 'That consent version is not the current one' using errcode = '22023';
   end if;
 
+  -- Hold the parent's links while consent is recorded, so an admin can't re-point one
+  -- halfway through (their change waits for this to finish, then its trigger
+  -- withdraws what was just recorded).
+  perform 1 from public.guardianships g where g.parent_profile_id = me for update;
+
   insert into public.parent_consents
     (school_id, guardianship_id, parent_profile_id, student_profile_id, consent_version, ip, user_agent)
   select g.school_id, g.id, g.parent_profile_id, g.student_profile_id, current_version,
@@ -445,10 +460,13 @@ begin
     and not exists (
       select 1 from public.parent_consents pc
       where pc.guardianship_id = g.id
+        and pc.parent_profile_id = g.parent_profile_id
+        and pc.student_profile_id = g.student_profile_id
         and pc.consent_version = current_version
         and pc.withdrawn_at is null
     )
-  on conflict (guardianship_id, consent_version) where withdrawn_at is null do nothing;
+  on conflict (guardianship_id, parent_profile_id, student_profile_id, consent_version)
+    where withdrawn_at is null do nothing;
 
   update public.guardianships g
   set status = 'active', activated_at = coalesce(g.activated_at, now())
@@ -469,6 +487,8 @@ begin
   from public.guardianships g
   join public.parent_consents pc
     on pc.guardianship_id = g.id
+   and pc.parent_profile_id = g.parent_profile_id
+   and pc.student_profile_id = g.student_profile_id
    and pc.consent_version = current_version
    and pc.withdrawn_at is null
   where g.parent_profile_id = me and g.status = 'active';
