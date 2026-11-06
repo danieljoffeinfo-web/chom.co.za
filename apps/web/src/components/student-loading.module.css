@@ -1,0 +1,58 @@
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--chom-space-6) var(--chom-space-4) var(--chom-space-12);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chom-space-4);
+}
+
+.title,
+.line,
+.card {
+  border-radius: var(--chom-radius-lg);
+  background: var(--chom-border);
+}
+
+.title {
+  width: min(420px, 80%);
+  height: 44px;
+}
+
+.line {
+  width: min(280px, 55%);
+  height: 16px;
+}
+
+.card {
+  height: 140px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .title,
+  .line,
+  .card {
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -7,17 +7,21 @@ export function Message({
   title,
   children,
   signOut = false,
+  action,
 }: {
   title: string;
   children: ReactNode;
   signOut?: boolean;
+  /** An extra button or link, shown before Sign out. */
+  action?: ReactNode;
 }) {
   return (
     <main className={styles.page}>
       <div className={styles.card}>
         <p className={styles.brand}>chom learn</p>
         <h1 className={styles.title}>{title}</h1>
-        <p className={styles.body}>{children}</p>
+        <div className={styles.body}>{children}</div>
+        {action}
         {signOut && (
           <form action="/sign-out" method="post">
             <button className={styles.button} type="submit">
