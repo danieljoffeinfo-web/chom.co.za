@@ -11,7 +11,7 @@ export function ConsentForm({ version, agreement }: { version: string; agreement
   });
 
   // React resets the form after each submit; the defaults put back what they chose.
-  const choices = state.choices ?? { whatsapp: true, email: true, push: false };
+  const choices = state.choices ?? { whatsapp: true, email: true, push: false, agree: false };
 
   // Hide an error once they change something; a new result shows again.
   const [dismissed, setDismissed] = useState<ConsentState | null>(null);
@@ -48,7 +48,7 @@ export function ConsentForm({ version, agreement }: { version: string; agreement
       </fieldset>
 
       <label className="consent-agree">
-        <input type="checkbox" name="agree" required />
+        <input type="checkbox" name="agree" required defaultChecked={choices.agree} />
         <span>{agreement}</span>
       </label>
 

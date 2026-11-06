@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 
 import { createClient } from '@/lib/supabase/server';
 
-export type ConsentChoices = { whatsapp: boolean; email: boolean; push: boolean };
+export type ConsentChoices = { whatsapp: boolean; email: boolean; push: boolean; agree: boolean };
 export type ConsentState = { error: string | null; choices?: ConsentChoices };
 
 /**
@@ -20,8 +20,9 @@ export async function recordConsent(_: ConsentState, form: FormData): Promise<Co
     whatsapp: form.get('whatsapp') === 'on',
     email: form.get('email') === 'on',
     push: form.get('push') === 'on',
+    agree: form.get('agree') === 'on',
   };
-  if (form.get('agree') !== 'on') {
+  if (!choices.agree) {
     return { error: 'Please tick the box to say you agree, or sign out if you don’t.', choices };
   }
 
