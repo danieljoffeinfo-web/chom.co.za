@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 
 import { type ConsentState, recordConsent } from './actions';
 
@@ -13,8 +13,12 @@ export function ConsentForm({ version, agreement }: { version: string; agreement
   // React resets the form after each submit; the defaults put back what they chose.
   const choices = state.choices ?? { whatsapp: true, email: true, push: false };
 
+  // Hide an error once they change something; a new result shows again.
+  const [dismissed, setDismissed] = useState<ConsentState | null>(null);
+  const error = dismissed === state ? null : state.error;
+
   return (
-    <form action={action} className="consent-form">
+    <form action={action} className="consent-form" onChange={() => setDismissed(state)}>
       <input type="hidden" name="version" value={version} />
 
       <fieldset className="consent-channels">
@@ -48,9 +52,9 @@ export function ConsentForm({ version, agreement }: { version: string; agreement
         <span>{agreement}</span>
       </label>
 
-      {state.error && (
+      {error && (
         <p className="form-error" role="alert">
-          {state.error}
+          {error}
         </p>
       )}
 
