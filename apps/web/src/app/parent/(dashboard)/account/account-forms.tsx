@@ -14,6 +14,8 @@ export function ChannelsForm({
     error: null,
   });
 
+  const choices = state.choices ?? initial;
+
   return (
     <form action={action}>
       <label className="switch-row">
@@ -21,21 +23,21 @@ export function ChannelsForm({
           <strong>WhatsApp</strong>
           <small>The Sunday summary and urgent alerts</small>
         </span>
-        <input type="checkbox" name="whatsapp" defaultChecked={initial.whatsapp} />
+        <input type="checkbox" name="whatsapp" defaultChecked={choices.whatsapp} />
       </label>
       <label className="switch-row">
         <span>
           <strong>Email</strong>
           <small>The Sunday summary</small>
         </span>
-        <input type="checkbox" name="email" defaultChecked={initial.email} />
+        <input type="checkbox" name="email" defaultChecked={choices.email} />
       </label>
       <label className="switch-row">
         <span>
           <strong>Notifications in this browser</strong>
           <small>Alerts while you have Chom open</small>
         </span>
-        <input type="checkbox" name="push" defaultChecked={initial.push} />
+        <input type="checkbox" name="push" defaultChecked={choices.push} />
       </label>
       <p className="form-note">
         Absence alerts always reach you, so you know the same day if your child isn’t at school.
