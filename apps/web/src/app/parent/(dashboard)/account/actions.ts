@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { currentParent } from '@/lib/parent/current-parent';
+import { currentLinks, currentParent } from '@/lib/parent/current-parent';
 import { createClient } from '@/lib/supabase/server';
 
 /** Withdraws consent for one child. Their information is hidden at once. */
@@ -20,8 +20,10 @@ export type ChannelsState = { saved: boolean; error: string | null };
 
 /** Saves which channels Chom may use to reach this parent. */
 export async function saveChannels(_: ChannelsState, form: FormData): Promise<ChannelsState> {
-  const parent = await currentParent();
+  const [parent, links] = await Promise.all([currentParent(), currentLinks()]);
   if (!parent) return { saved: false, error: 'Please sign in again.' };
+  // Only someone linked to a child as a parent has channels to save.
+  if (!links.length) return { saved: false, error: 'This isn’t a parent account.' };
 
   const supabase = await createClient();
   const { error } = await supabase.from('parent_notification_channels').upsert({
