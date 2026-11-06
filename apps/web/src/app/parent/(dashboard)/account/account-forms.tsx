@@ -82,9 +82,16 @@ export function WithdrawButton({
           disabled={pending}
           onClick={() =>
             start(async () => {
-              const result = await withdrawConsent(guardianshipId);
-              setError(result.error);
-              if (!result.error) setConfirming(false);
+              let message: string | null;
+              try {
+                ({ error: message } = await withdrawConsent(guardianshipId));
+              } catch {
+                message = 'We couldn’t withdraw your consent. Please try again in a moment.';
+              }
+              start(() => {
+                setError(message);
+                if (!message) setConfirming(false);
+              });
             })
           }
         >

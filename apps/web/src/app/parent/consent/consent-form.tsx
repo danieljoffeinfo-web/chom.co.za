@@ -10,6 +10,9 @@ export function ConsentForm({ version, agreement }: { version: string; agreement
     error: null,
   });
 
+  // React resets the form after each submit; the defaults put back what they chose.
+  const choices = state.choices ?? { whatsapp: true, email: true, push: false };
+
   return (
     <form action={action} className="consent-form">
       <input type="hidden" name="version" value={version} />
@@ -22,21 +25,21 @@ export function ConsentForm({ version, agreement }: { version: string; agreement
             <strong>WhatsApp</strong>
             <small>The weekly summary and urgent alerts</small>
           </span>
-          <input type="checkbox" name="whatsapp" defaultChecked />
+          <input type="checkbox" name="whatsapp" defaultChecked={choices.whatsapp} />
         </label>
         <label className="switch-row">
           <span>
             <strong>Email</strong>
             <small>The weekly summary, if WhatsApp isn’t for you</small>
           </span>
-          <input type="checkbox" name="email" defaultChecked />
+          <input type="checkbox" name="email" defaultChecked={choices.email} />
         </label>
         <label className="switch-row">
           <span>
             <strong>Notifications in this browser</strong>
             <small>Alerts while you have Chom open on this device</small>
           </span>
-          <input type="checkbox" name="push" />
+          <input type="checkbox" name="push" defaultChecked={choices.push} />
         </label>
       </fieldset>
 

@@ -26,7 +26,12 @@ const DATE = new Intl.DateTimeFormat('en-ZA', {
 /** Account (spec §5.9): linked children, consent, how Chom reaches you. */
 export default async function Account() {
   const supabase = await createClient();
-  const [parent, links, { data: consents }, { data: channels }] = await Promise.all([
+  const [
+    parent,
+    links,
+    { data: consents, error: consentsError },
+    { data: channels, error: channelsError },
+  ] = await Promise.all([
     currentParent(),
     currentLinks(),
     supabase
@@ -35,6 +40,9 @@ export default async function Account() {
       .order('granted_at', { ascending: false }),
     supabase.from('parent_notification_channels').select('whatsapp, email, push').maybeSingle(),
   ]);
+  // Fail loudly rather than show defaults a parent could save over their real choices.
+  if (consentsError) throw consentsError;
+  if (channelsError) throw channelsError;
   if (!parent) return null;
 
   const latestConsent = (guardianshipId: string) =>

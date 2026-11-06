@@ -16,7 +16,7 @@ export const metadata = { title: 'Before you start · Chom Learn' };
  */
 export default async function ConsentPage() {
   const supabase = await createClient();
-  const [links, { data: current }] = await Promise.all([
+  const [links, { data: current, error }] = await Promise.all([
     currentLinks(),
     supabase
       .from('parent_consent_versions')
@@ -27,6 +27,7 @@ export default async function ConsentPage() {
       .limit(1)
       .maybeSingle(),
   ]);
+  if (error) throw error;
 
   // Withdrawn links can consent again from here; blocked ones never reach the app.
   const pending = links.filter(
