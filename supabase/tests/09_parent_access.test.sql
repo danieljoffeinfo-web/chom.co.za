@@ -419,9 +419,11 @@ where parent_profile_id = '40000000-0000-4000-8000-000000000008'
 reset role;
 
 select is(
-  (select count(*)::int from public.parent_consents
-   where parent_profile_id = '40000000-0000-4000-8000-000000000008'
-     and student_profile_id = '40000000-0000-4000-8000-000000000005' and withdrawn_at is null),
+  (select count(*)::int from public.parent_consents pc
+   join public.guardianships g on g.id = pc.guardianship_id
+   where g.parent_profile_id = '40000000-0000-4000-8000-000000000008'
+     and g.student_profile_id = '40000000-0000-4000-8000-000000000005'
+     and pc.withdrawn_at is null),
   0,
   'Marked withdrawn by an admin: the consent is withdrawn'
 );
