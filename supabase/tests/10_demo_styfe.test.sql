@@ -5,11 +5,11 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(31);
+select plan(32);
 set local client_min_messages = warning;
 
 select lives_ok(
-  $$ select private.demo_load_styfe('{"maths_teacher": "Dan@Styfe.co.za", "thando_parent": "login@example.org"}') $$,
+  $$ select private.demo_load_styfe('{"maths_teacher": "Maths.Login@Styfe.co.za"}') $$,
   'Styfe loads'
 );
 
@@ -161,12 +161,13 @@ select results_eq(
      join styfe_learners l on l.profile_id = h.profile_id
      where h.hero is not null order by p.full_name $$,
   $$ values
-       ('Aaliyah Davids', 11, 'Accounting, Business Studies, Geography, Mathematical Literacy, Mathematics'),
-       ('Ethan van der Merwe', 12, 'Business Studies, Design, History, Mathematical Literacy'),
+       ('Amy Davids', 11, 'Accounting, Business Studies, Geography, Mathematical Literacy, Mathematics'),
+       ('Chris Ndlovu', 11, 'Further Studies Mathematics, Information Technology, Life Sciences, Mathematics, Physical Sciences'),
+       ('David Meyer', 11, 'Geography, Life Sciences, Mathematics, Physical Sciences'),
        ('Liam Jacobs', 10, 'Accounting, Business Studies, Economics, Mathematics'),
-       ('Sipho Ndlovu', 11, 'Further Studies Mathematics, Information Technology, Life Sciences, Mathematics, Physical Sciences'),
-       ('Thando Mokoena', 12, 'Geography, Life Sciences, Mathematics, Physical Sciences') $$,
-  'The five hero learners have the subjects the walkthrough needs'
+       ('Tanya Mokoena', 12, 'Geography, Life Sciences, Mathematics, Physical Sciences'),
+       ('Tyler van der Merwe', 12, 'Business Studies, Design, History, Mathematical Literacy') $$,
+  'The six hero learners have the subjects the walkthrough needs'
 );
 
 select results_eq(
@@ -174,9 +175,10 @@ select results_eq(
      join public.enrolments e on e.class_id = c.id
      join private.demo_learner_traits h on h.profile_id = e.student_profile_id
      join public.profiles p on p.id = h.profile_id
-     where p.full_name in ('Thando Mokoena', 'Liam Jacobs') and c.kind = 'register' order by p.full_name $$,
-  $$ values ('10B'), ('12A') $$,
-  'Heroes are in the brief''s classes (Liam 10B, Thando 12A)'
+     where p.full_name in ('David Meyer', 'Liam Jacobs', 'Tanya Mokoena') and c.kind = 'register'
+     order by p.full_name $$,
+  $$ values ('11A'), ('10B'), ('12A') $$,
+  'Heroes are in their classes (David 11A, Liam 10B, Tanya 12A)'
 );
 
 select is_empty(
@@ -198,7 +200,7 @@ select is_empty(
 
 select results_eq(
   $$ select distinct sub.name from public.teaching_allocations ta
-     join public.school_memberships m on m.profile_id = ta.teacher_profile_id and m.email = 'dan@styfe.co.za'
+     join public.school_memberships m on m.profile_id = ta.teacher_profile_id and m.email = 'maths.login@styfe.co.za'
      join public.class_subjects cs on cs.id = ta.class_subject_id
      join public.subjects sub on sub.id = cs.subject_id order by 1 $$,
   $$ values ('Further Studies Mathematics'), ('Mathematics') $$,
@@ -220,17 +222,20 @@ select ok(
 );
 
 select results_eq(
-  $$ select p.full_name, g.relationship::text, g.status::text from public.guardianships g
-     join public.school_memberships m on m.profile_id = g.parent_profile_id and m.role = 'parent'
-       and m.email = 'login@example.org'
-     join public.profiles p on p.id = g.student_profile_id $$,
-  $$ values ('Thando Mokoena', 'guardian', 'invited') $$,
-  'The parent login is Thando''s guardian, invited until they consent'
+  $$ select child.full_name, cm.email, parent.full_name, g.relationship::text, g.is_primary, g.status::text
+     from public.guardianships g
+     join public.school_memberships pm on pm.profile_id = g.parent_profile_id and pm.role = 'parent'
+       and pm.email = 'rory@styfe.co.za'
+     join public.profiles parent on parent.id = g.parent_profile_id
+     join public.profiles child on child.id = g.student_profile_id
+     join public.school_memberships cm on cm.profile_id = child.id and cm.role = 'student' $$,
+  $$ values ('David Meyer', 'david@styfe.co.za', 'Rory Meyer', 'guardian', true, 'invited') $$,
+  'The student login is David; the parent login, Rory, is his only guardian, invited until they consent'
 );
 
 select is_empty(
   $$ select m.email from public.school_memberships m join public.schools s on s.id = m.school_id and s.slug = 'styfe'
-     where (m.role = 'parent' and m.email not like '%@example.com' and m.email <> 'login@example.org')
+     where (m.role = 'parent' and m.email not like '%@example.com' and m.email <> 'rory@styfe.co.za')
         or (m.role <> 'parent' and m.email not like '%@styfe.co.za') $$,
   'Staff and learners have styfe.co.za emails; parents have reserved example.com ones (except the parent login)'
 );
@@ -260,7 +265,7 @@ create temp table first_load as
 select p.full_name, m.email from public.school_memberships m join public.profiles p on p.id = m.profile_id
 join public.schools s on s.id = m.school_id and s.slug = 'styfe';
 
-select private.demo_load_styfe('{"maths_teacher": "dan@styfe.co.za", "thando_parent": "login@example.org"}');
+select private.demo_load_styfe('{"maths_teacher": "maths.login@styfe.co.za"}');
 
 select set_eq(
   $$ select p.full_name, m.email from public.school_memberships m join public.profiles p on p.id = m.profile_id
@@ -275,7 +280,7 @@ select ok(
   not exists (select 1 from public.schools where slug = 'styfe')
   and not exists (select 1 from public.school_groups where slug = 'styfe')
   and not exists (select 1 from public.school_memberships m where m.email like '%@styfe.co.za')
-  and not exists (select 1 from public.profiles p where p.full_name = 'Thando Mokoena')
+  and not exists (select 1 from public.profiles p where p.full_name in ('Tanya Mokoena', 'David Meyer', 'Rory Meyer'))
   and not exists (select 1 from private.demo_learner_traits),
   'Removing Styfe leaves nothing behind: school, group, people, traits'
 );
@@ -291,6 +296,12 @@ select ok(
   and not has_function_privilege('authenticated', 'private.demo_remove_school(text)', 'EXECUTE')
   and not has_function_privilege('anon', 'private.demo_load_styfe(jsonb)', 'EXECUTE'),
   'Nobody signed in can run the demo loader or remover'
+);
+
+select throws_ok(
+  $$ select private.demo_load_styfe('{"maths_teacher": "rory@styfe.co.za"}') $$,
+  '23505', null,
+  'A login email given to two people is refused (sign-in would link neither)'
 );
 
 -- Another school's admin sees none of Styfe's subject set-up.

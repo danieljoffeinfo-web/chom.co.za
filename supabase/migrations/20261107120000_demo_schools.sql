@@ -189,7 +189,7 @@ create policy "School admins can remove subject rule members"
 
 -- What the demo generator decided about each made-up learner, kept so later slices
 -- (marks, study time, attendance) build on the same people: ability, aptitudes and
--- the walkthrough story for the five hero learners. Private: never shown to anyone.
+-- the walkthrough story for the hero learners. Private: never shown to anyone.
 create table private.demo_learner_traits (
   profile_id uuid primary key references public.profiles (id) on delete cascade,
   school_id uuid not null references public.schools (id) on delete cascade,
@@ -277,14 +277,16 @@ comment on function private.demo_remove_school(text) is
 --
 -- p_logins sets the emails of the people the demo is shown with (they need real
 -- mailboxes to receive sign-in codes). Keys:
---   maths_teacher    the Head of Mathematics (Grade 11-12 Maths, Further Studies Maths)
---   english_teacher  the Head of English (Grade 11-12 English, Further Studies English)
---   science_teacher  the Physical Sciences teacher (all grades)
---   thando_parent    a second guardian for Thando Mokoena, the at-risk hero learner
--- Anyone not given gets a made-up address that receives nothing.
+--   maths_teacher    Mr Ian Havenga, Head of Mathematics (Grade 11-12 Maths, Further
+--                    Studies Maths)
+--   english_teacher  Ms Mitchell, Head of English (Grade 11-12 English, Further Studies English)
+--   science_teacher  Dr Naidoo, Physical Sciences (all grades)
+--   student          David Meyer, Grade 11A: the student login (default david@styfe.co.za)
+--   parent           Rory Meyer, David's parent: the parent login (default rory@styfe.co.za)
+-- Teachers not given get a made-up address that receives nothing.
 --
 -- Learner and staff emails are on styfe.co.za; parents' are on example.com (reserved:
--- it can never deliver mail). Phone numbers start +27 00, which no real number does.
+-- it can never deliver mail), except the parent login. Phone numbers start +27 00, which no real number does.
 create function private.demo_load_styfe(p_logins jsonb default '{}')
 returns uuid
 language plpgsql
@@ -444,7 +446,7 @@ begin
   insert into demo_staff (key, full_name, preferred_name, email, job_title, is_admin, is_teacher) values
     ('principal', 'Nomsa Khoza',      'Dr Khoza',      'nomsa.khoza@styfe.co.za',     'Principal',            true,  false),
     ('deputy',    'Gareth Fourie',    'Mr Fourie',     'gareth.fourie@styfe.co.za',   'Deputy Principal',     true,  true),
-    ('math1',     'Dan Joffe',        'Mr Joffe',      coalesce(p_logins ->> 'maths_teacher', 'dan.joffe@styfe.co.za'),
+    ('math1',     'Ian Havenga',      'Mr Havenga',    coalesce(p_logins ->> 'maths_teacher', 'ian.havenga@styfe.co.za'),
                                                                                       'Head of Mathematics',  false, true),
     ('math2',     'Precious Mahlangu','Ms Mahlangu',   'precious.mahlangu@styfe.co.za', null,                 false, true),
     ('math3',     'Ruan Steyn',       'Mr Steyn',      'ruan.steyn@styfe.co.za',      null,                   false, true),
@@ -515,19 +517,22 @@ begin
     profile_id uuid
   );
 
-  -- The five Styfe hero learners, fixed for the walkthrough.
+  -- The Styfe hero learners, fixed for the walkthrough: the brief's five, plus David,
+  -- the learner the demo signs in as.
   insert into demo_learners (grade, letter, first_name, last_name, sex, ability, maths_apt, lang_apt,
                              track, profile, block_a, block_b, block_c, fs_maths, package, hero) values
-    (12, 'A', 'Thando', 'Mokoena',        'F', 74, 4,  2, 'math', 'science',   'ps',   'ls', 'geo',  false, false,
+    (12, 'A', 'Tanya',  'Mokoena',        'F', 74, 4,  2, 'math', 'science',   'ps',   'ls', 'geo',  false, false,
      'At risk: Maths and Physical Sciences slip about 8 points by June and 16 by prelims; study time falls from about 240 to 80 minutes a week from May. Provisional offer: UCT Mechanical Engineering.'),
     (10, 'B', 'Liam',   'Jacobs',         'M', 58, -8, 0, 'math', 'commerce',  'acc',  'bs', 'econ', false, false,
      'AI tutor success: Maths rises from 38% to about 67% as study time climbs from 60 to 320 minutes a week.'),
-    (11, 'A', 'Sipho',  'Ndlovu',         'M', 88, 6,  2, 'math', 'science',   'ps',   'ls', 'it',   true,  false,
+    (11, 'A', 'Chris',  'Ndlovu',         'M', 88, 6,  2, 'math', 'science',   'ps',   'ls', 'it',   true,  false,
      'Top achiever, about 90% average. Soccer 1st XI captain. Wrote IeBT Maths and Physics.'),
-    (11, 'B', 'Aaliyah','Davids',         'F', 60, -12, 4, 'math', 'commerce', 'acc',  'bs', 'geo',  false, true,
+    (11, 'B', 'Amy',    'Davids',         'F', 60, -12, 4, 'math', 'commerce', 'acc',  'bs', 'geo',  false, true,
      'Maths + Maths Literacy package: Maths about 44%, Maths Literacy about 70%.'),
-    (12, 'B', 'Ethan',  'van der Merwe',  'M', 58, -4, 0, 'ml',   'humanities','hist', 'bs', 'des',  false, false,
-     'Attendance alert: about 12 days absent June-August; marks dip about 7 points.');
+    (12, 'B', 'Tyler',  'van der Merwe',  'M', 58, -4, 0, 'ml',   'humanities','hist', 'bs', 'des',  false, false,
+     'Attendance alert: about 12 days absent June-August; marks dip about 7 points.'),
+    (11, 'A', 'David',  'Meyer',          'M', 66, 0,  0, 'math', 'science',   'ps',   'ls', 'geo',  false, false,
+     'The student login. At risk: a solid Term 1, then Maths and Physical Sciences slip about 10 points from May as study time falls. Parent: Rory Meyer, the parent login.');
 
   -- Everyone else: random names and abilities, mostly 55-75.
   for v_grade in 10..12 loop
@@ -649,6 +654,10 @@ begin
     from demo_learners
   ) e
   where e.n = l.n;
+
+  update demo_learners
+  set email = lower(trim(coalesce(p_logins ->> 'student', 'david@styfe.co.za')))
+  where first_name = 'David' and hero is not null;
 
   for r in select * from demo_learners order by n loop
     insert into public.profiles (full_name) values (r.first_name || ' ' || r.last_name)
@@ -778,21 +787,22 @@ begin
     from demo_learners l
   ) x;
 
-  -- The second parent, where there is one. Not for Thando: her second guardian is the
-  -- demo's parent login, below.
+  -- The second parent, where there is one. Not for David: his parent is the demo's
+  -- parent login, below.
   insert into demo_parents (n, relationship, is_primary, full_name)
   select p.n, 'father', false,
          adult_m[1 + floor(random() * array_length(adult_m, 1))::int] || ' ' || l.last_name
   from demo_parents p
   join demo_learners l on l.n = p.n
   where p.has_second
-    and not (l.first_name = 'Thando' and l.hero is not null);
+    and not (l.first_name = 'David' and l.hero is not null);
 
-  -- Thando's second guardian is the demo's parent login.
-  insert into demo_parents (n, relationship, is_primary, full_name, email)
-  select l.n, 'guardian', false, 'Daniel Joffe', lower(trim(p_logins ->> 'thando_parent'))
+  -- David's parent is the parent login: Rory Meyer, his only (so primary) guardian.
+  update demo_parents p
+  set relationship = 'guardian', full_name = 'Rory Meyer',
+      email = lower(trim(coalesce(p_logins ->> 'parent', 'rory@styfe.co.za')))
   from demo_learners l
-  where l.first_name = 'Thando' and l.hero is not null;
+  where l.n = p.n and l.first_name = 'David' and l.hero is not null;
 
   update demo_parents p
   set email = coalesce(p.email,
@@ -808,6 +818,21 @@ begin
     from demo_parents
   ) e
   where e.pn = p.pn;
+
+  -- Sign-in links an email only when exactly one person has it, so a login passed twice
+  -- (or matching a made-up address) would leave both people unable to sign in.
+  if exists (
+    select email from (
+      select email from demo_staff
+      union all select email from demo_learners
+      union all select email from demo_parents
+    ) a
+    group by email
+    having count(*) > 1
+  ) then
+    raise exception 'Demo emails must be unique; check p_logins for repeated addresses'
+      using errcode = '23505';
+  end if;
 
   for r in select * from demo_parents order by pn loop
     insert into public.profiles (full_name) values (r.full_name) returning id into v_id;

@@ -133,14 +133,14 @@ select private.expose_table('public.my_table', 'select, insert, update, delete')
 
 `expose_table` switches on row-level security, removes default grants and never opens anything to signed-out visitors. A guardrail test fails CI if any table lacks row-level security or access rules, or is reachable signed out.
 
-**Demo schools.** Schools with `is_demo` hold made-up people and can be wiped and reloaded; real schools never. `private.demo_load_styfe()` loads (or reloads) Styfe School, the 3-term demo school from the demo data brief: 23 staff, 150 learners in Grades 10-12 (classes A and B, 25 each), their subject groups, teachers and parents, and five fixed hero learners for the walkthrough. It is deterministic: every reload produces the same people. Pass the emails of the people the demo is shown with, since they need real mailboxes for sign-in codes:
+**Demo schools.** Schools with `is_demo` hold made-up people and can be wiped and reloaded; real schools never. `private.demo_load_styfe()` loads (or reloads) Styfe School, the 3-term demo school from the demo data brief: 23 staff, 150 learners in Grades 10-12 (classes A and B, 25 each), their subject groups, teachers and parents, and six fixed hero learners for the walkthrough, including David (the student login) and his parent Rory (the parent login). It is deterministic: every reload produces the same people. Pass the emails of the people the demo is shown with, since they need real mailboxes for sign-in codes:
 
 ```sql
-select private.demo_load_styfe('{"maths_teacher": "...", "english_teacher": "...", "science_teacher": "...", "thando_parent": "..."}');
+select private.demo_load_styfe('{"maths_teacher": "...", "english_teacher": "...", "science_teacher": "...", "student": "...", "parent": "..."}');
 select private.demo_remove_school('styfe');  -- removes it and everyone who belongs only to it
 ```
 
-Learner and staff emails are on `styfe.co.za`, parents' on `example.com` (reserved, never delivers), and every phone number starts `+27 00`. Only the database owner can run these (from the Supabase SQL editor); the apps cannot. `supabase/tests/10_demo_styfe.test.sql` checks the brief's rules: subject packages, class sizes, extras, heroes and clean removal.
+Learner and staff emails are on `styfe.co.za`, parents' on `example.com` (reserved, never delivers) apart from the parent login, and every phone number starts `+27 00`. Only the database owner can run these (from the Supabase SQL editor); the apps cannot. `supabase/tests/10_demo_styfe.test.sql` checks the brief's rules: subject packages, class sizes, extras, heroes and clean removal.
 
 **Tests.** `supabase/tests/` checks school isolation, what each role can see and change, and data integrity, against two fake schools in `supabase/seed.sql`. The seed is for local and CI only; it is never loaded into production.
 
