@@ -93,6 +93,8 @@ Supabase (PostgreSQL), as decided in [ADR 0001](docs/decisions/0001-database-pla
 | `school_memberships`              | A person's role at a school (student, teacher, parent, school admin). One person can hold several                                                                                         |
 | `guardianships`                   | Which parent is linked to which child                                                                                                                                                     |
 | `subjects`                        | The subjects a school offers, usually linked to the curriculum catalogue                                                                                                                  |
+| `subject_offerings`               | What a school offers each year, for which grades: fundamental, elective (in a timetable block, one per block) or extra                                                                    |
+| `school_subject_rules`            | A school's own combination rules (e.g. IT requires Mathematics), with `school_subject_rule_members`                                                                                       |
 | `classes`                         | Classes per school year: a grade number for sorting plus a free-text name (10B, 10LSI, ...)                                                                                               |
 | `class_subjects`                  | A subject taught to a class                                                                                                                                                               |
 | `teaching_allocations`            | Which teacher teaches it                                                                                                                                                                  |
@@ -130,6 +132,15 @@ select private.expose_table('public.my_table', 'select, insert, update, delete')
 ```
 
 `expose_table` switches on row-level security, removes default grants and never opens anything to signed-out visitors. A guardrail test fails CI if any table lacks row-level security or access rules, or is reachable signed out.
+
+**Demo schools.** Schools with `is_demo` hold made-up people and can be wiped and reloaded; real schools never. `private.demo_load_styfe()` loads (or reloads) Styfe School, the 3-term demo school from the demo data brief: 23 staff, 150 learners in Grades 10-12 (classes A and B, 25 each), their subject groups, teachers and parents, and six fixed hero learners for the walkthrough, including David (the student login) and his parent Rory (the parent login). It is deterministic: every reload produces the same people. Pass the emails of the people the demo is shown with, since they need real mailboxes for sign-in codes:
+
+```sql
+select private.demo_load_styfe('{"maths_teacher": "...", "english_teacher": "...", "science_teacher": "...", "student": "...", "parent": "..."}');
+select private.demo_remove_school('styfe');  -- removes it and everyone who belongs only to it
+```
+
+Learner and staff emails are on `styfe.co.za`, parents' on `example.com` (reserved, never delivers) apart from the parent login, and every phone number starts `+27 00`. Only the database owner can run these (from the Supabase SQL editor); the apps cannot. `supabase/tests/10_demo_styfe.test.sql` checks the brief's rules: subject packages, class sizes, extras, heroes and clean removal.
 
 **Tests.** `supabase/tests/` checks school isolation, what each role can see and change, and data integrity, against two fake schools in `supabase/seed.sql`. The seed is for local and CI only; it is never loaded into production.
 
