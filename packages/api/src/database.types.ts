@@ -704,9 +704,12 @@ export type Database = {
       school_memberships: {
         Row: {
           created_at: string;
+          date_of_birth: string | null;
           ednana_id: string | null;
           email: string | null;
           id: string;
+          job_title: string | null;
+          phone: string | null;
           profile_id: string;
           role: Database['public']['Enums']['membership_role'];
           school_id: string;
@@ -716,9 +719,12 @@ export type Database = {
         ComputedFields: never;
         Insert: {
           created_at?: string;
+          date_of_birth?: string | null;
           ednana_id?: string | null;
           email?: string | null;
           id?: string;
+          job_title?: string | null;
+          phone?: string | null;
           profile_id: string;
           role: Database['public']['Enums']['membership_role'];
           school_id: string;
@@ -727,9 +733,12 @@ export type Database = {
         };
         Update: {
           created_at?: string;
+          date_of_birth?: string | null;
           ednana_id?: string | null;
           email?: string | null;
           id?: string;
+          job_title?: string | null;
+          phone?: string | null;
           profile_id?: string;
           role?: Database['public']['Enums']['membership_role'];
           school_id?: string;
@@ -753,11 +762,94 @@ export type Database = {
           },
         ];
       };
+      school_subject_rule_members: {
+        Row: {
+          member_role: string;
+          rule_id: string;
+          school_id: string;
+          subject_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          member_role?: string;
+          rule_id: string;
+          school_id: string;
+          subject_id: string;
+        };
+        Update: {
+          member_role?: string;
+          rule_id?: string;
+          school_id?: string;
+          subject_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'school_subject_rule_members_rule_id_school_id_fkey';
+            columns: ['rule_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'school_subject_rules';
+            referencedColumns: ['id', 'school_id'];
+          },
+          {
+            foreignKeyName: 'school_subject_rule_members_subject_id_school_id_fkey';
+            columns: ['subject_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'subjects';
+            referencedColumns: ['id', 'school_id'];
+          },
+        ];
+      };
+      school_subject_rules: {
+        Row: {
+          created_at: string;
+          description: string;
+          id: string;
+          max_count: number | null;
+          max_grade: number;
+          min_grade: number;
+          rule_type: Database['public']['Enums']['subject_rule_type'];
+          school_id: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          description: string;
+          id?: string;
+          max_count?: number | null;
+          max_grade: number;
+          min_grade: number;
+          rule_type: Database['public']['Enums']['subject_rule_type'];
+          school_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string;
+          id?: string;
+          max_count?: number | null;
+          max_grade?: number;
+          min_grade?: number;
+          rule_type?: Database['public']['Enums']['subject_rule_type'];
+          school_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'school_subject_rules_school_id_fkey';
+            columns: ['school_id'];
+            isOneToOne: false;
+            referencedRelation: 'schools';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       schools: {
         Row: {
           created_at: string;
           ednana_id: string | null;
           id: string;
+          is_demo: boolean;
           name: string;
           school_group_id: string;
           slug: string;
@@ -768,6 +860,7 @@ export type Database = {
           created_at?: string;
           ednana_id?: string | null;
           id?: string;
+          is_demo?: boolean;
           name: string;
           school_group_id: string;
           slug: string;
@@ -777,6 +870,7 @@ export type Database = {
           created_at?: string;
           ednana_id?: string | null;
           id?: string;
+          is_demo?: boolean;
           name?: string;
           school_group_id?: string;
           slug?: string;
@@ -905,6 +999,61 @@ export type Database = {
           },
           {
             foreignKeyName: 'student_subject_goals_subject_id_school_id_fkey';
+            columns: ['subject_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'subjects';
+            referencedColumns: ['id', 'school_id'];
+          },
+        ];
+      };
+      subject_offerings: {
+        Row: {
+          academic_year_id: string;
+          block: string | null;
+          created_at: string;
+          id: string;
+          kind: Database['public']['Enums']['offering_kind'];
+          max_grade: number;
+          min_grade: number;
+          school_id: string;
+          subject_id: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          academic_year_id: string;
+          block?: string | null;
+          created_at?: string;
+          id?: string;
+          kind: Database['public']['Enums']['offering_kind'];
+          max_grade: number;
+          min_grade: number;
+          school_id: string;
+          subject_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          academic_year_id?: string;
+          block?: string | null;
+          created_at?: string;
+          id?: string;
+          kind?: Database['public']['Enums']['offering_kind'];
+          max_grade?: number;
+          min_grade?: number;
+          school_id?: string;
+          subject_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'subject_offerings_academic_year_id_school_id_fkey';
+            columns: ['academic_year_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'academic_years';
+            referencedColumns: ['id', 'school_id'];
+          },
+          {
+            foreignKeyName: 'subject_offerings_subject_id_school_id_fkey';
             columns: ['subject_id', 'school_id'];
             isOneToOne: false;
             referencedRelation: 'subjects';
@@ -1058,6 +1207,7 @@ export type Database = {
       language_level: 'home' | 'first_additional' | 'second_additional';
       membership_role: 'student' | 'teacher' | 'parent' | 'school_admin';
       membership_status: 'active' | 'inactive';
+      offering_kind: 'fundamental' | 'elective' | 'extra';
       sign_in_provider: 'microsoft' | 'google';
       staff_level: 'support' | 'operations' | 'owner';
       study_method:
@@ -1182,6 +1332,7 @@ export const Constants = {
       language_level: ['home', 'first_additional', 'second_additional'],
       membership_role: ['student', 'teacher', 'parent', 'school_admin'],
       membership_status: ['active', 'inactive'],
+      offering_kind: ['fundamental', 'elective', 'extra'],
       sign_in_provider: ['microsoft', 'google'],
       staff_level: ['support', 'operations', 'owner'],
       study_method: [
