@@ -360,6 +360,54 @@ export type Database = {
           },
         ];
       };
+      curriculum_units: {
+        Row: {
+          created_at: string;
+          curriculum_id: string;
+          curriculum_subject_id: string;
+          grade: number;
+          id: string;
+          is_ongoing: boolean;
+          position: number;
+          teaching_weeks: number;
+          title: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          created_at?: string;
+          curriculum_id: string;
+          curriculum_subject_id: string;
+          grade: number;
+          id?: string;
+          is_ongoing?: boolean;
+          position: number;
+          teaching_weeks: number;
+          title: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          curriculum_id?: string;
+          curriculum_subject_id?: string;
+          grade?: number;
+          id?: string;
+          is_ongoing?: boolean;
+          position?: number;
+          teaching_weeks?: number;
+          title?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'curriculum_units_curriculum_subject_id_curriculum_id_fkey';
+            columns: ['curriculum_subject_id', 'curriculum_id'];
+            isOneToOne: false;
+            referencedRelation: 'curriculum_subjects';
+            referencedColumns: ['id', 'curriculum_id'];
+          },
+        ];
+      };
       enrolments: {
         Row: {
           class_id: string;
@@ -406,6 +454,96 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'school_memberships';
             referencedColumns: ['school_id', 'profile_id', 'role'];
+          },
+        ];
+      };
+      exam_windows: {
+        Row: {
+          academic_year_id: string;
+          created_at: string;
+          ends_on: string;
+          id: string;
+          is_approximate: boolean;
+          kind: Database['public']['Enums']['exam_window_kind'];
+          label: string;
+          max_grade: number;
+          min_grade: number;
+          school_id: string;
+          starts_on: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          academic_year_id: string;
+          created_at?: string;
+          ends_on: string;
+          id?: string;
+          is_approximate?: boolean;
+          kind: Database['public']['Enums']['exam_window_kind'];
+          label: string;
+          max_grade: number;
+          min_grade: number;
+          school_id: string;
+          starts_on: string;
+          updated_at?: string;
+        };
+        Update: {
+          academic_year_id?: string;
+          created_at?: string;
+          ends_on?: string;
+          id?: string;
+          is_approximate?: boolean;
+          kind?: Database['public']['Enums']['exam_window_kind'];
+          label?: string;
+          max_grade?: number;
+          min_grade?: number;
+          school_id?: string;
+          starts_on?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'exam_windows_academic_year_id_school_id_fkey';
+            columns: ['academic_year_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'academic_years';
+            referencedColumns: ['id', 'school_id'];
+          },
+        ];
+      };
+      grade_content_end_dates: {
+        Row: {
+          academic_year_id: string;
+          content_ends_on: string;
+          created_at: string;
+          grade: number;
+          school_id: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          academic_year_id: string;
+          content_ends_on: string;
+          created_at?: string;
+          grade: number;
+          school_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          academic_year_id?: string;
+          content_ends_on?: string;
+          created_at?: string;
+          grade?: number;
+          school_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'grade_content_end_dates_academic_year_id_school_id_fkey';
+            columns: ['academic_year_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'academic_years';
+            referencedColumns: ['id', 'school_id'];
           },
         ];
       };
@@ -637,6 +775,73 @@ export type Database = {
         };
         Relationships: [];
       };
+      public_holidays: {
+        Row: {
+          country: string;
+          created_at: string;
+          holiday_date: string;
+          name: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          country?: string;
+          created_at?: string;
+          holiday_date: string;
+          name: string;
+        };
+        Update: {
+          country?: string;
+          created_at?: string;
+          holiday_date?: string;
+          name?: string;
+        };
+        Relationships: [];
+      };
+      school_calendar_breaks: {
+        Row: {
+          academic_year_id: string;
+          created_at: string;
+          ends_on: string;
+          id: string;
+          kind: Database['public']['Enums']['calendar_break_kind'];
+          label: string;
+          school_id: string;
+          starts_on: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          academic_year_id: string;
+          created_at?: string;
+          ends_on: string;
+          id?: string;
+          kind: Database['public']['Enums']['calendar_break_kind'];
+          label: string;
+          school_id: string;
+          starts_on: string;
+          updated_at?: string;
+        };
+        Update: {
+          academic_year_id?: string;
+          created_at?: string;
+          ends_on?: string;
+          id?: string;
+          kind?: Database['public']['Enums']['calendar_break_kind'];
+          label?: string;
+          school_id?: string;
+          starts_on?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'school_calendar_breaks_academic_year_id_school_id_fkey';
+            columns: ['academic_year_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'academic_years';
+            referencedColumns: ['id', 'school_id'];
+          },
+        ];
+      };
       school_group_domains: {
         Row: {
           created_at: string;
@@ -844,9 +1049,52 @@ export type Database = {
           },
         ];
       };
+      school_terms: {
+        Row: {
+          academic_year_id: string;
+          created_at: string;
+          ends_on: string;
+          id: string;
+          school_id: string;
+          starts_on: string;
+          term_number: number;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          academic_year_id: string;
+          created_at?: string;
+          ends_on: string;
+          id?: string;
+          school_id: string;
+          starts_on: string;
+          term_number: number;
+          updated_at?: string;
+        };
+        Update: {
+          academic_year_id?: string;
+          created_at?: string;
+          ends_on?: string;
+          id?: string;
+          school_id?: string;
+          starts_on?: string;
+          term_number?: number;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'school_terms_academic_year_id_school_id_fkey';
+            columns: ['academic_year_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'academic_years';
+            referencedColumns: ['id', 'school_id'];
+          },
+        ];
+      };
       schools: {
         Row: {
           created_at: string;
+          demo_today: string | null;
           ednana_id: string | null;
           id: string;
           is_demo: boolean;
@@ -858,6 +1106,7 @@ export type Database = {
         ComputedFields: never;
         Insert: {
           created_at?: string;
+          demo_today?: string | null;
           ednana_id?: string | null;
           id?: string;
           is_demo?: boolean;
@@ -868,6 +1117,7 @@ export type Database = {
         };
         Update: {
           created_at?: string;
+          demo_today?: string | null;
           ednana_id?: string | null;
           id?: string;
           is_demo?: boolean;
@@ -1159,6 +1409,61 @@ export type Database = {
           },
         ];
       };
+      unit_schedules: {
+        Row: {
+          academic_year_id: string;
+          created_at: string;
+          curriculum_unit_id: string;
+          ends_on: string;
+          id: string;
+          is_pinned: boolean;
+          school_id: string;
+          starts_on: string;
+          term_number: number | null;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          academic_year_id: string;
+          created_at?: string;
+          curriculum_unit_id: string;
+          ends_on: string;
+          id?: string;
+          is_pinned?: boolean;
+          school_id: string;
+          starts_on: string;
+          term_number?: number | null;
+          updated_at?: string;
+        };
+        Update: {
+          academic_year_id?: string;
+          created_at?: string;
+          curriculum_unit_id?: string;
+          ends_on?: string;
+          id?: string;
+          is_pinned?: boolean;
+          school_id?: string;
+          starts_on?: string;
+          term_number?: number | null;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'unit_schedules_academic_year_id_school_id_fkey';
+            columns: ['academic_year_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'academic_years';
+            referencedColumns: ['id', 'school_id'];
+          },
+          {
+            foreignKeyName: 'unit_schedules_curriculum_unit_id_fkey';
+            columns: ['curriculum_unit_id'];
+            isOneToOne: false;
+            referencedRelation: 'curriculum_units';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -1197,10 +1502,13 @@ export type Database = {
         Args: { p_curriculum_code: string; p_grade: number; p_name: string };
         Returns: string;
       };
+      school_today: { Args: { p_school_id: string }; Returns: string };
       withdraw_parent_consent: { Args: { p_guardianship_id: string }; Returns: undefined };
     };
     Enums: {
+      calendar_break_kind: 'half_term' | 'school_holiday';
       class_kind: 'register' | 'subject_group';
+      exam_window_kind: 'mid_year' | 'preliminary' | 'final_internal' | 'final_external';
       guardian_relationship: 'mother' | 'father' | 'guardian' | 'other';
       guardianship_status:
         'invited' | 'active' | 'blocked' | 'consent_withdrawn' | 'learner_revoked';
@@ -1326,7 +1634,9 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      calendar_break_kind: ['half_term', 'school_holiday'],
       class_kind: ['register', 'subject_group'],
+      exam_window_kind: ['mid_year', 'preliminary', 'final_internal', 'final_external'],
       guardian_relationship: ['mother', 'father', 'guardian', 'other'],
       guardianship_status: ['invited', 'active', 'blocked', 'consent_withdrawn', 'learner_revoked'],
       language_level: ['home', 'first_additional', 'second_additional'],

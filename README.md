@@ -95,6 +95,12 @@ Supabase (PostgreSQL), as decided in [ADR 0001](docs/decisions/0001-database-pla
 | `subjects`                        | The subjects a school offers, usually linked to the curriculum catalogue                                                                                                                  |
 | `subject_offerings`               | What a school offers each year, for which grades: fundamental, elective (in a timetable block, one per block) or extra                                                                    |
 | `school_subject_rules`            | A school's own combination rules (e.g. IT requires Mathematics), with `school_subject_rule_members`                                                                                       |
+| `school_terms`                    | A school's terms each year: 3 or 4, whatever it runs                                                                                                                                      |
+| `school_calendar_breaks`          | Half-terms and school holidays inside a term                                                                                                                                              |
+| `exam_windows`                    | Exam periods per grade range (mid-year, prelims, finals); no new content during them                                                                                                      |
+| `grade_content_end_dates`         | The last day of new content per grade; revision after                                                                                                                                     |
+| `curriculum_units`                | Reference data: each subject and grade as an ordered list of units with teaching weeks, never tied to a term                                                                              |
+| `unit_schedules`                  | When a school teaches each unit, generated from its calendar; teachers' pinned dates survive regeneration                                                                                 |
 | `classes`                         | Classes per school year: a grade number for sorting plus a free-text name (10B, 10LSI, ...)                                                                                               |
 | `class_subjects`                  | A subject taught to a class                                                                                                                                                               |
 | `teaching_allocations`            | Which teacher teaches it                                                                                                                                                                  |
@@ -133,7 +139,7 @@ select private.expose_table('public.my_table', 'select, insert, update, delete')
 
 `expose_table` switches on row-level security, removes default grants and never opens anything to signed-out visitors. A guardrail test fails CI if any table lacks row-level security or access rules, or is reachable signed out.
 
-**Demo schools.** Schools with `is_demo` hold made-up people and can be wiped and reloaded; real schools never. `private.demo_load_styfe()` loads (or reloads) Styfe School, the 3-term demo school from the demo data brief: 23 staff, 150 learners in Grades 10-12 (classes A and B, 25 each), their subject groups, teachers and parents, and six fixed hero learners for the walkthrough, including David (the student login) and his parent Rory (the parent login). It is deterministic: every reload produces the same people. Pass the emails of the people the demo is shown with, since they need real mailboxes for sign-in codes:
+**Demo schools.** Schools with `is_demo` hold made-up people and can be wiped and reloaded; real schools never. `private.demo_load_styfe()` loads (or reloads) Styfe School, the 3-term demo school from the demo data brief: 23 staff, 150 learners in Grades 10-12 (classes A and B, 25 each), their subject groups, teachers and parents, its 2026 calendar and curriculum schedule, and six fixed hero learners for the walkthrough, including David (the student login) and his parent Rory (the parent login). It is deterministic: every reload produces the same people. Pass the emails of the people the demo is shown with, since they need real mailboxes for sign-in codes:
 
 ```sql
 select private.demo_load_styfe('{"maths_teacher": "...", "english_teacher": "...", "science_teacher": "...", "student": "...", "parent": "..."}');
@@ -141,6 +147,8 @@ select private.demo_remove_school('styfe');  -- removes it and everyone who belo
 ```
 
 Learner and staff emails are on `styfe.co.za`, parents' on `example.com` (reserved, never delivers) apart from the parent login, and every phone number starts `+27 00`. Only the database owner can run these (from the Supabase SQL editor); the apps cannot. `supabase/tests/10_demo_styfe.test.sql` checks the brief's rules: subject packages, class sizes, extras, heroes and clean removal.
+
+**Content is not the calendar.** Curriculum units are the same for every school and never mention a term. Each school has its own calendar (terms, half-terms, holidays, exam windows, content-end dates), and `private.generate_unit_schedule(year)` lays the units over that school's teaching days in proportion to their weeks, keeping any unit a teacher has pinned. So the same Grade 11 Maths units land in three terms at a 3-term school and four at a 4-term one. `public_holidays` lists the national holidays. `school_today(school)` is the date the app treats as today: the demo date for a demo school (Styfe: 7 November 2026), otherwise today in South Africa.
 
 **Tests.** `supabase/tests/` checks school isolation, what each role can see and change, and data integrity, against two fake schools in `supabase/seed.sql`. The seed is for local and CI only; it is never loaded into production.
 
