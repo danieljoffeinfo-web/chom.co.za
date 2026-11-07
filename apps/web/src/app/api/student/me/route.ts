@@ -9,9 +9,10 @@ const noStore = { 'Cache-Control': 'private, no-store' };
 
 /**
  * What the student dashboard (the prototype at /app) shows about the signed-in
- * student: who they are, their class and school, their subjects with teachers, and
- * the goals they set at onboarding. Everything is read as the student, so row-level
- * security decides what comes back.
+ * student: who they are, their class and school, their subjects with teachers, the
+ * goals they set at onboarding, and from the school's calendar: today's date, the term
+ * and week, upcoming exams, and each subject's unit plan (done, now, upcoming).
+ * Everything is read as the student, so row-level security decides what comes back.
  *
  * 401 when nobody is signed in or the person isn't a student: the dashboard then
  * stays on its sample data.
@@ -57,6 +58,92 @@ export async function GET() {
     teachersBySubject.set(a.class_subjects.subject_id, list);
   }
 
+  // The school's calendar and this grade's unit plan. "Today" is the school's: a demo
+  // school's fixed date, otherwise today in South Africa.
+  const grade = student.grade;
+  const subjectIds = student.subjects.map((s) => s.id);
+  const [todayRes, termsRes, examsRes, contentEndRes, subjectRowsRes, scheduleRes] =
+    await Promise.all([
+      supabase.rpc('school_today', { p_school_id: student.schoolId }),
+      supabase
+        .from('school_terms')
+        .select('term_number, starts_on, ends_on')
+        .eq('academic_year_id', student.academicYearId)
+        .order('term_number'),
+      grade === null
+        ? Promise.resolve({ data: [] })
+        : supabase
+            .from('exam_windows')
+            .select('label, kind, starts_on, ends_on, is_approximate')
+            .eq('academic_year_id', student.academicYearId)
+            .lte('min_grade', grade)
+            .gte('max_grade', grade)
+            .order('starts_on'),
+      grade === null
+        ? Promise.resolve({ data: null })
+        : supabase
+            .from('grade_content_end_dates')
+            .select('content_ends_on')
+            .eq('academic_year_id', student.academicYearId)
+            .eq('grade', grade)
+            .maybeSingle(),
+      subjectIds.length
+        ? supabase.from('subjects').select('id, curriculum_subject_id').in('id', subjectIds)
+        : Promise.resolve({ data: [] }),
+      grade === null
+        ? Promise.resolve({ data: [] })
+        : supabase
+            .from('unit_schedules')
+            .select(
+              'starts_on, ends_on, term_number, curriculum_units!inner(title, position, grade, curriculum_subject_id)',
+            )
+            .eq('academic_year_id', student.academicYearId)
+            .eq('curriculum_units.grade', grade),
+    ]);
+
+  const today: string =
+    todayRes.data ?? new Date().toLocaleDateString('en-CA', { timeZone: 'Africa/Johannesburg' });
+  const terms = termsRes.data ?? [];
+  const term = terms.find((t) => t.starts_on <= today && today <= t.ends_on) ?? null;
+  const daysBetween = (from: string, to: string) =>
+    Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000);
+  const contentEndsOn = contentEndRes.data?.content_ends_on ?? null;
+
+  const curriculumOf = new Map(
+    (subjectRowsRes.data ?? []).map((s) => [s.id, s.curriculum_subject_id] as const),
+  );
+  const unitsByCurriculumSubject = new Map<
+    string,
+    { title: string; position: number; startsOn: string; endsOn: string; term: number | null }[]
+  >();
+  for (const row of scheduleRes.data ?? []) {
+    const u = row.curriculum_units;
+    const list = unitsByCurriculumSubject.get(u.curriculum_subject_id) ?? [];
+    list.push({
+      title: u.title,
+      position: u.position,
+      startsOn: row.starts_on,
+      endsOn: row.ends_on,
+      term: row.term_number,
+    });
+    unitsByCurriculumSubject.set(u.curriculum_subject_id, list);
+  }
+  const unitsFor = (subjectId: string) => {
+    const curriculumSubjectId = curriculumOf.get(subjectId);
+    const units = curriculumSubjectId
+      ? (unitsByCurriculumSubject.get(curriculumSubjectId) ?? [])
+      : [];
+    return units
+      .sort((a, b) => a.position - b.position)
+      .map(({ title, startsOn, endsOn, term: unitTerm }) => ({
+        title,
+        startsOn,
+        endsOn,
+        term: unitTerm,
+        status: endsOn < today ? 'done' : startsOn <= today ? 'now' : 'upcoming',
+      }));
+  };
+
   const goals = new Map(student.goals.map((g) => [g.subject_id, g]));
   const fullName = student.name.trim();
   const words = fullName.split(/\s+/);
@@ -81,7 +168,26 @@ export async function GET() {
         teacher: (teachersBySubject.get(s.id) ?? []).join(', '),
         isFocus: goals.get(s.id)?.is_focus ?? false,
         target: goals.get(s.id)?.target_percent ?? null,
+        units: unitsFor(s.id),
       })),
+      today,
+      termCount: terms.length,
+      term: term && {
+        number: term.term_number,
+        week: Math.floor(daysBetween(term.starts_on, today) / 7) + 1,
+        endsOn: term.ends_on,
+      },
+      contentEndsOn,
+      // Exams still to come or under way, soonest first.
+      exams: (examsRes.data ?? [])
+        .filter((e) => e.ends_on >= today)
+        .map((e) => ({
+          label: e.label,
+          startsOn: e.starts_on,
+          endsOn: e.ends_on,
+          isApproximate: e.is_approximate,
+          inProgress: e.starts_on <= today,
+        })),
       onboardingComplete: Boolean(student.studyProfile?.onboarding_completed_at),
     },
     { headers: noStore },
