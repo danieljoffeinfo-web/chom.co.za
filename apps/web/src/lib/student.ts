@@ -19,6 +19,8 @@ export type StudentContext = {
   academicYearId: string;
   yearLabel: string;
   grade: number | null;
+  /** The register class (e.g. 11A), or null if the student isn't in one. */
+  registerClassName: string | null;
   classNames: string[];
   subjects: StudentSubject[];
   studyProfile: Tables<'student_study_profiles'> | null;
@@ -69,7 +71,7 @@ export async function loadStudentContext(supabase: Client): Promise<StudentConte
   const { data: enrolments } = await supabase
     .from('enrolments')
     .select(
-      'classes!inner(name, grade, academic_year_id, class_subjects(subjects(id, name, curriculum_subjects(category, sort_order))))',
+      'classes!inner(name, grade, kind, academic_year_id, class_subjects(subjects(id, name, curriculum_subjects(category, sort_order))))',
     )
     .eq('student_profile_id', profile.id)
     .eq('classes.academic_year_id', year.id);
@@ -77,10 +79,12 @@ export async function loadStudentContext(supabase: Client): Promise<StudentConte
   const subjects = new Map<string, StudentSubject>();
   const classNames: string[] = [];
   let grade: number | null = null;
+  let registerClassName: string | null = null;
   for (const enrolment of enrolments ?? []) {
     const cls = enrolment.classes;
     classNames.push(cls.name);
     grade = grade ?? cls.grade;
+    if (cls.kind === 'register') registerClassName = registerClassName ?? cls.name;
     for (const classSubject of cls.class_subjects) {
       const subject = classSubject.subjects;
       if (!subject || subjects.has(subject.id)) continue;
@@ -115,6 +119,7 @@ export async function loadStudentContext(supabase: Client): Promise<StudentConte
     academicYearId: year.id,
     yearLabel: year.label,
     grade,
+    registerClassName,
     classNames,
     subjects: [...subjects.values()].sort(
       (a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name),

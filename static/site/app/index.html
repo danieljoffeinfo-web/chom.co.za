@@ -3355,7 +3355,7 @@ SOFTWARE.
       <div class="school-switch">
         <span class="school-icon"
           ><svg class="icon small"><use href="#i-school" /></svg></span
-        ><span><strong>My school space</strong>Grade 10 · Class B</span>
+        ><span><strong>My school space</strong><span id="school-space-line">Grade 10 · Class B</span></span>
       </div>
       <p class="nav-label">My learning</p>
       <nav class="nav" aria-label="Learning">
@@ -3470,8 +3470,20 @@ SOFTWARE.
     </dialog>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script>
-      (() => {
+      // The signed-in student's real details (name, class, subjects, teachers,
+      // goals). Signed out, or not a student: null, and the page shows sample data.
+      window.chomMe = fetch("/api/student/me", {
+        credentials: "same-origin",
+        redirect: "manual",
+        cache: "no-store",
+      })
+        .then((r) => (r.ok ? r.json() : null))
+        .catch(() => null);
+    </script>
+    <script>
+      (async () => {
         "use strict";
+        const me = await window.chomMe;
         const $ = (s) => document.querySelector(s),
           $$ = (s) => [...document.querySelectorAll(s)];
         const icon = (name, small = false) =>
@@ -3530,6 +3542,8 @@ SOFTWARE.
             done: false,
           },
         ];
+        if (me) initialTasks.length = 0;
+        const storeKey = me ? `chom-learn-v2:${me.id}` : "chom-learn-v2";
         const defaults = {
           tasks: initialTasks,
           notes: "",
@@ -3543,7 +3557,7 @@ SOFTWARE.
           saved = {};
         try {
           saved =
-            JSON.parse(localStorage.getItem("chom-learn-v2") || "{}") || {};
+            JSON.parse(localStorage.getItem(storeKey) || "{}") || {};
         } catch (e) {
           storageAvailable = false;
         }
@@ -3604,6 +3618,45 @@ SOFTWARE.
           { id: "history", name: "History", short: "Hi", room: "Room 9", teacher: "", color: "#c5221f" },
           { id: "art", name: "Art", short: "Ar", room: "Art studio", teacher: "", color: "#e52592" },
         ];
+        const palette = ["#1967d2", "#129eaf", "#e8710a", "#1e8e3e", "#9334e6", "#c5221f", "#e52592", "#5f6368"];
+        const shortName = (raw) => {
+          const name = String(raw ?? "").trim();
+          const words = name.split(/\s+/).filter(Boolean);
+          return words.length > 1 && !/Language$/.test(name)
+            ? words[0][0] + words[1][0].toLowerCase()
+            : name.slice(0, 2);
+        };
+        if (me) {
+          subjectList.length = 0;
+          me.subjects.forEach((s, i) =>
+            subjectList.push({
+              id: s.id,
+              name: s.name,
+              short: shortName(s.name),
+              room: "",
+              teacher: s.teacher,
+              color: palette[i % palette.length],
+              isFocus: s.isFocus,
+              target: s.target,
+            }),
+          );
+        }
+        const displayName = me ? me.firstName : "Amara";
+        const initials = me ? me.initials : "AN";
+        const gradeShort = me ? me.registerClass || `Grade ${me.grade ?? ""}` : "Grade 10B";
+        const gradeLine = me
+          ? [me.grade != null ? `Grade ${me.grade}` : "", me.registerClass ? `Class ${me.registerClass}` : ""]
+              .filter(Boolean)
+              .join(" · ")
+          : "Grade 10 · Class B";
+        if (me) {
+          $("#school-space-line").textContent = gradeLine;
+          $$('[data-action="profile"]').forEach((b) => {
+            b.setAttribute("aria-label", `${me.firstName}'s profile`);
+            const a = b.querySelector(".avatar");
+            if (a) a.textContent = me.initials;
+          });
+        }
         // Sample "now": Tuesday, during period 1.
         const today = 1,
           nowSlot = 0;
@@ -3666,7 +3719,7 @@ SOFTWARE.
         }
         function save() {
           try {
-            localStorage.setItem("chom-learn-v2", JSON.stringify(state));
+            localStorage.setItem(storeKey, JSON.stringify(state));
             return true;
           } catch (e) {
             storageAvailable = false;
@@ -3690,7 +3743,7 @@ SOFTWARE.
           );
         }
         function footer() {
-          return `<footer class="page-footer"><span>${icon("heart")}A little support. A lot of possibility.</span><span>Sample school data · Your changes stay on this device</span></footer>`;
+          return `<footer class="page-footer"><span>${icon("heart")}A little support. A lot of possibility.</span><span>${me ? `${esc(me.schoolName)} · Tasks you add stay on this device` : "Sample school data · Your changes stay on this device"}</span></footer>`;
         }
         function subjectInfo(name) {
           return subjectList.find((x) => x.name === name);
@@ -3715,11 +3768,18 @@ SOFTWARE.
         function subjectsPanel() {
           return `<section class="cd-section" aria-labelledby="subjects-title"><div class="cd-head"><div><span class="cd-label">My subjects</span><h2 id="subjects-title">Your classes</h2></div><a class="text-button" href="#subjects">All subjects ${icon("arrow", true)}</a></div><div class="cd-classes">${subjectList
             .map((x) => {
+              if (me) return liveClassCard(x);
               const next = nextLesson(x),
                 live = next.day === today && next.slot === nowSlot;
               return `<button class="cd-class ${live ? "live" : ""}" data-action="subject" data-subject="${x.id}"><span class="cd-class-top"><span class="cd-avatar" aria-hidden="true">${x.short}</span>${live ? '<span class="cd-pill small">Live</span>' : ""}</span><span><strong>${x.name}</strong><small>Grade 10B · ${x.teacher || x.room}</small></span><span class="cd-next"><span>${live ? "Happening now" : "Next lesson"}</span><b>${live ? x.room : lessonLabel(next)}</b></span></button>`;
             })
             .join("")}</div></section>`;
+        }
+        function liveClassCard(x) {
+          return `<button class="cd-class" data-action="subject" data-subject="${esc(x.id)}"><span class="cd-class-top"><span class="cd-avatar" aria-hidden="true">${esc(x.short)}</span>${x.isFocus ? '<span class="cd-pill small">Focus</span>' : ""}</span><span><strong>${esc(x.name)}</strong><small>${esc(gradeShort)} · ${esc(x.teacher || "Teacher to be confirmed")}</small></span><span class="cd-next"><span>Your goal</span><b>${x.target ? x.target + "%" : "Not set"}</b></span></button>`;
+        }
+        function comingSoon(title, copy) {
+          return `<section class="panel"><div class="cd-head"><div><span class="cd-label">Coming soon</span><h2>${title}</h2></div></div><p class="muted" style="margin:0;padding:0 24px 28px">${copy}</p></section>`;
         }
         function dueLabel(t) {
           if (t.done) return "Done";
@@ -3775,10 +3835,24 @@ SOFTWARE.
         function schoolPanel() {
           return `<section class="cd-section" aria-labelledby="beyond-title"><div class="cd-head"><div><span class="cd-label">School life</span><h2 id="beyond-title">Beyond the classroom</h2></div></div><div class="cd-beyond"><button class="cd-service" data-action="service" data-service="sport">${icon("ball")}<span><strong>Sports &amp; activities</strong><small>Hockey, 15:30</small></span></button><button class="cd-service" data-action="service" data-service="transport">${icon("bus")}<span><strong>My transport</strong><small>Bus 14</small></span></button><button class="cd-service" data-action="service" data-service="support">${icon("heart")}<span><strong>Someone to talk to</strong><small>Private, whenever you need it</small></span></button></div></section>`;
         }
+        function liveDashboard() {
+          const now = new Date(),
+            zone = { timeZone: "Africa/Johannesburg" },
+            weekday = now.toLocaleDateString("en-ZA", { ...zone, weekday: "long" }),
+            day = now.toLocaleDateString("en-ZA", { ...zone, day: "numeric", month: "long", year: "numeric" }),
+            focus = subjectList.filter((x) => x.isFocus);
+          return `<div class="cd"><div class="cd-top"><header class="cd-hero"><span class="cd-label">${esc(weekday)} · ${esc(day)}</span><h1 class="cd-title">Hey, ${esc(displayName)}.</h1><p class="cd-lede">You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></header><section class="cd-stats" aria-label="Your week in numbers"><div class="cd-stat"><span class="cd-num" id="task-count">${remaining()}</span><strong>Tasks due today</strong><small>Tick them off as you go</small></div><div class="cd-stat"><span class="cd-num">${focus.length}</span><strong>Focus subjects</strong><small>${focus.length ? esc(focus.map((x) => x.name).join(", ")) : "Pick them in your answers"}</small></div></section></div>${subjectsPanel()}<div class="cd-split"><div class="cd-col"><section class="panel dt-panel" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="dt-all" href="#tasks">See all tasks ${icon("arrow", true)}</a></div><div id="dash-tasks">${dashTasks()}</div></section>${comingSoon("Your timetable and assignments", `Your lessons, homework and due dates will appear here once ${esc(me.schoolName)} loads its timetable.`)}</div></div></div>`;
+        }
         function dashboard() {
+          if (me) return liveDashboard();
           const nowClass = subjectInfo(weekly[today][nowSlot]),
             nextClass = subjectInfo(weekly[today][nowSlot + 1]);
           return `<div class="cd"><div class="cd-top"><header class="cd-hero"><span class="cd-label">Tuesday · 6 October 2026</span><h1 class="cd-title">Hey, Amara.</h1><p class="cd-lede">You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></header><section class="cd-stats" aria-label="Your week in numbers"><div class="cd-stat"><span class="cd-num" id="task-count">${remaining()}</span><strong>Tasks due today</strong><small>Tick them off as you go</small></div><div class="cd-stat"><span class="cd-num">2</span><strong>Assignments due</strong><small>Friday, 9 October</small></div></section></div><section class="cd-now" aria-label="Happening now"><div class="cd-now-main"><span class="cd-pill">On now</span><div><span class="cd-now-title">${nowClass.name}</span><span>${nowClass.room}${nowClass.teacher ? " · " + nowClass.teacher : ""} · ${slotTimes[nowSlot][0]}–${slotTimes[nowSlot][1]}</span></div></div><div class="cd-now-side"><span>Next: ${nextClass.name}, ${slotTimes[nowSlot + 1][0]}</span><button class="cd-cta" data-action="subject" data-subject="${nowClass.id}">Open class ${icon("arrow", true)}</button></div></section><div class="cd-split"><div class="cd-col"><section class="panel dt-panel" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="dt-all" href="#tasks">See all tasks ${icon("arrow", true)}</a></div><div id="dash-tasks">${dashTasks()}</div></section>${assignmentsPanel()}</div></div></div>`;
+        }
+        function liveSubjects() {
+          return viewHeader("My subjects", `${esc(gradeLine)} · ${esc(me.schoolName)}`) +
+            `<section class="cd-section"><div class="cd-classes">${subjectList.map(liveClassCard).join("")}</div></section>` +
+            `<div class="notice">Class notes and worksheets appear here when your teachers share them.</div>`;
         }
         function viewHeader(title, copy, extra = "") {
           return `<header class="view-header"><div><h1>${title}</h1><p>${copy}</p></div>${extra}</header>`;
@@ -3799,7 +3873,16 @@ SOFTWARE.
           $("#notification-dot").hidden = !!state.notificationsRead;
           let html = "";
           if (currentView === "dashboard") html = dashboard();
-          if (currentView === "subjects") html = School.student();
+          if (currentView === "subjects") html = me ? liveSubjects() : School.student();
+          if (me && currentView === "timetable")
+            html = viewHeader("A little structure for your week.", `${esc(gradeLine)} · ${esc(me.yearLabel)}`) +
+              comingSoon("Your timetable is on its way", `Your lessons will appear here once ${esc(me.schoolName)} loads its timetable.`);
+          if (me && currentView === "assignments")
+            html = viewHeader("Good work takes a little planning.", "Keep your drafts and deadlines in one place.") +
+              comingSoon("No assignments yet", "When your teachers set assignments, they’ll appear here with their due dates.");
+          if (me && currentView === "results")
+            html = viewHeader("See how far you’re coming.", "Use your results to find your next small step.") +
+              comingSoon("No results yet", "Your marks will appear here as your teachers record them, next to the goals you set.");
           if (currentView === "tasks")
             html =
               viewHeader(
@@ -3808,21 +3891,21 @@ SOFTWARE.
                 `<button class="button" data-action="add-task">${icon("plus", true)}Add a task</button>`,
               ) +
               `<section class="panel"><div class="panel-head"><h2>My tasks</h2><span class="muted" id="tasks-summary">${remaining()} left today</span></div><div id="tasks-content">${tasksMarkup()}</div></section>`;
-          if (currentView === "timetable")
+          if (currentView === "timetable" && !me)
             html =
               viewHeader(
                 "A little structure for your week.",
                 "5–9 October 2026 · Grade 10B · Sample school timetable",
               ) +
               `<section class="panel"><div class="panel-head"><h2>This week</h2><span class="date-pill">Term 4 · Week 2</span></div><div class="table-wrap"><div class="week-grid">${dayNames.map((d, di) => `<div class="week-col"><h3>${d.slice(0, 3)} <span class="muted">${di + 5} Oct</span></h3>${weekly[di].map((s, i) => `<div class="week-class" style="--c:${subjectInfo(s).color}"><time>${["09:40", "10:35", "11:30", "12:25", "13:45", "14:40"][i]}</time><strong>${s}</strong><small>Period ${i + 1}</small></div>`).join("")}</div>`).join("")}</div></div></section><div class="notice">Lunch break: 13:15–13:45. School activities and transport are in School life. On small screens, scroll the timetable sideways to see the week.</div>`;
-          if (currentView === "assignments")
+          if (currentView === "assignments" && !me)
             html =
               viewHeader(
                 "Good work takes a little planning.",
                 "Keep your drafts and deadlines in one place.",
               ) +
               `<section class="panel"><div class="panel-head"><h2>Due this Friday</h2><span class="count">2</span></div><div class="assignment-list">${assignmentRows()}</div></section><div class="notice">Use each assignment’s workspace to write notes and track your draft. Submission to your school is not connected in this preview.</div>`;
-          if (currentView === "results")
+          if (currentView === "results" && !me)
             html =
               viewHeader(
                 "See how far you’re coming.",
@@ -3974,6 +4057,13 @@ SOFTWARE.
         function subjectDialog(id) {
           const x = subjectList.find((y) => y.id === id);
           if (!x) return;
+          if (me) {
+            modal(
+              x.name,
+              `<p>${esc(gradeShort)} · ${esc(x.teacher || "Teacher to be confirmed")}</p><p>${x.target ? `Your goal: <strong>${x.target}%</strong>` : "You haven’t set a goal for this subject yet."}${x.isFocus ? " This is one of your focus subjects." : ""}</p><div class="notice">Lesson times appear once your timetable is loaded. Class material appears when your teacher shares it.</div>`,
+            );
+            return;
+          }
           const shared = window.School?.subjects.some((y) => y.id === id);
           modal(
             x.name,
@@ -4222,8 +4312,8 @@ SOFTWARE.
           }
           if (a === "profile")
             modal(
-              "Hi, Amara.",
-              `<div style="display:flex;align-items:center;gap:16px"><span class="avatar" style="width:54px;height:54px;font-size:17px">AN</span><div><h3 style="margin:0">Amara</h3><p class="muted">Grade 10 · Class B</p></div></div><div class="notice">You’re viewing a sample student profile. No school account is connected.</div><div class="form-actions"><button class="button secondary" data-action="search-go" data-view="settings">My preferences</button><a class="button" href="../">Sign out</a></div>`,
+              `Hi, ${esc(displayName)}.`,
+              `<div style="display:flex;align-items:center;gap:16px"><span class="avatar" style="width:54px;height:54px;font-size:17px">${esc(initials)}</span><div><h3 style="margin:0">${esc(me ? me.fullName : displayName)}</h3><p class="muted">${esc(gradeLine)}${me ? " · " + esc(me.schoolName) : ""}</p></div></div><div class="notice">${me ? `Signed in to ${esc(me.schoolName)}. Your subjects and teachers come from your school.` : "You’re viewing a sample student profile. No school account is connected."}</div><div class="form-actions"><button class="button secondary" data-action="search-go" data-view="settings">My preferences</button><a class="button" href="../">Sign out</a></div>`,
             );
           if (a === "service") {
             const info = serviceContent[b.dataset.service];
