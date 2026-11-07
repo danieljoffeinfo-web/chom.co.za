@@ -3619,8 +3619,9 @@ SOFTWARE.
           { id: "art", name: "Art", short: "Ar", room: "Art studio", teacher: "", color: "#e52592" },
         ];
         const palette = ["#1967d2", "#129eaf", "#e8710a", "#1e8e3e", "#9334e6", "#c5221f", "#e52592", "#5f6368"];
-        const shortName = (name) => {
-          const words = name.split(/\s+/);
+        const shortName = (raw) => {
+          const name = String(raw ?? "").trim();
+          const words = name.split(/\s+/).filter(Boolean);
           return words.length > 1 && !/Language$/.test(name)
             ? words[0][0] + words[1][0].toLowerCase()
             : name.slice(0, 2);

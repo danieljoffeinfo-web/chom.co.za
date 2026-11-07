@@ -24,11 +24,22 @@ export async function GET() {
   }
 
   // Who teaches each of the student's subjects this year, through the classes they're
-  // in. Students may see the teachers of their own classes.
-  const { data: allocations } = await supabase
-    .from('teaching_allocations')
-    .select('teacher_profile_id, class_subjects!inner(subject_id, classes!inner(academic_year_id))')
-    .eq('class_subjects.classes.academic_year_id', student.academicYearId);
+  // in. Limited to the student's own classes: someone who is also a school admin can
+  // see every class's teachers, and those aren't theirs.
+  const { data: enrolments } = await supabase
+    .from('enrolments')
+    .select('class_id')
+    .eq('student_profile_id', student.profileId);
+  const classIds = [...new Set((enrolments ?? []).map((e) => e.class_id))];
+  const { data: allocations } = classIds.length
+    ? await supabase
+        .from('teaching_allocations')
+        .select(
+          'teacher_profile_id, class_subjects!inner(subject_id, class_id, classes!inner(academic_year_id))',
+        )
+        .in('class_subjects.class_id', classIds)
+        .eq('class_subjects.classes.academic_year_id', student.academicYearId)
+    : { data: [] };
 
   const teacherIds = [...new Set((allocations ?? []).map((a) => a.teacher_profile_id))];
   const { data: teachers } = teacherIds.length
