@@ -44,6 +44,9 @@ export async function proxy(request: NextRequest) {
     path.startsWith('/sign-in') ||
     path === '/sign-out' ||
     path.startsWith('/auth/') ||
+    // API routes check sign-in themselves and answer 401 in JSON; a redirect to the
+    // sign-in page would reach the page's fetch as an unreadable response.
+    path.startsWith('/api/') ||
     isPrototype;
   if (!signedIn && !isPublic) {
     const signIn = request.nextUrl.clone();

@@ -1,3 +1,4 @@
+import { isAuthRetryableFetchError } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
 import { loadStudentContext } from '@/lib/student';
@@ -20,9 +21,12 @@ const noStore = { 'Cache-Control': 'private, no-store' };
  */
 export async function GET() {
   const supabase = await createClient();
-  const { data: claims } = await supabase.auth.getClaims();
+  const { data: claims, error: claimsError } = await supabase.auth.getClaims();
   if (!claims?.claims) {
-    return NextResponse.json({ error: 'signed_out' }, { status: 401, headers: noStore });
+    // Auth unreachable (a network error or 5xx) is "try again", not "sign in again".
+    return isRetryableAuthError(claimsError)
+      ? NextResponse.json({ error: 'unavailable' }, { status: 500, headers: noStore })
+      : NextResponse.json({ error: 'signed_out' }, { status: 401, headers: noStore });
   }
   const student = await loadStudentContext(supabase);
   if (!student) {
@@ -226,4 +230,11 @@ async function hasStudentMembership(
     .limit(1);
   if (membershipError) return null;
   return memberships.length > 0;
+}
+
+function isRetryableAuthError(error: unknown): boolean {
+  if (!error) return false;
+  if (isAuthRetryableFetchError(error)) return true;
+  const status = (error as { status?: unknown }).status;
+  return typeof status === 'number' && status >= 500;
 }

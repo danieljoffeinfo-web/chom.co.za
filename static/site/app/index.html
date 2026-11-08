@@ -3500,7 +3500,8 @@ SOFTWARE.
           .then((r) => {
             if (r.ok) return r.json();
             if (!live) return null;
-            if (r.status === 401) {
+            // A redirect (e.g. to sign in) reaches us opaque, as status 0: treat it as signed out.
+            if (r.status === 401 || r.type === "opaqueredirect") {
               location.replace("/sign-in");
               return never;
             }
