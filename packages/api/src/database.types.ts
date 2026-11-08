@@ -1360,6 +1360,207 @@ export type Database = {
           },
         ];
       };
+      task_attachments: {
+        Row: {
+          content_type: string | null;
+          created_at: string;
+          file_name: string;
+          id: string;
+          school_id: string;
+          size_bytes: number;
+          storage_path: string;
+          task_id: string;
+          uploaded_by: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          content_type?: string | null;
+          created_at?: string;
+          file_name: string;
+          id?: string;
+          school_id: string;
+          size_bytes: number;
+          storage_path: string;
+          task_id: string;
+          uploaded_by: string;
+        };
+        Update: {
+          content_type?: string | null;
+          created_at?: string;
+          file_name?: string;
+          id?: string;
+          school_id?: string;
+          size_bytes?: number;
+          storage_path?: string;
+          task_id?: string;
+          uploaded_by?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'task_attachments_task_id_school_id_fkey';
+            columns: ['task_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'tasks';
+            referencedColumns: ['id', 'school_id'];
+          },
+          {
+            foreignKeyName: 'task_attachments_uploaded_by_fkey';
+            columns: ['uploaded_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      task_classes: {
+        Row: {
+          class_subject_id: string;
+          created_at: string;
+          school_id: string;
+          task_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          class_subject_id: string;
+          created_at?: string;
+          school_id: string;
+          task_id: string;
+        };
+        Update: {
+          class_subject_id?: string;
+          created_at?: string;
+          school_id?: string;
+          task_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'task_classes_class_subject_id_school_id_fkey';
+            columns: ['class_subject_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'class_subjects';
+            referencedColumns: ['id', 'school_id'];
+          },
+          {
+            foreignKeyName: 'task_classes_task_id_school_id_fkey';
+            columns: ['task_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'tasks';
+            referencedColumns: ['id', 'school_id'];
+          },
+        ];
+      };
+      task_completions: {
+        Row: {
+          completed_at: string;
+          school_id: string;
+          student_profile_id: string;
+          student_role: Database['public']['Enums']['membership_role'];
+          task_id: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          completed_at?: string;
+          school_id: string;
+          student_profile_id: string;
+          student_role?: Database['public']['Enums']['membership_role'];
+          task_id: string;
+        };
+        Update: {
+          completed_at?: string;
+          school_id?: string;
+          student_profile_id?: string;
+          student_role?: Database['public']['Enums']['membership_role'];
+          task_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'task_completions_school_id_student_profile_id_student_role_fkey';
+            columns: ['school_id', 'student_profile_id', 'student_role'];
+            isOneToOne: false;
+            referencedRelation: 'school_memberships';
+            referencedColumns: ['school_id', 'profile_id', 'role'];
+          },
+          {
+            foreignKeyName: 'task_completions_task_id_school_id_fkey';
+            columns: ['task_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'tasks';
+            referencedColumns: ['id', 'school_id'];
+          },
+        ];
+      };
+      tasks: {
+        Row: {
+          academic_year_id: string;
+          created_at: string;
+          created_by: string;
+          due_at: string | null;
+          id: string;
+          kind: Database['public']['Enums']['task_kind'];
+          notes: string | null;
+          school_id: string;
+          subject_id: string | null;
+          title: string;
+          updated_at: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          academic_year_id: string;
+          created_at?: string;
+          created_by: string;
+          due_at?: string | null;
+          id?: string;
+          kind: Database['public']['Enums']['task_kind'];
+          notes?: string | null;
+          school_id: string;
+          subject_id?: string | null;
+          title: string;
+          updated_at?: string;
+        };
+        Update: {
+          academic_year_id?: string;
+          created_at?: string;
+          created_by?: string;
+          due_at?: string | null;
+          id?: string;
+          kind?: Database['public']['Enums']['task_kind'];
+          notes?: string | null;
+          school_id?: string;
+          subject_id?: string | null;
+          title?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'tasks_academic_year_id_school_id_fkey';
+            columns: ['academic_year_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'academic_years';
+            referencedColumns: ['id', 'school_id'];
+          },
+          {
+            foreignKeyName: 'tasks_created_by_fkey';
+            columns: ['created_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'tasks_school_id_fkey';
+            columns: ['school_id'];
+            isOneToOne: false;
+            referencedRelation: 'schools';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'tasks_subject_id_school_id_fkey';
+            columns: ['subject_id', 'school_id'];
+            isOneToOne: false;
+            referencedRelation: 'subjects';
+            referencedColumns: ['id', 'school_id'];
+          },
+        ];
+      };
       teaching_allocations: {
         Row: {
           class_subject_id: string;
@@ -1523,6 +1724,7 @@ export type Database = {
       study_session_length: 'minutes_15' | 'minutes_30' | 'minutes_45' | 'minutes_60_plus';
       study_time: 'afternoon' | 'evening' | 'late_night' | 'weekends';
       subject_rule_type: 'mutually_exclusive' | 'requires' | 'max_from_group';
+      task_kind: 'assigned' | 'personal';
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -1656,6 +1858,7 @@ export const Constants = {
       study_session_length: ['minutes_15', 'minutes_30', 'minutes_45', 'minutes_60_plus'],
       study_time: ['afternoon', 'evening', 'late_night', 'weekends'],
       subject_rule_type: ['mutually_exclusive', 'requires', 'max_from_group'],
+      task_kind: ['assigned', 'personal'],
     },
   },
 } as const;
