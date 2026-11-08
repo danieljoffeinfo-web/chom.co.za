@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 
 import styles from './page.module.css';
+import { Logo } from '@/components/logo';
 
 export default async function Landing() {
   const supabase = await createClient();
@@ -12,7 +13,9 @@ export default async function Landing() {
 
   return (
     <main className={styles.main}>
-      <p className={styles.brand}>chom learn</p>
+      <p className={styles.brand}>
+        <Logo />
+      </p>
       <h1 className={styles.title}>Everything at your fingertips.</h1>
       <p className={styles.lede}>
         <strong>Study the right way with Chom.</strong>

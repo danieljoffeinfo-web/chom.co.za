@@ -115,3 +115,5 @@ export const radius = {
 
 /** Minimum touch target, per accessibility guidance. */
 export const minTouchTarget = 44;
+
+export { logo } from './logo';

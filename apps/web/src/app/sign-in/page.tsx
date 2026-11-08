@@ -4,6 +4,7 @@ import { parseLoginAs } from '@/lib/login-intent';
 
 import { SignInForm } from './sign-in-form';
 import styles from './sign-in.module.css';
+import { Logo } from '@/components/logo';
 
 export const metadata = { title: 'Sign in · Chom Learn' };
 
@@ -17,7 +18,9 @@ export default async function SignIn({
   return (
     <main className={styles.page}>
       <div className={styles.card}>
-        <p className={styles.brand}>chom learn</p>
+        <p className={styles.brand}>
+          <Logo />
+        </p>
         <h1 className={styles.title}>{loginAs === 'staff' ? 'Teacher sign in' : 'Sign in'}</h1>
         <p className={styles.muted}>
           {loginAs === 'staff'
