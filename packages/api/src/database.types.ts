@@ -1100,10 +1100,8 @@ export type Database = {
       schools: {
         Row: {
           created_at: string;
-          demo_today: string | null;
           ednana_id: string | null;
           id: string;
-          is_demo: boolean;
           name: string;
           school_group_id: string;
           slug: string;
@@ -1112,10 +1110,8 @@ export type Database = {
         ComputedFields: never;
         Insert: {
           created_at?: string;
-          demo_today?: string | null;
           ednana_id?: string | null;
           id?: string;
-          is_demo?: boolean;
           name: string;
           school_group_id: string;
           slug: string;
@@ -1123,10 +1119,8 @@ export type Database = {
         };
         Update: {
           created_at?: string;
-          demo_today?: string | null;
           ednana_id?: string | null;
           id?: string;
-          is_demo?: boolean;
           name?: string;
           school_group_id?: string;
           slug?: string;
