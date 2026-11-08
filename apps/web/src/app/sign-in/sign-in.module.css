@@ -155,3 +155,12 @@
   opacity: 0.6;
   cursor: progress;
 }
+
+.account {
+  font-size: 14px;
+  padding: 10px 14px;
+  border-radius: var(--chom-radius-md);
+  background: var(--chom-background);
+  border: 1px solid var(--chom-border);
+  overflow-wrap: anywhere;
+}

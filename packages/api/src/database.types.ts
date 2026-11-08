@@ -1681,7 +1681,7 @@ export type Database = {
           path: string;
         }[];
       };
-      confirm_my_name: { Args: { p_full_name: string }; Returns: undefined };
+      confirm_my_name: { Args: { p_full_name: string }; Returns: boolean };
       finish_task_file_cleanup: { Args: { p_ids: number[]; p_token: string }; Returns: number };
       link_my_account: { Args: Record<PropertyKey, never>; Returns: string };
       my_guardian_links: {
