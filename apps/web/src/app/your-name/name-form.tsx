@@ -23,21 +23,14 @@ export function NameForm({ next }: { next: string }) {
     setBusy(true);
     setError(null);
     try {
-      const { data: matches, error: saveError } = await createClient().rpc('confirm_my_name', {
+      const { error: saveError } = await createClient().rpc('confirm_my_name', {
         p_full_name: fullName,
       });
       if (saveError) throw saveError;
-      if (!matches) {
-        setError(
-          'That isn’t the name your school has for this account. Check the spelling and type your first name and surname. If this isn’t your account, sign out below.',
-        );
-        setBusy(false);
-        return;
-      }
       router.push(next);
     } catch (thrown) {
-      console.error('Checking the name failed', thrown);
-      setError('We couldn’t check your name. Please try again in a moment.');
+      console.error('Saving the name failed', thrown);
+      setError('We couldn’t save your name. Please try again in a moment.');
       setBusy(false);
     }
   }
