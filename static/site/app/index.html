@@ -3488,9 +3488,12 @@ SOFTWARE.
         const liveTasks = me
           ? await fetch("/api/student/tasks", { credentials: "same-origin", redirect: "manual", cache: "no-store" })
               .then((r) => (r.ok ? r.json() : null))
-              .then((d) => (d && Array.isArray(d.tasks) ? d.tasks : []))
-              .catch(() => [])
+              .then((d) => (d && Array.isArray(d.tasks) ? d.tasks : null))
+              .catch(() => null)
           : null;
+        // Signed in but the list didn't load: say so, rather than "all caught up".
+        const tasksFailed = Boolean(me) && !liveTasks;
+        const tasksFailedNote = `<p class="task-empty" role="alert">We couldn’t load your tasks. <button type="button" class="text-button" data-action="reload-page">Try again</button></p>`;
         if (me && !me.today)
           me.today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Johannesburg" });
         const $ = (s) => document.querySelector(s),
@@ -3618,7 +3621,7 @@ SOFTWARE.
           const m = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
           return `${Number(iso.slice(8, 10))} ${m[Number(iso.slice(5, 7)) - 1]}`;
         }
-        if (me && liveTasks) state.tasks = liveTasks.map(fromServer);
+        if (me) state.tasks = (liveTasks || []).map(fromServer);
         let currentView = "dashboard",
           taskFilter = "today",
           selectedDay = 1,
@@ -3839,13 +3842,13 @@ SOFTWARE.
           return /^\d/.test(t.time) ? "Due by " + t.time : "Due today";
         }
         function dashTaskRow(t) {
-          return `<li><label class="dt-row ${t.done ? "done" : ""}"><span class="dt-copy">${me ? `<button type="button" class="dt-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button>` : `<span class="dt-name">${esc(t.title)}</span>`}<span class="dt-subject">${esc(t.subject)}</span></span><span class="dt-due ${t.done ? "is-done" : ""}">${esc(dueLabel(t))}</span><input type="checkbox" class="dt-check" data-task="${esc(t.id)}" aria-label="Mark ${esc(t.title)} as done" ${t.done ? "checked" : ""}></label></li>`;
+          return `<li><${me ? "div" : "label"} class="dt-row ${t.done ? "done" : ""}"><span class="dt-copy">${me ? `<button type="button" class="dt-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button>` : `<span class="dt-name">${esc(t.title)}</span>`}<span class="dt-subject">${esc(t.subject)}</span></span><span class="dt-due ${t.done ? "is-done" : ""}">${esc(dueLabel(t))}</span><input type="checkbox" class="dt-check" data-task="${esc(t.id)}" aria-label="Mark ${esc(t.title)} as done" ${t.done ? "checked" : ""}></${me ? "div" : "label"}></li>`;
         }
         function dashTasks() {
           const today = state.tasks.filter((t) => t.when === "today"),
             upcoming = state.tasks.filter((t) => t.when === "upcoming"),
             left = remaining();
-          return `<div class="dt-group"><h3 class="dt-group-title">Due today <span>${left ? left + " left" : "All done"}</span></h3>${today.length ? `<ul class="dt-list">${today.map(dashTaskRow).join("")}</ul>` : `<p class="task-empty">Nothing due today. You’re all caught up.</p>`}</div>${upcoming.length ? `<div class="dt-group"><h3 class="dt-group-title">Coming up</h3><ul class="dt-list">${upcoming.map(dashTaskRow).join("")}</ul></div>` : ""}`;
+          return `<div class="dt-group"><h3 class="dt-group-title">Due today <span>${tasksFailed ? "" : left ? left + " left" : "All done"}</span></h3>${today.length ? `<ul class="dt-list">${today.map(dashTaskRow).join("")}</ul>` : tasksFailed ? tasksFailedNote : `<p class="task-empty">Nothing due today. You’re all caught up.</p>`}</div>${upcoming.length ? `<div class="dt-group"><h3 class="dt-group-title">Coming up</h3><ul class="dt-list">${upcoming.map(dashTaskRow).join("")}</ul></div>` : ""}`;
         }
         function tasksMarkup() {
           const list = state.tasks.filter((t) =>
@@ -3855,7 +3858,7 @@ SOFTWARE.
                 ? t.when === "upcoming" && !t.done
                 : t.when === "today",
           );
-          return `<div class="filter-row" role="tablist" aria-label="Task filters">${["today", "upcoming", "done"].map((f) => `<button class="filter ${taskFilter === f ? "active" : ""}" role="tab" aria-selected="${taskFilter === f}" aria-controls="task-results" data-filter="${f}">${{ today: "Today", upcoming: "Upcoming", done: "Completed" }[f]}<span>${state.tasks.filter((t) => (f === "done" ? t.done : f === "upcoming" ? t.when === "upcoming" && !t.done : t.when === "today")).length}</span></button>`).join("")}</div><div class="task-list" id="task-results" role="tabpanel" aria-label="${taskFilter} tasks">${list.length ? list.map((t) => `<div class="task-row ${t.done ? "completed" : ""}"><label class="task-check"><input type="checkbox" data-task="${esc(t.id)}" aria-label="Complete ${esc(t.title)}" ${t.done ? "checked" : ""}></label><div class="task-content">${me ? `<button type="button" class="task-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button>` : `<span class="task-name">${esc(t.title)}</span>`}<span class="task-sub"><i class="subject-dot ${esc(t.subject)}"></i>${esc(t.subject)}</span></div><span class="due ${t.done ? "done" : ""}">${t.done ? "Completed" : esc(me ? t.time : t.time === "Done" ? "Today" : t.time)}</span></div>`).join("") : `<p class="task-empty">${taskFilter === "done" ? "Your completed tasks will appear here." : taskFilter === "upcoming" ? "A little breathing room. No upcoming tasks." : "Nothing due today. You’re all caught up."}</p>`}</div>`;
+          return `<div class="filter-row" role="tablist" aria-label="Task filters">${["today", "upcoming", "done"].map((f) => `<button class="filter ${taskFilter === f ? "active" : ""}" role="tab" aria-selected="${taskFilter === f}" aria-controls="task-results" data-filter="${f}">${{ today: "Today", upcoming: "Upcoming", done: "Completed" }[f]}<span>${state.tasks.filter((t) => (f === "done" ? t.done : f === "upcoming" ? t.when === "upcoming" && !t.done : t.when === "today")).length}</span></button>`).join("")}</div><div class="task-list" id="task-results" role="tabpanel" aria-label="${taskFilter} tasks">${list.length ? list.map((t) => `<div class="task-row ${t.done ? "completed" : ""}"><label class="task-check"><input type="checkbox" data-task="${esc(t.id)}" aria-label="Complete ${esc(t.title)}" ${t.done ? "checked" : ""}></label><div class="task-content">${me ? `<button type="button" class="task-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button>` : `<span class="task-name">${esc(t.title)}</span>`}<span class="task-sub"><i class="subject-dot ${esc(t.subject)}"></i>${esc(t.subject)}</span></div><span class="due ${t.done ? "done" : ""}">${t.done ? "Completed" : esc(me ? t.time : t.time === "Done" ? "Today" : t.time)}</span></div>`).join("") : tasksFailed ? tasksFailedNote : `<p class="task-empty">${taskFilter === "done" ? "Your completed tasks will appear here." : taskFilter === "upcoming" ? "A little breathing room. No upcoming tasks." : "Nothing due today. You’re all caught up."}</p>`}</div>`;
         }
         function scheduleRows(day) {
           const slot = (i) => {
@@ -4407,6 +4410,7 @@ SOFTWARE.
           if (a === "navigate") go(b.dataset.view);
           if (a === "add-task") addTask();
           if (a === "task-detail") taskDetail(b.dataset.id);
+          if (a === "reload-page") location.reload();
           if (a === "task-delete") deleteTask(b.dataset.id);
           if (a === "subject") subjectDialog(b.dataset.subject);
           if (a === "assignment") assignment(b.dataset.id);
