@@ -14,6 +14,8 @@ import { createClient } from 'npm:@supabase/supabase-js@2.118.0';
 type Job = { id: number; bucket_id: string; path: string };
 
 const BATCH = 200;
+// A task folder holds a handful of files; this bounds the loop all the same.
+const MAX_PAGES = 20;
 
 Deno.serve(async (req) => {
   const token = req.headers.get('x-cleanup-token');
@@ -43,17 +45,19 @@ Deno.serve(async (req) => {
     try {
       if (job.path.endsWith('/')) {
         // A whole task folder: list what's left in it and remove it, page by page.
+        // Entries without an id are sub-folders, which task folders don't have.
         const folder = job.path.slice(0, -1);
-        for (;;) {
-          const { data: files, error: listError } = await bucket.list(folder, { limit: 1000 });
+        for (let page = 0; page < MAX_PAGES; page++) {
+          const { data: entries, error: listError } = await bucket.list(folder, { limit: 1000 });
           if (listError) throw listError;
-          if (!files?.length) break;
+          const files = (entries ?? []).filter((f) => f.id !== null);
+          if (!files.length) break;
           const { error: removeError } = await bucket.remove(
             files.map((f) => `${folder}/${f.name}`),
           );
           if (removeError) throw removeError;
           removed += files.length;
-          if (files.length < 1000) break;
+          if ((entries ?? []).length < 1000) break;
         }
       } else {
         // One file. Removing one that's already gone is not an error.
@@ -72,7 +76,14 @@ Deno.serve(async (req) => {
       p_token: token,
       p_ids: done,
     });
-    if (finishError) return json({ error: 'finish_failed' }, 500);
+    if (finishError) {
+      // The files are gone; their paths stay queued and are cleared on a later run.
+      console.error(
+        `task-file-cleanup: removed ${removed} files from ${done.length} paths but couldn't clear them:`,
+        finishError.message,
+      );
+      return json({ error: 'finish_failed', removed, cleared: 0 }, 500);
+    }
   }
   return json({ claimed: jobs.length, cleared: done.length, removed });
 });

@@ -40,7 +40,8 @@ $$;
 
 revoke execute on function private.task_cleanup_token() from public, anon, authenticated;
 
--- The function claims up to p_limit paths not tried in the last 10 minutes.
+-- The function claims up to p_limit paths not tried in the last 10 minutes, the
+-- least-tried first, so a path that keeps failing never crowds out new ones.
 create function public.claim_task_file_cleanup(p_token text, p_limit int default 200)
 returns table (id bigint, bucket_id text, path text)
 language plpgsql
@@ -59,7 +60,7 @@ begin
    where q.id in (
      select c.id from private.task_file_cleanup c
      where c.claimed_at is null or c.claimed_at < now() - interval '10 minutes'
-     order by c.id
+     order by c.attempts, c.id
      limit greatest(1, least(p_limit, 1000))
      for update skip locked
    )

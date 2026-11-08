@@ -110,6 +110,8 @@ export function TaskForm({ classes, task }: { classes: ClassChoice[]; task?: Edi
   const [chosen, setChosen] = useState<string[]>(task?.classSubjectIds ?? []);
   // Files already on the task, and the ones the teacher has chosen to take off.
   const [removed, setRemoved] = useState<string[]>([]);
+  // Files already taken off in an earlier attempt, so a retry doesn't try again.
+  const deleted = useRef(new Set<string>());
   const [files, setFiles] = useState<Picked[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState<null | 'saving' | 'uploading' | 'sending'>(null);
@@ -232,11 +234,13 @@ export function TaskForm({ classes, task }: { classes: ClassChoice[]; task?: Edi
       }
 
       for (const id of removed) {
+        if (deleted.current.has(id)) continue;
         const gone = await removeAttachment(id);
         if (!gone.ok) {
           setError(gone.error);
           return;
         }
+        deleted.current.add(id);
       }
 
       setBusy('sending');

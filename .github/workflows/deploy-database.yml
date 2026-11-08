@@ -129,7 +129,7 @@ jobs:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         # Bundled by Supabase (no Docker). JWT checks are off per function in
         # supabase/config.toml: task-file-cleanup checks its own token.
-        run: pnpm exec supabase functions deploy --remote="$SUPABASE_PROJECT_REF" --use-api
+        run: pnpm exec supabase functions deploy --remote="$SUPABASE_PROJECT_REF" --use-api --yes
 
       - name: Production after deploy
         if: steps.ci.outputs.passed == 'true' && (github.event_name == 'workflow_run' || inputs.dry_run == false)
