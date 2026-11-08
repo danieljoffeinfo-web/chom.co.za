@@ -62,9 +62,6 @@ jobs:
       - name: Bundle mobile (iOS + Android)
         run: pnpm --filter @chom/mobile bundle
 
-      - name: Build static site (live chom.co.za)
-        run: pnpm build:site
-
   database:
     name: Database migrations, access rules and types
     runs-on: ubuntu-latest

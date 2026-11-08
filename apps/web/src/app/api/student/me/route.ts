@@ -9,15 +9,15 @@ export const dynamic = 'force-dynamic';
 const noStore = { 'Cache-Control': 'private, no-store' };
 
 /**
- * What the student dashboard (the prototype at /app) shows about the signed-in
+ * What the student dashboard (at /app) shows about the signed-in
  * student: who they are, their class and school, their subjects with teachers, the
  * goals they set at onboarding, and from the school's calendar: today's date, the term
  * and week, upcoming exams, and each subject's unit plan (done, now, upcoming).
  * Everything is read as the student, so row-level security decides what comes back.
  *
  * 401 when nobody is signed in; 403 when someone is, but not as a student (a teacher or
- * parent in the same browser). On chom.co.za the dashboard then sends them to sign in,
- * or offers their own dashboard; it never shows sample data to a real visitor.
+ * parent in the same browser). The dashboard then sends them to sign in, or offers
+ * their own dashboard.
  */
 export async function GET() {
   const supabase = await createClient();
@@ -73,8 +73,7 @@ export async function GET() {
     teachersBySubject.set(a.class_subjects.subject_id, list);
   }
 
-  // The school's calendar and this grade's unit plan. "Today" is the school's: a demo
-  // school's fixed date, otherwise today in South Africa.
+  // The school's calendar and this grade's unit plan. "Today" is today in South Africa.
   const grade = student.grade;
   const subjectIds = student.subjects.map((s) => s.id);
   const [todayRes, termsRes, examsRes, contentEndRes, subjectRowsRes, scheduleRes] =

@@ -34,11 +34,6 @@ export async function proxy(request: NextRequest) {
   const signedIn = Boolean(data?.claims);
 
   const path = request.nextUrl.pathname;
-  // The HTML prototypes use sample data only, so they stay viewable signed out
-  // (for showing schools).
-  const isPrototype = ['/app', '/teacher', '/shared'].some(
-    (p) => path === p || path.startsWith(`${p}/`),
-  );
   const isPublic =
     path === '/' ||
     path.startsWith('/sign-in') ||
@@ -46,8 +41,7 @@ export async function proxy(request: NextRequest) {
     path.startsWith('/auth/') ||
     // API routes check sign-in themselves and answer 401 in JSON; a redirect to the
     // sign-in page would reach the page's fetch as an unreadable response.
-    path.startsWith('/api/') ||
-    isPrototype;
+    path.startsWith('/api/');
   if (!signedIn && !isPublic) {
     const signIn = request.nextUrl.clone();
     signIn.pathname = '/sign-in';
