@@ -3484,6 +3484,13 @@ SOFTWARE.
       (async () => {
         "use strict";
         const me = await window.chomMe;
+        // The student's real tasks: their teachers' work and their own reminders.
+        const liveTasks = me
+          ? await fetch("/api/student/tasks", { credentials: "same-origin", redirect: "manual", cache: "no-store" })
+              .then((r) => (r.ok ? r.json() : null))
+              .then((d) => (d && Array.isArray(d.tasks) ? d.tasks : []))
+              .catch(() => [])
+          : null;
         if (me && !me.today)
           me.today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Johannesburg" });
         const $ = (s) => document.querySelector(s),
@@ -3586,6 +3593,32 @@ SOFTWARE.
             ...saved.assignmentProgress,
           },
         };
+        // A real task in the shape the page draws: due today (or overdue, or no date)
+        // goes under Today; a later date under Upcoming.
+        function fromServer(t) {
+          const dueDay = t.dueAt
+            ? new Date(t.dueAt).toLocaleDateString("en-CA", { timeZone: "Africa/Johannesburg" })
+            : null;
+          const label = !dueDay
+            ? "Anytime"
+            : dueDay < me.today
+              ? `Overdue · ${shortDue(dueDay)}`
+              : dueDay === me.today
+                ? "Due today"
+                : `Due ${shortDue(dueDay)}`;
+          return {
+            ...t,
+            subject: t.subject || "My task",
+            when: !dueDay || dueDay <= me.today ? "today" : "upcoming",
+            time: label,
+            dueDay,
+          };
+        }
+        function shortDue(iso) {
+          const m = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+          return `${Number(iso.slice(8, 10))} ${m[Number(iso.slice(5, 7)) - 1]}`;
+        }
+        if (me && liveTasks) state.tasks = liveTasks.map(fromServer);
         let currentView = "dashboard",
           taskFilter = "today",
           selectedDay = 1,
@@ -3801,11 +3834,12 @@ SOFTWARE.
         }
         function dueLabel(t) {
           if (t.done) return "Done";
+          if (me) return t.time;
           if (t.when === "upcoming") return "Due " + String(t.time).toLowerCase();
           return /^\d/.test(t.time) ? "Due by " + t.time : "Due today";
         }
         function dashTaskRow(t) {
-          return `<li><label class="dt-row ${t.done ? "done" : ""}"><span class="dt-copy"><span class="dt-name">${esc(t.title)}</span><span class="dt-subject">${esc(t.subject)}</span></span><span class="dt-due ${t.done ? "is-done" : ""}">${esc(dueLabel(t))}</span><input type="checkbox" class="dt-check" data-task="${esc(t.id)}" aria-label="Mark ${esc(t.title)} as done" ${t.done ? "checked" : ""}></label></li>`;
+          return `<li><label class="dt-row ${t.done ? "done" : ""}"><span class="dt-copy">${me ? `<button type="button" class="dt-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button>` : `<span class="dt-name">${esc(t.title)}</span>`}<span class="dt-subject">${esc(t.subject)}</span></span><span class="dt-due ${t.done ? "is-done" : ""}">${esc(dueLabel(t))}</span><input type="checkbox" class="dt-check" data-task="${esc(t.id)}" aria-label="Mark ${esc(t.title)} as done" ${t.done ? "checked" : ""}></label></li>`;
         }
         function dashTasks() {
           const today = state.tasks.filter((t) => t.when === "today"),
@@ -3821,7 +3855,7 @@ SOFTWARE.
                 ? t.when === "upcoming" && !t.done
                 : t.when === "today",
           );
-          return `<div class="filter-row" role="tablist" aria-label="Task filters">${["today", "upcoming", "done"].map((f) => `<button class="filter ${taskFilter === f ? "active" : ""}" role="tab" aria-selected="${taskFilter === f}" aria-controls="task-results" data-filter="${f}">${{ today: "Today", upcoming: "Upcoming", done: "Completed" }[f]}<span>${state.tasks.filter((t) => (f === "done" ? t.done : f === "upcoming" ? t.when === "upcoming" && !t.done : t.when === "today")).length}</span></button>`).join("")}</div><div class="task-list" id="task-results" role="tabpanel" aria-label="${taskFilter} tasks">${list.length ? list.map((t) => `<div class="task-row ${t.done ? "completed" : ""}"><label class="task-check"><input type="checkbox" data-task="${esc(t.id)}" aria-label="Complete ${esc(t.title)}" ${t.done ? "checked" : ""}></label><div class="task-content"><span class="task-name">${esc(t.title)}</span><span class="task-sub"><i class="subject-dot ${esc(t.subject)}"></i>${esc(t.subject)}</span></div><span class="due ${t.done ? "done" : ""}">${t.done ? "Completed" : esc(t.time === "Done" ? "Today" : t.time)}</span></div>`).join("") : `<p class="task-empty">${taskFilter === "done" ? "Your completed tasks will appear here." : taskFilter === "upcoming" ? "A little breathing room. No upcoming tasks." : "Nothing due today. You’re all caught up."}</p>`}</div>`;
+          return `<div class="filter-row" role="tablist" aria-label="Task filters">${["today", "upcoming", "done"].map((f) => `<button class="filter ${taskFilter === f ? "active" : ""}" role="tab" aria-selected="${taskFilter === f}" aria-controls="task-results" data-filter="${f}">${{ today: "Today", upcoming: "Upcoming", done: "Completed" }[f]}<span>${state.tasks.filter((t) => (f === "done" ? t.done : f === "upcoming" ? t.when === "upcoming" && !t.done : t.when === "today")).length}</span></button>`).join("")}</div><div class="task-list" id="task-results" role="tabpanel" aria-label="${taskFilter} tasks">${list.length ? list.map((t) => `<div class="task-row ${t.done ? "completed" : ""}"><label class="task-check"><input type="checkbox" data-task="${esc(t.id)}" aria-label="Complete ${esc(t.title)}" ${t.done ? "checked" : ""}></label><div class="task-content">${me ? `<button type="button" class="task-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button>` : `<span class="task-name">${esc(t.title)}</span>`}<span class="task-sub"><i class="subject-dot ${esc(t.subject)}"></i>${esc(t.subject)}</span></div><span class="due ${t.done ? "done" : ""}">${t.done ? "Completed" : esc(me ? t.time : t.time === "Done" ? "Today" : t.time)}</span></div>`).join("") : `<p class="task-empty">${taskFilter === "done" ? "Your completed tasks will appear here." : taskFilter === "upcoming" ? "A little breathing room. No upcoming tasks." : "Nothing due today. You’re all caught up."}</p>`}</div>`;
         }
         function scheduleRows(day) {
           const slot = (i) => {
@@ -4101,11 +4135,67 @@ SOFTWARE.
           );
         }
         function addTask() {
+          if (me) {
+            modal(
+              "One more thing on your list.",
+              `<p>Just for you. Your teachers won’t see it.</p><form id="add-live-task-form"><div class="field"><label for="task-title">What do you need to do?</label><input id="task-title" name="title" placeholder="e.g. Revise chapter 4" required maxlength="200" autocomplete="off"></div><div class="field"><label for="task-due">Due date (optional)</label><input id="task-due" name="dueOn" type="date"></div><div class="form-actions"><button class="button secondary" type="button" data-action="close-dialog">Cancel</button><button class="button" type="submit">Add task</button></div></form>`,
+            );
+            $("#task-title").focus();
+            return;
+          }
           modal(
             "One more thing on your list.",
             `<p>Give it a name. Take it one step at a time.</p><form id="add-task-form"><div class="field"><label for="task-title">What do you need to do?</label><input id="task-title" name="title" placeholder="e.g. Revise chapter 4" required maxlength="120" autocomplete="off"></div><div class="form-row"><div class="field"><label for="task-subject">Subject</label><select id="task-subject" name="subject">${["Maths", "English", "Life Sciences", "History", "Afrikaans", "Geography", "Art", "Personal"].map((x) => `<option>${x}</option>`).join("")}</select></div><div class="field"><label for="task-when">When is it due?</label><select id="task-when" name="when"><option value="today">Today</option><option value="upcoming">Tomorrow</option></select></div></div><div class="form-actions"><button class="button secondary" type="button" data-action="close-dialog">Cancel</button><button class="button" type="submit">Add task</button></div></form>`,
           );
           $("#task-title").focus();
+        }
+        function fileSize(bytes) {
+          return bytes >= 1048576 ? `${(bytes / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
+        }
+        function taskDetail(id) {
+          const t = state.tasks.find((x) => x.id === id);
+          if (!t) return;
+          const meta = [t.kind === "assigned" ? t.subject : "Your own task", t.teacher, t.done ? "Done" : t.time]
+            .filter(Boolean)
+            .map(esc)
+            .join(" · ");
+          const files = (t.attachments || [])
+            .map((a) => `<li><a class="text-button" href="/api/student/tasks/files/${esc(a.id)}">${esc(a.name)}</a> <span class="muted">${esc(fileSize(a.size))}</span></li>`)
+            .join("");
+          modal(
+            t.title,
+            `<p class="muted">${meta}</p>${t.notes ? `<div style="white-space:pre-wrap;margin:12px 0">${esc(t.notes)}</div>` : ""}${files ? `<h3>Files</h3><ul class="lesson-list">${files}</ul>` : ""}<div class="form-actions">${t.kind === "personal" ? `<button class="button secondary" type="button" data-action="task-delete" data-id="${esc(t.id)}">Delete</button>` : ""}<button class="button" type="button" data-action="close-dialog">Close</button></div>`,
+          );
+        }
+        async function saveDone(t, done) {
+          try {
+            const r = await fetch(`/api/student/tasks/${encodeURIComponent(t.id)}`, {
+              method: "PATCH",
+              credentials: "same-origin",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ done }),
+            });
+            if (!r.ok) throw new Error();
+          } catch {
+            t.done = !done;
+            render();
+            announce("Couldn’t save that. Check your connection and try again.");
+          }
+        }
+        async function deleteTask(id) {
+          try {
+            const r = await fetch(`/api/student/tasks/${encodeURIComponent(id)}`, {
+              method: "DELETE",
+              credentials: "same-origin",
+            });
+            if (!r.ok && r.status !== 404) throw new Error();
+            state.tasks = state.tasks.filter((t) => t.id !== id);
+            closeModal();
+            render();
+            announce("Task deleted.");
+          } catch {
+            announce("Couldn’t delete that. Try again.");
+          }
         }
         function assignment(id) {
           const science = id === "science";
@@ -4316,6 +4406,8 @@ SOFTWARE.
           if (a === "close-dialog") closeModal();
           if (a === "navigate") go(b.dataset.view);
           if (a === "add-task") addTask();
+          if (a === "task-detail") taskDetail(b.dataset.id);
+          if (a === "task-delete") deleteTask(b.dataset.id);
           if (a === "subject") subjectDialog(b.dataset.subject);
           if (a === "assignment") assignment(b.dataset.id);
           if (a === "study") study(b.dataset.topic);
@@ -4377,6 +4469,7 @@ SOFTWARE.
             if (!t) return;
             const done = e.target.checked;
             t.done = done;
+            if (me) saveDone(t, done);
             const id = t.id;
             save();
             if ($("#tasks-content")) $("#tasks-content").innerHTML = tasksMarkup();
@@ -4419,7 +4512,41 @@ SOFTWARE.
             save();
           }
         });
-        document.addEventListener("submit", (e) => {
+        document.addEventListener("submit", async (e) => {
+          if (e.target.id === "add-live-task-form") {
+            e.preventDefault();
+            const f = new FormData(e.target),
+              title = String(f.get("title") || "").trim(),
+              dueOn = String(f.get("dueOn") || "");
+            if (!title) {
+              $("#task-title").setCustomValidity("Give your task a name.");
+              $("#task-title").reportValidity();
+              $("#task-title").addEventListener("input", () => $("#task-title").setCustomValidity(""), { once: true });
+              return;
+            }
+            const submit = e.target.querySelector('[type="submit"]');
+            submit.disabled = true;
+            try {
+              const r = await fetch("/api/student/tasks", {
+                method: "POST",
+                credentials: "same-origin",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, dueOn: dueOn || null }),
+              });
+              if (!r.ok) throw new Error();
+              const { task } = await r.json();
+              const added = fromServer(task);
+              state.tasks.push(added);
+              taskFilter = added.when;
+              closeModal();
+              render();
+              announce("A little more clarity. Your task is added.");
+            } catch {
+              submit.disabled = false;
+              announce("Couldn’t add that. Check your connection and try again.");
+            }
+            return;
+          }
           if (e.target.id === "add-task-form") {
             e.preventDefault();
             const f = new FormData(e.target),
