@@ -15,6 +15,7 @@ import {
 import { createClient } from '@/lib/supabase/browser';
 
 import styles from './onboarding.module.css';
+import { Logo } from '@/components/logo';
 
 type Answers = {
   focus: string[];
@@ -166,7 +167,9 @@ export function Onboarding({ student }: { student: StudentContext }) {
     <main className={styles.page}>
       <div className={styles.card}>
         <div className={styles.top}>
-          <p className={styles.brand}>chom learn</p>
+          <p className={styles.brand}>
+            <Logo />
+          </p>
           {stepIndex > 0 && <p className={styles.count}>Question {stepIndex} of 5</p>}
         </div>
         <div

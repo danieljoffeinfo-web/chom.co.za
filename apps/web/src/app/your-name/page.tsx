@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/server';
 
 import styles from '../sign-in/sign-in.module.css';
 import { NameForm } from './name-form';
+import { Logo } from '@/components/logo';
 
 export const metadata = { title: 'Your name · Chom Learn' };
 
@@ -27,7 +28,9 @@ export default async function YourName({
   return (
     <main className={styles.page}>
       <div className={styles.card}>
-        <p className={styles.brand}>chom learn</p>
+        <p className={styles.brand}>
+          <Logo />
+        </p>
         <h1 className={styles.title}>What’s your full name?</h1>
         <p className={styles.muted}>This is the name your teachers and school will see.</p>
         {me.email && (

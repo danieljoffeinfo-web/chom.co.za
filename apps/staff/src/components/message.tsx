@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import styles from './message.module.css';
+import { Logo } from './logo';
 
 /** A simple full-page message, e.g. "This site is for school staff". */
 export function Message({
@@ -18,7 +19,9 @@ export function Message({
   return (
     <main className={styles.page}>
       <div className={styles.card}>
-        <p className={styles.brand}>chom staff</p>
+        <p className={styles.brand}>
+          <Logo />
+        </p>
         <h1 className={styles.title}>{title}</h1>
         <div className={styles.body}>{children}</div>
         {action}

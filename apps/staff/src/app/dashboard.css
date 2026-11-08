@@ -173,9 +173,14 @@ textarea::placeholder {
   align-items: center;
   padding: 0 13px 0 26px;
 }
-.brand-mark {
-  width: 32px;
-  height: 32px;
+.brand-logo {
+  color: var(--ink);
+}
+.brand-tag {
+  align-self: flex-end;
+  margin-bottom: 3px;
+  font-size: 12px;
+  color: var(--muted);
 }
 .wordmark {
   font-size: 30px;

@@ -1,5 +1,5 @@
 import { colors, minTouchTarget, radius, space, textStyles } from '@chom/tokens';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const theme = colors.light;
@@ -9,7 +9,11 @@ export default function Welcome() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.content}>
-        <Text style={styles.brand}>chom learn</Text>
+        <Image
+          source={require('../../assets/images/logo.png')}
+          style={styles.logo}
+          accessibilityLabel="Chom"
+        />
         <View style={styles.hero}>
           <Text style={styles.title}>Everything at your fingertips.</Text>
           <Text style={styles.lede}>
@@ -32,12 +36,7 @@ export default function Welcome() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: theme.background },
   content: { flex: 1, padding: space[6], justifyContent: 'space-between' },
-  brand: {
-    fontFamily: 'InterTight_800ExtraBold',
-    fontSize: 22,
-    letterSpacing: -1,
-    color: theme.text,
-  },
+  logo: { width: 98, height: 28 },
   hero: { gap: space[4] },
   title: {
     fontFamily: 'InterTight_800ExtraBold',
