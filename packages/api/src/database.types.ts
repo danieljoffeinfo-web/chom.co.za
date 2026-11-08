@@ -754,6 +754,7 @@ export type Database = {
           id: string;
           name_confirmed_at: string | null;
           preferred_name: string | null;
+          school_full_name: string | null;
           updated_at: string;
           user_id: string | null;
         };
@@ -764,6 +765,7 @@ export type Database = {
           id?: string;
           name_confirmed_at?: string | null;
           preferred_name?: string | null;
+          school_full_name?: string | null;
           updated_at?: string;
           user_id?: string | null;
         };
@@ -773,6 +775,7 @@ export type Database = {
           id?: string;
           name_confirmed_at?: string | null;
           preferred_name?: string | null;
+          school_full_name?: string | null;
           updated_at?: string;
           user_id?: string | null;
         };

@@ -10,10 +10,9 @@ import { NameForm } from './name-form';
 export const metadata = { title: 'Your name · Chom Learn' };
 
 /**
- * The last step of a first sign-in: the person types their full name, which must match
- * the school's name for the account. It says which account is signed in, so someone
- * who finds another person's account open (an old tab, a shared computer) can tell,
- * and sign out.
+ * The last step of a first sign-in: the person types their full name, and that becomes
+ * their name. It says which account is signed in, so someone who finds another
+ * person's account open (an old tab, a shared computer) can tell, and sign out.
  */
 export default async function YourName({
   searchParams,
@@ -30,9 +29,7 @@ export default async function YourName({
       <div className={styles.card}>
         <p className={styles.brand}>chom learn</p>
         <h1 className={styles.title}>What’s your full name?</h1>
-        <p className={styles.muted}>
-          Type your name as your school has it, to confirm this account is yours.
-        </p>
+        <p className={styles.muted}>This is the name your teachers and school will see.</p>
         {me.email && (
           <p className={styles.account}>
             Signed in as <strong>{me.email}</strong>
