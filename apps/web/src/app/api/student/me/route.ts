@@ -1,3 +1,4 @@
+import { isAuthRetryableFetchError } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
 import { loadStudentContext } from '@/lib/student';
@@ -14,14 +15,28 @@ const noStore = { 'Cache-Control': 'private, no-store' };
  * and week, upcoming exams, and each subject's unit plan (done, now, upcoming).
  * Everything is read as the student, so row-level security decides what comes back.
  *
- * 401 when nobody is signed in or the person isn't a student: the dashboard then
- * stays on its sample data.
+ * 401 when nobody is signed in; 403 when someone is, but not as a student (a teacher or
+ * parent in the same browser). On chom.co.za the dashboard then sends them to sign in,
+ * or offers their own dashboard; it never shows sample data to a real visitor.
  */
 export async function GET() {
   const supabase = await createClient();
+  const { data: claims, error: claimsError } = await supabase.auth.getClaims();
+  if (!claims?.claims) {
+    // Auth unreachable (a network error or 5xx) is "try again", not "sign in again".
+    return isRetryableAuthError(claimsError)
+      ? NextResponse.json({ error: 'unavailable' }, { status: 500, headers: noStore })
+      : NextResponse.json({ error: 'signed_out' }, { status: 401, headers: noStore });
+  }
   const student = await loadStudentContext(supabase);
   if (!student) {
-    return NextResponse.json({ error: 'not_a_student' }, { status: 401, headers: noStore });
+    // Only a confirmed non-student gets 403 ("this is the student dashboard"). A failed
+    // lookup, or a student whose school has no current year, gets 500: the dashboard
+    // then offers to try again instead of telling a student they're someone else.
+    const isStudent = await hasStudentMembership(supabase, claims.claims.sub);
+    return isStudent === false
+      ? NextResponse.json({ error: 'not_a_student' }, { status: 403, headers: noStore })
+      : NextResponse.json({ error: 'unavailable' }, { status: 500, headers: noStore });
   }
 
   // Who teaches each of the student's subjects this year, through the classes they're
@@ -192,4 +207,34 @@ export async function GET() {
     },
     { headers: noStore },
   );
+}
+
+/** True or false if we could tell whether this login is an active student; null if not. */
+async function hasStudentMembership(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+): Promise<boolean | null> {
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('user_id', userId)
+    .maybeSingle();
+  if (error) return null;
+  if (!profile) return false;
+  const { data: memberships, error: membershipError } = await supabase
+    .from('school_memberships')
+    .select('id')
+    .eq('profile_id', profile.id)
+    .eq('role', 'student')
+    .eq('status', 'active')
+    .limit(1);
+  if (membershipError) return null;
+  return memberships.length > 0;
+}
+
+function isRetryableAuthError(error: unknown): boolean {
+  if (!error) return false;
+  if (isAuthRetryableFetchError(error)) return true;
+  const status = (error as { status?: unknown }).status;
+  return typeof status === 'number' && status >= 500;
 }
