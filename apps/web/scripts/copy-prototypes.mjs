@@ -16,6 +16,9 @@ const copies = [
   ['static/site/app', 'app'],
   ['static/teacher-prototype', 'teacher'],
   ['static/prototype-data', 'shared'],
+  // The learner prototype's font files sit next to the marketing page, and the
+  // prototype refers to them as ../fonts. Served from /fonts on this app.
+  ['static/site/fonts', 'fonts'],
 ];
 
 for (const [from, to] of copies) {
