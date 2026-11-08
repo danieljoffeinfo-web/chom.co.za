@@ -3484,6 +3484,8 @@ SOFTWARE.
       (async () => {
         "use strict";
         const me = await window.chomMe;
+        if (me && !me.today)
+          me.today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Johannesburg" });
         const $ = (s) => document.querySelector(s),
           $$ = (s) => [...document.querySelectorAll(s)];
         const icon = (name, small = false) =>
@@ -3638,6 +3640,7 @@ SOFTWARE.
               color: palette[i % palette.length],
               isFocus: s.isFocus,
               target: s.target,
+              units: Array.isArray(s.units) ? s.units : [],
             }),
           );
         }
@@ -3775,8 +3778,23 @@ SOFTWARE.
             })
             .join("")}</div></section>`;
         }
+        // Dates from the school's calendar are plain YYYY-MM-DD days.
+        const day = (iso, opts) => new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-ZA", { timeZone: "UTC", ...opts });
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const shortDay = (iso) => `${Number(iso.slice(8, 10))} ${months[Number(iso.slice(5, 7)) - 1]}`;
+        function unitNow(x) {
+          const now = x.units.filter((u) => u.status === "now");
+          // An all-year unit (Physical Education) runs alongside the others: prefer the one that started last.
+          const current = now.sort((a, b) => (a.startsOn < b.startsOn ? 1 : -1))[0];
+          if (current) return { label: "Now", title: current.title };
+          const next = x.units.find((u) => u.status === "upcoming");
+          if (me.contentEndsOn && me.today > me.contentEndsOn)
+            return { label: "Revision", title: x.units.length ? "All units covered" : "Revise for exams" };
+          if (next) return { label: "Next", title: `${next.title} · ${shortDay(next.startsOn)}` };
+          return { label: "Your goal", title: x.target ? x.target + "%" : "Not set" };
+        }
         function liveClassCard(x) {
-          return `<button class="cd-class" data-action="subject" data-subject="${esc(x.id)}"><span class="cd-class-top"><span class="cd-avatar" aria-hidden="true">${esc(x.short)}</span>${x.isFocus ? '<span class="cd-pill small">Focus</span>' : ""}</span><span><strong>${esc(x.name)}</strong><small>${esc(gradeShort)} · ${esc(x.teacher || "Teacher to be confirmed")}</small></span><span class="cd-next"><span>Your goal</span><b>${x.target ? x.target + "%" : "Not set"}</b></span></button>`;
+          return `<button class="cd-class" data-action="subject" data-subject="${esc(x.id)}"><span class="cd-class-top"><span class="cd-avatar" aria-hidden="true">${esc(x.short)}</span>${x.isFocus ? '<span class="cd-pill small">Focus</span>' : ""}</span><span><strong>${esc(x.name)}</strong><small>${esc(gradeShort)} · ${esc(x.teacher || "Teacher to be confirmed")}${x.target ? ` · Goal ${x.target}%` : ""}</small></span><span class="cd-next"><span>${esc(unitNow(x).label)}</span><b>${esc(unitNow(x).title)}</b></span></button>`;
         }
         function comingSoon(title, copy) {
           return `<section class="panel"><div class="cd-head"><div><span class="cd-label">Coming soon</span><h2>${title}</h2></div></div><p class="muted" style="margin:0;padding:0 24px 28px">${copy}</p></section>`;
@@ -3836,12 +3854,19 @@ SOFTWARE.
           return `<section class="cd-section" aria-labelledby="beyond-title"><div class="cd-head"><div><span class="cd-label">School life</span><h2 id="beyond-title">Beyond the classroom</h2></div></div><div class="cd-beyond"><button class="cd-service" data-action="service" data-service="sport">${icon("ball")}<span><strong>Sports &amp; activities</strong><small>Hockey, 15:30</small></span></button><button class="cd-service" data-action="service" data-service="transport">${icon("bus")}<span><strong>My transport</strong><small>Bus 14</small></span></button><button class="cd-service" data-action="service" data-service="support">${icon("heart")}<span><strong>Someone to talk to</strong><small>Private, whenever you need it</small></span></button></div></section>`;
         }
         function liveDashboard() {
-          const now = new Date(),
-            zone = { timeZone: "Africa/Johannesburg" },
-            weekday = now.toLocaleDateString("en-ZA", { ...zone, weekday: "long" }),
-            day = now.toLocaleDateString("en-ZA", { ...zone, day: "numeric", month: "long", year: "numeric" }),
+          const weekday = day(me.today, { weekday: "long" }),
+            date = day(me.today, { day: "numeric", month: "long", year: "numeric" }),
+            termLabel = me.term ? ` · Term ${me.term.number} · Week ${me.term.week}` : "",
             focus = subjectList.filter((x) => x.isFocus);
-          return `<div class="cd"><div class="cd-top"><header class="cd-hero"><span class="cd-label">${esc(weekday)} · ${esc(day)}</span><h1 class="cd-title">Hey, ${esc(displayName)}.</h1><p class="cd-lede">You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></header><section class="cd-stats" aria-label="Your week in numbers"><div class="cd-stat"><span class="cd-num" id="task-count">${remaining()}</span><strong>Tasks due today</strong><small>Tick them off as you go</small></div><div class="cd-stat"><span class="cd-num">${focus.length}</span><strong>Focus subjects</strong><small>${focus.length ? esc(focus.map((x) => x.name).join(", ")) : "Pick them in your answers"}</small></div></section></div>${subjectsPanel()}<div class="cd-split"><div class="cd-col"><section class="panel dt-panel" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="dt-all" href="#tasks">See all tasks ${icon("arrow", true)}</a></div><div id="dash-tasks">${dashTasks()}</div></section>${comingSoon("Your timetable and assignments", `Your lessons, homework and due dates will appear here once ${esc(me.schoolName)} loads its timetable.`)}</div></div></div>`;
+          return `<div class="cd"><div class="cd-top"><header class="cd-hero"><span class="cd-label">${esc(weekday)} · ${esc(date)}${esc(termLabel)}</span><h1 class="cd-title">Hey, ${esc(displayName)}.</h1><p class="cd-lede">You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></header><section class="cd-stats" aria-label="Your week in numbers"><div class="cd-stat"><span class="cd-num" id="task-count">${remaining()}</span><strong>Tasks due today</strong><small>Tick them off as you go</small></div><div class="cd-stat"><span class="cd-num">${focus.length}</span><strong>Focus subjects</strong><small>${focus.length ? esc(focus.map((x) => x.name).join(", ")) : "Pick them in your answers"}</small></div></section></div>${subjectsPanel()}<div class="cd-split"><div class="cd-col"><section class="panel dt-panel" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="dt-all" href="#tasks">See all tasks ${icon("arrow", true)}</a></div><div id="dash-tasks">${dashTasks()}</div></section>${comingUp()}</div></div></div>`;
+        }
+        function comingUp() {
+          const exams = (me.exams || []).slice(0, 3);
+          const revising = me.contentEndsOn && me.today > me.contentEndsOn;
+          const rows = exams
+            .map((e) => `<li class="slot"><time class="slot-time">${esc(shortDay(e.startsOn))}</time><div class="slot-body"><h3>${esc(e.label)}${e.inProgress ? '<span class="now-tag">Now</span>' : ""}</h3><p>${esc(shortDay(e.startsOn))} – ${esc(shortDay(e.endsOn))}${e.isApproximate ? " · dates to be confirmed" : ""}</p></div></li>`)
+            .join("");
+          return `<section class="panel"><div class="cd-head"><div><span class="cd-label">Coming up</span><h2>${exams.length ? "Exams" : "Your term"}</h2></div></div><div style="padding:0 24px 24px">${revising ? `<p class="muted" style="margin:0 0 12px">New content finished on ${esc(day(me.contentEndsOn, { day: "numeric", month: "long" }))}. Time to revise.</p>` : ""}${rows ? `<ul class="schedule-list" style="list-style:none;margin:0;padding:0">${rows}</ul>` : `<p class="muted" style="margin:0">No exams coming up${me.term ? `. Term ${me.term.number} ends on ${esc(day(me.term.endsOn, { day: "numeric", month: "long" }))}.` : "."}</p>`}</div></section>`;
         }
         function dashboard() {
           if (me) return liveDashboard();
@@ -3876,7 +3901,7 @@ SOFTWARE.
           if (currentView === "subjects") html = me ? liveSubjects() : School.student();
           if (me && currentView === "timetable")
             html = viewHeader("A little structure for your week.", `${esc(gradeLine)} · ${esc(me.yearLabel)}`) +
-              comingSoon("Your timetable is on its way", `Your lessons will appear here once ${esc(me.schoolName)} loads its timetable.`);
+              comingSoon("Your timetable is on its way", `Your lesson times will appear here once ${esc(me.schoolName)} loads its timetable. What each subject is teaching this term is in My subjects.`);
           if (me && currentView === "assignments")
             html = viewHeader("Good work takes a little planning.", "Keep your drafts and deadlines in one place.") +
               comingSoon("No assignments yet", "When your teachers set assignments, they’ll appear here with their due dates.");
@@ -4060,7 +4085,7 @@ SOFTWARE.
           if (me) {
             modal(
               x.name,
-              `<p>${esc(gradeShort)} · ${esc(x.teacher || "Teacher to be confirmed")}</p><p>${x.target ? `Your goal: <strong>${x.target}%</strong>` : "You haven’t set a goal for this subject yet."}${x.isFocus ? " This is one of your focus subjects." : ""}</p><div class="notice">Lesson times appear once your timetable is loaded. Class material appears when your teacher shares it.</div>`,
+              `<p>${esc(gradeShort)} · ${esc(x.teacher || "Teacher to be confirmed")}</p><p>${x.target ? `Your goal: <strong>${x.target}%</strong>` : "You haven’t set a goal for this subject yet."}${x.isFocus ? " This is one of your focus subjects." : ""}</p>${x.units.length ? `<h3>This year’s units</h3><ul class="lesson-list">${x.units.map((u) => `<li><span>${u.status === "done" ? "✓ " : u.status === "now" ? "● " : ""}${esc(u.title)}</span><span>${esc(shortDay(u.startsOn))} – ${esc(shortDay(u.endsOn))}${u.term ? ` · T${u.term}` : ""}</span></li>`).join("")}</ul>` : ""}<div class="notice">Lesson times appear once your timetable is loaded. Class material appears when your teacher shares it.</div>`,
             );
             return;
           }
