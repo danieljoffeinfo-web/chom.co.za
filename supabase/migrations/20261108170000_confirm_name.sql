@@ -20,7 +20,8 @@ set search_path = ''
 as $$
 declare
   v_profile_id uuid := private.current_profile_id();
-  v_name text := regexp_replace(trim(coalesce(p_full_name, '')), '\s+', ' ', 'g');
+  -- Squeeze every run of whitespace (tabs, newlines) to one space, then trim.
+  v_name text := trim(regexp_replace(coalesce(p_full_name, ''), '\s+', ' ', 'g'));
 begin
   if v_profile_id is null then
     raise exception 'confirm_my_name: not linked to a profile' using errcode = '42501';

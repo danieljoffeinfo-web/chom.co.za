@@ -4,7 +4,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(8);
+select plan(9);
 
 create function pg_temp.as_user(p_user text)
 returns void language plpgsql as $$
@@ -47,9 +47,14 @@ select throws_ok(
   'An empty name is refused'
 );
 select throws_ok(
+  $$ select public.confirm_my_name(E'\t\tA\n') $$,
+  '22023', null,
+  'Whitespace around one letter does not count towards the 2 characters'
+);
+select throws_ok(
   $$ select public.confirm_my_name(repeat('a', 121)) $$,
   '22023', null,
-  'So is one over 120 characters'
+  'A name over 120 characters is refused'
 );
 reset role;
 

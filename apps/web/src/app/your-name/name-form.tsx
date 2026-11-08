@@ -50,7 +50,10 @@ export function NameForm({ schoolName, next }: { schoolName: string; next: strin
         maxLength={120}
         autoFocus
         value={name}
-        onChange={(event) => setName(event.target.value)}
+        onChange={(event) => {
+          setName(event.target.value);
+          setError(null);
+        }}
       />
       {error && (
         <p className={styles.error} role="alert">
