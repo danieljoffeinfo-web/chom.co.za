@@ -13,6 +13,8 @@ export type SetTask = {
   subject: string | null;
   /** The classes it went to (empty: saved but never sent, e.g. an upload failed). */
   classes: { classSubjectId: string; classId: string; name: string }[];
+  /** Sent to at least one class (even one the teacher no longer teaches). */
+  sent: boolean;
   files: { id: string; name: string; size: number; path: string }[];
   /** Learners who have ticked it off, and learners it went to. */
   done: number;
@@ -46,6 +48,7 @@ function toSetTask(row: Row, staff: StaffContext): SetTask {
     dueAt: row.due_at ?? '',
     subject: row.subjects?.name ?? null,
     classes,
+    sent: row.task_classes.length > 0,
     files: row.task_attachments.map((a) => ({
       id: a.id,
       name: a.file_name,

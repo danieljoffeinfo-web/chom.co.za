@@ -58,7 +58,7 @@ export default async function SetWork() {
                 <span>
                   <span className={styles.rowTitle}>
                     {t.title}
-                    {t.classes.length === 0 && <span className={styles.draft}>Not sent</span>}
+                    {!t.sent && <span className={styles.draft}>Not sent</span>}
                   </span>
                   <span className={styles.meta}>
                     {[

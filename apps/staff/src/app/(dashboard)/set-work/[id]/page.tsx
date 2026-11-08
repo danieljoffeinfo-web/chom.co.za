@@ -74,10 +74,14 @@ export default async function TaskDetail({ params }: { params: Promise<{ id: str
           <h2>
             Done: {task.done} of {task.learners}
           </h2>
-          {classes.length === 0 ? (
+          {!task.sent ? (
             <p className="muted">
               This task was saved but never sent to a class (a file didn’t finish uploading). Delete
               it and set it again.
+            </p>
+          ) : classes.length === 0 ? (
+            <p className="muted">
+              This task went to classes you no longer teach, so their progress isn’t shown here.
             </p>
           ) : (
             classes.map((c) => (

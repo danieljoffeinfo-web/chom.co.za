@@ -9,6 +9,13 @@ import { MAX_FILE_BYTES, TASK_FILES_BUCKET } from '@/lib/task-files';
 
 type Failed = { ok: false; error: string };
 
+/** A real calendar day as YYYY-MM-DD (so 2026-02-30 is refused). */
+function isCalendarDate(value: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const day = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(day.getTime()) && day.toISOString().slice(0, 10) === value;
+}
+
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
@@ -35,7 +42,7 @@ export async function createTask(input: {
     return { ok: false, error: 'Give the task a name (up to 200 characters).' };
   }
   if (notes.length > 20000) return { ok: false, error: 'The notes are too long.' };
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(input.dueOn) || !/^\d{2}:\d{2}$/.test(input.dueTime)) {
+  if (!isCalendarDate(input.dueOn) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(input.dueTime)) {
     return { ok: false, error: 'Choose a due date and time.' };
   }
   const mine = new Set(staff.classes.map((c) => c.classSubjectId));
@@ -121,9 +128,34 @@ export async function publishTask(input: {
   if (!staff) return { ok: false, error: 'Please sign in again.' };
   if (!UUID.test(input.taskId)) return { ok: false, error: 'That task wasn’t found.' };
 
+  const classIds = [...new Set(input.classSubjectIds)];
+  const mine = new Set(staff.classes.map((c) => c.classSubjectId));
+  if (!classIds.length || !classIds.every((id) => mine.has(id))) {
+    return { ok: false, error: 'You can only set work for classes you teach.' };
+  }
+
+  // The task's own subject decides which classes it can go to.
   const supabase = await createClient();
+  const [{ data: task }, { data: classSubjects }] = await Promise.all([
+    supabase
+      .from('tasks')
+      .select('subject_id')
+      .eq('id', input.taskId)
+      .eq('kind', 'assigned')
+      .eq('created_by', staff.profileId)
+      .maybeSingle(),
+    supabase.from('class_subjects').select('id, subject_id').in('id', classIds),
+  ]);
+  if (!task?.subject_id) return { ok: false, error: 'That task wasn’t found.' };
+  if (
+    (classSubjects ?? []).length !== classIds.length ||
+    !(classSubjects ?? []).every((c) => c.subject_id === task.subject_id)
+  ) {
+    return { ok: false, error: 'A task is for one subject: choose classes of the same subject.' };
+  }
+
   const { error } = await supabase.from('task_classes').upsert(
-    [...new Set(input.classSubjectIds)].map((id) => ({
+    classIds.map((id) => ({
       task_id: input.taskId,
       school_id: staff.schoolId,
       class_subject_id: id,
