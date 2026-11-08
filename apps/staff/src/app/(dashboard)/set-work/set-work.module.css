@@ -288,3 +288,10 @@
     text-align: left;
   }
 }
+
+.actions {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}

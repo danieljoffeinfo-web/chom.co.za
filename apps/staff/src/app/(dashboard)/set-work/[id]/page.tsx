@@ -36,7 +36,12 @@ export default async function TaskDetail({ params }: { params: Promise<{ id: str
             {[task.subject, task.dueAt ? dueLabel(task.dueAt) : null].filter(Boolean).join(' · ')}
           </p>
         </div>
-        <DeleteTask taskId={task.id} />
+        <div className={styles.actions}>
+          <Link className="button" href={`/set-work/${task.id}/edit`}>
+            Edit task
+          </Link>
+          <DeleteTask taskId={task.id} />
+        </div>
       </header>
 
       <div className={styles.detail}>

@@ -16,6 +16,31 @@ function isCalendarDate(value: string): boolean {
   return !Number.isNaN(day.getTime()) && day.toISOString().slice(0, 10) === value;
 }
 
+/** A task's title, notes and due date, checked and tidied. */
+function checkDetails(input: {
+  title: string;
+  notes: string;
+  dueOn: string;
+  dueTime: string;
+}): { ok: true; title: string; notes: string | null; dueAt: string } | Failed {
+  const title = input.title.trim();
+  const notes = input.notes.trim();
+  if (!title || title.length > 200) {
+    return { ok: false, error: 'Give the task a name (up to 200 characters).' };
+  }
+  if (notes.length > 20000) return { ok: false, error: 'The notes are too long.' };
+  if (!isCalendarDate(input.dueOn) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(input.dueTime)) {
+    return { ok: false, error: 'Choose a due date and time.' };
+  }
+  // South Africa has no daylight saving: always +02:00.
+  return {
+    ok: true,
+    title,
+    notes: notes || null,
+    dueAt: `${input.dueOn}T${input.dueTime}:00+02:00`,
+  };
+}
+
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
@@ -36,15 +61,8 @@ export async function createTask(input: {
   const staff = await currentStaff();
   if (!staff) return { ok: false, error: 'Please sign in again.' };
 
-  const title = input.title.trim();
-  const notes = input.notes.trim();
-  if (!title || title.length > 200) {
-    return { ok: false, error: 'Give the task a name (up to 200 characters).' };
-  }
-  if (notes.length > 20000) return { ok: false, error: 'The notes are too long.' };
-  if (!isCalendarDate(input.dueOn) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(input.dueTime)) {
-    return { ok: false, error: 'Choose a due date and time.' };
-  }
+  const checked = checkDetails(input);
+  if (!checked.ok) return checked;
   const mine = new Set(staff.classes.map((c) => c.classSubjectId));
   const classIds = [...new Set(input.classSubjectIds)];
   if (!classIds.length) return { ok: false, error: 'Choose at least one class.' };
@@ -74,10 +92,9 @@ export async function createTask(input: {
       school_id: staff.schoolId,
       academic_year_id: year.id,
       kind: 'assigned',
-      title,
-      notes: notes || null,
-      // South Africa has no daylight saving: always +02:00.
-      due_at: `${input.dueOn}T${input.dueTime}:00+02:00`,
+      title: checked.title,
+      notes: checked.notes,
+      due_at: checked.dueAt,
       subject_id: [...subjects][0] ?? null,
       created_by: staff.profileId,
     })
@@ -119,10 +136,15 @@ export async function addAttachment(input: {
   return { ok: true };
 }
 
-/** Sends the task to its classes: from now on those learners see it. */
+/**
+ * Sends the task to its classes: from now on those learners see it. With replace
+ * (editing), classes of the teacher's that aren't in the list are taken off it;
+ * classes they no longer teach are left as they are.
+ */
 export async function publishTask(input: {
   taskId: string;
   classSubjectIds: string[];
+  replace?: boolean;
 }): Promise<{ ok: true } | Failed> {
   const staff = await currentStaff();
   if (!staff) return { ok: false, error: 'Please sign in again.' };
@@ -163,7 +185,68 @@ export async function publishTask(input: {
     { onConflict: 'task_id,class_subject_id', ignoreDuplicates: true },
   );
   if (error) return { ok: false, error: 'We couldn’t send the task to your classes.' };
+
+  if (input.replace) {
+    const dropped = [...mine].filter((id) => !classIds.includes(id));
+    if (dropped.length) {
+      const { error: dropError } = await supabase
+        .from('task_classes')
+        .delete()
+        .eq('task_id', input.taskId)
+        .in('class_subject_id', dropped);
+      if (dropError) return { ok: false, error: 'We couldn’t update the task’s classes.' };
+    }
+  }
   revalidatePath('/set-work');
+  revalidatePath(`/set-work/${input.taskId}`);
+  return { ok: true };
+}
+
+/** Changes a task's title, notes and due date. */
+export async function updateTask(input: {
+  taskId: string;
+  title: string;
+  notes: string;
+  dueOn: string;
+  dueTime: string;
+}): Promise<{ ok: true } | Failed> {
+  const staff = await currentStaff();
+  if (!staff) return { ok: false, error: 'Please sign in again.' };
+  if (!UUID.test(input.taskId)) return { ok: false, error: 'That task wasn’t found.' };
+  const checked = checkDetails(input);
+  if (!checked.ok) return checked;
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('tasks')
+    .update({ title: checked.title, notes: checked.notes, due_at: checked.dueAt })
+    .eq('id', input.taskId)
+    .eq('kind', 'assigned')
+    .eq('created_by', staff.profileId)
+    .select('id');
+  if (error || !data?.length) return { ok: false, error: 'We couldn’t save your changes.' };
+  return { ok: true };
+}
+
+/** Takes a file off a task: from storage first, then its record. */
+export async function removeAttachment(attachmentId: string): Promise<{ ok: true } | Failed> {
+  const staff = await currentStaff();
+  if (!staff) return { ok: false, error: 'Please sign in again.' };
+  if (!UUID.test(attachmentId)) return { ok: false, error: 'That file wasn’t found.' };
+
+  const supabase = await createClient();
+  const { data: file } = await supabase
+    .from('task_attachments')
+    .select('storage_path, tasks!inner(created_by)')
+    .eq('id', attachmentId)
+    .eq('tasks.created_by', staff.profileId)
+    .maybeSingle();
+  if (!file) return { ok: false, error: 'That file wasn’t found.' };
+
+  await supabase.storage.from(TASK_FILES_BUCKET).remove([file.storage_path]);
+  // If the remove failed, deleting the record queues the file for clean-up.
+  const { error } = await supabase.from('task_attachments').delete().eq('id', attachmentId);
+  if (error) return { ok: false, error: 'We couldn’t remove that file.' };
   return { ok: true };
 }
 

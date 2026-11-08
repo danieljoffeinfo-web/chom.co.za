@@ -78,39 +78,39 @@ Supabase (PostgreSQL), as decided in [ADR 0001](docs/decisions/0001-database-pla
 
 **Core tables.**
 
-| Table                             | Holds                                                                                                                                                                                     |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `curricula`                       | Curricula (IEB now; CAPS, Cambridge later as rows, not code)                                                                                                                              |
-| `curriculum_subjects`             | Each curriculum's official subjects: grades, category, language level, compulsory, externally examined, counts toward the certificate. Cambridge levels (IGCSE, AS, A) sit on the subject |
-| `curriculum_subject_aliases`      | Other names for a subject ("Maths Lit", "CAT"), valid for a grade range. Never ambiguous within a grade                                                                                   |
-| `curriculum_subject_rules`        | Subject combination rules (e.g. Mathematics or Mathematical Literacy, never both). Stored now, enforced when subject choice is built                                                      |
-| `curriculum_subject_rule_members` | The subjects each rule applies to                                                                                                                                                         |
-| `school_groups`                   | A school, or a franchise of schools (e.g. Curro), sharing email domains and sign-in. A single school is a group of one                                                                    |
-| `school_group_domains`            | A group's email domains and the only sign-in trusted for each (Microsoft with the school's tenant, or Google)                                                                             |
-| `schools`                         | Each school, in a group                                                                                                                                                                   |
-| `academic_years`                  | A school's years and the curriculum it follows that year; one is current                                                                                                                  |
-| `profiles`                        | One row per person, across schools. Linked to a login once they have one                                                                                                                  |
-| `school_memberships`              | A person's role at a school (student, teacher, parent, school admin). One person can hold several                                                                                         |
-| `guardianships`                   | Which parent is linked to which child                                                                                                                                                     |
-| `subjects`                        | The subjects a school offers, usually linked to the curriculum catalogue                                                                                                                  |
-| `subject_offerings`               | What a school offers each year, for which grades: fundamental, elective (in a timetable block, one per block) or extra                                                                    |
-| `school_subject_rules`            | A school's own combination rules (e.g. IT requires Mathematics), with `school_subject_rule_members`                                                                                       |
-| `school_terms`                    | A school's terms each year: 3 or 4, whatever it runs                                                                                                                                      |
-| `school_calendar_breaks`          | Half-terms and school holidays inside a term                                                                                                                                              |
-| `exam_windows`                    | Exam periods per grade range (mid-year, prelims, finals); no new content during them                                                                                                      |
-| `grade_content_end_dates`         | The last day of new content per grade; revision after                                                                                                                                     |
-| `curriculum_units`                | Reference data: each subject and grade as an ordered list of units with teaching weeks, never tied to a term                                                                              |
-| `unit_schedules`                  | When a school teaches each unit, generated from its calendar; teachers' pinned dates survive regeneration                                                                                 |
-| `tasks`                           | Work a teacher sets (assigned: title, notes, due date) or a student's own reminder (personal, private to them)                                                                            |
-| `task_classes`                    | The classes an assigned task was sent to; a teacher can only send to classes they teach                                                                                                   |
-| `task_attachments`                | Files on a task, stored in the private `task-files` bucket under `<school>/<task>/`, up to 300 MB each; files of deleted tasks are queued in `private.task_file_cleanup` for removal      |
-| `task_completions`                | Who has ticked off which task; classmates never see each other's                                                                                                                          |
-| `classes`                         | Classes per school year: a grade number for sorting plus a free-text name (10B, 10LSI, ...)                                                                                               |
-| `class_subjects`                  | A subject taught to a class                                                                                                                                                               |
-| `teaching_allocations`            | Which teacher teaches it                                                                                                                                                                  |
-| `enrolments`                      | Which learner is in which class                                                                                                                                                           |
-| `student_study_profiles`          | A student's study habits for a school year, from onboarding: session length, how and when they study                                                                                      |
-| `student_subject_goals`           | A student's target percentage per subject, and up to 3 focus subjects                                                                                                                     |
+| Table                             | Holds                                                                                                                                                                                                 |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `curricula`                       | Curricula (IEB now; CAPS, Cambridge later as rows, not code)                                                                                                                                          |
+| `curriculum_subjects`             | Each curriculum's official subjects: grades, category, language level, compulsory, externally examined, counts toward the certificate. Cambridge levels (IGCSE, AS, A) sit on the subject             |
+| `curriculum_subject_aliases`      | Other names for a subject ("Maths Lit", "CAT"), valid for a grade range. Never ambiguous within a grade                                                                                               |
+| `curriculum_subject_rules`        | Subject combination rules (e.g. Mathematics or Mathematical Literacy, never both). Stored now, enforced when subject choice is built                                                                  |
+| `curriculum_subject_rule_members` | The subjects each rule applies to                                                                                                                                                                     |
+| `school_groups`                   | A school, or a franchise of schools (e.g. Curro), sharing email domains and sign-in. A single school is a group of one                                                                                |
+| `school_group_domains`            | A group's email domains and the only sign-in trusted for each (Microsoft with the school's tenant, or Google)                                                                                         |
+| `schools`                         | Each school, in a group                                                                                                                                                                               |
+| `academic_years`                  | A school's years and the curriculum it follows that year; one is current                                                                                                                              |
+| `profiles`                        | One row per person, across schools. Linked to a login once they have one                                                                                                                              |
+| `school_memberships`              | A person's role at a school (student, teacher, parent, school admin). One person can hold several                                                                                                     |
+| `guardianships`                   | Which parent is linked to which child                                                                                                                                                                 |
+| `subjects`                        | The subjects a school offers, usually linked to the curriculum catalogue                                                                                                                              |
+| `subject_offerings`               | What a school offers each year, for which grades: fundamental, elective (in a timetable block, one per block) or extra                                                                                |
+| `school_subject_rules`            | A school's own combination rules (e.g. IT requires Mathematics), with `school_subject_rule_members`                                                                                                   |
+| `school_terms`                    | A school's terms each year: 3 or 4, whatever it runs                                                                                                                                                  |
+| `school_calendar_breaks`          | Half-terms and school holidays inside a term                                                                                                                                                          |
+| `exam_windows`                    | Exam periods per grade range (mid-year, prelims, finals); no new content during them                                                                                                                  |
+| `grade_content_end_dates`         | The last day of new content per grade; revision after                                                                                                                                                 |
+| `curriculum_units`                | Reference data: each subject and grade as an ordered list of units with teaching weeks, never tied to a term                                                                                          |
+| `unit_schedules`                  | When a school teaches each unit, generated from its calendar; teachers' pinned dates survive regeneration                                                                                             |
+| `tasks`                           | Work a teacher sets (assigned: title, notes, due date) or a student's own reminder (personal, private to them)                                                                                        |
+| `task_classes`                    | The classes an assigned task was sent to; a teacher can only send to classes they teach                                                                                                               |
+| `task_attachments`                | Files on a task, stored in the private `task-files` bucket under `<school>/<task>/`, up to 300 MB each; files of deleted tasks are queued in `private.task_file_cleanup` and removed every 15 minutes |
+| `task_completions`                | Who has ticked off which task; classmates never see each other's                                                                                                                                      |
+| `classes`                         | Classes per school year: a grade number for sorting plus a free-text name (10B, 10LSI, ...)                                                                                                           |
+| `class_subjects`                  | A subject taught to a class                                                                                                                                                                           |
+| `teaching_allocations`            | Which teacher teaches it                                                                                                                                                                              |
+| `enrolments`                      | Which learner is in which class                                                                                                                                                                       |
+| `student_study_profiles`          | A student's study habits for a school year, from onboarding: session length, how and when they study                                                                                                  |
+| `student_subject_goals`           | A student's target percentage per subject, and up to 3 focus subjects                                                                                                                                 |
 
 **Signing in.** The roster decides who someone is: each membership carries the email the school knows them by. After every sign-in the app calls `link_my_account()`, which links the login to the one roster profile with that email, but only if the login proves it the way the school allows:
 
@@ -183,6 +183,15 @@ Merging a pull request that adds a migration is all it takes: once CI passes on 
 - Migrations already on `main` can't be edited, and a new migration must be newer than every migration on `main` (CI fails otherwise).
 - To check what would be applied, run the workflow by hand from the Actions tab, on `main`. **Dry run** is ticked by default.
 - **Database first, then the app.** Vercel deploys the apps as soon as a pull request merges. App code that needs a new table or function must not merge in the same pull request as its migration. Merge the migration first, wait until the **Deploy database** run for it has succeeded (Actions tab), then merge the app change.
+
+**Edge Functions.** After the migrations, the same workflow deploys every function in `supabase/functions` (bundled by Supabase, no Docker). JWT checks are set per function in `supabase/config.toml`.
+
+- `task-file-cleanup` removes the files of deleted tasks. Every 15 minutes, if anything is queued in `private.task_file_cleanup`, a pg_cron job calls it with a random token from Vault. The function claims the queued paths, removes them through the Storage API with the project's service key, and clears them. It needs two Vault secrets, set once per project in the SQL editor (the job does nothing without them):
+
+  ```sql
+  select vault.create_secret('https://<project-ref>.supabase.co', 'project_url');
+  select vault.create_secret(encode(extensions.gen_random_bytes(32), 'hex'), 'task_cleanup_token');
+  ```
 
 **One-time setup.** The workflow needs a Supabase access token, kept as a GitHub secret:
 
