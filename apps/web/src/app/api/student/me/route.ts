@@ -26,7 +26,13 @@ export async function GET() {
   }
   const student = await loadStudentContext(supabase);
   if (!student) {
-    return NextResponse.json({ error: 'not_a_student' }, { status: 403, headers: noStore });
+    // Only a confirmed non-student gets 403 ("this is the student dashboard"). A failed
+    // lookup, or a student whose school has no current year, gets 500: the dashboard
+    // then offers to try again instead of telling a student they're someone else.
+    const isStudent = await hasStudentMembership(supabase, claims.claims.sub);
+    return isStudent === false
+      ? NextResponse.json({ error: 'not_a_student' }, { status: 403, headers: noStore })
+      : NextResponse.json({ error: 'unavailable' }, { status: 500, headers: noStore });
   }
 
   // Who teaches each of the student's subjects this year, through the classes they're
@@ -197,4 +203,27 @@ export async function GET() {
     },
     { headers: noStore },
   );
+}
+
+/** True or false if we could tell whether this login is an active student; null if not. */
+async function hasStudentMembership(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+): Promise<boolean | null> {
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('user_id', userId)
+    .maybeSingle();
+  if (error) return null;
+  if (!profile) return false;
+  const { data: memberships, error: membershipError } = await supabase
+    .from('school_memberships')
+    .select('id')
+    .eq('profile_id', profile.id)
+    .eq('role', 'student')
+    .eq('status', 'active')
+    .limit(1);
+  if (membershipError) return null;
+  return memberships.length > 0;
 }

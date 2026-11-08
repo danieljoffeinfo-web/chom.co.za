@@ -3487,8 +3487,14 @@ SOFTWARE.
         }
         const button = (href, label, primary) =>
           `<a href="${href}" style="display:inline-block;padding:12px 20px;border-radius:999px;font-weight:600;text-decoration:none;${primary ? "background:#282B4A;color:#EEEBDA" : "border:1px solid #282B4A;color:#282B4A"}">${label}</a>`;
+        // A server error (5xx) is retried once like a dropped connection; 401 and 403 aren't.
         const load = () =>
-          fetch("/api/student/me", { credentials: "same-origin", redirect: "manual", cache: "no-store" });
+          fetch("/api/student/me", { credentials: "same-origin", redirect: "manual", cache: "no-store" }).then(
+            (r) => {
+              if (r.status >= 500) throw new Error(String(r.status));
+              return r;
+            },
+          );
         window.chomMe = load()
           .catch(() => new Promise((r) => setTimeout(r, 800)).then(load))
           .then((r) => {
