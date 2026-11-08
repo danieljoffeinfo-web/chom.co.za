@@ -1672,12 +1672,13 @@ export type Database = {
     Functions: {
       claim_task_file_cleanup: {
         Args: { p_limit?: number; p_token: string };
-        Returns: { bucket_id: string; id: number; path: string }[];
+        Returns: {
+          bucket_id: string;
+          id: number;
+          path: string;
+        }[];
       };
-      finish_task_file_cleanup: {
-        Args: { p_ids: number[]; p_token: string };
-        Returns: number;
-      };
+      finish_task_file_cleanup: { Args: { p_ids: number[]; p_token: string }; Returns: number };
       link_my_account: { Args: Record<PropertyKey, never>; Returns: string };
       my_guardian_links: {
         Args: Record<PropertyKey, never>;
