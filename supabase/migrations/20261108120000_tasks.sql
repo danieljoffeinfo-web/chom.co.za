@@ -128,7 +128,9 @@ as $$
   )
 $$;
 
--- Did the signed-in person create this task?
+-- Did the signed-in person create this task, and are they still at the school in the
+-- role they made it as (a teacher for set work, a student for a reminder)? Someone
+-- who has left can no longer change their tasks or add files to them.
 create function private.is_task_creator(p_task_id uuid)
 returns boolean
 language sql
@@ -138,7 +140,9 @@ set search_path = ''
 as $$
   select exists (
     select 1 from public.tasks t
-    where t.id = p_task_id and t.created_by = (select private.current_profile_id())
+    where t.id = p_task_id
+      and t.created_by = (select private.current_profile_id())
+      and private.has_role(t.school_id, (case t.kind when 'assigned' then 'teacher' else 'student' end)::public.membership_role)
   )
 $$;
 
@@ -214,8 +218,8 @@ as $$
   end
 $$;
 
--- May the signed-in person upload or remove this file? Only the task's creator, and
--- only under the task's own school folder.
+-- May the signed-in person upload or remove this file? Only the task's creator (while
+-- still active in that role), and only under the task's own school folder.
 create function private.can_manage_task_file(p_name text)
 returns boolean
 language sql
@@ -228,6 +232,7 @@ as $$
     where t.id = private.task_id_from_path(p_name)
       and split_part(p_name, '/', 1) = t.school_id::text
       and t.created_by = (select private.current_profile_id())
+      and private.has_role(t.school_id, (case t.kind when 'assigned' then 'teacher' else 'student' end)::public.membership_role)
   )
 $$;
 
@@ -247,6 +252,50 @@ grant execute on function
   private.task_id_from_path(text),
   private.can_manage_task_file(text)
 to authenticated;
+
+-- A task only goes to classes in its own school year and, when it names a subject, for
+-- that subject. Checked when a class is added and when the task's subject changes.
+create function private.check_task_classes()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_task uuid;
+begin
+  if tg_table_name = 'tasks' then
+    v_task := new.id;
+  else
+    v_task := new.task_id;
+  end if;
+  if exists (
+    select 1
+    from public.task_classes tc
+    join public.tasks t on t.id = tc.task_id
+    join public.class_subjects cs on cs.id = tc.class_subject_id
+    join public.classes c on c.id = cs.class_id
+    where tc.task_id = v_task
+      and (
+        c.academic_year_id <> t.academic_year_id
+        or (t.subject_id is not null and cs.subject_id <> t.subject_id)
+      )
+  ) then
+    raise exception 'A task can only go to classes for its subject in its school year'
+      using errcode = '23514';
+  end if;
+  return null;
+end;
+$$;
+
+revoke execute on function private.check_task_classes() from public;
+
+create constraint trigger task_classes_match_task
+  after insert or update on public.task_classes
+  for each row execute function private.check_task_classes();
+create constraint trigger tasks_classes_match_subject
+  after update of subject_id, academic_year_id on public.tasks
+  for each row execute function private.check_task_classes();
 
 -- ---------------------------------------------------------------------------------
 -- Row-level security
@@ -278,12 +327,14 @@ create policy "Teachers set tasks; students add their own reminders"
 
 create policy "Creators can change their tasks"
   on public.tasks for update to authenticated
-  using (created_by = (select private.current_profile_id()))
-  with check (created_by = (select private.current_profile_id()));
+  using (private.is_task_creator(id))
+  with check (private.is_task_creator(id));
 
+-- The app removes a task's files before the task; anything left is queued for the
+-- clean-up job (see private.task_file_cleanup below).
 create policy "Creators can remove their tasks"
   on public.tasks for delete to authenticated
-  using (created_by = (select private.current_profile_id()));
+  using (private.is_task_creator(id));
 
 create policy "Visible with the task"
   on public.task_classes for select to authenticated
@@ -395,3 +446,110 @@ create policy "Task files: the task's creator replaces"
 create policy "Task files: the task's creator removes"
   on storage.objects for delete to authenticated
   using (bucket_id = 'task-files' and private.can_manage_task_file(name));
+
+-- ---------------------------------------------------------------------------------
+-- Clean-up of deleted files
+-- ---------------------------------------------------------------------------------
+
+-- Storage objects can only be deleted properly through the Storage API, not from SQL.
+-- When a task or an attachment row goes, the file paths are queued here, and a trusted
+-- job (with the secret key) removes them from the bucket and clears the queue. A path
+-- ending in "/" is a task's whole folder.
+create table private.task_file_cleanup (
+  id bigint generated always as identity primary key,
+  bucket_id text not null default 'task-files',
+  path text not null check (length(path) > 0),
+  queued_at timestamptz not null default now()
+);
+
+revoke all on private.task_file_cleanup from public, anon, authenticated;
+
+create function private.queue_task_file_cleanup()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if tg_table_name = 'tasks' then
+    insert into private.task_file_cleanup (path)
+    values (old.school_id::text || '/' || old.id::text || '/');
+  else
+    insert into private.task_file_cleanup (path) values (old.storage_path);
+  end if;
+  return null;
+end;
+$$;
+
+revoke execute on function private.queue_task_file_cleanup() from public;
+
+create trigger tasks_queue_file_cleanup after delete on public.tasks
+  for each row execute function private.queue_task_file_cleanup();
+create trigger task_attachments_queue_file_cleanup after delete on public.task_attachments
+  for each row execute function private.queue_task_file_cleanup();
+
+-- ---------------------------------------------------------------------------------
+-- Demo: removing a demo school removes its tasks too
+-- ---------------------------------------------------------------------------------
+
+create or replace function private.demo_remove_school(p_slug text)
+returns void
+language plpgsql
+set search_path = ''
+as $$
+declare
+  v_school uuid;
+  v_group uuid;
+  v_profiles uuid[];
+begin
+  select s.id, s.school_group_id into v_school, v_group
+  from public.schools s
+  where s.slug = p_slug;
+
+  if v_school is null then
+    return;
+  end if;
+  if not (select s.is_demo from public.schools s where s.id = v_school) then
+    raise exception 'School % is not a demo school; refusing to remove it', p_slug
+      using errcode = '42501';
+  end if;
+
+  select coalesce(array_agg(distinct m.profile_id), '{}') into v_profiles
+  from public.school_memberships m
+  where m.school_id = v_school;
+
+  delete from public.tasks where school_id = v_school;
+  delete from public.unit_schedules where school_id = v_school;
+  delete from public.exam_windows where school_id = v_school;
+  delete from public.grade_content_end_dates where school_id = v_school;
+  delete from public.school_calendar_breaks where school_id = v_school;
+  delete from public.school_terms where school_id = v_school;
+  delete from public.parent_consents where school_id = v_school;
+  delete from public.student_subject_goals where school_id = v_school;
+  delete from public.student_study_profiles where school_id = v_school;
+  delete from public.teaching_allocations where school_id = v_school;
+  delete from public.enrolments where school_id = v_school;
+  delete from public.class_subjects where school_id = v_school;
+  delete from public.classes where school_id = v_school;
+  delete from public.school_subject_rules where school_id = v_school;
+  delete from public.subject_offerings where school_id = v_school;
+  delete from public.subjects where school_id = v_school;
+  delete from public.guardianships where school_id = v_school;
+  delete from public.school_memberships where school_id = v_school;
+  delete from public.academic_years where school_id = v_school;
+  delete from public.schools where id = v_school;
+
+  if not exists (select 1 from public.schools s where s.school_group_id = v_group) then
+    delete from public.school_groups where id = v_group;
+  end if;
+
+  -- People who now belong nowhere. Anyone still at another school, or on Chom's own
+  -- staff, stays.
+  delete from public.profiles p
+  where p.id = any (v_profiles)
+    and not exists (select 1 from public.school_memberships m where m.profile_id = p.id)
+    and not exists (select 1 from public.parent_consents c
+                    where c.parent_profile_id = p.id or c.student_profile_id = p.id)
+    and not exists (select 1 from private.platform_staff s where s.profile_id = p.id);
+end;
+$$;

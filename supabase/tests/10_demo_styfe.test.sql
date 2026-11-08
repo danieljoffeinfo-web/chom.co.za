@@ -5,7 +5,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(32);
+select plan(33);
 set local client_min_messages = warning;
 
 select lives_ok(
@@ -265,7 +265,44 @@ create temp table first_load as
 select p.full_name, m.email from public.school_memberships m join public.profiles p on p.id = m.profile_id
 join public.schools s on s.id = m.school_id and s.slug = 'styfe';
 
-select private.demo_load_styfe('{"maths_teacher": "maths.login@styfe.co.za"}');
+-- Styfe's people use it: a teacher sets work, a learner ticks it off and adds a reminder.
+insert into public.tasks (id, school_id, academic_year_id, kind, title, due_at, subject_id, created_by)
+select '90000000-0000-4000-8000-0000000000d1', ta.school_id, c.academic_year_id, 'assigned', 'Demo homework',
+       now(), cs.subject_id, ta.teacher_profile_id
+from public.teaching_allocations ta
+join public.schools s on s.id = ta.school_id and s.slug = 'styfe'
+join public.class_subjects cs on cs.id = ta.class_subject_id
+join public.classes c on c.id = cs.class_id
+where exists (select 1 from public.enrolments e where e.class_id = c.id)
+limit 1;
+insert into public.task_classes (task_id, school_id, class_subject_id)
+select t.id, t.school_id, ta.class_subject_id
+from public.tasks t
+join public.teaching_allocations ta on ta.teacher_profile_id = t.created_by and ta.school_id = t.school_id
+join public.class_subjects cs on cs.id = ta.class_subject_id and cs.subject_id = t.subject_id
+join public.classes c on c.id = cs.class_id and c.academic_year_id = t.academic_year_id
+where t.id = '90000000-0000-4000-8000-0000000000d1'
+  and exists (select 1 from public.enrolments e where e.class_id = c.id)
+limit 1;
+insert into public.task_completions (task_id, school_id, student_profile_id)
+select tc.task_id, tc.school_id, e.student_profile_id
+from public.task_classes tc
+join public.class_subjects cs on cs.id = tc.class_subject_id
+join public.enrolments e on e.class_id = cs.class_id
+where tc.task_id = '90000000-0000-4000-8000-0000000000d1'
+limit 1;
+insert into public.tasks (school_id, academic_year_id, kind, title, created_by)
+select c.school_id, c.academic_year_id, 'personal', 'Buy a calculator', tc.student_profile_id
+from public.task_completions tc
+join public.enrolments e on e.student_profile_id = tc.student_profile_id
+join public.classes c on c.id = e.class_id
+where tc.task_id = '90000000-0000-4000-8000-0000000000d1'
+limit 1;
+
+select lives_ok(
+  $$ select private.demo_load_styfe('{"maths_teacher": "maths.login@styfe.co.za"}') $$,
+  'Reloading Styfe works when its people have tasks'
+);
 
 select set_eq(
   $$ select p.full_name, m.email from public.school_memberships m join public.profiles p on p.id = m.profile_id

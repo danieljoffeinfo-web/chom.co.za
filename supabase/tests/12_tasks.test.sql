@@ -9,7 +9,7 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(26);
+select plan(32);
 
 create function pg_temp.as_user(p_user text)
 returns void language plpgsql as $$
@@ -193,6 +193,56 @@ select results_eq($$ select * from pg_temp.sees('30000000-0000-4000-8000-0000000
 select results_eq($$ select * from pg_temp.sees('30000000-0000-4000-8000-000000000011') $$,
   $$ values (0, 0, 0, 0) $$, 'Another school''s admin sees nothing');
 
+-- A task's classes stay in its subject: it can't be relabelled as another subject.
+select pg_temp.as_user('30000000-0000-4000-8000-000000000002');
+set local role authenticated;
+select throws_ok(
+  $$ update public.tasks set subject_id = '50000000-0000-4000-8000-000000000002'
+     where id = '90000000-0000-4000-8000-000000000001' $$,
+  '23514', null,
+  'A Maths task sent to 10B Maths cannot be relabelled as English'
+);
+reset role;
+-- Priya teaches 10B English; her English task cannot go to a Maths class she doesn't
+-- teach, nor to an English class while labelled for another subject.
+select pg_temp.as_user('30000000-0000-4000-8000-000000000003');
+set local role authenticated;
+insert into public.tasks (id, school_id, academic_year_id, kind, title, due_at, subject_id, created_by)
+values ('90000000-0000-4000-8000-000000000009', '10000000-0000-4000-8000-000000000001',
+        '20000000-0000-4000-8000-000000000001', 'assigned', 'Essay plan', '2026-11-20 15:00+02',
+        '50000000-0000-4000-8000-000000000001', '40000000-0000-4000-8000-000000000003');
+select throws_ok(
+  $$ insert into public.task_classes (task_id, school_id, class_subject_id)
+     values ('90000000-0000-4000-8000-000000000009', '10000000-0000-4000-8000-000000000001',
+             '70000000-0000-4000-8000-000000000002') $$,
+  '23514', null,
+  'A task labelled Maths cannot go to an English class'
+);
+reset role;
+
+-- A teacher who has left can't change their tasks any more.
+update public.school_memberships set status = 'inactive'
+where profile_id = '40000000-0000-4000-8000-000000000002' and role = 'teacher';
+select pg_temp.as_user('30000000-0000-4000-8000-000000000002');
+set local role authenticated;
+update public.tasks set title = 'Changed after leaving' where id = '90000000-0000-4000-8000-000000000001';
+select throws_ok(
+  $$ insert into public.task_attachments (task_id, school_id, storage_path, file_name, size_bytes, uploaded_by)
+     values ('90000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-000000000001',
+             '10000000-0000-4000-8000-000000000001/90000000-0000-4000-8000-000000000001/late.pdf',
+             'late.pdf', 10, '40000000-0000-4000-8000-000000000002') $$,
+  '42501', null,
+  'A teacher who has left cannot attach files'
+);
+reset role;
+select is(
+  (select title from public.tasks where id = '90000000-0000-4000-8000-000000000001'),
+  'Exercise 4.2: quadratic equations',
+  'nor change their task'
+);
+update public.school_memberships set status = 'active'
+where profile_id = '40000000-0000-4000-8000-000000000002' and role = 'teacher';
+
 -- Deleting a task removes its classes, files' rows and ticks with it.
 select pg_temp.as_user('30000000-0000-4000-8000-000000000002');
 set local role authenticated;
@@ -206,6 +256,17 @@ select ok(
   and not exists (select 1 from public.task_attachments where task_id = '90000000-0000-4000-8000-000000000001')
   and not exists (select 1 from public.task_completions where task_id = '90000000-0000-4000-8000-000000000001'),
   'and its classes, attachments and ticks go with it'
+);
+select set_eq(
+  $$ select path from private.task_file_cleanup $$,
+  $$ values ('10000000-0000-4000-8000-000000000001/90000000-0000-4000-8000-000000000001/'),
+            ('10000000-0000-4000-8000-000000000001/90000000-0000-4000-8000-000000000001/worksheet.pdf') $$,
+  'Its files are queued for removal from storage'
+);
+select ok(
+  not has_table_privilege('authenticated', 'private.task_file_cleanup', 'SELECT')
+  and not has_table_privilege('authenticated', 'private.task_file_cleanup', 'DELETE'),
+  'Nobody signed in can read or clear the clean-up queue'
 );
 
 select * from finish();
