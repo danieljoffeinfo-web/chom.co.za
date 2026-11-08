@@ -26,7 +26,7 @@ export default async function SignIn({
         </p>
         {error === 'link' && (
           <p className={styles.error} role="alert">
-            That sign-in link has expired or was already used. Please ask for a new one.
+            That sign-in didn’t work. Please sign in again.
           </p>
         )}
         <SignInForm loginAs={loginAs} />
