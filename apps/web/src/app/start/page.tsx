@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 
 import { Message } from '@/components/message';
 import { parseLoginAs } from '@/lib/login-intent';
+import { loadMyName } from '@/lib/my-name';
 import { loadStudentContext } from '@/lib/student';
 import { createClient } from '@/lib/supabase/server';
 
@@ -29,9 +30,10 @@ const NOT_LINKED: Record<string, { title: string; body: string }> = {
 };
 
 /**
- * After every sign-in: link the login to the school roster, then send each person to
- * their dashboard. Teacher login → the staff dashboard. Otherwise students go to
- * onboarding (first time) or their dashboard, and staff to the staff dashboard.
+ * After every sign-in: link the login to the school roster, ask for their full name the
+ * first time, then send each person to their dashboard. Teacher login → the staff
+ * dashboard. Otherwise students go to onboarding (first time) or their dashboard, and
+ * staff to the staff dashboard.
  */
 export default async function Start({ searchParams }: { searchParams: Promise<{ as?: string }> }) {
   const loginAs = parseLoginAs((await searchParams).as);
@@ -54,6 +56,10 @@ export default async function Start({ searchParams }: { searchParams: Promise<{ 
       </Message>
     );
   }
+
+  // The last step of a first sign-in: their full name.
+  const me = await loadMyName(supabase);
+  if (me && !me.confirmed) redirect(`/your-name${loginAs === 'staff' ? '?as=staff' : ''}`);
 
   // Staff go to the staff dashboard on staff.chom.co.za, which shares this sign-in.
   const { data: staff, error: staffError } = await supabase.rpc('my_staff_dashboard');

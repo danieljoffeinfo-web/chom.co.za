@@ -17,7 +17,7 @@ export default async function SignIn({
         <p className={styles.muted}>For teachers and school admins. Use your school email.</p>
         {error === 'link' && (
           <p className={styles.error} role="alert">
-            That sign-in link has expired or was already used. Please ask for a new one.
+            That sign-in didn’t work. Please sign in again.
           </p>
         )}
         <SignInForm />

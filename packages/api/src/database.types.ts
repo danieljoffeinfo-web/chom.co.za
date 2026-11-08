@@ -752,6 +752,7 @@ export type Database = {
           created_at: string;
           full_name: string;
           id: string;
+          name_confirmed_at: string | null;
           preferred_name: string | null;
           updated_at: string;
           user_id: string | null;
@@ -761,6 +762,7 @@ export type Database = {
           created_at?: string;
           full_name: string;
           id?: string;
+          name_confirmed_at?: string | null;
           preferred_name?: string | null;
           updated_at?: string;
           user_id?: string | null;
@@ -769,6 +771,7 @@ export type Database = {
           created_at?: string;
           full_name?: string;
           id?: string;
+          name_confirmed_at?: string | null;
           preferred_name?: string | null;
           updated_at?: string;
           user_id?: string | null;
@@ -1678,6 +1681,7 @@ export type Database = {
           path: string;
         }[];
       };
+      confirm_my_name: { Args: { p_full_name: string }; Returns: undefined };
       finish_task_file_cleanup: { Args: { p_ids: number[]; p_token: string }; Returns: number };
       link_my_account: { Args: Record<PropertyKey, never>; Returns: string };
       my_guardian_links: {

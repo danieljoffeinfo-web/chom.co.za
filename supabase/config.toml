@@ -245,6 +245,17 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
+# Signing in for the first time (or after forgetting a password) sends a code, not a
+# link: both emails use the code template. The deploy workflow sends the same template
+# to production ("Email templates" step), so it lives here, in the repo.
+[auth.email.template.magic_link]
+subject = "Your Chom code"
+content_path = "./supabase/templates/code.html"
+
+[auth.email.template.confirmation]
+subject = "Your Chom code"
+content_path = "./supabase/templates/code.html"
+
 # Uncomment to customize email template
 # [auth.email.template.invite]
 # subject = "You have been invited"
