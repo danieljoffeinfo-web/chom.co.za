@@ -14,14 +14,19 @@ const noStore = { 'Cache-Control': 'private, no-store' };
  * and week, upcoming exams, and each subject's unit plan (done, now, upcoming).
  * Everything is read as the student, so row-level security decides what comes back.
  *
- * 401 when nobody is signed in or the person isn't a student: the dashboard then
- * stays on its sample data.
+ * 401 when nobody is signed in; 403 when someone is, but not as a student (a teacher or
+ * parent in the same browser). On chom.co.za the dashboard then sends them to sign in,
+ * or offers their own dashboard; it never shows sample data to a real visitor.
  */
 export async function GET() {
   const supabase = await createClient();
+  const { data: claims } = await supabase.auth.getClaims();
+  if (!claims?.claims) {
+    return NextResponse.json({ error: 'signed_out' }, { status: 401, headers: noStore });
+  }
   const student = await loadStudentContext(supabase);
   if (!student) {
-    return NextResponse.json({ error: 'not_a_student' }, { status: 401, headers: noStore });
+    return NextResponse.json({ error: 'not_a_student' }, { status: 403, headers: noStore });
   }
 
   // Who teaches each of the student's subjects this year, through the classes they're

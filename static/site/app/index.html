@@ -3470,15 +3470,52 @@ SOFTWARE.
     </dialog>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script>
-      // The signed-in student's real details (name, class, subjects, teachers,
-      // goals). Signed out, or not a student: null, and the page shows sample data.
-      window.chomMe = fetch("/api/student/me", {
-        credentials: "same-origin",
-        redirect: "manual",
-        cache: "no-store",
-      })
-        .then((r) => (r.ok ? r.json() : null))
-        .catch(() => null);
+      // The signed-in student's real details (name, class, subjects, teachers, goals).
+      // On chom.co.za a real visitor never sees sample data: signed out goes to sign in,
+      // a teacher or parent is offered their own dashboard, and a failed load says so.
+      // Only local and preview builds fall back to the sample student, for showing schools.
+      (() => {
+        const live = /(^|\.)chom\.co\.za$/.test(location.hostname);
+        const never = new Promise(() => {});
+        function stop(title, body, actions) {
+          const show = () => {
+            document.body.innerHTML = `<main style="min-height:100vh;display:grid;place-items:center;padding:24px;background:#EEEBDA;color:#282B4A;font-family:inherit"><div style="max-width:440px;text-align:center"><p style="font-weight:700;letter-spacing:-0.02em;font-size:22px;margin:0 0 24px">chom learn</p><h1 style="font-size:28px;margin:0 0 12px">${title}</h1><p style="margin:0 0 24px;line-height:1.5">${body}</p><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">${actions}</div></div></main>`;
+          };
+          if (document.body) show();
+          else document.addEventListener("DOMContentLoaded", show, { once: true });
+          return never;
+        }
+        const button = (href, label, primary) =>
+          `<a href="${href}" style="display:inline-block;padding:12px 20px;border-radius:999px;font-weight:600;text-decoration:none;${primary ? "background:#282B4A;color:#EEEBDA" : "border:1px solid #282B4A;color:#282B4A"}">${label}</a>`;
+        const load = () =>
+          fetch("/api/student/me", { credentials: "same-origin", redirect: "manual", cache: "no-store" });
+        window.chomMe = load()
+          .catch(() => new Promise((r) => setTimeout(r, 800)).then(load))
+          .then((r) => {
+            if (r.ok) return r.json();
+            if (!live) return null;
+            if (r.status === 401) {
+              location.replace("/sign-in");
+              return never;
+            }
+            if (r.status === 403)
+              return stop(
+                "This is the student dashboard",
+                "You’re signed in with a teacher or parent account in this browser. Go to your own dashboard, or sign out to sign in as a student.",
+                button("/start", "Go to my dashboard", true) + button("/sign-out", "Sign out", false),
+              );
+            throw new Error(String(r.status));
+          })
+          .catch(() =>
+            live
+              ? stop(
+                  "We couldn’t load your dashboard",
+                  "Check your connection and try again.",
+                  button(location.pathname, "Try again", true),
+                )
+              : null,
+          );
+      })();
     </script>
     <script>
       (async () => {
