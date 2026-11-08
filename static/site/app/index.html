@@ -3120,7 +3120,6 @@
       }
     </style>
   <link rel="stylesheet" href="/shared/subjects.css">
-<script src="/shared/school.js"></script>
 </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -3355,7 +3354,7 @@ SOFTWARE.
       <div class="school-switch">
         <span class="school-icon"
           ><svg class="icon small"><use href="#i-school" /></svg></span
-        ><span><strong>My school space</strong><span id="school-space-line">Grade 10 · Class B</span></span>
+        ><span><strong>My school space</strong><span id="school-space-line"></span></span>
       </div>
       <p class="nav-label">My learning</p>
       <nav class="nav" aria-label="Learning">
@@ -3371,7 +3370,7 @@ SOFTWARE.
           ><svg class="icon"><use href="#i-check" /></svg>My tasks<span
             class="badge"
             id="nav-task-count"
-            >3</span
+            >0</span
           ></a
         ><a href="#assignments" data-view="assignments"
           ><svg class="icon"><use href="#i-file" /></svg>Assignments</a
@@ -3404,7 +3403,7 @@ SOFTWARE.
           <svg class="icon small" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3M13 13.5 16.5 10 13 6.5M16.5 10H8"/></svg>Sign out
         </a>
         <div class="sidebar-footer">
-          <i></i>Student preview <span style="margin-left: auto">v.04</span>
+          <i></i>Chom Learn <span style="margin-left: auto">v.04</span>
         </div>
       </div>
     </aside>
@@ -3447,10 +3446,10 @@ SOFTWARE.
         <button
           class="quick-button"
           data-action="profile"
-          aria-label="Amara's profile"
+          aria-label="Your profile"
           data-hint="Your profile"
         >
-          <span class="avatar" aria-hidden="true">AN</span>
+          <span class="avatar" aria-hidden="true"></span>
         </button>
       </nav>
       <main class="page" id="main" tabindex="-1"></main>
@@ -3471,11 +3470,9 @@ SOFTWARE.
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script>
       // The signed-in student's real details (name, class, subjects, teachers, goals).
-      // On chom.co.za a real visitor never sees sample data: signed out goes to sign in,
-      // a teacher or parent is offered their own dashboard, and a failed load says so.
-      // Only local and preview builds fall back to the sample student, for showing schools.
+      // There is no sample data: signed out goes to sign in, a teacher or parent is
+      // offered their own dashboard, and a failed load says so. It never resolves to null.
       (() => {
-        const live = /(^|\.)chom\.co\.za$/.test(location.hostname);
         const never = new Promise(() => {});
         function stop(title, body, actions) {
           const show = () => {
@@ -3499,7 +3496,6 @@ SOFTWARE.
           .catch(() => new Promise((r) => setTimeout(r, 800)).then(load))
           .then((r) => {
             if (r.ok) return r.json();
-            if (!live) return null;
             // A redirect (e.g. to sign in) reaches us opaque, as status 0: treat it as signed out.
             if (r.status === 401 || r.type === "opaqueredirect") {
               location.replace("/sign-in");
@@ -3514,13 +3510,11 @@ SOFTWARE.
             throw new Error(String(r.status));
           })
           .catch(() =>
-            live
-              ? stop(
-                  "We couldn’t load your dashboard",
-                  "Check your connection and try again.",
-                  button(location.pathname, "Try again", true),
-                )
-              : null,
+            stop(
+              "We couldn’t load your dashboard",
+              "Check your connection and try again.",
+              button(location.pathname, "Try again", true),
+            ),
           );
       })();
     </script>
@@ -3529,16 +3523,14 @@ SOFTWARE.
         "use strict";
         const me = await window.chomMe;
         // The student's real tasks: their teachers' work and their own reminders.
-        const liveTasks = me
-          ? await fetch("/api/student/tasks", { credentials: "same-origin", redirect: "manual", cache: "no-store" })
-              .then((r) => (r.ok ? r.json() : null))
-              .then((d) => (d && Array.isArray(d.tasks) ? d.tasks : null))
-              .catch(() => null)
-          : null;
-        // Signed in but the list didn't load: say so, rather than "all caught up".
-        const tasksFailed = Boolean(me) && !liveTasks;
+        const liveTasks = await fetch("/api/student/tasks", { credentials: "same-origin", redirect: "manual", cache: "no-store" })
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d) => (d && Array.isArray(d.tasks) ? d.tasks : null))
+          .catch(() => null);
+        // The list didn't load: say so, rather than "all caught up".
+        const tasksFailed = !liveTasks;
         const tasksFailedNote = `<p class="task-empty" role="alert">We couldn’t load your tasks. <button type="button" class="text-button" data-action="reload-page">Try again</button></p>`;
-        if (me && !me.today)
+        if (!me.today)
           me.today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Johannesburg" });
         const $ = (s) => document.querySelector(s),
           $$ = (s) => [...document.querySelectorAll(s)];
@@ -3556,55 +3548,9 @@ SOFTWARE.
                 "'": "&#39;",
               })[c],
           );
-        const initialTasks = [
-          {
-            id: "maths",
-            title: "Exercise 4.2: quadratic equations",
-            subject: "Maths",
-            when: "today",
-            time: "15:00",
-            done: false,
-          },
-          {
-            id: "english",
-            title: "Reading log, chapter 6",
-            subject: "English",
-            when: "today",
-            time: "Today",
-            done: false,
-          },
-          {
-            id: "history",
-            title: "Outline your WWI essay",
-            subject: "History",
-            when: "today",
-            time: "Today",
-            done: false,
-          },
-          {
-            id: "afrikaans",
-            title: "Practise your vocabulary set",
-            subject: "Afrikaans",
-            when: "today",
-            time: "Done",
-            done: true,
-          },
-          {
-            id: "science",
-            title: "Complete your lab prep sheet",
-            subject: "Science",
-            when: "upcoming",
-            time: "Tomorrow",
-            done: false,
-          },
-        ];
-        if (me) initialTasks.length = 0;
-        const storeKey = me ? `chom-learn-v2:${me.id}` : "chom-learn-v2";
+        const storeKey = `chom-learn-v2:${me.id}`;
         const defaults = {
-          tasks: initialTasks,
           notes: "",
-          assignmentNotes: {},
-          assignmentProgress: { history: 60, science: 20 },
           focus: false,
           theme: "light",
           notificationsRead: false,
@@ -3617,29 +3563,7 @@ SOFTWARE.
         } catch (e) {
           storageAvailable = false;
         }
-        const state = {
-          ...defaults,
-          ...saved,
-          tasks:
-            Array.isArray(saved.tasks) &&
-            saved.tasks.every(
-              (t) =>
-                t &&
-                typeof t.id === "string" &&
-                typeof t.title === "string" &&
-                typeof t.subject === "string",
-            )
-              ? saved.tasks
-              : initialTasks,
-          assignmentNotes: {
-            ...defaults.assignmentNotes,
-            ...saved.assignmentNotes,
-          },
-          assignmentProgress: {
-            ...defaults.assignmentProgress,
-            ...saved.assignmentProgress,
-          },
-        };
+        const state = { ...defaults, ...saved };
         // A real task in the shape the page draws: due today (or overdue, or no date)
         // goes under Today; a later date under Upcoming.
         function fromServer(t) {
@@ -3665,10 +3589,9 @@ SOFTWARE.
           const m = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
           return `${Number(iso.slice(8, 10))} ${m[Number(iso.slice(5, 7)) - 1]}`;
         }
-        if (me) state.tasks = (liveTasks || []).map(fromServer);
+        state.tasks = (liveTasks || []).map(fromServer);
         let currentView = "dashboard",
           taskFilter = "today",
-          selectedDay = 1,
           toastTimer,
           lastFocused;
         const views = {
@@ -3683,23 +3606,7 @@ SOFTWARE.
           messages: "Messages",
           settings: "Settings",
         };
-        const slotTimes = [
-          ["09:40", "10:30"],
-          ["10:35", "11:25"],
-          ["11:30", "12:20"],
-          ["12:25", "13:15"],
-          ["13:45", "14:35"],
-          ["14:40", "15:30"],
-        ];
-        const subjectList = [
-          { id: "maths", name: "Mathematics", short: "Ma", room: "Room 12", teacher: "Mr Dlamini", color: "#1967d2" },
-          { id: "english", name: "English", short: "En", room: "Room 4", teacher: "Ms Naidoo", color: "#129eaf" },
-          { id: "afrikaans", name: "Afrikaans", short: "Af", room: "Room 7", teacher: "", color: "#e8710a" },
-          { id: "life-sciences", name: "Life Sciences", short: "Ls", room: "Lab 2", teacher: "", color: "#1e8e3e" },
-          { id: "geography", name: "Geography", short: "Gg", room: "Room 15", teacher: "", color: "#9334e6" },
-          { id: "history", name: "History", short: "Hi", room: "Room 9", teacher: "", color: "#c5221f" },
-          { id: "art", name: "Art", short: "Ar", room: "Art studio", teacher: "", color: "#e52592" },
-        ];
+        const subjectList = [];
         const palette = ["#1967d2", "#129eaf", "#e8710a", "#1e8e3e", "#9334e6", "#c5221f", "#e52592", "#5f6368"];
         const shortName = (raw) => {
           const name = String(raw ?? "").trim();
@@ -3708,9 +3615,7 @@ SOFTWARE.
             ? words[0][0] + words[1][0].toLowerCase()
             : name.slice(0, 2);
         };
-        if (me) {
-          subjectList.length = 0;
-          me.subjects.forEach((s, i) =>
+        me.subjects.forEach((s, i) =>
             subjectList.push({
               id: s.id,
               name: s.name,
@@ -3722,76 +3627,19 @@ SOFTWARE.
               target: s.target,
               units: Array.isArray(s.units) ? s.units : [],
             }),
-          );
-        }
-        const displayName = me ? me.firstName : "Amara";
-        const initials = me ? me.initials : "AN";
-        const gradeShort = me ? me.registerClass || `Grade ${me.grade ?? ""}` : "Grade 10B";
-        const gradeLine = me
-          ? [me.grade != null ? `Grade ${me.grade}` : "", me.registerClass ? `Class ${me.registerClass}` : ""]
-              .filter(Boolean)
-              .join(" · ")
-          : "Grade 10 · Class B";
-        if (me) {
-          $("#school-space-line").textContent = gradeLine;
-          $$('[data-action="profile"]').forEach((b) => {
-            b.setAttribute("aria-label", `${me.firstName}'s profile`);
-            const a = b.querySelector(".avatar");
-            if (a) a.textContent = me.initials;
-          });
-        }
-        // Sample "now": Tuesday, during period 1.
-        const today = 1,
-          nowSlot = 0;
-        const weekly = [
-          [
-            "English",
-            "Mathematics",
-            "Afrikaans",
-            "Geography",
-            "Life Sciences",
-            "Art",
-          ],
-          [
-            "Mathematics",
-            "English",
-            "Life Sciences",
-            "History",
-            "Afrikaans",
-            "Art",
-          ],
-          [
-            "Geography",
-            "Mathematics",
-            "English",
-            "Life Sciences",
-            "History",
-            "Art",
-          ],
-          [
-            "Afrikaans",
-            "History",
-            "Mathematics",
-            "English",
-            "Geography",
-            "Life Sciences",
-          ],
-          [
-            "Mathematics",
-            "Life Sciences",
-            "Art",
-            "Geography",
-            "English",
-            "History",
-          ],
-        ];
-        const dayNames = [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-        ];
+        );
+        const displayName = me.firstName;
+        const initials = me.initials;
+        const gradeShort = me.registerClass || `Grade ${me.grade ?? ""}`;
+        const gradeLine = [me.grade != null ? `Grade ${me.grade}` : "", me.registerClass ? `Class ${me.registerClass}` : ""]
+          .filter(Boolean)
+          .join(" · ");
+        $("#school-space-line").textContent = gradeLine;
+        $$('[data-action="profile"]').forEach((b) => {
+          b.setAttribute("aria-label", `${me.firstName}'s profile`);
+          const a = b.querySelector(".avatar");
+          if (a) a.textContent = me.initials;
+        });
         const remaining = () =>
           state.tasks.filter((t) => t.when === "today" && !t.done).length;
         function applyTheme() {
@@ -3826,37 +3674,7 @@ SOFTWARE.
           );
         }
         function footer() {
-          return `<footer class="page-footer"><span>${icon("heart")}A little support. A lot of possibility.</span><span>${me ? `${esc(me.schoolName)} · Tasks you add stay on this device` : "Sample school data · Your changes stay on this device"}</span></footer>`;
-        }
-        function subjectInfo(name) {
-          return subjectList.find((x) => x.name === name);
-        }
-        function lessonsOf(subject) {
-          return weekly.flatMap((titles, day) =>
-            titles.flatMap((t, slot) => (t === subject.name ? [{ day, slot }] : [])),
-          );
-        }
-        function nextLesson(subject) {
-          const lessons = lessonsOf(subject);
-          return (
-            lessons.find(
-              (l) => l.day > today || (l.day === today && l.slot >= nowSlot),
-            ) || lessons[0]
-          );
-        }
-        function lessonLabel(l) {
-          if (l.day === today && l.slot === nowSlot) return "On now";
-          return `${l.day === today ? "Today" : dayNames[l.day].slice(0, 3)} · ${slotTimes[l.slot][0]}`;
-        }
-        function subjectsPanel() {
-          return `<section class="cd-section" aria-labelledby="subjects-title"><div class="cd-head"><div><span class="cd-label">My subjects</span><h2 id="subjects-title">Your classes</h2></div><a class="text-button" href="#subjects">All subjects ${icon("arrow", true)}</a></div><div class="cd-classes">${subjectList
-            .map((x) => {
-              if (me) return liveClassCard(x);
-              const next = nextLesson(x),
-                live = next.day === today && next.slot === nowSlot;
-              return `<button class="cd-class ${live ? "live" : ""}" data-action="subject" data-subject="${x.id}"><span class="cd-class-top"><span class="cd-avatar" aria-hidden="true">${x.short}</span>${live ? '<span class="cd-pill small">Live</span>' : ""}</span><span><strong>${x.name}</strong><small>Grade 10B · ${x.teacher || x.room}</small></span><span class="cd-next"><span>${live ? "Happening now" : "Next lesson"}</span><b>${live ? x.room : lessonLabel(next)}</b></span></button>`;
-            })
-            .join("")}</div></section>`;
+          return `<footer class="page-footer"><span>${icon("heart")}A little support. A lot of possibility.</span><span>${esc(me.schoolName)} · Tasks you add stay on this device</span></footer>`;
         }
         // Dates from the school's calendar are plain YYYY-MM-DD days.
         const day = (iso, opts) => new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-ZA", { timeZone: "UTC", ...opts });
@@ -3880,13 +3698,10 @@ SOFTWARE.
           return `<section class="panel"><div class="cd-head"><div><span class="cd-label">Coming soon</span><h2>${title}</h2></div></div><p class="muted" style="margin:0;padding:0 24px 28px">${copy}</p></section>`;
         }
         function dueLabel(t) {
-          if (t.done) return "Done";
-          if (me) return t.time;
-          if (t.when === "upcoming") return "Due " + String(t.time).toLowerCase();
-          return /^\d/.test(t.time) ? "Due by " + t.time : "Due today";
+          return t.done ? "Done" : t.time;
         }
         function dashTaskRow(t) {
-          return `<li><${me ? "div" : "label"} class="dt-row ${t.done ? "done" : ""}"><span class="dt-copy">${me ? `<button type="button" class="dt-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button>` : `<span class="dt-name">${esc(t.title)}</span>`}<span class="dt-subject">${esc(t.subject)}</span></span><span class="dt-due ${t.done ? "is-done" : ""}">${esc(dueLabel(t))}</span><input type="checkbox" class="dt-check" data-task="${esc(t.id)}" aria-label="Mark ${esc(t.title)} as done" ${t.done ? "checked" : ""}></${me ? "div" : "label"}></li>`;
+          return `<li><div class="dt-row ${t.done ? "done" : ""}"><span class="dt-copy"><button type="button" class="dt-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button><span class="dt-subject">${esc(t.subject)}</span></span><span class="dt-due ${t.done ? "is-done" : ""}">${esc(dueLabel(t))}</span><input type="checkbox" class="dt-check" data-task="${esc(t.id)}" aria-label="Mark ${esc(t.title)} as done" ${t.done ? "checked" : ""}></div></li>`;
         }
         function dashTasks() {
           const today = state.tasks.filter((t) => t.when === "today"),
@@ -3902,37 +3717,7 @@ SOFTWARE.
                 ? t.when === "upcoming" && !t.done
                 : t.when === "today",
           );
-          return `<div class="filter-row" role="tablist" aria-label="Task filters">${["today", "upcoming", "done"].map((f) => `<button class="filter ${taskFilter === f ? "active" : ""}" role="tab" aria-selected="${taskFilter === f}" aria-controls="task-results" data-filter="${f}">${{ today: "Today", upcoming: "Upcoming", done: "Completed" }[f]}<span>${state.tasks.filter((t) => (f === "done" ? t.done : f === "upcoming" ? t.when === "upcoming" && !t.done : t.when === "today")).length}</span></button>`).join("")}</div><div class="task-list" id="task-results" role="tabpanel" aria-label="${taskFilter} tasks">${list.length ? list.map((t) => `<div class="task-row ${t.done ? "completed" : ""}"><label class="task-check"><input type="checkbox" data-task="${esc(t.id)}" aria-label="Complete ${esc(t.title)}" ${t.done ? "checked" : ""}></label><div class="task-content">${me ? `<button type="button" class="task-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button>` : `<span class="task-name">${esc(t.title)}</span>`}<span class="task-sub"><i class="subject-dot ${esc(t.subject)}"></i>${esc(t.subject)}</span></div><span class="due ${t.done ? "done" : ""}">${t.done ? "Completed" : esc(me ? t.time : t.time === "Done" ? "Today" : t.time)}</span></div>`).join("") : tasksFailed ? tasksFailedNote : `<p class="task-empty">${taskFilter === "done" ? "Your completed tasks will appear here." : taskFilter === "upcoming" ? "A little breathing room. No upcoming tasks." : "Nothing due today. You’re all caught up."}</p>`}</div>`;
-        }
-        function scheduleRows(day) {
-          const slot = (i) => {
-            const x = subjectInfo(weekly[day][i]),
-              now = day === today && i === nowSlot;
-            return `<li class="slot ${now ? "now" : ""}" style="--c:${x.color}"><time class="slot-time">${slotTimes[i][0]}</time><div class="slot-body"><h3>${x.name}${now ? '<span class="now-tag">Now</span>' : ""}</h3><p>${x.room}${x.teacher ? " · " + x.teacher : ""}</p></div></li>`;
-          };
-          return [0, 1, 2, 3].map(slot).join("") +
-            `<li class="slot break"><time class="slot-time">13:15</time><div class="slot-body"><p>Lunch break · 30 min</p></div></li>` +
-            [4, 5].map(slot).join("");
-        }
-        function schedulePanel() {
-          return `<section class="panel schedule-panel" aria-labelledby="day-title"><div class="cd-head"><div><span class="cd-label">Your day</span><h2 id="day-title">${dayNames[selectedDay]}, ${5 + selectedDay} October</h2><p class="schedule-subtitle">6 classes · lunch at 13:15</p></div></div><div class="schedule-days" aria-label="School days">${dayNames.map((d, i) => `<button class="day ${i === selectedDay ? "selected" : ""} ${i === today ? "today" : ""}" data-day="${i}" aria-label="${d} ${5 + i} October${i === today ? ", today" : ""}" aria-pressed="${i === selectedDay}">${d.slice(0, 3)}<b>${5 + i}</b></button>`).join("")}</div><ol class="schedule-list">${scheduleRows(selectedDay)}</ol><div class="schedule-footer"><a href="#timetable">View full timetable ${icon("arrow", true)}</a></div></section>`;
-        }
-        function assignmentRows() {
-          return ["history", "science"]
-            .map(
-              (id, i) =>
-                `<button class="cd-acard" data-action="assignment" data-id="${id}"><span class="cd-aicon">${icon(i ? "flask" : "file")}</span><span><strong>${i ? "Osmosis lab report" : "World War I essay"}</strong><small>${i ? "Life Sciences" : "History"} · Due Fri, 9 Oct</small></span><span><span class="cd-bar-label"><span>Drafted</span><span>${state.assignmentProgress[id]}%</span></span><span class="cd-bar"><i style="--value:${state.assignmentProgress[id]}%"></i></span></span></button>`,
-            )
-            .join("");
-        }
-        function assignmentsPanel() {
-          return `<section class="panel" aria-labelledby="assign-title"><div class="cd-head"><div><span class="cd-label">Assignments</span><h2 id="assign-title">Due this week</h2></div><a class="text-button" href="#assignments">See all assignments ${icon("arrow", true)}</a></div><div class="cd-assign">${assignmentRows()}</div></section>`;
-        }
-        function progressPanel() {
-          return `<section class="progress-panel"><div class="progress-head"><h2>Your progress</h2>${icon("leaf")}</div><div class="progress-visual"><div class="progress-ring"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="none" style="stroke:var(--line)" stroke-width="6"/><circle cx="40" cy="40" r="34" fill="none" style="stroke:var(--orange)" stroke-width="6" stroke-linecap="round" stroke-dasharray="207 214"/></svg><strong>97%</strong></div><div class="progress-message"><strong>Showing up matters.</strong><p>Your attendance this term. Keep making space for learning.</p></div></div><div class="progress-foot"><span>One day at a time.</span><button data-action="navigate" data-view="results">My progress ${icon("arrow", true)}</button></div></section>`;
-        }
-        function schoolPanel() {
-          return `<section class="cd-section" aria-labelledby="beyond-title"><div class="cd-head"><div><span class="cd-label">School life</span><h2 id="beyond-title">Beyond the classroom</h2></div></div><div class="cd-beyond"><button class="cd-service" data-action="service" data-service="sport">${icon("ball")}<span><strong>Sports &amp; activities</strong><small>Hockey, 15:30</small></span></button><button class="cd-service" data-action="service" data-service="transport">${icon("bus")}<span><strong>My transport</strong><small>Bus 14</small></span></button><button class="cd-service" data-action="service" data-service="support">${icon("heart")}<span><strong>Someone to talk to</strong><small>Private, whenever you need it</small></span></button></div></section>`;
+          return `<div class="filter-row" role="tablist" aria-label="Task filters">${["today", "upcoming", "done"].map((f) => `<button class="filter ${taskFilter === f ? "active" : ""}" role="tab" aria-selected="${taskFilter === f}" aria-controls="task-results" data-filter="${f}">${{ today: "Today", upcoming: "Upcoming", done: "Completed" }[f]}<span>${state.tasks.filter((t) => (f === "done" ? t.done : f === "upcoming" ? t.when === "upcoming" && !t.done : t.when === "today")).length}</span></button>`).join("")}</div><div class="task-list" id="task-results" role="tabpanel" aria-label="${taskFilter} tasks">${list.length ? list.map((t) => `<div class="task-row ${t.done ? "completed" : ""}"><label class="task-check"><input type="checkbox" data-task="${esc(t.id)}" aria-label="Complete ${esc(t.title)}" ${t.done ? "checked" : ""}></label><div class="task-content"><button type="button" class="task-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button><span class="task-sub"><i class="subject-dot ${esc(t.subject)}"></i>${esc(t.subject)}</span></div><span class="due ${t.done ? "done" : ""}">${t.done ? "Completed" : esc(t.time)}</span></div>`).join("") : tasksFailed ? tasksFailedNote : `<p class="task-empty">${taskFilter === "done" ? "Your completed tasks will appear here." : taskFilter === "upcoming" ? "A little breathing room. No upcoming tasks." : "Nothing due today. You’re all caught up."}</p>`}</div>`;
         }
         function liveDashboard() {
           const weekday = day(me.today, { weekday: "long" }),
@@ -3950,10 +3735,7 @@ SOFTWARE.
           return `<section class="panel"><div class="cd-head"><div><span class="cd-label">Coming up</span><h2>${exams.length ? "Exams" : "Your term"}</h2></div></div><div style="padding:0 24px 24px">${revising ? `<p class="muted" style="margin:0 0 12px">New content finished on ${esc(day(me.contentEndsOn, { day: "numeric", month: "long" }))}. Time to revise.</p>` : ""}${rows ? `<ul class="schedule-list" style="list-style:none;margin:0;padding:0">${rows}</ul>` : `<p class="muted" style="margin:0">No exams coming up${me.term ? `. Term ${me.term.number} ends on ${esc(day(me.term.endsOn, { day: "numeric", month: "long" }))}.` : "."}</p>`}</div></section>`;
         }
         function dashboard() {
-          if (me) return liveDashboard();
-          const nowClass = subjectInfo(weekly[today][nowSlot]),
-            nextClass = subjectInfo(weekly[today][nowSlot + 1]);
-          return `<div class="cd"><div class="cd-top"><header class="cd-hero"><span class="cd-label">Tuesday · 6 October 2026</span><h1 class="cd-title">Hey, Amara.</h1><p class="cd-lede">You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></header><section class="cd-stats" aria-label="Your week in numbers"><div class="cd-stat"><span class="cd-num" id="task-count">${remaining()}</span><strong>Tasks due today</strong><small>Tick them off as you go</small></div><div class="cd-stat"><span class="cd-num">2</span><strong>Assignments due</strong><small>Friday, 9 October</small></div></section></div><section class="cd-now" aria-label="Happening now"><div class="cd-now-main"><span class="cd-pill">On now</span><div><span class="cd-now-title">${nowClass.name}</span><span>${nowClass.room}${nowClass.teacher ? " · " + nowClass.teacher : ""} · ${slotTimes[nowSlot][0]}–${slotTimes[nowSlot][1]}</span></div></div><div class="cd-now-side"><span>Next: ${nextClass.name}, ${slotTimes[nowSlot + 1][0]}</span><button class="cd-cta" data-action="subject" data-subject="${nowClass.id}">Open class ${icon("arrow", true)}</button></div></section><div class="cd-split"><div class="cd-col"><section class="panel dt-panel" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="dt-all" href="#tasks">See all tasks ${icon("arrow", true)}</a></div><div id="dash-tasks">${dashTasks()}</div></section>${assignmentsPanel()}</div></div></div>`;
+          return liveDashboard();
         }
         function liveSubjects() {
           return viewHeader("My subjects", `${esc(gradeLine)} · ${esc(me.schoolName)}`) +
@@ -3979,14 +3761,14 @@ SOFTWARE.
           $("#notification-dot").hidden = !!state.notificationsRead;
           let html = "";
           if (currentView === "dashboard") html = dashboard();
-          if (currentView === "subjects") html = me ? liveSubjects() : School.student();
-          if (me && currentView === "timetable")
+          if (currentView === "subjects") html = liveSubjects();
+          if (currentView === "timetable")
             html = viewHeader("A little structure for your week.", `${esc(gradeLine)} · ${esc(me.yearLabel)}`) +
               comingSoon("Your timetable is on its way", `Your lesson times will appear here once ${esc(me.schoolName)} loads its timetable. What each subject is teaching this term is in My subjects.`);
-          if (me && currentView === "assignments")
+          if (currentView === "assignments")
             html = viewHeader("Good work takes a little planning.", "Keep your drafts and deadlines in one place.") +
               comingSoon("No assignments yet", "When your teachers set assignments, they’ll appear here with their due dates.");
-          if (me && currentView === "results")
+          if (currentView === "results")
             html = viewHeader("See how far you’re coming.", "Use your results to find your next small step.") +
               comingSoon("No results yet", "Your marks will appear here as your teachers record them, next to the goals you set.");
           if (currentView === "tasks")
@@ -3997,34 +3779,13 @@ SOFTWARE.
                 `<button class="button" data-action="add-task">${icon("plus", true)}Add a task</button>`,
               ) +
               `<section class="panel"><div class="panel-head"><h2>My tasks</h2><span class="muted" id="tasks-summary">${remaining()} left today</span></div><div id="tasks-content">${tasksMarkup()}</div></section>`;
-          if (currentView === "timetable" && !me)
-            html =
-              viewHeader(
-                "A little structure for your week.",
-                "5–9 October 2026 · Grade 10B · Sample school timetable",
-              ) +
-              `<section class="panel"><div class="panel-head"><h2>This week</h2><span class="date-pill">Term 4 · Week 2</span></div><div class="table-wrap"><div class="week-grid">${dayNames.map((d, di) => `<div class="week-col"><h3>${d.slice(0, 3)} <span class="muted">${di + 5} Oct</span></h3>${weekly[di].map((s, i) => `<div class="week-class" style="--c:${subjectInfo(s).color}"><time>${["09:40", "10:35", "11:30", "12:25", "13:45", "14:40"][i]}</time><strong>${s}</strong><small>Period ${i + 1}</small></div>`).join("")}</div>`).join("")}</div></div></section><div class="notice">Lunch break: 13:15–13:45. School activities and transport are in School life. On small screens, scroll the timetable sideways to see the week.</div>`;
-          if (currentView === "assignments" && !me)
-            html =
-              viewHeader(
-                "Good work takes a little planning.",
-                "Keep your drafts and deadlines in one place.",
-              ) +
-              `<section class="panel"><div class="panel-head"><h2>Due this Friday</h2><span class="count">2</span></div><div class="assignment-list">${assignmentRows()}</div></section><div class="notice">Use each assignment’s workspace to write notes and track your draft. Submission to your school is not connected in this preview.</div>`;
-          if (currentView === "results" && !me)
-            html =
-              viewHeader(
-                "See how far you’re coming.",
-                "Use your results to find your next small step.",
-              ) +
-              `<div class="content-grid">${progressPanel()}<section class="content-card"><h3>Your latest result</h3><div class="large-stat">78<span style="font-size:21px">%</span></div><p>Geography · Recent assessment</p><p>Sample result from your dashboard.</p></section></div><h2 class="section-title">Where a little practice could help</h2><section class="panel"><div class="table-wrap"><table class="data-table"><thead><tr><th>Skill</th><th>Subject</th><th>Recent score</th><th>Next step</th></tr></thead><tbody><tr><td>Algebra</td><td>Mathematics</td><td>62%</td><td><button class="text-button" data-action="study" data-topic="algebra">Practise algebra</button></td></tr><tr><td>Lab reports</td><td>Life Sciences</td><td>48%</td><td><button class="text-button" data-action="assignment" data-id="science">Work on your report</button></td></tr><tr><td>Essay structure</td><td>English</td><td>71%</td><td><button class="text-button" data-action="study" data-topic="essay">Build an outline</button></td></tr></tbody></table></div></section>`;
           if (currentView === "chom")
             html =
               viewHeader(
                 "A good place to get unstuck.",
                 "Choose a guided session, try a quick quiz, or collect your thoughts.",
               ) +
-              `<div class="info-strip">Your study preview includes guided exercises and a notebook. Live AI chat is not connected.</div><div class="content-grid"><section class="content-card"><span class="subject-icon">${icon("spark")}</span><h2>Make algebra make sense</h2><p>Break a quadratic equation into smaller, clearer steps.</p><button class="button secondary" data-action="study" data-topic="algebra">Start a session</button></section><section class="content-card"><span class="subject-icon mint">${icon("flask")}</span><h2>A quick osmosis check</h2><p>Three questions to help you see what’s sticking.</p><button class="button secondary" data-action="study" data-topic="quiz">Take the quiz</button></section></div><h2 class="section-title">Your study notebook</h2><section class="content-card"><label for="study-notes" class="muted">An idea, a question, a lightbulb moment. Keep it here.</label><textarea id="study-notes" class="notes-area" maxlength="12000" style="margin-top:12px" placeholder="Today I learned...">${esc(state.notes)}</textarea><div class="form-actions"><button class="button" data-action="save-notes">Save my notes</button></div></section>`;
+              `<div class="info-strip">Guided exercises and a notebook to help you study. Open-ended AI chat is coming soon.</div><div class="content-grid"><section class="content-card"><span class="subject-icon">${icon("spark")}</span><h2>Make algebra make sense</h2><p>Break a quadratic equation into smaller, clearer steps.</p><button class="button secondary" data-action="study" data-topic="algebra">Start a session</button></section><section class="content-card"><span class="subject-icon mint">${icon("flask")}</span><h2>A quick osmosis check</h2><p>Three questions to help you see what’s sticking.</p><button class="button secondary" data-action="study" data-topic="quiz">Take the quiz</button></section></div><h2 class="section-title">Your study notebook</h2><section class="content-card"><label for="study-notes" class="muted">An idea, a question, a lightbulb moment. Keep it here.</label><textarea id="study-notes" class="notes-area" maxlength="12000" style="margin-top:12px" placeholder="Today I learned...">${esc(state.notes)}</textarea><div class="form-actions"><button class="button" data-action="save-notes">Save my notes</button></div></section>`;
           if (currentView === "school")
             html =
               viewHeader(
@@ -4036,7 +3797,7 @@ SOFTWARE.
                   "sport",
                   "ball",
                   "Sports & activities",
-                  "Hockey practice and time for the things you love.",
+                  "Time for the things you love.",
                 ],
                 [
                   "news",
@@ -4048,7 +3809,7 @@ SOFTWARE.
                   "transport",
                   "bus",
                   "Getting home",
-                  "Your bus and after-school travel details.",
+                  "After-school travel details from your school.",
                 ],
                 [
                   "support",
@@ -4080,14 +3841,14 @@ SOFTWARE.
                 "A place to stay in the loop.",
                 "Messages from your teachers and school will live here.",
               ) +
-              `<section class="panel"><div class="empty-message">${icon("message").replace('class="icon"', 'class="icon" style="margin:0 auto 15px;width:32px;height:32px"')}<h2>Your inbox is ready.</h2><p style="margin-top:10px">School messaging isn’t connected in this preview.<br>There are no messages to read or send yet.</p><a class="button secondary" style="margin-top:20px" href="#school">Explore school life</a></div></section>`;
+              `<section class="panel"><div class="empty-message">${icon("message").replace('class="icon"', 'class="icon" style="margin:0 auto 15px;width:32px;height:32px"')}<h2>Your inbox is ready.</h2><p style="margin-top:10px">There are no messages yet.<br>Messages from your teachers and school will show here.</p><a class="button secondary" style="margin-top:20px" href="#school">Explore school life</a></div></section>`;
           if (currentView === "settings")
             html =
               viewHeader(
                 "Make a little space for you.",
                 "Your preferences are saved in this browser.",
               ) +
-              `<section class="content-card"><h2>Your learning space</h2><div class="switch-row"><div><label for="focus-toggle">Keep my dashboard focused</label><p>Hide the extra school links and sidebar tip.</p></div><input type="checkbox" id="focus-toggle" ${state.focus ? "checked" : ""}></div><div class="switch-row"><div><label for="theme-toggle">Dark mode</label><p>Light is the default. Switch on for a navy background.</p></div><input type="checkbox" id="theme-toggle" ${state.theme === "dark" ? "checked" : ""}></div><div class="notice">This is a student preview with sample school data. Tasks, notes, and preferences are stored on this device. They do not sync to a school account.</div></section>`;
+              `<section class="content-card"><h2>Your learning space</h2><div class="switch-row"><div><label for="focus-toggle">Keep my dashboard focused</label><p>Hide the extra school links and sidebar tip.</p></div><input type="checkbox" id="focus-toggle" ${state.focus ? "checked" : ""}></div><div class="switch-row"><div><label for="theme-toggle">Dark mode</label><p>Light is the default. Switch on for a navy background.</p></div><input type="checkbox" id="theme-toggle" ${state.theme === "dark" ? "checked" : ""}></div><div class="notice">Your notes and preferences are saved in this browser.</div></section>`;
           $("#main").innerHTML =
             (!storageAvailable
               ? '<div class="storage-warning">Your browser is not saving changes. Keep this page open to retain your work for this visit.</div>'
@@ -4163,36 +3924,15 @@ SOFTWARE.
         function subjectDialog(id) {
           const x = subjectList.find((y) => y.id === id);
           if (!x) return;
-          if (me) {
-            modal(
-              x.name,
-              `<p>${esc(gradeShort)} · ${esc(x.teacher || "Teacher to be confirmed")}</p><p>${x.target ? `Your goal: <strong>${x.target}%</strong>` : "You haven’t set a goal for this subject yet."}${x.isFocus ? " This is one of your focus subjects." : ""}</p>${x.units.length ? `<h3>This year’s units</h3><ul class="lesson-list">${x.units.map((u) => `<li><span>${u.status === "done" ? "✓ " : u.status === "now" ? "● " : ""}${esc(u.title)}</span><span>${esc(shortDay(u.startsOn))} – ${esc(shortDay(u.endsOn))}${u.term ? ` · T${u.term}` : ""}</span></li>`).join("")}</ul>` : ""}<div class="notice">Lesson times appear once your timetable is loaded. Class material appears when your teacher shares it.</div>`,
-            );
-            return;
-          }
-          const shared = window.School?.subjects.some((y) => y.id === id);
           modal(
             x.name,
-            `<p>Grade 10 · ${x.room}${x.teacher ? " · " + x.teacher : ""}</p><h3>This week</h3><ul class="lesson-list">${lessonsOf(x)
-              .map(
-                (l) =>
-                  `<li><span>${dayNames[l.day]}</span><span>${slotTimes[l.slot].join("–")}</span></li>`,
-              )
-              .join("")}</ul>${shared ? `<div class="form-actions"><button class="button secondary" data-action="navigate" data-view="timetable">View timetable</button><a class="button" href="#subjects?subject=${id}" data-action="close-dialog">Open class material</a></div>` : `<div class="notice">No class material has been shared for ${x.name} yet. When your teacher adds notes or worksheets, you’ll find them here.</div><div class="form-actions"><button class="button secondary" data-action="navigate" data-view="timetable">View timetable</button></div>`}`,
+            `<p>${esc(gradeShort)} · ${esc(x.teacher || "Teacher to be confirmed")}</p><p>${x.target ? `Your goal: <strong>${x.target}%</strong>` : "You haven’t set a goal for this subject yet."}${x.isFocus ? " This is one of your focus subjects." : ""}</p>${x.units.length ? `<h3>This year’s units</h3><ul class="lesson-list">${x.units.map((u) => `<li><span>${u.status === "done" ? "✓ " : u.status === "now" ? "● " : ""}${esc(u.title)}</span><span>${esc(shortDay(u.startsOn))} – ${esc(shortDay(u.endsOn))}${u.term ? ` · T${u.term}` : ""}</span></li>`).join("")}</ul>` : ""}<div class="notice">Lesson times appear once your timetable is loaded. Class material appears when your teacher shares it.</div>`,
           );
         }
         function addTask() {
-          if (me) {
-            modal(
-              "One more thing on your list.",
-              `<p>Just for you. Your teachers won’t see it.</p><form id="add-live-task-form"><div class="field"><label for="task-title">What do you need to do?</label><input id="task-title" name="title" placeholder="e.g. Revise chapter 4" required maxlength="200" autocomplete="off"></div><div class="field"><label for="task-due">Due date (optional)</label><input id="task-due" name="dueOn" type="date"></div><div class="form-actions"><button class="button secondary" type="button" data-action="close-dialog">Cancel</button><button class="button" type="submit">Add task</button></div></form>`,
-            );
-            $("#task-title").focus();
-            return;
-          }
           modal(
             "One more thing on your list.",
-            `<p>Give it a name. Take it one step at a time.</p><form id="add-task-form"><div class="field"><label for="task-title">What do you need to do?</label><input id="task-title" name="title" placeholder="e.g. Revise chapter 4" required maxlength="120" autocomplete="off"></div><div class="form-row"><div class="field"><label for="task-subject">Subject</label><select id="task-subject" name="subject">${["Maths", "English", "Life Sciences", "History", "Afrikaans", "Geography", "Art", "Personal"].map((x) => `<option>${x}</option>`).join("")}</select></div><div class="field"><label for="task-when">When is it due?</label><select id="task-when" name="when"><option value="today">Today</option><option value="upcoming">Tomorrow</option></select></div></div><div class="form-actions"><button class="button secondary" type="button" data-action="close-dialog">Cancel</button><button class="button" type="submit">Add task</button></div></form>`,
+            `<p>Just for you. Your teachers won’t see it.</p><form id="add-live-task-form"><div class="field"><label for="task-title">What do you need to do?</label><input id="task-title" name="title" placeholder="e.g. Revise chapter 4" required maxlength="200" autocomplete="off"></div><div class="field"><label for="task-due">Due date (optional)</label><input id="task-due" name="dueOn" type="date"></div><div class="form-actions"><button class="button secondary" type="button" data-action="close-dialog">Cancel</button><button class="button" type="submit">Add task</button></div></form>`,
           );
           $("#task-title").focus();
         }
@@ -4244,14 +3984,6 @@ SOFTWARE.
             announce("Couldn’t delete that. Try again.");
           }
         }
-        function assignment(id) {
-          const science = id === "science";
-          if (!["science", "history"].includes(id)) return;
-          modal(
-            science ? "Osmosis lab report" : "World War I essay",
-            `<p>${science ? "Life Sciences" : "History"} · Due Friday, 9 October</p><div class="notice">A personal drafting space. Check your teacher’s brief for the exact assignment requirements.</div><form id="assignment-form" data-id="${id}"><div class="field"><label for="assignment-notes">My draft notes</label><textarea id="assignment-notes" name="notes" class="notes-area" maxlength="12000" placeholder="${science ? "Record your observations, results and conclusion..." : "Start with your main argument and supporting points..."}">${esc(state.assignmentNotes[id] || "")}</textarea></div><div class="field"><label for="assignment-progress">Draft progress</label><select id="assignment-progress" name="progress">${[0, 20, 40, 60, 80, 100].map((n) => `<option value="${n}" ${state.assignmentProgress[id] === n ? "selected" : ""}>${n === 0 ? "Not started" : n === 100 ? "Draft complete" : n + "% drafted"}</option>`).join("")}</select></div><div class="form-actions"><button class="button" type="submit">Save draft</button></div></form>`,
-          );
-        }
         function study(topic, query = "") {
           if (topic === "quiz") {
             startQuiz();
@@ -4290,7 +4022,7 @@ SOFTWARE.
           }
           modal(
             "What shall we work on?",
-            `${query ? `<p>You’re exploring “${esc(query)}”.</p>` : "<p>A little help can make a big difference.</p>"}<div class="topic-options"><button class="topic-option" data-action="study" data-topic="algebra">${icon("spark")}<span>Understand quadratic equations<small>A step-by-step guided example</small></span>${icon("chevron", true)}</button><button class="topic-option" data-action="study" data-topic="quiz">${icon("flask")}<span>Test your osmosis knowledge<small>Three questions, with explanations</small></span>${icon("chevron", true)}</button><button class="topic-option" data-action="study" data-topic="plan">${icon("calendar")}<span>Find my next step<small>A plan based on your task list</small></span>${icon("chevron", true)}</button></div><div class="notice">These guided sessions work in this preview. Open-ended AI chat is not connected yet.</div>`,
+            `${query ? `<p>You’re exploring “${esc(query)}”.</p>` : "<p>A little help can make a big difference.</p>"}<div class="topic-options"><button class="topic-option" data-action="study" data-topic="algebra">${icon("spark")}<span>Understand quadratic equations<small>A step-by-step guided example</small></span>${icon("chevron", true)}</button><button class="topic-option" data-action="study" data-topic="quiz">${icon("flask")}<span>Test your osmosis knowledge<small>Three questions, with explanations</small></span>${icon("chevron", true)}</button><button class="topic-option" data-action="study" data-topic="plan">${icon("calendar")}<span>Find my next step<small>A plan based on your task list</small></span>${icon("chevron", true)}</button></div><div class="notice">Open-ended AI chat is coming soon.</div>`,
           );
         }
         const quiz = [
@@ -4371,9 +4103,7 @@ SOFTWARE.
                 " · " +
                 (t.done
                   ? "Completed"
-                  : t.when === "today"
-                    ? "Today"
-                    : "Tomorrow"),
+                  : t.time),
               view: "tasks",
               filter: t.done ? "done" : t.when,
             })),
@@ -4391,19 +4121,19 @@ SOFTWARE.
         const serviceContent = {
           sport: [
             "Sports & activities",
-            `<p>Make time for the things you enjoy outside class.</p><h3>Hockey practice</h3><p>Today at 15:30 · Sample activity</p><div class="notice">Confirm practice times, venue, and transport with your school. Activity sign-up is not connected in this preview.</div>`,
+            `<p>Make time for the things you enjoy outside class.</p><div class="notice">Your school hasn’t shared any activities here yet. Check with your school for practice times and sign-ups.</div>`,
           ],
           transport: [
             "Your ride home",
-            `<p>Your saved sample transport information.</p><h3>Bus 14 · 15:55</h3><p>Check your school’s transport notice for the collection point.</p><div class="notice">This is sample schedule data, not live tracking. Confirm the bus time before making travel plans.</div>`,
+            `<p>Transport times from your school will show here.</p><div class="notice">For now, check your school’s transport notice for times and the collection point.</div>`,
           ],
           support: [
             "You don’t have to figure it all out alone.",
-            `<p>School can feel like a lot. A teacher, parent, or school counsellor can help you work through what’s on your mind.</p><h3>Ask for a private conversation</h3><p>Contact your school office or speak to a teacher you trust to find out how to meet with the counsellor.</p><div class="notice">This preview does not send messages or book counselling sessions. You don’t need to share personal details here.</div>`,
+            `<p>School can feel like a lot. A teacher, parent, or school counsellor can help you work through what’s on your mind.</p><h3>Ask for a private conversation</h3><p>Contact your school office or speak to a teacher you trust to find out how to meet with the counsellor.</p><div class="notice">Chom doesn’t send messages or book counselling sessions. You don’t need to share personal details here.</div>`,
           ],
           news: [
             "Around your school",
-            `<p>Your school news feed is ready for future updates.</p><div class="notice">No live announcements are connected in this preview. Check your school’s usual channels for current notices.</div>`,
+            `<p>Your school hasn’t shared any news here yet.</p><div class="notice">Check your school’s usual channels for current notices.</div>`,
           ],
           career: [
             "A future with room for you.",
@@ -4411,7 +4141,7 @@ SOFTWARE.
           ],
           uniform: [
             "School essentials",
-            `<p>Your school’s uniform shop will be accessible from here.</p><div class="notice">The shop is not connected in this preview. Contact your school for its approved supplier, sizes, and opening hours.</div>`,
+            `<p>Your school’s uniform shop will be accessible from here.</p><div class="notice">Contact your school for its approved supplier, sizes, and opening hours.</div>`,
           ],
         };
         document.addEventListener("click", (e) => {
@@ -4420,13 +4150,6 @@ SOFTWARE.
             taskFilter = filter.dataset.filter;
             $("#tasks-content").innerHTML = tasksMarkup();
             $(`[data-filter="${taskFilter}"]`).focus();
-            return;
-          }
-          const day = e.target.closest("[data-day]");
-          if (day) {
-            selectedDay = +day.dataset.day;
-            $(".schedule-panel").outerHTML = schedulePanel();
-            $(`[data-day="${selectedDay}"]`).focus();
             return;
           }
           const answer = e.target.closest("[data-answer]");
@@ -4457,7 +4180,6 @@ SOFTWARE.
           if (a === "reload-page") location.reload();
           if (a === "task-delete") deleteTask(b.dataset.id);
           if (a === "subject") subjectDialog(b.dataset.subject);
-          if (a === "assignment") assignment(b.dataset.id);
           if (a === "study") study(b.dataset.topic);
           if (a === "search") search();
           if (a === "search-go") {
@@ -4472,13 +4194,13 @@ SOFTWARE.
             $("#notification-dot").hidden = true;
             modal(
               "Your little updates.",
-              `<p>You’re all caught up with this sample workspace.</p><div class="topic-options"><button class="topic-option" data-action="search-go" data-view="results">${icon("chart")}<span>Your Geography result is ready<small>78% · Sample assessment result</small></span>${icon("chevron", true)}</button><button class="topic-option" data-action="search-go" data-view="assignments">${icon("file")}<span>Two assignments due Friday<small>History essay and Life Sciences lab report</small></span>${icon("chevron", true)}</button></div>`,
+              `<p>You’re all caught up.</p><p class="muted">Updates from your teachers and school will show here.</p>`,
             );
           }
           if (a === "profile")
             modal(
               `Hi, ${esc(displayName)}.`,
-              `<div style="display:flex;align-items:center;gap:16px"><span class="avatar" style="width:54px;height:54px;font-size:17px">${esc(initials)}</span><div><h3 style="margin:0">${esc(me ? me.fullName : displayName)}</h3><p class="muted">${esc(gradeLine)}${me ? " · " + esc(me.schoolName) : ""}</p></div></div><div class="notice">${me ? `Signed in to ${esc(me.schoolName)}. Your subjects and teachers come from your school.` : "You’re viewing a sample student profile. No school account is connected."}</div><div class="form-actions"><button class="button secondary" data-action="search-go" data-view="settings">My preferences</button><a class="button" href="../">Sign out</a></div>`,
+              `<div style="display:flex;align-items:center;gap:16px"><span class="avatar" style="width:54px;height:54px;font-size:17px">${esc(initials)}</span><div><h3 style="margin:0">${esc(me.fullName)}</h3><p class="muted">${esc(gradeLine)} · ${esc(me.schoolName)}</p></div></div><div class="notice">Signed in to ${esc(me.schoolName)}. Your subjects and teachers come from your school.</div><div class="form-actions"><button class="button secondary" data-action="search-go" data-view="settings">My preferences</button><a class="button" href="../">Sign out</a></div>`,
             );
           if (a === "service") {
             const info = serviceContent[b.dataset.service];
@@ -4517,7 +4239,7 @@ SOFTWARE.
             if (!t) return;
             const done = e.target.checked;
             t.done = done;
-            if (me) saveDone(t, done);
+            saveDone(t, done);
             const id = t.id;
             save();
             if ($("#tasks-content")) $("#tasks-content").innerHTML = tasksMarkup();
@@ -4594,47 +4316,6 @@ SOFTWARE.
               announce("Couldn’t add that. Check your connection and try again.");
             }
             return;
-          }
-          if (e.target.id === "add-task-form") {
-            e.preventDefault();
-            const f = new FormData(e.target),
-              title = f.get("title").trim();
-            if (!title) {
-              $("#task-title").setCustomValidity("Give your task a name.");
-              $("#task-title").reportValidity();
-              $("#task-title").addEventListener(
-                "input",
-                () => $("#task-title").setCustomValidity(""),
-                { once: true },
-              );
-              return;
-            }
-            state.tasks.push({
-              id:
-                "task-" +
-                Date.now() +
-                "-" +
-                Math.random().toString(36).slice(2, 8),
-              title,
-              subject: f.get("subject"),
-              when: f.get("when"),
-              time: f.get("when") === "today" ? "Today" : "Tomorrow",
-              done: false,
-            });
-            taskFilter = f.get("when");
-            persist("A little more clarity. Your task is added.");
-            closeModal();
-            render();
-          }
-          if (e.target.id === "assignment-form") {
-            e.preventDefault();
-            const f = new FormData(e.target),
-              id = e.target.dataset.id;
-            state.assignmentNotes[id] = f.get("notes");
-            state.assignmentProgress[id] = +f.get("progress");
-            persist("Your draft is saved on this device.");
-            closeModal();
-            render();
           }
         });
         $("#nav-overlay").addEventListener("click", () => {
