@@ -62,9 +62,9 @@
 .hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  align-items: center;
+  align-items: start;
   gap: 64px;
-  padding-block: 92px 102px;
+  padding-block: 40px 72px;
 }
 .eyebrow {
   font-size: 12px;
@@ -678,7 +678,7 @@
   .hero {
     grid-template-columns: 1fr;
     gap: 58px;
-    padding-block: 56px 65px;
+    padding-block: 32px 56px;
   }
   .hero h1 {
     font-size: clamp(48px, 9vw, 72px);

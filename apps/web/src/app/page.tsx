@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { Logo } from '@/components/logo';
-import { HomePreview } from './home-preview';
 import styles from './page.module.css';
 
 export default async function Landing() {
@@ -61,7 +60,6 @@ export default async function Landing() {
               <span aria-hidden="true">↳</span> Less looking for things. More getting into them.
             </div>
           </div>
-          <HomePreview />
         </section>
         <div className={styles.ribbon} aria-label="Chom essentials">
           <span>One place to begin.</span>
