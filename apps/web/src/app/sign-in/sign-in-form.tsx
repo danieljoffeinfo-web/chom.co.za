@@ -121,7 +121,7 @@ export function SignInForm({ loginAs }: { loginAs: LoginAs }) {
           setError(
             rateLimited(signInError) ??
               (signInError.code === 'invalid_credentials'
-                ? 'That email or password is wrong. First time here? Set up your password below.'
+                ? 'That email or password is wrong.'
                 : TRY_AGAIN),
           );
           return;
@@ -203,8 +203,7 @@ export function SignInForm({ loginAs }: { loginAs: LoginAs }) {
             <>
               {step === 'set-up' && (
                 <p className={styles.muted}>
-                  First time here, or forgot your password? Choose a password, and we’ll email you a
-                  code to confirm it’s you.
+                  Choose a new password, and we’ll email you a code to confirm it’s you.
                 </p>
               )}
               <label className={styles.label} htmlFor="email">
@@ -265,7 +264,7 @@ export function SignInForm({ loginAs }: { loginAs: LoginAs }) {
 
       {step === 'sign-in' && (
         <button className={styles.linkButton} type="button" onClick={() => goTo('set-up')}>
-          First time here, or forgot your password?
+          Forgot your password?
         </button>
       )}
       {step === 'set-up' && (
