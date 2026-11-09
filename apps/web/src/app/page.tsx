@@ -129,19 +129,6 @@ export default async function Landing() {
             </article>
           </div>
         </section>
-        <section className={styles.teacher} aria-labelledby="teacher-title">
-          <div className={styles.teacherSymbol} aria-hidden="true">
-            ✳
-          </div>
-          <div>
-            <p className={styles.eyebrow}>On the other side of the classroom?</p>
-            <h2 id="teacher-title">There’s a place for teachers, too.</h2>
-            <p>Your classes and the work you set, connected to the school day.</p>
-          </div>
-          <Link className={styles.secondary} href="/sign-in?as=staff">
-            Teacher login <span aria-hidden="true">↗</span>
-          </Link>
-        </section>
       </main>
       <footer className={styles.footer}>
         <Logo height={24} />
