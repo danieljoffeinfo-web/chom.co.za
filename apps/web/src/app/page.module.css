@@ -63,8 +63,24 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: start;
-  gap: 64px;
+  gap: 24px;
   padding-block: 40px 72px;
+}
+.heroCopy {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+.heroVisual {
+  align-self: center;
+  width: calc(100% + 48px);
+  margin-inline: -24px;
+  pointer-events: none;
+}
+.heroArtwork {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 .eyebrow {
   font-size: 12px;
@@ -642,7 +658,7 @@
 }
 @media (max-width: 1100px) {
   .hero {
-    gap: 36px;
+    gap: 24px;
   }
   .actions {
     flex-wrap: wrap;
@@ -677,8 +693,12 @@
   }
   .hero {
     grid-template-columns: 1fr;
-    gap: 58px;
+    gap: 24px;
     padding-block: 32px 56px;
+  }
+  .heroVisual {
+    width: min(100%, 640px);
+    margin-inline: auto;
   }
   .hero h1 {
     font-size: clamp(48px, 9vw, 72px);

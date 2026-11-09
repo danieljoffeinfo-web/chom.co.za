@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
@@ -59,6 +60,17 @@ export default async function Landing() {
             <div className={styles.heroNote}>
               <span aria-hidden="true">↳</span> Less looking for things. More getting into them.
             </div>
+          </div>
+          <div className={styles.heroVisual} aria-hidden="true">
+            <Image
+              src="/images/chom-study-desk.webp"
+              alt=""
+              width={1536}
+              height={1024}
+              className={styles.heroArtwork}
+              preload
+              unoptimized
+            />
           </div>
         </section>
         <section id="your-day" className={styles.features} aria-labelledby="features-title">
