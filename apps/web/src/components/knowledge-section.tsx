@@ -122,9 +122,11 @@ export function KnowledgeSection() {
           </div>
 
           <p className={styles.copy}>
-            Schoolwork comes with a lot to keep track of. Chom brings your subjects, topics and
-            daily tasks together, so you can spend less time finding your place and more time making
-            sense of what you’re learning.
+            Most learners use AI the hard way: uploading documents, explaining the topic from
+            scratch and hunting for resources every time they need help. AI is a great tool, but it
+            doesn’t know your subjects, your syllabus or what your teacher set this week. Chom does.
+            It already has your subject material and the files your teachers share, so every answer
+            starts from where you are.
           </p>
         </div>
       </div>
