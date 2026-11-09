@@ -61,13 +61,6 @@ export default async function Landing() {
             </div>
           </div>
         </section>
-        <div className={styles.ribbon} aria-label="Chom essentials">
-          <span>One place to begin.</span>
-          <span>Your subjects</span>
-          <span>Your tasks</span>
-          <span>Your timetable</span>
-          <span>Your goals</span>
-        </div>
         <section id="your-day" className={styles.features} aria-labelledby="features-title">
           <div className={styles.sectionHead}>
             <div>
@@ -135,19 +128,6 @@ export default async function Landing() {
               </p>
             </article>
           </div>
-        </section>
-        <section className={styles.teacher} aria-labelledby="teacher-title">
-          <div className={styles.teacherSymbol} aria-hidden="true">
-            ✳
-          </div>
-          <div>
-            <p className={styles.eyebrow}>On the other side of the classroom?</p>
-            <h2 id="teacher-title">There’s a place for teachers, too.</h2>
-            <p>Your classes and the work you set, connected to the school day.</p>
-          </div>
-          <Link className={styles.secondary} href="/sign-in?as=staff">
-            Teacher login <span aria-hidden="true">↗</span>
-          </Link>
         </section>
       </main>
       <footer className={styles.footer}>
