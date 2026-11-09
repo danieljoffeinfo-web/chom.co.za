@@ -87,7 +87,7 @@ export default async function Landing() {
               </div>
               <p className={styles.featureNumber}>01 / Your subjects</p>
               <h3>A home for every subject.</h3>
-              <p>See your subjects together and keep your learning goals in sight.</p>
+              <p>All your key topics and content, organised in one place.</p>
             </article>
             <article className={styles.feature}>
               <div className={styles.taskVisual} aria-hidden="true">
@@ -103,7 +103,7 @@ export default async function Landing() {
               </div>
               <p className={styles.featureNumber}>02 / Your tasks</p>
               <h3>Know what needs doing.</h3>
-              <p>Bring your schoolwork into focus, one task and one deadline at a time.</p>
+              <p>Stay on top of your schoolwork and leave time for what truly matters.</p>
             </article>
             <article className={styles.feature}>
               <div className={styles.timeVisual} aria-hidden="true">
