@@ -35,7 +35,9 @@ function allowQuestion(request: Request) {
     request.headers.get('x-vercel-forwarded-for') ||
     request.headers.get('x-forwarded-for') ||
     'unknown';
-  const key = createHash('sha256').update(address.split(',')[0].trim()).digest('hex');
+  const key = createHash('sha256')
+    .update((address.split(',')[0] ?? 'unknown').trim())
+    .digest('hex');
   const current = attempts.get(key);
   if (current && current.count >= 5) return false;
   if (!current && attempts.size >= 2000) return false;
