@@ -122,9 +122,11 @@ export function KnowledgeSection() {
           </div>
 
           <p className={styles.copy}>
-            Chom brings your subjects, tasks and timetable into one place. Open a subject to explore
-            its topics and learning material, keep track of the work you need to finish, and see
-            which lessons are coming up. Everything stays organised, so you can focus on learning.
+            Most learners use AI the hard way: uploading documents, explaining the topic from
+            scratch and hunting for resources every time they need help. AI is a great tool, but it
+            doesn’t know your subjects, your syllabus or what your teacher set this week. Chom does.
+            It already has your subject material and the files your teachers share, so every answer
+            starts from where you are.
           </p>
         </div>
       </div>
