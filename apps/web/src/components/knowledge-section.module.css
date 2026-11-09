@@ -62,12 +62,36 @@
   margin-left: 10px;
 }
 .copy {
-  max-width: 30ch;
-  color: var(--chom-text);
+  display: grid;
+  gap: 28px;
+  max-width: 32ch;
   font-size: clamp(21px, 2.1vw, 28px);
-  line-height: 1.6;
   letter-spacing: -0.025em;
   text-wrap: pretty;
+}
+/* The problem, a step quieter than the answer. */
+.problem {
+  margin: 0;
+  color: var(--chom-text-muted);
+  font-size: 0.82em;
+  line-height: 1.6;
+}
+/* The answer: "Chom does." as the turn, then what Chom does about it. */
+.answer {
+  margin: 0;
+  padding-left: 22px;
+  border-left: 3px solid var(--chom-text);
+  color: var(--chom-text);
+  font-weight: 500;
+  line-height: 1.5;
+}
+.answer strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1.35em;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
 }
 @media (max-width: 800px) {
   .section {
