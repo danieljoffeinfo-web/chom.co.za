@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { Logo } from '@/components/logo';
+import { KnowledgeSection } from '@/components/knowledge-section';
+import { STUDY_SUBJECTS } from '@/lib/ask-chom';
 import styles from './page.module.css';
 
 export default async function Landing() {
@@ -20,7 +22,7 @@ export default async function Landing() {
           <Logo height={30} />
         </Link>
         <nav aria-label="Main navigation">
-          <a className={styles.navLink} href="#your-day">
+          <a className={styles.navLink} href="#ask-chom">
             Explore Chom
           </a>
           <Link className={styles.navLink} href="/sign-in?as=staff">
@@ -47,7 +49,7 @@ export default async function Landing() {
               <Link className={styles.cta} href="/sign-in">
                 Let’s get started <span aria-hidden="true">↗</span>
               </Link>
-              <a className={styles.textLink} href="#your-day">
+              <a className={styles.textLink} href="#ask-chom">
                 Take a look around <span aria-hidden="true">↓</span>
               </a>
             </div>
@@ -67,6 +69,8 @@ export default async function Landing() {
             />
           </div>
         </section>
+        <KnowledgeSection subjects={STUDY_SUBJECTS} />
+
         <section id="your-day" className={styles.features} aria-labelledby="features-title">
           <div className={styles.sectionHead}>
             <div>
