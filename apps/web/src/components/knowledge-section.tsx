@@ -122,9 +122,9 @@ export function KnowledgeSection() {
           </div>
 
           <p className={styles.copy}>
-            Schoolwork comes with a lot to keep track of. Chom brings your subjects, topics and
-            daily tasks together, so you can spend less time finding your place and more time making
-            sense of what you’re learning.
+            Chom brings your subjects, tasks and timetable into one place. Open a subject to explore
+            its topics and learning material, keep track of the work you need to finish, and see
+            which lessons are coming up. Everything stays organised, so you can focus on learning.
           </p>
         </div>
       </div>
