@@ -50,7 +50,6 @@
   background-size: 400% 300%;
   background-repeat: no-repeat;
   z-index: 2;
-  will-change: transform, opacity;
 }
 .caption {
   color: var(--chom-text-muted);
@@ -69,15 +68,6 @@
   line-height: 1.6;
   letter-spacing: -0.025em;
   text-wrap: pretty;
-}
-@media (min-width: 801px) and (min-height: 850px) and (prefers-reduced-motion: no-preference) {
-  .section {
-    min-height: calc(760px + 45vh);
-  }
-  .section .sticky {
-    position: sticky;
-    top: 24px;
-  }
 }
 @media (max-width: 800px) {
   .section {
@@ -105,10 +95,5 @@
   .copy {
     max-width: 100%;
     font-size: 21px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .symbol {
-    will-change: auto;
   }
 }
