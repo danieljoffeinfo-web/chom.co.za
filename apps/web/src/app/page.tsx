@@ -41,9 +41,9 @@ export default async function Landing() {
               A little more organised. A lot more you.
             </p>
             <h1 id="hero-title">
-              Your school day.
+              Everything at
               <br />
-              All in one place.
+              your fingertips.
             </h1>
             <p className={styles.lede}>
               Your subjects, tasks and timetable, together. Make room for learning with a clearer
