@@ -47,6 +47,22 @@
   text-decoration: none;
 }
 
+.doorLabel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.doorIcon {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .door:hover {
   background: var(--chom-primary);
   color: var(--chom-on-primary);
