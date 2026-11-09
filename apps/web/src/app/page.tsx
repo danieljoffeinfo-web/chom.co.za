@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -5,6 +6,33 @@ import { createClient } from '@/lib/supabase/server';
 import { Logo } from '@/components/logo';
 import { KnowledgeSection } from '@/components/knowledge-section';
 import styles from './page.module.css';
+
+const description =
+  'Chom is the study companion for IEB learners. It knows your subjects and what your teacher set, and helps you understand the work instead of doing it for you.';
+const ogImage = {
+  url: '/images/og-chom.jpg',
+  width: 1200,
+  height: 630,
+  alt: 'Two Chom mascots studying at a desk',
+};
+
+export const metadata: Metadata = {
+  description,
+  openGraph: {
+    title: 'Chom Learn',
+    description,
+    url: 'https://chom.co.za',
+    type: 'website',
+    siteName: 'Chom Learn',
+    images: [ogImage],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Chom Learn',
+    description,
+    images: [ogImage],
+  },
+};
 
 export default async function Landing() {
   const supabase = await createClient();
@@ -21,9 +49,6 @@ export default async function Landing() {
           <Logo height={30} />
         </Link>
         <nav aria-label="Main navigation">
-          <a className={styles.navLink} href="#ask-chom">
-            Explore Chom
-          </a>
           <Link className={styles.navLink} href="/sign-in?as=staff">
             For teachers
           </Link>
@@ -48,7 +73,7 @@ export default async function Landing() {
               <Link className={styles.cta} href="/sign-in">
                 Let’s get started <span aria-hidden="true">↗</span>
               </Link>
-              <a className={styles.textLink} href="#ask-chom">
+              <a className={styles.textLink} href="#meet-chom">
                 Take a look around <span aria-hidden="true">↓</span>
               </a>
             </div>
@@ -56,10 +81,10 @@ export default async function Landing() {
               <span aria-hidden="true">↳</span> Less looking for things. More getting into them.
             </div>
           </div>
-          <div className={styles.heroVisual} aria-hidden="true">
+          <div className={styles.heroVisual}>
             <Image
               src="/images/chom-study-desk.webp"
-              alt=""
+              alt="Two navy Chom mascots at a small desk, sorting books and loose pages beside an open notebook, a pen and a pencil cup."
               width={1536}
               height={1024}
               className={styles.heroArtwork}
@@ -73,17 +98,6 @@ export default async function Landing() {
         <section id="powered-by" className={styles.poweredBy} aria-labelledby="powered-title">
           <h2 id="powered-title">Powered by</h2>
           <div className={styles.providerLogos}>
-            <div className={styles.openaiLogo}>
-              <Image
-                src="/images/providers/openai.webp"
-                alt=""
-                width={1254}
-                height={1254}
-                className={styles.openaiMark}
-                unoptimized
-              />
-              <span>OpenAI</span>
-            </div>
             <div className={styles.claudeLogo}>
               <Image
                 src="/images/providers/claude-mark.svg"
@@ -108,6 +122,10 @@ export default async function Landing() {
       <footer className={styles.footer}>
         <Logo height={24} />
         <p>Study the right way with Chom.</p>
+        <address className={styles.contact}>
+          <a href="mailto:info@chom.co.za">info@chom.co.za</a>
+          <a href="tel:+27615047462">061 504 7462</a>
+        </address>
         <Link href="/sign-in">
           Make yourself at home <span aria-hidden="true">↗</span>
         </Link>

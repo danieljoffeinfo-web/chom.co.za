@@ -19,7 +19,7 @@ const symbols = [
 
 export function KnowledgeSection() {
   return (
-    <section id="ask-chom" className={styles.section} aria-labelledby="knowledge-title">
+    <section id="meet-chom" className={styles.section} aria-labelledby="knowledge-title">
       <header className={styles.heading}>
         <h2 id="knowledge-title">Your subjects. All in here.</h2>
         <p>Meet Chom. Your curious little study companion.</p>
@@ -27,10 +27,10 @@ export function KnowledgeSection() {
 
       <div className={styles.layout}>
         <div className={styles.illustration}>
-          <div className={styles.scene} aria-hidden="true">
+          <div className={styles.scene}>
             <Image
               src="/images/chom-knowledge.webp"
-              alt=""
+              alt="Chom, a round navy mascot, with its arms raised among floating icons for maths, science, coding, geography, music and art."
               width={1254}
               height={1254}
               sizes="(max-width: 800px) 80vw, 480px"
@@ -40,6 +40,7 @@ export function KnowledgeSection() {
             {symbols.map((symbol, index) => (
               <span
                 key={symbol.name}
+                aria-hidden="true"
                 className={styles.symbol}
                 style={{
                   left: `${symbol.x}%`,
@@ -65,6 +66,13 @@ export function KnowledgeSection() {
             <strong>Chom does.</strong> It already has your subject material and the files your
             teachers share, so every answer starts from where you are.
           </p>
+          <div className={styles.helper}>
+            <h3>Not a homework helper.</h3>
+            <p>
+              Chom won’t write your answers for you. It helps you understand the work your teacher
+              set, so you can do it yourself.
+            </p>
+          </div>
         </div>
       </div>
     </section>

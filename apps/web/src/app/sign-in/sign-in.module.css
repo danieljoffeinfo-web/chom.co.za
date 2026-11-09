@@ -18,10 +18,43 @@
 }
 
 .brand {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
+  align-self: flex-start;
+  color: var(--chom-text);
   margin-bottom: var(--chom-space-4);
+}
+
+/* One button for each kind of person signing in. */
+.doors {
+  list-style: none;
+  margin: var(--chom-space-4) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--chom-space-3);
+}
+
+.door {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border: 1px solid var(--chom-primary);
+  border-radius: var(--chom-radius-pill);
+  color: var(--chom-text);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.door:hover {
+  background: var(--chom-primary);
+  color: var(--chom-on-primary);
+}
+
+.door:focus-visible {
+  outline: 3px solid var(--chom-primary);
+  outline-offset: 3px;
 }
 
 .title {
@@ -111,6 +144,10 @@
   cursor: pointer;
   align-self: flex-start;
   margin-top: var(--chom-space-2);
+}
+
+.switch a {
+  color: var(--chom-text);
 }
 
 .switch {
