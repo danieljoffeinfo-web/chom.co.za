@@ -55,13 +55,17 @@ export function KnowledgeSection() {
           </p>
         </div>
 
-        <p className={styles.copy}>
-          Most learners use AI the hard way: uploading documents, explaining the topic from scratch
-          and hunting for resources every time they need help. AI is a great tool, but it doesn’t
-          know your subjects, your syllabus or what your teacher set this week. Chom does. It
-          already has your subject material and the files your teachers share, so every answer
-          starts from where you are.
-        </p>
+        <div className={styles.copy}>
+          <p className={styles.problem}>
+            Most learners use AI the hard way: uploading documents, explaining the topic from
+            scratch and hunting for resources every time they need help. AI is a great tool, but it
+            doesn’t know your subjects, your syllabus or what your teacher set this week.
+          </p>
+          <p className={styles.answer}>
+            <strong>Chom does.</strong> It already has your subject material and the files your
+            teachers share, so every answer starts from where you are.
+          </p>
+        </div>
       </div>
     </section>
   );
