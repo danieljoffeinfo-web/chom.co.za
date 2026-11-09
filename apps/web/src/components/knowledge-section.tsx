@@ -20,6 +20,9 @@ const symbols = [
   { name: 'Music', x: 88, y: 80, rotation: 12 },
 ];
 
+// Centre of Chom’s tummy, expressed as a percentage of the illustration scene.
+const absorptionPoint = { x: 50, y: 72 };
+
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
 
 export function KnowledgeSection({ subjects }: { subjects: readonly string[] }) {
@@ -57,10 +60,10 @@ export function KnowledgeSection({ subjects }: { subjects: readonly string[] }) 
         if (!element) return;
         const step = clamp((progress - (index % 4) * 0.09) / 0.7);
         const eased = step * step * (3 - 2 * step);
-        const x = ((50 - symbol.x) / 100) * sceneBounds.width * eased;
-        const y = ((45 - symbol.y) / 100) * sceneBounds.height * eased;
+        const x = ((absorptionPoint.x - symbol.x) / 100) * sceneBounds.width * eased;
+        const y = ((absorptionPoint.y - symbol.y) / 100) * sceneBounds.height * eased;
         element.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${symbol.rotation * (1 - eased)}deg) scale(${1 - eased * 0.88})`;
-        element.style.opacity = String(1 - clamp((step - 0.62) / 0.38));
+        element.style.opacity = String(1 - clamp((step - 0.84) / 0.16));
       });
     };
     const schedule = () => {
