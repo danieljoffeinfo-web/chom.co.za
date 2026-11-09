@@ -61,13 +61,6 @@ export default async function Landing() {
             </div>
           </div>
         </section>
-        <div className={styles.ribbon} aria-label="Chom essentials">
-          <span>One place to begin.</span>
-          <span>Your subjects</span>
-          <span>Your tasks</span>
-          <span>Your timetable</span>
-          <span>Your goals</span>
-        </div>
         <section id="your-day" className={styles.features} aria-labelledby="features-title">
           <div className={styles.sectionHead}>
             <div>
