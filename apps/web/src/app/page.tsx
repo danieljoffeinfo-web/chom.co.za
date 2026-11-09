@@ -34,12 +34,6 @@ export default async function Landing() {
       <main id="main">
         <section className={styles.hero} aria-labelledby="hero-title">
           <div className={styles.heroCopy}>
-            <p className={styles.eyebrow}>
-              <span className={styles.smallMark} aria-hidden="true">
-                ✳
-              </span>{' '}
-              A little more organised. A lot more you.
-            </p>
             <h1 id="hero-title">
               Everything at
               <br />
