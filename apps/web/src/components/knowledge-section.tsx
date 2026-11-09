@@ -63,7 +63,7 @@ export function KnowledgeSection() {
             doesn’t know your subjects, your syllabus or what your teacher set this week.
           </p>
           <p className={styles.answer}>
-            <strong>Chom does.</strong> It already has your subject material and the files your
+            <strong>Chom knows.</strong> It already has your subject material and the files your
             teachers share, so every answer starts from where you are.
           </p>
         </div>
