@@ -70,72 +70,38 @@ export default async function Landing() {
         </section>
         <KnowledgeSection />
 
-        <section id="your-day" className={styles.features} aria-labelledby="features-title">
-          <div className={styles.sectionHead}>
-            <div>
-              <p className={styles.eyebrow}>A clearer school day</p>
-              <h2 id="features-title">Everything has its place.</h2>
+        <section id="powered-by" className={styles.poweredBy} aria-labelledby="powered-title">
+          <h2 id="powered-title">Powered by</h2>
+          <div className={styles.providerLogos}>
+            <div className={styles.openaiLogo}>
+              <Image
+                src="/images/providers/openai.webp"
+                alt=""
+                width={1254}
+                height={1254}
+                className={styles.openaiMark}
+                unoptimized
+              />
+              <span>OpenAI</span>
             </div>
-            <p>
-              From the first lesson to the last thing on your list. Keep the everyday essentials
-              close.
-            </p>
-          </div>
-          <div className={styles.featureGrid}>
-            <article className={styles.feature}>
-              <div className={styles.subjectVisual} aria-hidden="true">
-                <span>
-                  Mathematics <b>↗</b>
-                </span>
-                <span>
-                  Life Sciences <b>↗</b>
-                </span>
-                <span>
-                  English <b>↗</b>
-                </span>
-              </div>
-              <p className={styles.featureNumber}>01 / Your subjects</p>
-              <h3>A home for every subject.</h3>
-              <p>All your key topics and content, organised in one place.</p>
-            </article>
-            <article className={styles.feature}>
-              <div className={styles.taskVisual} aria-hidden="true">
-                <span>
-                  <i>✓</i> Finish the first draft
-                </span>
-                <span>
-                  <i /> Revise for tomorrow
-                </span>
-                <span>
-                  <i /> Hand in your assignment
-                </span>
-              </div>
-              <p className={styles.featureNumber}>02 / Your tasks</p>
-              <h3>Know what needs doing.</h3>
-              <p>Stay on top of your schoolwork and leave time for what truly matters.</p>
-            </article>
-            <article className={styles.feature}>
-              <div className={styles.timeVisual} aria-hidden="true">
-                <div>
-                  <span>08:00</span>
-                  <b>
-                    Mathematics<small>First lesson</small>
-                  </b>
-                </div>
-                <div>
-                  <span>09:00</span>
-                  <b>
-                    Life Sciences<small>Up next</small>
-                  </b>
-                </div>
-              </div>
-              <p className={styles.featureNumber}>03 / Your timetable</p>
-              <h3>Find your rhythm.</h3>
-              <p>
-                See how your day fits together, so the next lesson feels a little less like a
-                surprise.
-              </p>
-            </article>
+            <div className={styles.claudeLogo}>
+              <Image
+                src="/images/providers/claude-mark.svg"
+                alt=""
+                width={48}
+                height={48}
+                className={styles.claudeMark}
+                unoptimized
+              />
+              <Image
+                src="/images/providers/claude-wordmark.svg"
+                alt="Claude"
+                width={166}
+                height={41}
+                className={styles.claudeWordmark}
+                unoptimized
+              />
+            </div>
           </div>
         </section>
       </main>
