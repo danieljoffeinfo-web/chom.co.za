@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { Logo } from '@/components/logo';
 import { KnowledgeSection } from '@/components/knowledge-section';
-import { STUDY_SUBJECTS } from '@/lib/ask-chom';
 import styles from './page.module.css';
 
 export default async function Landing() {
@@ -69,7 +68,7 @@ export default async function Landing() {
             />
           </div>
         </section>
-        <KnowledgeSection subjects={STUDY_SUBJECTS} />
+        <KnowledgeSection />
 
         <section id="your-day" className={styles.features} aria-labelledby="features-title">
           <div className={styles.sectionHead}>

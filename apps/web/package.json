@@ -11,8 +11,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings 0",
-    "typecheck": "next typegen && tsc --noEmit",
-    "test": "node --experimental-strip-types --test test/*.test.ts"
+    "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
     "@chom/api": "workspace:*",

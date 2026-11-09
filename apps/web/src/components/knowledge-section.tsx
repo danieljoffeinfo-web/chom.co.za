@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
+import { useEffect, useRef, type CSSProperties } from 'react';
 
 import styles from './knowledge-section.module.css';
 
@@ -25,18 +25,10 @@ const absorptionPoint = { x: 50, y: 72 };
 
 const clamp = (value: number) => Math.min(1, Math.max(0, value));
 
-export function KnowledgeSection({ subjects }: { subjects: readonly string[] }) {
+export function KnowledgeSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   const symbolRefs = useRef<(HTMLSpanElement | null)[]>([]);
-  const questionRef = useRef<HTMLTextAreaElement>(null);
-  const requestRef = useRef<AbortController | null>(null);
-  const [subject, setSubject] = useState('');
-  const [question, setQuestion] = useState('');
-  const [pending, setPending] = useState(false);
-  const [answer, setAnswer] = useState('');
-  const [error, setError] = useState('');
-
   useEffect(() => {
     const section = sectionRef.current;
     const scene = sceneRef.current;
@@ -48,7 +40,7 @@ export function KnowledgeSection({ subjects }: { subjects: readonly string[] }) 
       frame = 0;
       const bounds = section.getBoundingClientRect();
       const sceneBounds = scene.getBoundingClientRect();
-      const sticky = window.innerWidth > 800 && window.innerHeight >= 850 && !answer;
+      const sticky = window.innerWidth > 800 && window.innerHeight >= 850;
       const progress = reducedMotion.matches
         ? 0
         : sticky
@@ -79,46 +71,7 @@ export function KnowledgeSection({ subjects }: { subjects: readonly string[] }) 
       window.removeEventListener('resize', schedule);
       reducedMotion.removeEventListener('change', schedule);
     };
-  }, [answer]);
-
-  useEffect(() => () => requestRef.current?.abort(), []);
-
-  function chooseSuggestion(nextSubject: string, nextQuestion: string) {
-    setSubject(nextSubject);
-    setQuestion(nextQuestion);
-    setError('');
-    questionRef.current?.focus();
-  }
-
-  async function askChom(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (pending) return;
-    const controller = new AbortController();
-    requestRef.current = controller;
-    setPending(true);
-    setError('');
-    setAnswer('');
-    try {
-      const response = await fetch('/api/ask-chom', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subject, question }),
-        signal: controller.signal,
-      });
-      const result = await response.json();
-      if (!response.ok || typeof result.answer !== 'string') {
-        throw new Error(result.error || 'Chom couldn’t answer just now. Please try again.');
-      }
-      setAnswer(result.answer);
-    } catch (failure) {
-      if (controller.signal.aborted) return;
-      setError(
-        failure instanceof Error ? failure.message : 'Please check your connection and try again.',
-      );
-    } finally {
-      if (!controller.signal.aborted) setPending(false);
-    }
-  }
+  }, []);
 
   return (
     <section
@@ -126,7 +79,6 @@ export function KnowledgeSection({ subjects }: { subjects: readonly string[] }) 
       ref={sectionRef}
       className={styles.section}
       aria-labelledby="knowledge-title"
-      data-answer={answer ? 'true' : undefined}
     >
       <div className={styles.sticky}>
         <header className={styles.heading}>
@@ -169,87 +121,11 @@ export function KnowledgeSection({ subjects }: { subjects: readonly string[] }) 
             </p>
           </div>
 
-          <form className={styles.form} onSubmit={askChom} aria-labelledby="ask-title">
-            <h3 id="ask-title">Ask me a question.</h3>
-            <p className={styles.formIntro}>Let’s work through it, together.</p>
-            <label htmlFor="chom-subject">Subject</label>
-            <select
-              id="chom-subject"
-              name="subject"
-              value={subject}
-              onChange={(event) => setSubject(event.target.value)}
-              required
-              disabled={pending}
-            >
-              <option value="" disabled>
-                Choose a subject
-              </option>
-              {subjects.map((name) => (
-                <option key={name}>{name}</option>
-              ))}
-            </select>
-
-            <label htmlFor="chom-question">Your question</label>
-            <textarea
-              ref={questionRef}
-              id="chom-question"
-              name="question"
-              placeholder="What would you like to understand?"
-              rows={4}
-              minLength={5}
-              maxLength={1000}
-              value={question}
-              onChange={(event) => setQuestion(event.target.value)}
-              required
-              disabled={pending}
-            />
-
-            <button className={styles.submit} type="submit" disabled={pending}>
-              {pending ? 'Chom is thinking…' : 'Ask Chom'}
-              <span aria-hidden="true">{pending ? '···' : '→'}</span>
-            </button>
-
-            <div className={styles.suggestions}>
-              <p>Need an idea?</p>
-              <div>
-                <button
-                  type="button"
-                  disabled={pending}
-                  onClick={() =>
-                    chooseSuggestion(
-                      'Life Sciences',
-                      'Can you explain photosynthesis in simple terms?',
-                    )
-                  }
-                >
-                  Explain photosynthesis
-                </button>
-                <button
-                  type="button"
-                  disabled={pending}
-                  onClick={() =>
-                    chooseSuggestion('Mathematics', 'How do I solve 2x + 5 = 17, step by step?')
-                  }
-                >
-                  Help with algebra
-                </button>
-              </div>
-            </div>
-            <div aria-live="polite" aria-atomic="true" aria-busy={pending}>
-              {error && (
-                <p className={styles.message} role="alert">
-                  {error}
-                </p>
-              )}
-              {answer && (
-                <div className={styles.answer}>
-                  <h4>Chom says</h4>
-                  <p>{answer}</p>
-                  <small>Chom can make mistakes. Check important details with your teacher.</small>
-                </div>
-              )}
-            </div>
-          </form>
+          <p className={styles.copy}>
+            Schoolwork comes with a lot to keep track of. Chom brings your subjects, topics and
+            daily tasks together, so you can spend less time finding your place and more time making
+            sense of what you’re learning.
+          </p>
         </div>
       </div>
     </section>
