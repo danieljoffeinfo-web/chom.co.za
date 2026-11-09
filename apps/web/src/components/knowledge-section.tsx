@@ -66,13 +66,6 @@ export function KnowledgeSection() {
             <strong>Chom does.</strong> It already has your subject material and the files your
             teachers share, so every answer starts from where you are.
           </p>
-          <div className={styles.helper}>
-            <h3>Not a homework helper.</h3>
-            <p>
-              Chom won’t write your answers for you. It helps you understand the work your teacher
-              set, so you can do it yourself.
-            </p>
-          </div>
         </div>
       </div>
     </section>
