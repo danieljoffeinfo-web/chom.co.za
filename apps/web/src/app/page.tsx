@@ -126,9 +126,6 @@ export default async function Landing() {
           <a href="mailto:info@chom.co.za">info@chom.co.za</a>
           <a href="tel:+27615047462">061 504 7462</a>
         </address>
-        <Link href="/sign-in">
-          Make yourself at home <span aria-hidden="true">↗</span>
-        </Link>
       </footer>
     </div>
   );

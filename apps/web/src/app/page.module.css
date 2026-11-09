@@ -656,7 +656,7 @@
 .footer a {
   white-space: nowrap;
 }
-/* Contact details, pushed to the right ahead of the sign-in link. */
+/* Contact details, on the right. */
 .contact {
   display: flex;
   gap: 24px;
@@ -780,9 +780,6 @@
   }
   .contact {
     margin-left: 0;
-    width: 100%;
-  }
-  .footer > a {
     width: 100%;
   }
 }
