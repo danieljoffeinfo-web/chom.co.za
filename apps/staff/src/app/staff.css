@@ -61,8 +61,8 @@
   display: grid;
   place-items: center;
   /* A deep shade of the subject's colour, with a pale symbol on it. */
-  background: color-mix(in oklab, var(--tint) 52%, #12152a);
-  color: color-mix(in oklab, var(--tint) 18%, #ffffff);
+  background: color-mix(in oklab, var(--tint) 72%, #12152a);
+  color: color-mix(in oklab, var(--tint) 10%, #ffffff);
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
 }
 .class-badge .icon {
