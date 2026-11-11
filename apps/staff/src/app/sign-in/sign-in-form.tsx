@@ -1,7 +1,6 @@
 'use client';
 
-import { PASSWORD_RULE, passwordProblem } from '@chom/api';
-import { type AuthError, isAuthWeakPasswordError } from '@supabase/supabase-js';
+import type { AuthError } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { type FormEvent, useState } from 'react';
 
@@ -10,19 +9,14 @@ import { createClient } from '@/lib/supabase/browser';
 import styles from './sign-in.module.css';
 
 /**
- * Signing in:
- *   - Usually: email and password.
- *   - The first time (or after forgetting the password): email and a new password,
- *     then the code we email them. The code proves the email is theirs; only then is
- *     the password saved.
+ * Signing in, with no password: their email, then the 6-digit code we email them. The
+ * code proves the email is theirs.
  * In production staff sign in at chom.co.za (which also asks for their full name the
  * first time); this form is for previews and local development.
  */
 type Step =
-  | 'sign-in' // email + password
-  | 'set-up' // email + a new password, then we email a code
-  | 'code' // the emailed code
-  | 'new-password'; // signed in, but Supabase refused the password: choose another
+  | 'email' // their email; we send a code
+  | 'code'; // the emailed code
 
 const TRY_AGAIN = 'Something went wrong. Please try again in a moment.';
 
@@ -36,18 +30,10 @@ function rateLimited(error: AuthError): string | null {
   return null;
 }
 
-function passwordRefused(error: AuthError): string {
-  if (isAuthWeakPasswordError(error) && error.reasons.includes('pwned')) {
-    return 'That password has appeared in a data leak elsewhere, so it isn’t safe. Please choose a different one.';
-  }
-  return `Choose a stronger password: ${PASSWORD_RULE.toLowerCase()}`;
-}
-
 export function SignInForm() {
   const router = useRouter();
-  const [step, setStep] = useState<Step>('sign-in');
+  const [step, setStep] = useState<Step>('email');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,12 +43,7 @@ export function SignInForm() {
     setStep(next);
     setError(null);
     setNotice(null);
-    if (next !== 'code') setCode('');
-    if (next === 'set-up' || next === 'new-password') setPassword('');
-  }
-
-  function finish() {
-    router.push('/start');
+    setCode('');
   }
 
   // Runs one step, never leaving the button stuck (for example, no connection).
@@ -97,77 +78,29 @@ export function SignInForm() {
     return true;
   }
 
-  async function savePassword(): Promise<boolean> {
-    const { error: saveError } = await createClient().auth.updateUser({ password });
-    // Choosing the password they already have is fine: they know it.
-    if (saveError && saveError.code !== 'same_password') {
-      console.error('Saving the password failed', saveError.status, saveError.code);
-      setError(saveError.code === 'weak_password' ? passwordRefused(saveError) : TRY_AGAIN);
-      return false;
-    }
-    return true;
-  }
-
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     void run(async () => {
-      const supabase = createClient();
-      if (step === 'sign-in') {
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-          email: email.trim(),
-          password,
-        });
-        if (signInError) {
-          console.error('Sign-in failed', signInError.status, signInError.code);
-          setError(
-            rateLimited(signInError) ??
-              (signInError.code === 'invalid_credentials'
-                ? 'That email or password is wrong. First time here? Set up your password below.'
-                : TRY_AGAIN),
-          );
-          return;
-        }
-        finish();
-      } else if (step === 'set-up') {
-        const problem = passwordProblem(password);
-        if (problem) {
-          setError(problem);
-          return;
-        }
+      if (step === 'email') {
         if (await sendCode()) goTo('code');
-      } else if (step === 'code') {
-        const { error: codeError } = await supabase.auth.verifyOtp({
-          email: email.trim(),
-          token: code.trim(),
-          type: 'email',
-        });
-        if (codeError) {
-          console.error('Checking the code failed', codeError.status, codeError.code);
-          setError(
-            rateLimited(codeError) ??
-              'That code is wrong or has expired. Check the newest email from us, or send a new code.',
-          );
-          return;
-        }
-        if (await savePassword()) {
-          finish();
-        } else {
-          // They're signed in now; only the password needs another go.
-          setStep('new-password');
-          setPassword('');
-        }
-      } else {
-        const problem = passwordProblem(password);
-        if (problem) {
-          setError(problem);
-          return;
-        }
-        if (await savePassword()) finish();
+        return;
       }
+      const { error: codeError } = await createClient().auth.verifyOtp({
+        email: email.trim(),
+        token: code.trim(),
+        type: 'email',
+      });
+      if (codeError) {
+        console.error('Checking the code failed', codeError.status, codeError.code);
+        setError(
+          rateLimited(codeError) ??
+            'That code is wrong or has expired. Check the newest email from us, or send a new code.',
+        );
+        return;
+      }
+      router.push('/start');
     });
   }
-
-  const choosing = step === 'set-up' || step === 'new-password';
 
   return (
     <form className={styles.form} onSubmit={onSubmit}>
@@ -196,48 +129,21 @@ export function SignInForm() {
         </>
       ) : (
         <>
-          {step === 'new-password' ? (
-            <p className={styles.muted}>
-              Your email is confirmed. That password can’t be used, so please choose another.
-            </p>
-          ) : (
-            <>
-              {step === 'set-up' && (
-                <p className={styles.muted}>
-                  First time here, or forgot your password? Choose a password, and we’ll email you a
-                  code to confirm it’s you.
-                </p>
-              )}
-              <label className={styles.label} htmlFor="email">
-                Email
-              </label>
-              <input
-                id="email"
-                className={styles.input}
-                type="email"
-                autoComplete="email"
-                inputMode="email"
-                required
-                placeholder="you@school.co.za"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-            </>
-          )}
-          <label className={styles.label} htmlFor="password">
-            {choosing ? 'Choose a password' : 'Password'}
+          <label className={styles.label} htmlFor="email">
+            Email
           </label>
           <input
-            id="password"
+            id="email"
             className={styles.input}
-            type="password"
-            autoComplete={choosing ? 'new-password' : 'current-password'}
+            type="email"
+            autoComplete="email"
+            inputMode="email"
             required
-            minLength={choosing ? 8 : undefined}
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            placeholder="you@school.co.za"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
           />
-          {choosing && <p className={styles.fieldHint}>{PASSWORD_RULE}</p>}
+          <p className={styles.fieldHint}>We’ll email you a code. No password needed.</p>
         </>
       )}
 
@@ -253,27 +159,9 @@ export function SignInForm() {
       )}
 
       <button className={styles.primary} type="submit" disabled={busy}>
-        {busy
-          ? 'One moment…'
-          : step === 'sign-in'
-            ? 'Sign in'
-            : step === 'set-up'
-              ? 'Email me a code'
-              : step === 'code'
-                ? 'Continue'
-                : 'Save password'}
+        {busy ? 'One moment…' : step === 'email' ? 'Email me a code' : 'Continue'}
       </button>
 
-      {step === 'sign-in' && (
-        <button className={styles.linkButton} type="button" onClick={() => goTo('set-up')}>
-          First time here, or forgot your password?
-        </button>
-      )}
-      {step === 'set-up' && (
-        <button className={styles.linkButton} type="button" onClick={() => goTo('sign-in')}>
-          I have a password: sign in
-        </button>
-      )}
       {step === 'code' && (
         <div className={styles.links}>
           <button
@@ -288,7 +176,7 @@ export function SignInForm() {
           >
             Send a new code
           </button>
-          <button className={styles.linkButton} type="button" onClick={() => goTo('set-up')}>
+          <button className={styles.linkButton} type="button" onClick={() => goTo('email')}>
             Use a different email
           </button>
         </div>
