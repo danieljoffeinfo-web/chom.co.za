@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { Icon } from '@/components/icon';
+import { Icon } from '@chom/dashboard';
 import { currentStaff } from '@/lib/current-staff';
 import { createClient } from '@/lib/supabase/server';
 import { loadSetTask } from '@/lib/tasks';

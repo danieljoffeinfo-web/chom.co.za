@@ -1,4 +1,7 @@
-/** Names of the icons in public/icons.svg (Heroicons, copied from the learner dashboard). */
+/**
+ * Names of the icons in icons.svg (Heroicons, copied from the learner dashboard). Each
+ * app serves the sprite at /icons.svg (see iconSpriteResponse).
+ */
 export type IconName =
   | 'home'
   | 'check'
@@ -22,7 +25,11 @@ export type IconName =
   | 'heart'
   | 'leaf'
   | 'target'
-  | 'sun';
+  | 'sun'
+  | 'ball'
+  | 'cap'
+  | 'user'
+  | 'alert';
 
 export function Icon({ name, small = false }: { name: IconName; small?: boolean }) {
   return (

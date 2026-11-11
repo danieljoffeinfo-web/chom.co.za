@@ -9,7 +9,7 @@ import { Logo } from '@/components/logo';
 export const metadata = { title: 'Sign in · Chom Learn' };
 
 /**
- * Who's signing in. Students and parents use the normal sign-in; teachers the staff one.
+ * Who's signing in: a student, a parent or a teacher. Each door is passed on to /start.
  * Icon shapes are from Lucide (ISC licence).
  */
 const DOORS = {
@@ -38,7 +38,7 @@ const DOORS = {
       </>
     ),
     title: 'Parent sign in',
-    hint: 'Use the email your school knows you by.',
+    hint: 'Use the email you gave your child’s school.',
   },
   staff: {
     label: 'Teacher',

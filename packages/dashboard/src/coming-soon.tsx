@@ -1,4 +1,4 @@
-import { Icon, type IconName } from '@/components/icon';
+import { Icon, type IconName } from './icon';
 
 /** A page that's in the navigation but not built yet: what it will do, in one place. */
 export function ComingSoon({

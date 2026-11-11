@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-import { parseLoginAs } from '@/lib/login-intent';
+import { loginAsParam, parseLoginAs } from '@/lib/login-intent';
 import { loadMyName } from '@/lib/my-name';
 import { createClient } from '@/lib/supabase/server';
 
@@ -21,7 +21,7 @@ export default async function YourName({
   searchParams: Promise<{ as?: string }>;
 }) {
   const loginAs = parseLoginAs((await searchParams).as);
-  const next = `/start${loginAs === 'staff' ? '?as=staff' : ''}`;
+  const next = `/start${loginAsParam(loginAs)}`;
   const me = await loadMyName(await createClient());
   if (!me || me.confirmed) redirect(next);
 

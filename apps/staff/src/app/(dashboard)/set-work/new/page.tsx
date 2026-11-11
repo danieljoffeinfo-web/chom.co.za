@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import { Icon } from '@/components/icon';
+import { Icon } from '@chom/dashboard';
 import { currentStaff } from '@/lib/current-staff';
 
 import styles from '../set-work.module.css';

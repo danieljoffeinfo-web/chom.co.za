@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { type FormEvent, useMemo, useRef, useState } from 'react';
 import * as tus from 'tus-js-client';
 
-import { Icon } from '@/components/icon';
+import { Icon } from '@chom/dashboard';
 import { gradeLabel } from '@/lib/staff';
 import { createClient } from '@/lib/supabase/browser';
 import { supabaseEnv } from '@/lib/supabase/env';

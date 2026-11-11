@@ -1,4 +1,4 @@
-import { Icon } from '@/components/icon';
+import { Icon } from '@chom/dashboard';
 import { gradeLabel, subjectInitials, type TeachingClass } from '@/lib/staff';
 
 /** One card per subject taught to a class, styled like the learner's "Your classes". */

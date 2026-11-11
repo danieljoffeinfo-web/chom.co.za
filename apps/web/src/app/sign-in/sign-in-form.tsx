@@ -5,7 +5,7 @@ import { type AuthError, isAuthWeakPasswordError } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { type FormEvent, useState } from 'react';
 
-import type { LoginAs } from '@/lib/login-intent';
+import { type LoginAs, loginAsParam } from '@/lib/login-intent';
 import { createClient } from '@/lib/supabase/browser';
 
 import styles from './sign-in.module.css';
@@ -61,7 +61,7 @@ export function SignInForm({ loginAs }: { loginAs: LoginAs }) {
   }
 
   function finish() {
-    router.push(`/start${loginAs === 'staff' ? '?as=staff' : ''}`);
+    router.push(`/start${loginAsParam(loginAs)}`);
   }
 
   // Runs one step, never leaving the button stuck (for example, no connection).
