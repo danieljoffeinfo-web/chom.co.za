@@ -113,10 +113,16 @@
 
 /* ---------- Home and Academics ---------- */
 
-/* Home has three headline numbers: keep them on one row beside the greeting. */
+/* Home has three headline numbers: one row beside the greeting when both fit (the
+   greeting keeps at least 460px, so it never squeezes onto three lines), otherwise
+   the row moves under the greeting. */
+.parent-top > .cd-hero {
+  flex-basis: 460px;
+}
 .cd-stats.parent-stats {
-  flex-basis: 520px;
+  flex-basis: 420px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
 }
 @media (max-width: 600px) {
   .cd-stats.parent-stats {

@@ -51,7 +51,7 @@ export default async function ChildHome({ params }: { params: Promise<{ child: s
 
   return (
     <div className="cd">
-      <div className="cd-top">
+      <div className="cd-top parent-top">
         <header className="cd-hero">
           <span className="cd-label">{date}</span>
           <h1 className="cd-title">
