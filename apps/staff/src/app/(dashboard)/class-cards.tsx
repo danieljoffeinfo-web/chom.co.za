@@ -1,26 +1,34 @@
+import Link from 'next/link';
+
 import { Icon } from '@chom/dashboard';
 import { gradeLabel, subjectInitials, type TeachingClass } from '@/lib/staff';
 
-/** One card per subject taught to a class, styled like the learner's "Your classes". */
+/** The subjects a teacher takes, one row each; a row opens a new task for that class. */
 export function ClassCards({ classes }: { classes: TeachingClass[] }) {
   return (
-    <div className="cd-classes">
+    <ul className="class-list">
       {classes.map((c) => (
-        <div className="cd-class" key={c.classSubjectId}>
-          <span className="cd-class-top">
+        <li key={c.classSubjectId}>
+          <Link
+            className="class-row"
+            href={`/set-work/new?class=${encodeURIComponent(c.classSubjectId)}`}
+          >
             <span className="cd-avatar" aria-hidden="true">
               {subjectInitials(c.subjectName)}
             </span>
-          </span>
-          <span>
-            <strong>{c.subjectName}</strong>
-            <small>
-              {c.className} · {gradeLabel(c.grade)}
-            </small>
-          </span>
-        </div>
+            <span className="class-row-text">
+              <strong>{c.subjectName}</strong>
+              <small>
+                {c.className} · {gradeLabel(c.grade)}
+              </small>
+            </span>
+            <span className="class-row-go">
+              Set work <Icon name="chevron" small />
+            </span>
+          </Link>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
 
