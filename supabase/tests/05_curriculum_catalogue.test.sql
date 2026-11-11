@@ -165,8 +165,8 @@ set local role authenticated;
 
 select is(
   (select count(*)::int from public.curriculum_subject_aliases),
-  14,
-  'Signed-in users can read all 14 aliases'
+  16,
+  'Signed-in users can read all 16 aliases'
 );
 select isnt(
   public.resolve_curriculum_subject('IEB', 'Maths Lit', 11),
