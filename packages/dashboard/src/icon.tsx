@@ -1,3 +1,5 @@
+import { ICON_SPRITE_VERSION } from './sprite-version';
+
 /**
  * Names of the icons in icons.svg (Heroicons, copied from the learner dashboard). Each
  * app serves the sprite at /icons.svg (see iconSpriteResponse).
@@ -48,7 +50,7 @@ export type IconName =
 export function Icon({ name, small = false }: { name: IconName; small?: boolean }) {
   return (
     <svg className={small ? 'icon small' : 'icon'} aria-hidden="true">
-      <use href={`/icons.svg#i-${name}`} />
+      <use href={`/icons.svg?v=${ICON_SPRITE_VERSION}#i-${name}`} />
     </svg>
   );
 }
