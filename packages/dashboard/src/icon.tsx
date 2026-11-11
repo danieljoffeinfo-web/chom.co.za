@@ -29,7 +29,21 @@ export type IconName =
   | 'ball'
   | 'cap'
   | 'user'
-  | 'alert';
+  | 'alert'
+  | 'language'
+  | 'book-open'
+  | 'calculator'
+  | 'briefcase'
+  | 'drama'
+  | 'beaker'
+  | 'bolt'
+  | 'globe'
+  | 'clock'
+  | 'banknotes'
+  | 'computer'
+  | 'paint'
+  | 'music'
+  | 'tools';
 
 export function Icon({ name, small = false }: { name: IconName; small?: boolean }) {
   return (

@@ -1,5 +1,6 @@
 export { ComingSoon } from './coming-soon';
 export { Icon, type IconName } from './icon';
+export { subjectIcon } from './subject-icon';
 import { ICON_SPRITE } from './sprite';
 
 export { ICON_SPRITE };

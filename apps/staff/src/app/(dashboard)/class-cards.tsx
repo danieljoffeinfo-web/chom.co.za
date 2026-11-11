@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import { Icon } from '@chom/dashboard';
-import { gradeLabel, subjectInitials, type TeachingClass } from '@/lib/staff';
+import { Icon, subjectIcon } from '@chom/dashboard';
+import { gradeLabel, type TeachingClass } from '@/lib/staff';
 import type { SetTask } from '@/lib/tasks';
 
 /** Badge tints. A subject starts from a colour picked by its name, and moves along if
@@ -104,7 +104,7 @@ export function ClassCards({
                         aria-hidden="true"
                         style={{ '--tint': tints.get(c.subjectName) } as React.CSSProperties}
                       >
-                        {subjectInitials(c.subjectName)}
+                        <Icon name={subjectIcon(c.subjectName)} />
                       </span>
                       <span className="class-row-name">{c.subjectName}</span>
                       <span className={status ? 'class-row-status due' : 'class-row-status'}>
