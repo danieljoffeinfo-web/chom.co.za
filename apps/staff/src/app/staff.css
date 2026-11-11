@@ -60,11 +60,14 @@
   border-radius: 10px;
   display: grid;
   place-items: center;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.3px;
-  background: color-mix(in oklab, var(--tint) 16%, var(--card));
-  color: color-mix(in oklab, var(--tint) 75%, var(--ink));
+  /* A deep shade of the subject's colour, with a pale symbol on it. */
+  background: color-mix(in oklab, var(--tint) 52%, #12152a);
+  color: color-mix(in oklab, var(--tint) 18%, #ffffff);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+.class-badge .icon {
+  width: 18px;
+  height: 18px;
 }
 .class-row-name {
   font-size: 15px;
