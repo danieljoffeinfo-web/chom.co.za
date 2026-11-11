@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
 
+import { Logo } from '@/components/logo';
+
 type Kid = { id: string; name: string; initials: string; schoolName: string; detail: string };
 type Section = { path: string; label: string; icon: IconName };
 
@@ -66,19 +68,8 @@ export function ParentShell({
       </a>
       <aside className="sidebar parent-sidebar" id="sidebar" aria-label="Main navigation">
         <Link className="brand" href="/parent" aria-label="Chom Parent home">
-          <svg className="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
-            <rect x="1" y="1" width="38" height="38" rx="19" fill="#282b4a" />
-            <path
-              d="M27 12.5a10 10 0 1 0 0 15"
-              fill="none"
-              stroke="#eeebda"
-              strokeWidth="5"
-              strokeLinecap="round"
-            />
-          </svg>
-          <span className="wordmark">
-            chom<span>parent</span>
-          </span>
+          <Logo className="brand-logo" height={30} />
+          <span className="brand-tag">parent</span>
         </Link>
         {current && (
           <div className="school-switch">

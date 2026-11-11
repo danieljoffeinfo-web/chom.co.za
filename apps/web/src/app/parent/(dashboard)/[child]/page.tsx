@@ -51,7 +51,7 @@ export default async function ChildHome({ params }: { params: Promise<{ child: s
 
   return (
     <div className="cd">
-      <div className="cd-top">
+      <div className="cd-top parent-top">
         <header className="cd-hero">
           <span className="cd-label">{date}</span>
           <h1 className="cd-title">
@@ -64,7 +64,7 @@ export default async function ChildHome({ params }: { params: Promise<{ child: s
               : `${child.name} hasn’t finished setting up Chom yet.`}
           </p>
         </header>
-        <section className="cd-stats" aria-label={`${child.name} in numbers`}>
+        <section className="cd-stats parent-stats" aria-label={`${child.name} in numbers`}>
           <div className="cd-stat">
             <span className="cd-num">{child.subjects.length}</span>
             <strong>Subjects</strong>
