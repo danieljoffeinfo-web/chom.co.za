@@ -1,4 +1,6 @@
 import { currentStaff } from '@/lib/current-staff';
+import { createClient } from '@/lib/supabase/server';
+import { loadSetTasks } from '@/lib/tasks';
 
 import { ClassCards, NoClasses } from '../class-cards';
 
@@ -8,6 +10,8 @@ export const metadata = { title: 'My Classes · Chom Staff' };
 export default async function MyClasses() {
   const staff = await currentStaff();
   if (!staff) return null;
+  const drawnAt = new Date().getTime();
+  const tasks = staff.classes.length ? await loadSetTasks(await createClient(), staff) : [];
 
   return (
     <>
@@ -21,7 +25,11 @@ export default async function MyClasses() {
           </p>
         </div>
       </header>
-      {staff.classes.length ? <ClassCards classes={staff.classes} /> : <NoClasses />}
+      {staff.classes.length ? (
+        <ClassCards classes={staff.classes} tasks={tasks} now={drawnAt} />
+      ) : (
+        <NoClasses />
+      )}
     </>
   );
 }

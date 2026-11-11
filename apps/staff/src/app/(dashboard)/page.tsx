@@ -2,6 +2,8 @@ import Link from 'next/link';
 
 import { Icon } from '@chom/dashboard';
 import { currentStaff } from '@/lib/current-staff';
+import { createClient } from '@/lib/supabase/server';
+import { loadSetTasks } from '@/lib/tasks';
 
 import { ClassCards, NoClasses } from './class-cards';
 
@@ -17,6 +19,8 @@ function greeting(hour: number) {
 export default async function Today() {
   const staff = await currentStaff();
   if (!staff) return null; // The layout already sent them to /start.
+  const drawnAt = new Date().getTime();
+  const tasks = staff.classes.length ? await loadSetTasks(await createClient(), staff) : [];
 
   const now = new Date();
   const zone = 'Africa/Johannesburg';
@@ -77,7 +81,11 @@ export default async function Today() {
             All classes <Icon name="arrow" small />
           </Link>
         </div>
-        {staff.classes.length ? <ClassCards classes={staff.classes} /> : <NoClasses />}
+        {staff.classes.length ? (
+          <ClassCards classes={staff.classes} tasks={tasks} now={drawnAt} />
+        ) : (
+          <NoClasses />
+        )}
       </section>
 
       <div className="notice">

@@ -3,24 +3,48 @@
  * (@chom/dashboard). Keep this short: shared looks belong in the package.
  */
 
-/* My classes: one row per subject, each opening a new task for that class. */
+/* My classes: grouped by class, one row per subject, each opening a new task for it. */
+.class-groups {
+  display: grid;
+  gap: 20px;
+}
+.class-group {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--card);
+  overflow: hidden;
+}
+.class-group-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 14px 20px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.class-group-head strong {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.class-group-head span {
+  font-size: 13px;
+  color: var(--muted);
+}
 .class-list {
   list-style: none;
   margin: 0;
   padding: 0;
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  background: var(--card);
-  overflow: hidden;
 }
 .class-list li + li {
   border-top: 1px solid var(--line);
 }
 .class-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: 16px;
-  padding: 14px 20px;
+  gap: 14px;
+  min-height: 60px;
+  padding: 10px 16px 10px 20px;
   color: var(--ink);
   transition: background-color 0.15s;
 }
@@ -30,52 +54,100 @@
 .class-row:focus-visible {
   outline-offset: -3px;
 }
-.class-row-text {
-  flex: 1;
-  min-width: 0;
+.class-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  background: color-mix(in oklab, var(--tint) 16%, var(--card));
+  color: color-mix(in oklab, var(--tint) 75%, var(--ink));
 }
-.class-row-text strong {
-  display: block;
-  font-size: 16px;
+.class-row-name {
+  font-size: 15px;
   font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.class-row-text small {
-  display: block;
-  margin-top: 2px;
+.class-row-status {
   font-size: 13px;
   color: var(--muted);
+  white-space: nowrap;
+}
+.class-row-status b {
+  font-weight: 700;
+  color: var(--ink);
 }
 .class-row-go {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
+  min-width: 92px;
+  justify-content: flex-end;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
-  white-space: nowrap;
+}
+.class-row-go-label {
+  opacity: 0;
+  transform: translateX(4px);
   transition:
-    color 0.15s,
+    opacity 0.15s,
     transform 0.15s;
 }
-.class-row:hover .class-row-go {
+.class-row:hover .class-row-go,
+.class-row:focus-visible .class-row-go {
   color: var(--ink);
-  transform: translateX(2px);
 }
-@media (max-width: 600px) {
-  .class-row {
-    padding: 12px 16px;
-    gap: 12px;
+.class-row:hover .class-row-go-label,
+.class-row:focus-visible .class-row-go-label {
+  opacity: 1;
+  transform: none;
+}
+@media (hover: none) {
+  .class-row-go-label {
+    display: none;
   }
   .class-row-go {
-    font-size: 0;
-    gap: 0;
+    min-width: 0;
+  }
+}
+@media (max-width: 600px) {
+  .class-group-head {
+    padding: 12px 16px 10px;
+  }
+  .class-row {
+    grid-template-columns: 36px minmax(0, 1fr) auto;
+    grid-template-areas: 'badge name go' 'badge status go';
+    row-gap: 2px;
+    column-gap: 12px;
+    padding: 10px 12px 10px 16px;
+  }
+  .class-badge {
+    grid-area: badge;
+  }
+  .class-row-name {
+    grid-area: name;
+    white-space: normal;
+  }
+  .class-row-status {
+    grid-area: status;
+  }
+  .class-row-go {
+    grid-area: go;
+    min-width: 0;
+  }
+  .class-row-go-label {
+    display: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .class-row-go {
+  .class-row-go-label {
     transition: none;
-  }
-  .class-row:hover .class-row-go {
     transform: none;
   }
 }
