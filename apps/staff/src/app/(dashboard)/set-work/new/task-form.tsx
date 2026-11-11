@@ -100,14 +100,25 @@ function defaultDueDate(): string {
  * keep the task's subject, and the classes it went to that the teacher no longer
  * teaches.
  */
-export function TaskForm({ classes, task }: { classes: ClassChoice[]; task?: EditableTask }) {
+export function TaskForm({
+  classes,
+  task,
+  startClassId,
+}: {
+  classes: ClassChoice[];
+  task?: EditableTask;
+  /** A new task opened from one class starts with that class ticked. */
+  startClassId?: string;
+}) {
   const router = useRouter();
   const editing = task !== undefined;
   const [title, setTitle] = useState(task?.title ?? '');
   const [notes, setNotes] = useState(task?.notes ?? '');
   const [dueOn, setDueOn] = useState(task?.dueOn ?? defaultDueDate);
   const [dueTime, setDueTime] = useState(task?.dueTime ?? '08:00');
-  const [chosen, setChosen] = useState<string[]>(task?.classSubjectIds ?? []);
+  const [chosen, setChosen] = useState<string[]>(
+    task?.classSubjectIds ?? (startClassId ? [startClassId] : []),
+  );
   // Files already on the task, and the ones the teacher has chosen to take off.
   const [removed, setRemoved] = useState<string[]>([]);
   // Files already taken off in an earlier attempt, so a retry doesn't try again.

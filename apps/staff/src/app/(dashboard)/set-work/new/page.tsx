@@ -10,10 +10,17 @@ import { TaskForm } from './task-form';
 export const metadata = { title: 'New task · Chom Staff' };
 
 /** A teacher sets a task: instructions, a due date, classes and files. */
-export default async function NewTask() {
+export default async function NewTask({
+  searchParams,
+}: {
+  searchParams: Promise<{ class?: string }>;
+}) {
   const staff = await currentStaff();
   if (!staff) return null;
   if (!staff.classes.length) redirect('/set-work');
+  // Opened from a class row on My Classes: tick that class to start with.
+  const { class: classParam } = await searchParams;
+  const startClass = staff.classes.find((c) => c.classSubjectId === classParam)?.classSubjectId;
 
   return (
     <>
@@ -34,6 +41,7 @@ export default async function NewTask() {
           subjectName: c.subjectName,
           learners: c.learners,
         }))}
+        startClassId={startClass}
       />
     </>
   );
