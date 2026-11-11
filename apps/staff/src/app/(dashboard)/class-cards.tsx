@@ -18,12 +18,6 @@ export function ClassCards({ classes }: { classes: TeachingClass[] }) {
               {c.className} · {gradeLabel(c.grade)}
             </small>
           </span>
-          <span className="cd-next">
-            <span>Learners</span>
-            <b>
-              {c.learners} in class · {c.onboarded} set up Chom
-            </b>
-          </span>
         </div>
       ))}
     </div>
