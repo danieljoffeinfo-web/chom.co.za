@@ -18,10 +18,59 @@
 }
 
 .brand {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.5px;
+  align-self: flex-start;
+  color: var(--chom-text);
   margin-bottom: var(--chom-space-4);
+}
+
+/* One button for each kind of person signing in. */
+.doors {
+  list-style: none;
+  margin: var(--chom-space-4) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--chom-space-3);
+}
+
+.door {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border: 1px solid var(--chom-primary);
+  border-radius: var(--chom-radius-pill);
+  color: var(--chom-text);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.doorLabel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.doorIcon {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.door:hover {
+  background: var(--chom-primary);
+  color: var(--chom-on-primary);
+}
+
+.door:focus-visible {
+  outline: 3px solid var(--chom-primary);
+  outline-offset: 3px;
 }
 
 .title {
@@ -113,6 +162,10 @@
   margin-top: var(--chom-space-2);
 }
 
+.switch a {
+  color: var(--chom-text);
+}
+
 .switch {
   display: flex;
   flex-direction: column;
@@ -123,4 +176,47 @@
   text-align: center;
   font-weight: 700;
   font-size: 14px;
+}
+
+.code {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  text-align: center;
+}
+
+.fieldHint {
+  margin-top: calc(-1 * var(--chom-space-2));
+  font-size: 13px;
+  color: var(--chom-text-muted);
+}
+
+.notice {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--chom-space-3);
+}
+
+.links .linkButton {
+  margin-top: 0;
+}
+
+.linkButton:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.account {
+  font-size: 14px;
+  padding: 10px 14px;
+  border-radius: var(--chom-radius-md);
+  background: var(--chom-background);
+  border: 1px solid var(--chom-border);
+  overflow-wrap: anywhere;
 }

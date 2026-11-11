@@ -12,6 +12,7 @@ const interTight = Inter_Tight({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://chom.co.za'),
   title: 'Chom Learn',
   description: 'Study the right way with Chom.',
 };

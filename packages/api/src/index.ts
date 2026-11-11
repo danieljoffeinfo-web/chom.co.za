@@ -7,6 +7,7 @@ export {
   staffOriginFor,
 } from './auth-cookies';
 export { isServerOnlyKey } from './keys';
+export { PASSWORD_RULE, passwordProblem } from './password';
 export {
   Constants,
   type Database,

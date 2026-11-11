@@ -1,0 +1,123 @@
+.section {
+  width: min(1280px, calc(100% - 96px));
+  margin: 24px auto 0;
+  padding-top: 48px;
+  border-top: 1px solid var(--chom-border);
+  scroll-margin-top: 24px;
+}
+.heading h2 {
+  font-size: clamp(36px, 4.3vw, 60px);
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  line-height: 1.1;
+}
+.heading > p {
+  color: var(--chom-text-muted);
+  font-size: 17px;
+  line-height: 1.6;
+  margin-top: 14px;
+}
+.layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(24px, 5vw, 80px);
+  align-items: center;
+  margin-top: 40px;
+}
+.illustration {
+  min-width: 0;
+}
+.scene {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.08;
+  isolation: isolate;
+  pointer-events: none;
+}
+.mascot {
+  position: absolute;
+  width: 59.2%;
+  height: auto;
+  left: 20.4%;
+  bottom: -1%;
+  z-index: 1;
+}
+.symbol {
+  position: absolute;
+  width: 18%;
+  aspect-ratio: 1.125;
+  background-image: url('/images/chom-subject-symbols.webp');
+  background-size: 400% 300%;
+  background-repeat: no-repeat;
+  z-index: 2;
+}
+.caption {
+  color: var(--chom-text-muted);
+  font-size: 13px;
+  text-align: center;
+  margin-top: 6px;
+}
+.caption span {
+  display: inline-block;
+  margin-left: 10px;
+}
+.copy {
+  display: grid;
+  gap: 28px;
+  max-width: 32ch;
+  font-size: clamp(21px, 2.1vw, 28px);
+  letter-spacing: -0.025em;
+  text-wrap: pretty;
+}
+/* The problem, a step quieter than the answer. */
+.problem {
+  margin: 0;
+  color: var(--chom-text-muted);
+  font-size: 0.82em;
+  line-height: 1.6;
+}
+/* The answer: "Chom knows." as the turn, then what Chom does about it. */
+.answer {
+  margin: 0;
+  padding-left: 22px;
+  border-left: 3px solid var(--chom-text);
+  color: var(--chom-text);
+  font-weight: 500;
+  line-height: 1.5;
+}
+.answer strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1.35em;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+@media (max-width: 800px) {
+  .section {
+    width: calc(100% - 40px);
+    margin-top: 0;
+    padding-top: 40px;
+  }
+  .heading h2 {
+    max-width: 500px;
+    font-size: clamp(36px, 8vw, 54px);
+  }
+  .heading > p {
+    max-width: 300px;
+    font-size: 16px;
+  }
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-top: 28px;
+  }
+  .illustration {
+    width: min(100%, 540px);
+    margin-inline: auto;
+  }
+  .copy {
+    max-width: 100%;
+    font-size: 21px;
+  }
+}

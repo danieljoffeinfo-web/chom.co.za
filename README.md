@@ -6,8 +6,8 @@ One platform for students, teachers and parents across many schools. This reposi
 
 ```
 apps/                   Workspace apps (every folder here is picked up automatically)
-  web/                  Next.js web app at chom.co.za: sign-in, student
-                        onboarding, and the parent dashboard at /parent
+  web/                  Next.js web app at chom.co.za: sign-in, onboarding and
+                        the web version for students and parents
   staff/                Next.js staff dashboard at staff.chom.co.za, for teachers
                         and school admins. Its own Vercel project (chom-staff)
   mobile/               Expo (React Native) app for iOS and Android: one app,
@@ -15,17 +15,13 @@ apps/                   Workspace apps (every folder here is picked up automatic
 packages/               Shared workspace packages (picked up automatically)
   api/                  The typed data client shared by web and mobile, with
                         TypeScript types generated from the database
-  dashboard/            The dashboard look shared by the staff and parent
-                        dashboards: styles, icons, <Icon>, <ComingSoon>
   tokens/               Design tokens: colours, type, spacing, radius.
                         TypeScript for mobile, tokens.css for web
   tsconfig/             Shared TypeScript settings
-static/                 No-build HTML prototypes, the design target for the app.
-                        Copied into apps/web at build time and served at
-                        chom.co.za/app (student) and chom.co.za/teacher
-  site/                 Old static home page and the student prototype (app/)
-  teacher-prototype/    Teacher prototype
-  prototype-data/       Sample data used only by the static prototypes
+static/                 The student dashboard (no-build HTML), copied into
+                        apps/web at build time and served at chom.co.za/app
+  site/app/             The dashboard itself
+  shared/               Its subject styles
 supabase/               The database: migrations (structure and access rules),
                         test seed data and automated access tests
 docs/
@@ -57,7 +53,6 @@ pnpm install
 | `pnpm format`       | Format everything with Prettier                                              |
 | `pnpm format:check` | Check formatting without changing files (what CI runs)                       |
 | `pnpm build`        | Production build of the web app                                              |
-| `pnpm build:site`   | Build the static site into `dist/` (no install needed)                       |
 | `pnpm db:start`     | Start a local Supabase (needs Docker); applies migrations and test data      |
 | `pnpm db:test`      | Run the database access and integrity tests                                  |
 | `pnpm db:reset`     | Rebuild the local database from scratch                                      |
@@ -80,30 +75,42 @@ Supabase (PostgreSQL), as decided in [ADR 0001](docs/decisions/0001-database-pla
 
 **Core tables.**
 
-| Table                             | Holds                                                                                                                                                                                     |
-| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `curricula`                       | Curricula (IEB now; CAPS, Cambridge later as rows, not code)                                                                                                                              |
-| `curriculum_subjects`             | Each curriculum's official subjects: grades, category, language level, compulsory, externally examined, counts toward the certificate. Cambridge levels (IGCSE, AS, A) sit on the subject |
-| `curriculum_subject_aliases`      | Other names for a subject ("Maths Lit", "CAT"), valid for a grade range. Never ambiguous within a grade                                                                                   |
-| `curriculum_subject_rules`        | Subject combination rules (e.g. Mathematics or Mathematical Literacy, never both). Stored now, enforced when subject choice is built                                                      |
-| `curriculum_subject_rule_members` | The subjects each rule applies to                                                                                                                                                         |
-| `school_groups`                   | A school, or a franchise of schools (e.g. Curro), sharing email domains and sign-in. A single school is a group of one                                                                    |
-| `school_group_domains`            | A group's email domains and the only sign-in trusted for each (Microsoft with the school's tenant, or Google)                                                                             |
-| `schools`                         | Each school, in a group                                                                                                                                                                   |
-| `academic_years`                  | A school's years and the curriculum it follows that year; one is current                                                                                                                  |
-| `profiles`                        | One row per person, across schools. Linked to a login once they have one                                                                                                                  |
-| `school_memberships`              | A person's role at a school (student, teacher, parent, school admin). One person can hold several                                                                                         |
-| `guardianships`                   | Which parent is linked to which child: relationship, primary contact, and a status (invited, active, blocked, consent withdrawn, revoked by the learner)                                  |
-| `parent_consent_versions`         | Versions of the parent POPIA consent; the latest published one is current. The wording lives in `apps/web/src/lib/parent/consent.ts`                                                      |
-| `parent_consents`                 | Each parent's consent, per child and version, with when and where it was given                                                                                                            |
-| `parent_notification_channels`    | Which channels (WhatsApp, email, push) each parent opted in to                                                                                                                            |
-| `subjects`                        | The subjects a school offers, usually linked to the curriculum catalogue                                                                                                                  |
-| `classes`                         | Classes per school year: a grade number for sorting plus a free-text name (10B, 10LSI, ...)                                                                                               |
-| `class_subjects`                  | A subject taught to a class                                                                                                                                                               |
-| `teaching_allocations`            | Which teacher teaches it                                                                                                                                                                  |
-| `enrolments`                      | Which learner is in which class                                                                                                                                                           |
-| `student_study_profiles`          | A student's study habits for a school year, from onboarding: session length, how and when they study                                                                                      |
-| `student_subject_goals`           | A student's target percentage per subject, and up to 3 focus subjects                                                                                                                     |
+| Table                             | Holds                                                                                                                                                                                                 |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `curricula`                       | Curricula (IEB now; CAPS, Cambridge later as rows, not code)                                                                                                                                          |
+| `curriculum_subjects`             | Each curriculum's official subjects: grades, category, language level, compulsory, externally examined, counts toward the certificate. Cambridge levels (IGCSE, AS, A) sit on the subject             |
+| `curriculum_subject_aliases`      | Other names for a subject ("Maths Lit", "CAT"), valid for a grade range. Never ambiguous within a grade                                                                                               |
+| `curriculum_subject_rules`        | Subject combination rules (e.g. Mathematics or Mathematical Literacy, never both). Stored now, enforced when subject choice is built                                                                  |
+| `curriculum_subject_rule_members` | The subjects each rule applies to                                                                                                                                                                     |
+| `school_groups`                   | A school, or a franchise of schools (e.g. Curro), sharing email domains and sign-in. A single school is a group of one                                                                                |
+| `school_group_domains`            | A group's email domains and the only sign-in trusted for each (Microsoft with the school's tenant, or Google)                                                                                         |
+| `schools`                         | Each school, in a group                                                                                                                                                                               |
+| `academic_years`                  | A school's years and the curriculum it follows that year; one is current                                                                                                                              |
+| `profiles`                        | One row per person, across schools. Linked to a login once they have one                                                                                                                              |
+| `school_memberships`              | A person's role at a school (student, teacher, parent, school admin). One person can hold several                                                                                                     |
+| `guardianships`                   | Which parent is linked to which child: relationship, primary contact, and a status (invited, active, blocked, consent withdrawn, revoked by the learner)                                              |
+| `parent_consent_versions`         | Versions of the parent POPIA consent; the latest published one is current. The wording lives in `apps/web/src/lib/parent/consent.ts`                                                                  |
+| `parent_consents`                 | Each parent's consent, per child and version, with when and where it was given                                                                                                                        |
+| `parent_notification_channels`    | Which channels (WhatsApp, email, push) each parent opted in to                                                                                                                                        |
+| `subjects`                        | The subjects a school offers, usually linked to the curriculum catalogue                                                                                                                              |
+| `subject_offerings`               | What a school offers each year, for which grades: fundamental, elective (in a timetable block, one per block) or extra                                                                                |
+| `school_subject_rules`            | A school's own combination rules (e.g. IT requires Mathematics), with `school_subject_rule_members`                                                                                                   |
+| `school_terms`                    | A school's terms each year: 3 or 4, whatever it runs                                                                                                                                                  |
+| `school_calendar_breaks`          | Half-terms and school holidays inside a term                                                                                                                                                          |
+| `exam_windows`                    | Exam periods per grade range (mid-year, prelims, finals); no new content during them                                                                                                                  |
+| `grade_content_end_dates`         | The last day of new content per grade; revision after                                                                                                                                                 |
+| `curriculum_units`                | Reference data: each subject and grade as an ordered list of units with teaching weeks, never tied to a term                                                                                          |
+| `unit_schedules`                  | When a school teaches each unit, generated from its calendar; teachers' pinned dates survive regeneration                                                                                             |
+| `tasks`                           | Work a teacher sets (assigned: title, notes, due date) or a student's own reminder (personal, private to them)                                                                                        |
+| `task_classes`                    | The classes an assigned task was sent to; a teacher can only send to classes they teach                                                                                                               |
+| `task_attachments`                | Files on a task, stored in the private `task-files` bucket under `<school>/<task>/`, up to 300 MB each; files of deleted tasks are queued in `private.task_file_cleanup` and removed every 15 minutes |
+| `task_completions`                | Who has ticked off which task; classmates never see each other's                                                                                                                                      |
+| `classes`                         | Classes per school year: a grade number for sorting plus a free-text name (10B, 10LSI, ...)                                                                                                           |
+| `class_subjects`                  | A subject taught to a class                                                                                                                                                                           |
+| `teaching_allocations`            | Which teacher teaches it                                                                                                                                                                              |
+| `enrolments`                      | Which learner is in which class                                                                                                                                                                       |
+| `student_study_profiles`          | A student's study habits for a school year, from onboarding: session length, how and when they study                                                                                                  |
+| `student_subject_goals`           | A student's target percentage per subject, and up to 3 focus subjects                                                                                                                                 |
 
 **Signing in.** The roster decides who someone is: each membership carries the email the school knows them by. After every sign-in the app calls `link_my_account()`, which links the login to the one roster profile with that email, but only if the login proves it the way the school allows:
 
@@ -112,8 +119,6 @@ Supabase (PostgreSQL), as decided in [ADR 0001](docs/decisions/0001-database-pla
 - It links nothing, and says why, when the email is on no roster, is on more than one profile, or the profile already has another login.
 
 The Microsoft tenant check reads the `tid` claim Supabase stores for Microsoft logins; it must be confirmed against a real Microsoft sign-in before the first school goes live.
-
-**Parents** see a child only while their link is active **and** they have consented to the current consent version for that child. Until then they see the child's name on the consent screen and nothing else. A school admin can block a guardian (with a reason, for example a court order); a blocked guardian sees nothing about that child, not even the link. Withdrawing consent hides the child at once, and publishing a new consent version makes every parent consent again. Parents with children at several schools see each child at their own school. See `docs/design/parent-dashboard.md`.
 
 **Onboarding answers** (study habits, targets, focus subjects) can be seen by the student, their teachers, their parents and school admins, and changed only by the student. Goal changes are kept in the audit log.
 
@@ -138,6 +143,10 @@ select private.expose_table('public.my_table', 'select, insert, update, delete')
 
 `expose_table` switches on row-level security, removes default grants and never opens anything to signed-out visitors. A guardrail test fails CI if any table lacks row-level security or access rules, or is reachable signed out.
 
+**Real schools only.** There are no demo schools: production holds real schools and the people in them, and nothing else. The only made-up people are the two test schools in `supabase/seed.sql`, which exist for the automated tests and are never loaded into production.
+
+**Content is not the calendar.** Curriculum units are the same for every school and never mention a term. Each school has its own calendar (terms, half-terms, holidays, exam windows, content-end dates), and `private.generate_unit_schedule(year)` lays the units over that school's teaching days in proportion to their weeks, keeping any unit a teacher has pinned. So the same Grade 11 Maths units land in three terms at a 3-term school and four at a 4-term one. `public_holidays` lists the national holidays. `school_today(school)` is the date the app treats as today: today in South Africa.
+
 **Tests.** `supabase/tests/` checks school isolation, what each role can see and change, and data integrity, against two fake schools in `supabase/seed.sql`. The seed is for local and CI only; it is never loaded into production.
 
 **Types.** After changing the schema, run `pnpm db:types` and commit the result. CI fails if the types are out of date.
@@ -152,12 +161,12 @@ select private.expose_table('public.my_table', 'select, insert, update, delete')
 
 ## Deployments
 
-| What                                                                                                | Where                                                         | How                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Web app: home page, sign-in, onboarding, and the HTML prototypes at `/app` (student) and `/teacher` | chom.co.za (Vercel project `chom-co-za`)                      | Root Directory `apps/web`, Next.js. Before each build, `apps/web/scripts/copy-prototypes.mjs` copies the prototypes from `static/` into `public/`. Needs `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (see `apps/web/.env.example`). Supabase Auth must allow `https://chom.co.za/auth/callback`                                                                                                                                                                                                                                                                                                   |
-| Staff dashboard for teachers and school admins                                                      | staff.chom.co.za (Vercel project `chom-staff`, region `dub1`) | Root Directory `apps/staff`, Next.js. Same Supabase settings as the web app. **Everyone signs in at chom.co.za**: the home page has a **Teacher login** (`/sign-in?as=staff`) and a **Parent login** (`/sign-in?as=parent`). After the email link, staff are sent to staff.chom.co.za and parents to chom.co.za/parent. The two sites share one sign-in cookie (`chom-auth`, set for `chom.co.za`; see `packages/api/src/auth-cookies.ts`). In production the staff site sends signed-out visitors, and its own `/sign-in`, to the Teacher login, and forwards every other address (any `*.vercel.app`) to staff.chom.co.za |
-| Database                                                                                            | Supabase project `chom.co.za`                                 | `.github/workflows/deploy-database.yml`: after CI passes on `main`, applies new files in `supabase/migrations/` to production with the pinned Supabase CLI. Never loads the seed. See below                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| Mobile app                                                                                          | Not published yet                                             | Will be built and submitted with Expo EAS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| What                                                                                                           | Where                                                         | How                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Web app: home page, sign-in, onboarding, the student dashboard at `/app` and the parent dashboard at `/parent` | chom.co.za (Vercel project `chom-co-za`)                      | Root Directory `apps/web`, Next.js. Before each build, `apps/web/scripts/copy-prototypes.mjs` copies the student dashboard from `static/` into `public/`. Needs `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (see `apps/web/.env.example`). Supabase Auth must allow `https://chom.co.za/auth/callback`                                                                                                                                                                                                                                                                                       |
+| Staff dashboard for teachers and school admins                                                                 | staff.chom.co.za (Vercel project `chom-staff`, region `dub1`) | Root Directory `apps/staff`, Next.js. Same Supabase settings as the web app. **Everyone signs in at chom.co.za**: `/sign-in` asks who's signing in (Student, Parent or Teacher; `/sign-in?as=parent`, `/sign-in?as=staff`). After signing in, staff are sent to staff.chom.co.za and parents to chom.co.za/parent. The two sites share one sign-in cookie (`chom-auth`, set for `chom.co.za`; see `packages/api/src/auth-cookies.ts`). In production the staff site sends signed-out visitors, and its own `/sign-in`, to the Teacher login, and forwards every other address (any `*.vercel.app`) to staff.chom.co.za |
+| Database                                                                                                       | Supabase project `chom.co.za`                                 | `.github/workflows/deploy-database.yml`: after CI passes on `main`, applies new files in `supabase/migrations/` to production with the pinned Supabase CLI. Never loads the seed. See below                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| Mobile app                                                                                                     | Not published yet                                             | Will be built and submitted with Expo EAS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 
 ### Database deploys
 
@@ -167,6 +176,15 @@ Merging a pull request that adds a migration is all it takes: once CI passes on 
 - Migrations already on `main` can't be edited, and a new migration must be newer than every migration on `main` (CI fails otherwise).
 - To check what would be applied, run the workflow by hand from the Actions tab, on `main`. **Dry run** is ticked by default.
 - **Database first, then the app.** Vercel deploys the apps as soon as a pull request merges. App code that needs a new table or function must not merge in the same pull request as its migration. Merge the migration first, wait until the **Deploy database** run for it has succeeded (Actions tab), then merge the app change.
+
+**Edge Functions.** After the migrations, the same workflow deploys every function in `supabase/functions` (bundled by Supabase, no Docker). JWT checks are set per function in `supabase/config.toml`.
+
+- `task-file-cleanup` removes the files of deleted tasks. Every 15 minutes, if anything is queued in `private.task_file_cleanup`, a pg_cron job calls it with a random token from Vault. The function claims the queued paths, removes them through the Storage API with the project's service key, and clears them. It needs two Vault secrets, set once per project in the SQL editor (the job does nothing without them):
+
+  ```sql
+  select vault.create_secret('https://<project-ref>.supabase.co', 'project_url');
+  select vault.create_secret(encode(extensions.gen_random_bytes(32), 'hex'), 'task_cleanup_token');
+  ```
 
 **One-time setup.** The workflow needs a Supabase access token, kept as a GitHub secret:
 
@@ -193,7 +211,3 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every pull request and every
 A second job starts a local Supabase, applies every migration and the test seed, runs the database tests in `supabase/tests/`, and checks that the generated database types are up to date.
 
 Mobile images and fonts can be imported with either `import logo from './logo.png'` or `require('./logo.png')`. The types for both are committed in `apps/mobile/src/types/assets.d.ts`, so they type-check in CI as well as locally.
-
-## Prototype notes
-
-The static site and teacher prototype use sample data only. Changes are stored in the browser (localStorage and IndexedDB) and do not sync. The teacher prototype links to the student prototype at `/student/app/#subjects` so both can show shared browser-only state.

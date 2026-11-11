@@ -5,6 +5,7 @@ import { SESSION_LENGTHS, STUDY_METHODS, STUDY_TIMES, loadStudentContext } from 
 import { createClient } from '@/lib/supabase/server';
 
 import styles from './home.module.css';
+import { Logo } from '@/components/logo';
 
 export const metadata = { title: 'Home · Chom Learn' };
 
@@ -25,7 +26,9 @@ export default async function Home() {
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <p className={styles.brand}>chom learn</p>
+        <p className={styles.brand}>
+          <Logo />
+        </p>
         <form action="/sign-out" method="post">
           <button className={styles.signOut} type="submit">
             Sign out

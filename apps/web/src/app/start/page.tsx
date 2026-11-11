@@ -3,7 +3,8 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { Message } from '@/components/message';
-import { parseLoginAs } from '@/lib/login-intent';
+import { loginAsParam, parseLoginAs } from '@/lib/login-intent';
+import { loadMyName } from '@/lib/my-name';
 import { type GuardianLink, loadGuardianLinks } from '@/lib/parent/parent';
 import { loadStudentContext } from '@/lib/student';
 import { createClient } from '@/lib/supabase/server';
@@ -36,10 +37,11 @@ const SOMETHING_WENT_WRONG = (
 );
 
 /**
- * After every sign-in: link the login to the school roster, then send each person to
- * their dashboard. Teacher login → the staff dashboard; Parent login → the parent
- * dashboard. Otherwise students go to onboarding (first time) or their dashboard, then
- * staff to the staff dashboard, then parents to the parent dashboard.
+ * After every sign-in: link the login to the school roster, ask for their full name the
+ * first time, then send each person to their dashboard. Teacher login → the staff
+ * dashboard; Parent login → the parent dashboard. Otherwise students go to onboarding
+ * (first time) or their dashboard, then staff to the staff dashboard, then parents to
+ * the parent dashboard.
  */
 export default async function Start({ searchParams }: { searchParams: Promise<{ as?: string }> }) {
   const loginAs = parseLoginAs((await searchParams).as);
@@ -56,6 +58,10 @@ export default async function Start({ searchParams }: { searchParams: Promise<{ 
       </Message>
     );
   }
+
+  // The last step of a first sign-in: their full name.
+  const me = await loadMyName(supabase);
+  if (me && !me.confirmed) redirect(`/your-name${loginAsParam(loginAs)}`);
 
   // Parent login: the parent dashboard asks for consent first if a child still needs
   // it. A failed lookup never tells a parent they aren't one.

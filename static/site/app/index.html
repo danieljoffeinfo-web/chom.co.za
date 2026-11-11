@@ -12,7 +12,7 @@
     <title>Chom Learn — Your school day, sorted</title>
     <link
       rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23282b4a'/%3E%3Cpath d='M28 13a11 11 0 1 0 0 14' fill='none' stroke='%23eeebda' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 420 420%22%3E%3Crect width=%22420%22 height=%22420%22 rx=%2296%22 fill=%22%23282B4A%22/%3E%3Cg fill=%22%23EEEBDA%22%3E%3Cpath transform=%22translate%2855.01 317.00%29%22 d=%22M 164.40625 -92.796875 L 222.796875 -92.796875 C 221.460938 -74.929688 215.863281 -58.597656 206 -43.796875 C 196.132812 -28.992188 183.398438 -17.257812 167.796875 -8.59375 C 152.203125 0.0703125 135.070312 4.40625 116.40625 4.40625 C 102 4.40625 88.460938 1.671875 75.796875 -3.796875 C 63.128906 -9.265625 51.992188 -16.863281 42.390625 -26.59375 C 32.796875 -36.332031 25.265625 -47.535156 19.796875 -60.203125 C 14.328125 -72.867188 11.59375 -86.398438 11.59375 -100.796875 C 11.59375 -120.265625 16.328125 -138 25.796875 -154 C 35.265625 -170 47.929688 -182.734375 63.796875 -192.203125 C 79.660156 -201.671875 97.195312 -206.40625 116.40625 -206.40625 C 132.9375 -206.40625 148.398438 -202.800781 162.796875 -195.59375 C 177.203125 -188.394531 189.335938 -178.796875 199.203125 -166.796875 L 154 -131.59375 C 148.9375 -138.257812 143.132812 -142.925781 136.59375 -145.59375 C 130.0625 -148.257812 123.332031 -149.59375 116.40625 -149.59375 C 103.332031 -149.59375 92.195312 -144.992188 83 -135.796875 C 73.800781 -126.597656 69.203125 -114.929688 69.203125 -100.796875 C 69.203125 -86.398438 73.800781 -74.664062 83 -65.59375 C 92.195312 -56.53125 103.332031 -52 116.40625 -52 C 128.9375 -52 139.597656 -55.734375 148.390625 -63.203125 C 157.191406 -70.671875 162.53125 -80.535156 164.40625 -92.796875 Z M 164.40625 -92.796875%22/%3E%3Cpath transform=%22translate%28267.80 316.20%29%22 d=%22M 54.796875 -56 C 64.128906 -56 71.59375 -53 77.1875 -47 C 82.789062 -41 85.59375 -33.734375 85.59375 -25.203125 C 85.59375 -16.929688 82.789062 -9.796875 77.1875 -3.796875 C 71.59375 2.203125 64.128906 5.203125 54.796875 5.203125 C 45.734375 5.203125 38.332031 2.203125 32.59375 -3.796875 C 26.863281 -9.796875 24 -16.929688 24 -25.203125 C 24 -33.734375 26.863281 -41 32.59375 -47 C 38.332031 -53 45.734375 -56 54.796875 -56 Z M 54.796875 -56%22/%3E%3C/g%3E%3C/svg%3E"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -205,9 +205,11 @@
         align-items: center;
         padding: 0 13px 0 26px;
       }
-      .brand-mark {
-        width: 32px;
-        height: 32px;
+      .brand-logo {
+        display: block;
+        height: 30px;
+        width: auto;
+        color: var(--ink);
       }
       .wordmark {
         font-size: 30px;
@@ -3120,7 +3122,6 @@
       }
     </style>
   <link rel="stylesheet" href="/shared/subjects.css">
-<script src="/shared/school.js"></script>
 </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -3334,16 +3335,7 @@ SOFTWARE.
     <div class="overlay" id="nav-overlay"></div>
     <aside class="sidebar" id="sidebar" aria-label="Main navigation">
       <a class="brand" href="#dashboard" aria-label="Chom Learn home"
-        ><svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
-          <rect x="1" y="1" width="38" height="38" rx="19" fill="#282b4a" />
-          <path
-            d="M27 12.5a10 10 0 1 0 0 15"
-            fill="none"
-            stroke="#eeebda"
-            stroke-width="5"
-            stroke-linecap="round"
-          /></svg
-        ><span class="wordmark">chom<span>learn</span></span></a
+        ><svg class="brand-logo" viewBox="200.19 508.58 1087.19 311.20" aria-hidden="true"><g fill="currentColor"><path transform="translate(192.597776 810.576174)" d="M 164.40625 -92.796875 L 222.796875 -92.796875 C 221.460938 -74.929688 215.863281 -58.597656 206 -43.796875 C 196.132812 -28.992188 183.398438 -17.257812 167.796875 -8.59375 C 152.203125 0.0703125 135.070312 4.40625 116.40625 4.40625 C 102 4.40625 88.460938 1.671875 75.796875 -3.796875 C 63.128906 -9.265625 51.992188 -16.863281 42.390625 -26.59375 C 32.796875 -36.332031 25.265625 -47.535156 19.796875 -60.203125 C 14.328125 -72.867188 11.59375 -86.398438 11.59375 -100.796875 C 11.59375 -120.265625 16.328125 -138 25.796875 -154 C 35.265625 -170 47.929688 -182.734375 63.796875 -192.203125 C 79.660156 -201.671875 97.195312 -206.40625 116.40625 -206.40625 C 132.9375 -206.40625 148.398438 -202.800781 162.796875 -195.59375 C 177.203125 -188.394531 189.335938 -178.796875 199.203125 -166.796875 L 154 -131.59375 C 148.9375 -138.257812 143.132812 -142.925781 136.59375 -145.59375 C 130.0625 -148.257812 123.332031 -149.59375 116.40625 -149.59375 C 103.332031 -149.59375 92.195312 -144.992188 83 -135.796875 C 73.800781 -126.597656 69.203125 -114.929688 69.203125 -100.796875 C 69.203125 -86.398438 73.800781 -74.664062 83 -65.59375 C 92.195312 -56.53125 103.332031 -52 116.40625 -52 C 128.9375 -52 139.597656 -55.734375 148.390625 -63.203125 C 157.191406 -70.671875 162.53125 -80.535156 164.40625 -92.796875 Z M 164.40625 -92.796875"/><path transform="translate(406.595955 810.576174)" d="M 223.59375 -100.796875 L 223.59375 0 L 167.203125 0 L 167.203125 -100.796875 C 167.203125 -117.066406 163.132812 -129.265625 155 -137.390625 C 146.863281 -145.523438 136.929688 -149.59375 125.203125 -149.59375 C 116.929688 -149.59375 109.0625 -147.523438 101.59375 -143.390625 C 94.132812 -139.265625 88.132812 -133.535156 83.59375 -126.203125 C 79.0625 -118.867188 76.796875 -110.398438 76.796875 -100.796875 L 76.796875 0 L 20 0 L 20 -298 L 76.796875 -298 L 76.796875 -187.59375 C 82.128906 -194.257812 90.0625 -199.0625 100.59375 -202 C 111.132812 -204.9375 120.9375 -206.40625 130 -206.40625 C 148.394531 -206.40625 164.660156 -201.671875 178.796875 -192.203125 C 192.929688 -182.734375 203.929688 -170 211.796875 -154 C 219.660156 -138 223.59375 -120.265625 223.59375 -100.796875 Z M 223.59375 -100.796875"/><path transform="translate(627.394031 810.576174)" d="M 116.40625 -206.40625 C 130.800781 -206.40625 144.460938 -203.671875 157.390625 -198.203125 C 170.328125 -192.734375 181.660156 -185.128906 191.390625 -175.390625 C 201.128906 -165.660156 208.796875 -154.460938 214.390625 -141.796875 C 219.992188 -129.128906 222.796875 -115.460938 222.796875 -100.796875 C 222.796875 -86.398438 219.992188 -72.867188 214.390625 -60.203125 C 208.796875 -47.535156 201.128906 -36.332031 191.390625 -26.59375 C 181.660156 -16.863281 170.328125 -9.265625 157.390625 -3.796875 C 144.460938 1.671875 130.800781 4.40625 116.40625 4.40625 C 102 4.40625 88.460938 1.671875 75.796875 -3.796875 C 63.128906 -9.265625 51.992188 -16.863281 42.390625 -26.59375 C 32.796875 -36.332031 25.265625 -47.535156 19.796875 -60.203125 C 14.328125 -72.867188 11.59375 -86.398438 11.59375 -100.796875 C 11.59375 -120.265625 16.328125 -138 25.796875 -154 C 35.265625 -170 47.929688 -182.734375 63.796875 -192.203125 C 79.660156 -201.671875 97.195312 -206.40625 116.40625 -206.40625 Z M 116.40625 -52 C 130.269531 -52 141.800781 -56.53125 151 -65.59375 C 160.195312 -74.664062 164.796875 -86.398438 164.796875 -100.796875 C 164.796875 -114.929688 160.195312 -126.597656 151 -135.796875 C 141.800781 -144.992188 130.269531 -149.59375 116.40625 -149.59375 C 103.332031 -149.59375 92.195312 -144.992188 83 -135.796875 C 73.800781 -126.597656 69.203125 -114.929688 69.203125 -100.796875 C 69.203125 -86.398438 73.800781 -74.664062 83 -65.59375 C 92.195312 -56.53125 103.332031 -52 116.40625 -52 Z M 116.40625 -52"/><path transform="translate(841.792207 810.576174)" d="M 217.203125 -100.796875 L 217.203125 0 L 160.40625 0 L 160.40625 -100.796875 C 160.40625 -118.128906 156.335938 -130.59375 148.203125 -138.1875 C 140.066406 -145.789062 129.597656 -149.59375 116.796875 -149.59375 C 109.867188 -149.59375 103.335938 -147.394531 97.203125 -143 C 91.066406 -138.601562 86.128906 -132.738281 82.390625 -125.40625 C 78.660156 -118.070312 76.796875 -109.867188 76.796875 -100.796875 L 76.796875 0 L 20 0 L 20 -202 L 76.796875 -202 L 76.796875 -188 C 81.328125 -193.601562 88.523438 -198.070312 98.390625 -201.40625 C 108.265625 -204.738281 117.601562 -206.40625 126.40625 -206.40625 C 141.332031 -206.40625 154.992188 -203.40625 167.390625 -197.40625 C 179.796875 -191.40625 188.929688 -183.738281 194.796875 -174.40625 C 201.203125 -182.9375 208.671875 -189.535156 217.203125 -194.203125 C 225.734375 -198.867188 234.398438 -202.066406 243.203125 -203.796875 C 252.003906 -205.535156 259.867188 -206.40625 266.796875 -206.40625 C 287.597656 -206.40625 304.796875 -201.671875 318.390625 -192.203125 C 331.992188 -182.734375 342.128906 -170 348.796875 -154 C 355.460938 -138 358.796875 -120.265625 358.796875 -100.796875 L 358.796875 0 L 302.40625 0 L 302.40625 -100.796875 C 302.40625 -116.265625 298.335938 -128.265625 290.203125 -136.796875 C 282.066406 -145.328125 272.265625 -149.59375 260.796875 -149.59375 C 248.535156 -149.59375 238.203125 -144.789062 229.796875 -135.1875 C 221.398438 -125.59375 217.203125 -114.128906 217.203125 -100.796875 Z M 217.203125 -100.796875"/><path transform="translate(1197.789217 810.576174)" d="M 54.796875 -56 C 64.128906 -56 71.59375 -53 77.1875 -47 C 82.789062 -41 85.59375 -33.734375 85.59375 -25.203125 C 85.59375 -16.929688 82.789062 -9.796875 77.1875 -3.796875 C 71.59375 2.203125 64.128906 5.203125 54.796875 5.203125 C 45.734375 5.203125 38.332031 2.203125 32.59375 -3.796875 C 26.863281 -9.796875 24 -16.929688 24 -25.203125 C 24 -33.734375 26.863281 -41 32.59375 -47 C 38.332031 -53 45.734375 -56 54.796875 -56 Z M 54.796875 -56"/></g></svg></a
       >
       <button
         class="mobile-close"
@@ -3355,7 +3347,7 @@ SOFTWARE.
       <div class="school-switch">
         <span class="school-icon"
           ><svg class="icon small"><use href="#i-school" /></svg></span
-        ><span><strong>My school space</strong>Grade 10 · Class B</span>
+        ><span><strong>My school space</strong><span id="school-space-line"></span></span>
       </div>
       <p class="nav-label">My learning</p>
       <nav class="nav" aria-label="Learning">
@@ -3371,7 +3363,7 @@ SOFTWARE.
           ><svg class="icon"><use href="#i-check" /></svg>My tasks<span
             class="badge"
             id="nav-task-count"
-            >3</span
+            >0</span
           ></a
         ><a href="#assignments" data-view="assignments"
           ><svg class="icon"><use href="#i-file" /></svg>Assignments</a
@@ -3404,7 +3396,7 @@ SOFTWARE.
           <svg class="icon small" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3M13 13.5 16.5 10 13 6.5M16.5 10H8"/></svg>Sign out
         </a>
         <div class="sidebar-footer">
-          <i></i>Student preview <span style="margin-left: auto">v.04</span>
+          <i></i>Chom Learn <span style="margin-left: auto">v.04</span>
         </div>
       </div>
     </aside>
@@ -3447,10 +3439,10 @@ SOFTWARE.
         <button
           class="quick-button"
           data-action="profile"
-          aria-label="Amara's profile"
+          aria-label="Your profile"
           data-hint="Your profile"
         >
-          <span class="avatar" aria-hidden="true">AN</span>
+          <span class="avatar" aria-hidden="true"></span>
         </button>
       </nav>
       <main class="page" id="main" tabindex="-1"></main>
@@ -3470,8 +3462,69 @@ SOFTWARE.
     </dialog>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script>
+      // The signed-in student's real details (name, class, subjects, teachers, goals).
+      // There is no sample data: signed out goes to sign in, a teacher or parent is
+      // offered their own dashboard, and a failed load says so. It never resolves to null.
       (() => {
+        const never = new Promise(() => {});
+        function stop(title, body, actions) {
+          const show = () => {
+            document.body.innerHTML = `<main style="min-height:100vh;display:grid;place-items:center;padding:24px;background:#EEEBDA;color:#282B4A;font-family:inherit"><div style="max-width:440px;text-align:center"><svg viewBox="200.19 508.58 1087.19 311.20" height="28" style="display:block;margin:0 auto 24px" role="img" aria-label="Chom"><g fill="#282B4A"><path transform="translate(192.597776 810.576174)" d="M 164.40625 -92.796875 L 222.796875 -92.796875 C 221.460938 -74.929688 215.863281 -58.597656 206 -43.796875 C 196.132812 -28.992188 183.398438 -17.257812 167.796875 -8.59375 C 152.203125 0.0703125 135.070312 4.40625 116.40625 4.40625 C 102 4.40625 88.460938 1.671875 75.796875 -3.796875 C 63.128906 -9.265625 51.992188 -16.863281 42.390625 -26.59375 C 32.796875 -36.332031 25.265625 -47.535156 19.796875 -60.203125 C 14.328125 -72.867188 11.59375 -86.398438 11.59375 -100.796875 C 11.59375 -120.265625 16.328125 -138 25.796875 -154 C 35.265625 -170 47.929688 -182.734375 63.796875 -192.203125 C 79.660156 -201.671875 97.195312 -206.40625 116.40625 -206.40625 C 132.9375 -206.40625 148.398438 -202.800781 162.796875 -195.59375 C 177.203125 -188.394531 189.335938 -178.796875 199.203125 -166.796875 L 154 -131.59375 C 148.9375 -138.257812 143.132812 -142.925781 136.59375 -145.59375 C 130.0625 -148.257812 123.332031 -149.59375 116.40625 -149.59375 C 103.332031 -149.59375 92.195312 -144.992188 83 -135.796875 C 73.800781 -126.597656 69.203125 -114.929688 69.203125 -100.796875 C 69.203125 -86.398438 73.800781 -74.664062 83 -65.59375 C 92.195312 -56.53125 103.332031 -52 116.40625 -52 C 128.9375 -52 139.597656 -55.734375 148.390625 -63.203125 C 157.191406 -70.671875 162.53125 -80.535156 164.40625 -92.796875 Z M 164.40625 -92.796875"/><path transform="translate(406.595955 810.576174)" d="M 223.59375 -100.796875 L 223.59375 0 L 167.203125 0 L 167.203125 -100.796875 C 167.203125 -117.066406 163.132812 -129.265625 155 -137.390625 C 146.863281 -145.523438 136.929688 -149.59375 125.203125 -149.59375 C 116.929688 -149.59375 109.0625 -147.523438 101.59375 -143.390625 C 94.132812 -139.265625 88.132812 -133.535156 83.59375 -126.203125 C 79.0625 -118.867188 76.796875 -110.398438 76.796875 -100.796875 L 76.796875 0 L 20 0 L 20 -298 L 76.796875 -298 L 76.796875 -187.59375 C 82.128906 -194.257812 90.0625 -199.0625 100.59375 -202 C 111.132812 -204.9375 120.9375 -206.40625 130 -206.40625 C 148.394531 -206.40625 164.660156 -201.671875 178.796875 -192.203125 C 192.929688 -182.734375 203.929688 -170 211.796875 -154 C 219.660156 -138 223.59375 -120.265625 223.59375 -100.796875 Z M 223.59375 -100.796875"/><path transform="translate(627.394031 810.576174)" d="M 116.40625 -206.40625 C 130.800781 -206.40625 144.460938 -203.671875 157.390625 -198.203125 C 170.328125 -192.734375 181.660156 -185.128906 191.390625 -175.390625 C 201.128906 -165.660156 208.796875 -154.460938 214.390625 -141.796875 C 219.992188 -129.128906 222.796875 -115.460938 222.796875 -100.796875 C 222.796875 -86.398438 219.992188 -72.867188 214.390625 -60.203125 C 208.796875 -47.535156 201.128906 -36.332031 191.390625 -26.59375 C 181.660156 -16.863281 170.328125 -9.265625 157.390625 -3.796875 C 144.460938 1.671875 130.800781 4.40625 116.40625 4.40625 C 102 4.40625 88.460938 1.671875 75.796875 -3.796875 C 63.128906 -9.265625 51.992188 -16.863281 42.390625 -26.59375 C 32.796875 -36.332031 25.265625 -47.535156 19.796875 -60.203125 C 14.328125 -72.867188 11.59375 -86.398438 11.59375 -100.796875 C 11.59375 -120.265625 16.328125 -138 25.796875 -154 C 35.265625 -170 47.929688 -182.734375 63.796875 -192.203125 C 79.660156 -201.671875 97.195312 -206.40625 116.40625 -206.40625 Z M 116.40625 -52 C 130.269531 -52 141.800781 -56.53125 151 -65.59375 C 160.195312 -74.664062 164.796875 -86.398438 164.796875 -100.796875 C 164.796875 -114.929688 160.195312 -126.597656 151 -135.796875 C 141.800781 -144.992188 130.269531 -149.59375 116.40625 -149.59375 C 103.332031 -149.59375 92.195312 -144.992188 83 -135.796875 C 73.800781 -126.597656 69.203125 -114.929688 69.203125 -100.796875 C 69.203125 -86.398438 73.800781 -74.664062 83 -65.59375 C 92.195312 -56.53125 103.332031 -52 116.40625 -52 Z M 116.40625 -52"/><path transform="translate(841.792207 810.576174)" d="M 217.203125 -100.796875 L 217.203125 0 L 160.40625 0 L 160.40625 -100.796875 C 160.40625 -118.128906 156.335938 -130.59375 148.203125 -138.1875 C 140.066406 -145.789062 129.597656 -149.59375 116.796875 -149.59375 C 109.867188 -149.59375 103.335938 -147.394531 97.203125 -143 C 91.066406 -138.601562 86.128906 -132.738281 82.390625 -125.40625 C 78.660156 -118.070312 76.796875 -109.867188 76.796875 -100.796875 L 76.796875 0 L 20 0 L 20 -202 L 76.796875 -202 L 76.796875 -188 C 81.328125 -193.601562 88.523438 -198.070312 98.390625 -201.40625 C 108.265625 -204.738281 117.601562 -206.40625 126.40625 -206.40625 C 141.332031 -206.40625 154.992188 -203.40625 167.390625 -197.40625 C 179.796875 -191.40625 188.929688 -183.738281 194.796875 -174.40625 C 201.203125 -182.9375 208.671875 -189.535156 217.203125 -194.203125 C 225.734375 -198.867188 234.398438 -202.066406 243.203125 -203.796875 C 252.003906 -205.535156 259.867188 -206.40625 266.796875 -206.40625 C 287.597656 -206.40625 304.796875 -201.671875 318.390625 -192.203125 C 331.992188 -182.734375 342.128906 -170 348.796875 -154 C 355.460938 -138 358.796875 -120.265625 358.796875 -100.796875 L 358.796875 0 L 302.40625 0 L 302.40625 -100.796875 C 302.40625 -116.265625 298.335938 -128.265625 290.203125 -136.796875 C 282.066406 -145.328125 272.265625 -149.59375 260.796875 -149.59375 C 248.535156 -149.59375 238.203125 -144.789062 229.796875 -135.1875 C 221.398438 -125.59375 217.203125 -114.128906 217.203125 -100.796875 Z M 217.203125 -100.796875"/><path transform="translate(1197.789217 810.576174)" d="M 54.796875 -56 C 64.128906 -56 71.59375 -53 77.1875 -47 C 82.789062 -41 85.59375 -33.734375 85.59375 -25.203125 C 85.59375 -16.929688 82.789062 -9.796875 77.1875 -3.796875 C 71.59375 2.203125 64.128906 5.203125 54.796875 5.203125 C 45.734375 5.203125 38.332031 2.203125 32.59375 -3.796875 C 26.863281 -9.796875 24 -16.929688 24 -25.203125 C 24 -33.734375 26.863281 -41 32.59375 -47 C 38.332031 -53 45.734375 -56 54.796875 -56 Z M 54.796875 -56"/></g></svg><h1 style="font-size:28px;margin:0 0 12px">${title}</h1><p style="margin:0 0 24px;line-height:1.5">${body}</p><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">${actions}</div></div></main>`;
+          };
+          if (document.body) show();
+          else document.addEventListener("DOMContentLoaded", show, { once: true });
+          return never;
+        }
+        const button = (href, label, primary) =>
+          `<a href="${href}" style="display:inline-block;padding:12px 20px;border-radius:999px;font-weight:600;text-decoration:none;${primary ? "background:#282B4A;color:#EEEBDA" : "border:1px solid #282B4A;color:#282B4A"}">${label}</a>`;
+        // A server error (5xx) is retried once like a dropped connection; 401 and 403 aren't.
+        const load = () =>
+          fetch("/api/student/me", { credentials: "same-origin", redirect: "manual", cache: "no-store" }).then(
+            (r) => {
+              if (r.status >= 500) throw new Error(String(r.status));
+              return r;
+            },
+          );
+        window.chomMe = load()
+          .catch(() => new Promise((r) => setTimeout(r, 800)).then(load))
+          .then((r) => {
+            if (r.ok) return r.json();
+            // A redirect (e.g. to sign in) reaches us opaque, as status 0: treat it as signed out.
+            if (r.status === 401 || r.type === "opaqueredirect") {
+              location.replace("/sign-in");
+              return never;
+            }
+            if (r.status === 403)
+              return stop(
+                "This is the student dashboard",
+                "You’re signed in with a teacher or parent account in this browser. Go to your own dashboard, or sign out to sign in as a student.",
+                button("/start", "Go to my dashboard", true) + button("/sign-out", "Sign out", false),
+              );
+            throw new Error(String(r.status));
+          })
+          .catch(() =>
+            stop(
+              "We couldn’t load your dashboard",
+              "Check your connection and try again.",
+              button(location.pathname, "Try again", true),
+            ),
+          );
+      })();
+    </script>
+    <script>
+      (async () => {
         "use strict";
+        const me = await window.chomMe;
+        // The student's real tasks: their teachers' work and their own reminders.
+        const liveTasks = await fetch("/api/student/tasks", { credentials: "same-origin", redirect: "manual", cache: "no-store" })
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d) => (d && Array.isArray(d.tasks) ? d.tasks : null))
+          .catch(() => null);
+        // The list didn't load: say so, rather than "all caught up".
+        const tasksFailed = !liveTasks;
+        const tasksFailedNote = `<p class="task-empty" role="alert">We couldn’t load your tasks. <button type="button" class="text-button" data-action="reload-page">Try again</button></p>`;
+        if (!me.today)
+          me.today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Johannesburg" });
         const $ = (s) => document.querySelector(s),
           $$ = (s) => [...document.querySelectorAll(s)];
         const icon = (name, small = false) =>
@@ -3488,53 +3541,9 @@ SOFTWARE.
                 "'": "&#39;",
               })[c],
           );
-        const initialTasks = [
-          {
-            id: "maths",
-            title: "Exercise 4.2: quadratic equations",
-            subject: "Maths",
-            when: "today",
-            time: "15:00",
-            done: false,
-          },
-          {
-            id: "english",
-            title: "Reading log, chapter 6",
-            subject: "English",
-            when: "today",
-            time: "Today",
-            done: false,
-          },
-          {
-            id: "history",
-            title: "Outline your WWI essay",
-            subject: "History",
-            when: "today",
-            time: "Today",
-            done: false,
-          },
-          {
-            id: "afrikaans",
-            title: "Practise your vocabulary set",
-            subject: "Afrikaans",
-            when: "today",
-            time: "Done",
-            done: true,
-          },
-          {
-            id: "science",
-            title: "Complete your lab prep sheet",
-            subject: "Science",
-            when: "upcoming",
-            time: "Tomorrow",
-            done: false,
-          },
-        ];
+        const storeKey = `chom-learn-v2:${me.id}`;
         const defaults = {
-          tasks: initialTasks,
           notes: "",
-          assignmentNotes: {},
-          assignmentProgress: { history: 60, science: 20 },
           focus: false,
           theme: "light",
           notificationsRead: false,
@@ -3543,36 +3552,39 @@ SOFTWARE.
           saved = {};
         try {
           saved =
-            JSON.parse(localStorage.getItem("chom-learn-v2") || "{}") || {};
+            JSON.parse(localStorage.getItem(storeKey) || "{}") || {};
         } catch (e) {
           storageAvailable = false;
         }
-        const state = {
-          ...defaults,
-          ...saved,
-          tasks:
-            Array.isArray(saved.tasks) &&
-            saved.tasks.every(
-              (t) =>
-                t &&
-                typeof t.id === "string" &&
-                typeof t.title === "string" &&
-                typeof t.subject === "string",
-            )
-              ? saved.tasks
-              : initialTasks,
-          assignmentNotes: {
-            ...defaults.assignmentNotes,
-            ...saved.assignmentNotes,
-          },
-          assignmentProgress: {
-            ...defaults.assignmentProgress,
-            ...saved.assignmentProgress,
-          },
-        };
+        const state = { ...defaults, ...saved };
+        // A real task in the shape the page draws: due today (or overdue, or no date)
+        // goes under Today; a later date under Upcoming.
+        function fromServer(t) {
+          const dueDay = t.dueAt
+            ? new Date(t.dueAt).toLocaleDateString("en-CA", { timeZone: "Africa/Johannesburg" })
+            : null;
+          const label = !dueDay
+            ? "Anytime"
+            : dueDay < me.today
+              ? `Overdue · ${shortDue(dueDay)}`
+              : dueDay === me.today
+                ? "Due today"
+                : `Due ${shortDue(dueDay)}`;
+          return {
+            ...t,
+            subject: t.subject || "My task",
+            when: !dueDay || dueDay <= me.today ? "today" : "upcoming",
+            time: label,
+            dueDay,
+          };
+        }
+        function shortDue(iso) {
+          const m = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+          return `${Number(iso.slice(8, 10))} ${m[Number(iso.slice(5, 7)) - 1]}`;
+        }
+        state.tasks = (liveTasks || []).map(fromServer);
         let currentView = "dashboard",
           taskFilter = "today",
-          selectedDay = 1,
           toastTimer,
           lastFocused;
         const views = {
@@ -3587,75 +3599,40 @@ SOFTWARE.
           messages: "Messages",
           settings: "Settings",
         };
-        const slotTimes = [
-          ["09:40", "10:30"],
-          ["10:35", "11:25"],
-          ["11:30", "12:20"],
-          ["12:25", "13:15"],
-          ["13:45", "14:35"],
-          ["14:40", "15:30"],
-        ];
-        const subjectList = [
-          { id: "maths", name: "Mathematics", short: "Ma", room: "Room 12", teacher: "Mr Dlamini", color: "#1967d2" },
-          { id: "english", name: "English", short: "En", room: "Room 4", teacher: "Ms Naidoo", color: "#129eaf" },
-          { id: "afrikaans", name: "Afrikaans", short: "Af", room: "Room 7", teacher: "", color: "#e8710a" },
-          { id: "life-sciences", name: "Life Sciences", short: "Ls", room: "Lab 2", teacher: "", color: "#1e8e3e" },
-          { id: "geography", name: "Geography", short: "Gg", room: "Room 15", teacher: "", color: "#9334e6" },
-          { id: "history", name: "History", short: "Hi", room: "Room 9", teacher: "", color: "#c5221f" },
-          { id: "art", name: "Art", short: "Ar", room: "Art studio", teacher: "", color: "#e52592" },
-        ];
-        // Sample "now": Tuesday, during period 1.
-        const today = 1,
-          nowSlot = 0;
-        const weekly = [
-          [
-            "English",
-            "Mathematics",
-            "Afrikaans",
-            "Geography",
-            "Life Sciences",
-            "Art",
-          ],
-          [
-            "Mathematics",
-            "English",
-            "Life Sciences",
-            "History",
-            "Afrikaans",
-            "Art",
-          ],
-          [
-            "Geography",
-            "Mathematics",
-            "English",
-            "Life Sciences",
-            "History",
-            "Art",
-          ],
-          [
-            "Afrikaans",
-            "History",
-            "Mathematics",
-            "English",
-            "Geography",
-            "Life Sciences",
-          ],
-          [
-            "Mathematics",
-            "Life Sciences",
-            "Art",
-            "Geography",
-            "English",
-            "History",
-          ],
-        ];
-        const dayNames = [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-        ];
+        const subjectList = [];
+        const palette = ["#1967d2", "#129eaf", "#e8710a", "#1e8e3e", "#9334e6", "#c5221f", "#e52592", "#5f6368"];
+        const shortName = (raw) => {
+          const name = String(raw ?? "").trim();
+          const words = name.split(/\s+/).filter(Boolean);
+          return words.length > 1 && !/Language$/.test(name)
+            ? words[0][0] + words[1][0].toLowerCase()
+            : name.slice(0, 2);
+        };
+        me.subjects.forEach((s, i) =>
+            subjectList.push({
+              id: s.id,
+              name: s.name,
+              short: shortName(s.name),
+              room: "",
+              teacher: s.teacher,
+              color: palette[i % palette.length],
+              isFocus: s.isFocus,
+              target: s.target,
+              units: Array.isArray(s.units) ? s.units : [],
+            }),
+        );
+        const displayName = me.firstName;
+        const initials = me.initials;
+        const gradeShort = me.registerClass || `Grade ${me.grade ?? ""}`;
+        const gradeLine = [me.grade != null ? `Grade ${me.grade}` : "", me.registerClass ? `Class ${me.registerClass}` : ""]
+          .filter(Boolean)
+          .join(" · ");
+        $("#school-space-line").textContent = gradeLine;
+        $$('[data-action="profile"]').forEach((b) => {
+          b.setAttribute("aria-label", `${me.firstName}'s profile`);
+          const a = b.querySelector(".avatar");
+          if (a) a.textContent = me.initials;
+        });
         const remaining = () =>
           state.tasks.filter((t) => t.when === "today" && !t.done).length;
         function applyTheme() {
@@ -3666,7 +3643,7 @@ SOFTWARE.
         }
         function save() {
           try {
-            localStorage.setItem("chom-learn-v2", JSON.stringify(state));
+            localStorage.setItem(storeKey, JSON.stringify(state));
             return true;
           } catch (e) {
             storageAvailable = false;
@@ -3690,50 +3667,40 @@ SOFTWARE.
           );
         }
         function footer() {
-          return `<footer class="page-footer"><span>${icon("heart")}A little support. A lot of possibility.</span><span>Sample school data · Your changes stay on this device</span></footer>`;
+          return `<footer class="page-footer"><span>${icon("heart")}A little support. A lot of possibility.</span><span>${esc(me.schoolName)} · Tasks you add stay on this device</span></footer>`;
         }
-        function subjectInfo(name) {
-          return subjectList.find((x) => x.name === name);
+        // Dates from the school's calendar are plain YYYY-MM-DD days.
+        const day = (iso, opts) => new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-ZA", { timeZone: "UTC", ...opts });
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const shortDay = (iso) => `${Number(iso.slice(8, 10))} ${months[Number(iso.slice(5, 7)) - 1]}`;
+        function unitNow(x) {
+          const now = x.units.filter((u) => u.status === "now");
+          // An all-year unit (Physical Education) runs alongside the others: prefer the one that started last.
+          const current = now.sort((a, b) => (a.startsOn < b.startsOn ? 1 : -1))[0];
+          if (current) return { label: "Now", title: current.title };
+          const next = x.units.find((u) => u.status === "upcoming");
+          if (me.contentEndsOn && me.today > me.contentEndsOn)
+            return { label: "Revision", title: x.units.length ? "All units covered" : "Revise for exams" };
+          if (next) return { label: "Next", title: `${next.title} · ${shortDay(next.startsOn)}` };
+          return { label: "Your goal", title: x.target ? x.target + "%" : "Not set" };
         }
-        function lessonsOf(subject) {
-          return weekly.flatMap((titles, day) =>
-            titles.flatMap((t, slot) => (t === subject.name ? [{ day, slot }] : [])),
-          );
+        function liveClassCard(x) {
+          return `<button class="cd-class" data-action="subject" data-subject="${esc(x.id)}"><span class="cd-class-top"><span class="cd-avatar" aria-hidden="true">${esc(x.short)}</span>${x.isFocus ? '<span class="cd-pill small">Focus</span>' : ""}</span><span><strong>${esc(x.name)}</strong><small>${esc(gradeShort)} · ${esc(x.teacher || "Teacher to be confirmed")}${x.target ? ` · Goal ${x.target}%` : ""}</small></span><span class="cd-next"><span>${esc(unitNow(x).label)}</span><b>${esc(unitNow(x).title)}</b></span></button>`;
         }
-        function nextLesson(subject) {
-          const lessons = lessonsOf(subject);
-          return (
-            lessons.find(
-              (l) => l.day > today || (l.day === today && l.slot >= nowSlot),
-            ) || lessons[0]
-          );
-        }
-        function lessonLabel(l) {
-          if (l.day === today && l.slot === nowSlot) return "On now";
-          return `${l.day === today ? "Today" : dayNames[l.day].slice(0, 3)} · ${slotTimes[l.slot][0]}`;
-        }
-        function subjectsPanel() {
-          return `<section class="cd-section" aria-labelledby="subjects-title"><div class="cd-head"><div><span class="cd-label">My subjects</span><h2 id="subjects-title">Your classes</h2></div><a class="text-button" href="#subjects">All subjects ${icon("arrow", true)}</a></div><div class="cd-classes">${subjectList
-            .map((x) => {
-              const next = nextLesson(x),
-                live = next.day === today && next.slot === nowSlot;
-              return `<button class="cd-class ${live ? "live" : ""}" data-action="subject" data-subject="${x.id}"><span class="cd-class-top"><span class="cd-avatar" aria-hidden="true">${x.short}</span>${live ? '<span class="cd-pill small">Live</span>' : ""}</span><span><strong>${x.name}</strong><small>Grade 10B · ${x.teacher || x.room}</small></span><span class="cd-next"><span>${live ? "Happening now" : "Next lesson"}</span><b>${live ? x.room : lessonLabel(next)}</b></span></button>`;
-            })
-            .join("")}</div></section>`;
+        function comingSoon(title, copy) {
+          return `<section class="panel"><div class="cd-head"><div><span class="cd-label">Coming soon</span><h2>${title}</h2></div></div><p class="muted" style="margin:0;padding:0 24px 28px">${copy}</p></section>`;
         }
         function dueLabel(t) {
-          if (t.done) return "Done";
-          if (t.when === "upcoming") return "Due " + String(t.time).toLowerCase();
-          return /^\d/.test(t.time) ? "Due by " + t.time : "Due today";
+          return t.done ? "Done" : t.time;
         }
         function dashTaskRow(t) {
-          return `<li><label class="dt-row ${t.done ? "done" : ""}"><span class="dt-copy"><span class="dt-name">${esc(t.title)}</span><span class="dt-subject">${esc(t.subject)}</span></span><span class="dt-due ${t.done ? "is-done" : ""}">${esc(dueLabel(t))}</span><input type="checkbox" class="dt-check" data-task="${esc(t.id)}" aria-label="Mark ${esc(t.title)} as done" ${t.done ? "checked" : ""}></label></li>`;
+          return `<li><div class="dt-row ${t.done ? "done" : ""}"><span class="dt-copy"><button type="button" class="dt-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button><span class="dt-subject">${esc(t.subject)}</span></span><span class="dt-due ${t.done ? "is-done" : ""}">${esc(dueLabel(t))}</span><input type="checkbox" class="dt-check" data-task="${esc(t.id)}" aria-label="Mark ${esc(t.title)} as done" ${t.done ? "checked" : ""}></div></li>`;
         }
         function dashTasks() {
           const today = state.tasks.filter((t) => t.when === "today"),
             upcoming = state.tasks.filter((t) => t.when === "upcoming"),
             left = remaining();
-          return `<div class="dt-group"><h3 class="dt-group-title">Due today <span>${left ? left + " left" : "All done"}</span></h3>${today.length ? `<ul class="dt-list">${today.map(dashTaskRow).join("")}</ul>` : `<p class="task-empty">Nothing due today. You’re all caught up.</p>`}</div>${upcoming.length ? `<div class="dt-group"><h3 class="dt-group-title">Coming up</h3><ul class="dt-list">${upcoming.map(dashTaskRow).join("")}</ul></div>` : ""}`;
+          return `<div class="dt-group"><h3 class="dt-group-title">Due today <span>${tasksFailed ? "" : left ? left + " left" : "All done"}</span></h3>${today.length ? `<ul class="dt-list">${today.map(dashTaskRow).join("")}</ul>` : tasksFailed ? tasksFailedNote : `<p class="task-empty">Nothing due today. You’re all caught up.</p>`}</div>${upcoming.length ? `<div class="dt-group"><h3 class="dt-group-title">Coming up</h3><ul class="dt-list">${upcoming.map(dashTaskRow).join("")}</ul></div>` : ""}`;
         }
         function tasksMarkup() {
           const list = state.tasks.filter((t) =>
@@ -3743,42 +3710,30 @@ SOFTWARE.
                 ? t.when === "upcoming" && !t.done
                 : t.when === "today",
           );
-          return `<div class="filter-row" role="tablist" aria-label="Task filters">${["today", "upcoming", "done"].map((f) => `<button class="filter ${taskFilter === f ? "active" : ""}" role="tab" aria-selected="${taskFilter === f}" aria-controls="task-results" data-filter="${f}">${{ today: "Today", upcoming: "Upcoming", done: "Completed" }[f]}<span>${state.tasks.filter((t) => (f === "done" ? t.done : f === "upcoming" ? t.when === "upcoming" && !t.done : t.when === "today")).length}</span></button>`).join("")}</div><div class="task-list" id="task-results" role="tabpanel" aria-label="${taskFilter} tasks">${list.length ? list.map((t) => `<div class="task-row ${t.done ? "completed" : ""}"><label class="task-check"><input type="checkbox" data-task="${esc(t.id)}" aria-label="Complete ${esc(t.title)}" ${t.done ? "checked" : ""}></label><div class="task-content"><span class="task-name">${esc(t.title)}</span><span class="task-sub"><i class="subject-dot ${esc(t.subject)}"></i>${esc(t.subject)}</span></div><span class="due ${t.done ? "done" : ""}">${t.done ? "Completed" : esc(t.time === "Done" ? "Today" : t.time)}</span></div>`).join("") : `<p class="task-empty">${taskFilter === "done" ? "Your completed tasks will appear here." : taskFilter === "upcoming" ? "A little breathing room. No upcoming tasks." : "Nothing due today. You’re all caught up."}</p>`}</div>`;
+          return `<div class="filter-row" role="tablist" aria-label="Task filters">${["today", "upcoming", "done"].map((f) => `<button class="filter ${taskFilter === f ? "active" : ""}" role="tab" aria-selected="${taskFilter === f}" aria-controls="task-results" data-filter="${f}">${{ today: "Today", upcoming: "Upcoming", done: "Completed" }[f]}<span>${state.tasks.filter((t) => (f === "done" ? t.done : f === "upcoming" ? t.when === "upcoming" && !t.done : t.when === "today")).length}</span></button>`).join("")}</div><div class="task-list" id="task-results" role="tabpanel" aria-label="${taskFilter} tasks">${list.length ? list.map((t) => `<div class="task-row ${t.done ? "completed" : ""}"><label class="task-check"><input type="checkbox" data-task="${esc(t.id)}" aria-label="Complete ${esc(t.title)}" ${t.done ? "checked" : ""}></label><div class="task-content"><button type="button" class="task-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button><span class="task-sub"><i class="subject-dot ${esc(t.subject)}"></i>${esc(t.subject)}</span></div><span class="due ${t.done ? "done" : ""}">${t.done ? "Completed" : esc(t.time)}</span></div>`).join("") : tasksFailed ? tasksFailedNote : `<p class="task-empty">${taskFilter === "done" ? "Your completed tasks will appear here." : taskFilter === "upcoming" ? "A little breathing room. No upcoming tasks." : "Nothing due today. You’re all caught up."}</p>`}</div>`;
         }
-        function scheduleRows(day) {
-          const slot = (i) => {
-            const x = subjectInfo(weekly[day][i]),
-              now = day === today && i === nowSlot;
-            return `<li class="slot ${now ? "now" : ""}" style="--c:${x.color}"><time class="slot-time">${slotTimes[i][0]}</time><div class="slot-body"><h3>${x.name}${now ? '<span class="now-tag">Now</span>' : ""}</h3><p>${x.room}${x.teacher ? " · " + x.teacher : ""}</p></div></li>`;
-          };
-          return [0, 1, 2, 3].map(slot).join("") +
-            `<li class="slot break"><time class="slot-time">13:15</time><div class="slot-body"><p>Lunch break · 30 min</p></div></li>` +
-            [4, 5].map(slot).join("");
+        function liveDashboard() {
+          const weekday = day(me.today, { weekday: "long" }),
+            date = day(me.today, { day: "numeric", month: "long", year: "numeric" }),
+            termLabel = me.term ? ` · Term ${me.term.number} · Week ${me.term.week}` : "",
+            focus = subjectList.filter((x) => x.isFocus);
+          return `<div class="cd"><div class="cd-top"><header class="cd-hero"><span class="cd-label">${esc(weekday)} · ${esc(date)}${esc(termLabel)}</span><h1 class="cd-title">Hey, ${esc(displayName)}.</h1><p class="cd-lede">You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></header><section class="cd-stats" aria-label="Your week in numbers"><div class="cd-stat"><span class="cd-num" id="task-count">${remaining()}</span><strong>Tasks due today</strong><small>Tick them off as you go</small></div><div class="cd-stat"><span class="cd-num">${focus.length}</span><strong>Focus subjects</strong><small>${focus.length ? esc(focus.map((x) => x.name).join(", ")) : "Pick them in your answers"}</small></div></section></div><div class="cd-split"><div class="cd-col"><section class="panel dt-panel" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="dt-all" href="#tasks">See all tasks ${icon("arrow", true)}</a></div><div id="dash-tasks">${dashTasks()}</div></section>${comingUp()}</div></div></div>`;
         }
-        function schedulePanel() {
-          return `<section class="panel schedule-panel" aria-labelledby="day-title"><div class="cd-head"><div><span class="cd-label">Your day</span><h2 id="day-title">${dayNames[selectedDay]}, ${5 + selectedDay} October</h2><p class="schedule-subtitle">6 classes · lunch at 13:15</p></div></div><div class="schedule-days" aria-label="School days">${dayNames.map((d, i) => `<button class="day ${i === selectedDay ? "selected" : ""} ${i === today ? "today" : ""}" data-day="${i}" aria-label="${d} ${5 + i} October${i === today ? ", today" : ""}" aria-pressed="${i === selectedDay}">${d.slice(0, 3)}<b>${5 + i}</b></button>`).join("")}</div><ol class="schedule-list">${scheduleRows(selectedDay)}</ol><div class="schedule-footer"><a href="#timetable">View full timetable ${icon("arrow", true)}</a></div></section>`;
-        }
-        function assignmentRows() {
-          return ["history", "science"]
-            .map(
-              (id, i) =>
-                `<button class="cd-acard" data-action="assignment" data-id="${id}"><span class="cd-aicon">${icon(i ? "flask" : "file")}</span><span><strong>${i ? "Osmosis lab report" : "World War I essay"}</strong><small>${i ? "Life Sciences" : "History"} · Due Fri, 9 Oct</small></span><span><span class="cd-bar-label"><span>Drafted</span><span>${state.assignmentProgress[id]}%</span></span><span class="cd-bar"><i style="--value:${state.assignmentProgress[id]}%"></i></span></span></button>`,
-            )
+        function comingUp() {
+          const exams = (me.exams || []).slice(0, 3);
+          const revising = me.contentEndsOn && me.today > me.contentEndsOn;
+          const rows = exams
+            .map((e) => `<li class="slot"><time class="slot-time">${esc(shortDay(e.startsOn))}</time><div class="slot-body"><h3>${esc(e.label)}${e.inProgress ? '<span class="now-tag">Now</span>' : ""}</h3><p>${esc(shortDay(e.startsOn))} – ${esc(shortDay(e.endsOn))}${e.isApproximate ? " · dates to be confirmed" : ""}</p></div></li>`)
             .join("");
-        }
-        function assignmentsPanel() {
-          return `<section class="panel" aria-labelledby="assign-title"><div class="cd-head"><div><span class="cd-label">Assignments</span><h2 id="assign-title">Due this week</h2></div><a class="text-button" href="#assignments">See all assignments ${icon("arrow", true)}</a></div><div class="cd-assign">${assignmentRows()}</div></section>`;
-        }
-        function progressPanel() {
-          return `<section class="progress-panel"><div class="progress-head"><h2>Your progress</h2>${icon("leaf")}</div><div class="progress-visual"><div class="progress-ring"><svg viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="34" fill="none" style="stroke:var(--line)" stroke-width="6"/><circle cx="40" cy="40" r="34" fill="none" style="stroke:var(--orange)" stroke-width="6" stroke-linecap="round" stroke-dasharray="207 214"/></svg><strong>97%</strong></div><div class="progress-message"><strong>Showing up matters.</strong><p>Your attendance this term. Keep making space for learning.</p></div></div><div class="progress-foot"><span>One day at a time.</span><button data-action="navigate" data-view="results">My progress ${icon("arrow", true)}</button></div></section>`;
-        }
-        function schoolPanel() {
-          return `<section class="cd-section" aria-labelledby="beyond-title"><div class="cd-head"><div><span class="cd-label">School life</span><h2 id="beyond-title">Beyond the classroom</h2></div></div><div class="cd-beyond"><button class="cd-service" data-action="service" data-service="sport">${icon("ball")}<span><strong>Sports &amp; activities</strong><small>Hockey, 15:30</small></span></button><button class="cd-service" data-action="service" data-service="transport">${icon("bus")}<span><strong>My transport</strong><small>Bus 14</small></span></button><button class="cd-service" data-action="service" data-service="support">${icon("heart")}<span><strong>Someone to talk to</strong><small>Private, whenever you need it</small></span></button></div></section>`;
+          return `<section class="panel"><div class="cd-head"><div><span class="cd-label">Coming up</span><h2>${exams.length ? "Exams" : "Your term"}</h2></div></div><div style="padding:0 24px 24px">${revising ? `<p class="muted" style="margin:0 0 12px">New content finished on ${esc(day(me.contentEndsOn, { day: "numeric", month: "long" }))}. Time to revise.</p>` : ""}${rows ? `<ul class="schedule-list" style="list-style:none;margin:0;padding:0">${rows}</ul>` : `<p class="muted" style="margin:0">No exams coming up${me.term ? `. Term ${me.term.number} ends on ${esc(day(me.term.endsOn, { day: "numeric", month: "long" }))}.` : "."}</p>`}</div></section>`;
         }
         function dashboard() {
-          const nowClass = subjectInfo(weekly[today][nowSlot]),
-            nextClass = subjectInfo(weekly[today][nowSlot + 1]);
-          return `<div class="cd"><div class="cd-top"><header class="cd-hero"><span class="cd-label">Tuesday · 6 October 2026</span><h1 class="cd-title">Hey, Amara.</h1><p class="cd-lede">You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></header><section class="cd-stats" aria-label="Your week in numbers"><div class="cd-stat"><span class="cd-num" id="task-count">${remaining()}</span><strong>Tasks due today</strong><small>Tick them off as you go</small></div><div class="cd-stat"><span class="cd-num">2</span><strong>Assignments due</strong><small>Friday, 9 October</small></div></section></div><section class="cd-now" aria-label="Happening now"><div class="cd-now-main"><span class="cd-pill">On now</span><div><span class="cd-now-title">${nowClass.name}</span><span>${nowClass.room}${nowClass.teacher ? " · " + nowClass.teacher : ""} · ${slotTimes[nowSlot][0]}–${slotTimes[nowSlot][1]}</span></div></div><div class="cd-now-side"><span>Next: ${nextClass.name}, ${slotTimes[nowSlot + 1][0]}</span><button class="cd-cta" data-action="subject" data-subject="${nowClass.id}">Open class ${icon("arrow", true)}</button></div></section><div class="cd-split"><div class="cd-col"><section class="panel dt-panel" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="dt-all" href="#tasks">See all tasks ${icon("arrow", true)}</a></div><div id="dash-tasks">${dashTasks()}</div></section>${assignmentsPanel()}</div></div></div>`;
+          return liveDashboard();
+        }
+        function liveSubjects() {
+          return viewHeader("My subjects", `${esc(gradeLine)} · ${esc(me.schoolName)}`) +
+            `<section class="cd-section"><div class="cd-classes">${subjectList.map(liveClassCard).join("")}</div></section>` +
+            `<div class="notice">Class notes and worksheets appear here when your teachers share them.</div>`;
         }
         function viewHeader(title, copy, extra = "") {
           return `<header class="view-header"><div><h1>${title}</h1><p>${copy}</p></div>${extra}</header>`;
@@ -3799,7 +3754,16 @@ SOFTWARE.
           $("#notification-dot").hidden = !!state.notificationsRead;
           let html = "";
           if (currentView === "dashboard") html = dashboard();
-          if (currentView === "subjects") html = School.student();
+          if (currentView === "subjects") html = liveSubjects();
+          if (currentView === "timetable")
+            html = viewHeader("A little structure for your week.", `${esc(gradeLine)} · ${esc(me.yearLabel)}`) +
+              comingSoon("Your timetable is on its way", `Your lesson times will appear here once ${esc(me.schoolName)} loads its timetable. What each subject is teaching this term is in My subjects.`);
+          if (currentView === "assignments")
+            html = viewHeader("Good work takes a little planning.", "Keep your drafts and deadlines in one place.") +
+              comingSoon("No assignments yet", "When your teachers set assignments, they’ll appear here with their due dates.");
+          if (currentView === "results")
+            html = viewHeader("See how far you’re coming.", "Use your results to find your next small step.") +
+              comingSoon("No results yet", "Your marks will appear here as your teachers record them, next to the goals you set.");
           if (currentView === "tasks")
             html =
               viewHeader(
@@ -3808,34 +3772,13 @@ SOFTWARE.
                 `<button class="button" data-action="add-task">${icon("plus", true)}Add a task</button>`,
               ) +
               `<section class="panel"><div class="panel-head"><h2>My tasks</h2><span class="muted" id="tasks-summary">${remaining()} left today</span></div><div id="tasks-content">${tasksMarkup()}</div></section>`;
-          if (currentView === "timetable")
-            html =
-              viewHeader(
-                "A little structure for your week.",
-                "5–9 October 2026 · Grade 10B · Sample school timetable",
-              ) +
-              `<section class="panel"><div class="panel-head"><h2>This week</h2><span class="date-pill">Term 4 · Week 2</span></div><div class="table-wrap"><div class="week-grid">${dayNames.map((d, di) => `<div class="week-col"><h3>${d.slice(0, 3)} <span class="muted">${di + 5} Oct</span></h3>${weekly[di].map((s, i) => `<div class="week-class" style="--c:${subjectInfo(s).color}"><time>${["09:40", "10:35", "11:30", "12:25", "13:45", "14:40"][i]}</time><strong>${s}</strong><small>Period ${i + 1}</small></div>`).join("")}</div>`).join("")}</div></div></section><div class="notice">Lunch break: 13:15–13:45. School activities and transport are in School life. On small screens, scroll the timetable sideways to see the week.</div>`;
-          if (currentView === "assignments")
-            html =
-              viewHeader(
-                "Good work takes a little planning.",
-                "Keep your drafts and deadlines in one place.",
-              ) +
-              `<section class="panel"><div class="panel-head"><h2>Due this Friday</h2><span class="count">2</span></div><div class="assignment-list">${assignmentRows()}</div></section><div class="notice">Use each assignment’s workspace to write notes and track your draft. Submission to your school is not connected in this preview.</div>`;
-          if (currentView === "results")
-            html =
-              viewHeader(
-                "See how far you’re coming.",
-                "Use your results to find your next small step.",
-              ) +
-              `<div class="content-grid">${progressPanel()}<section class="content-card"><h3>Your latest result</h3><div class="large-stat">78<span style="font-size:21px">%</span></div><p>Geography · Recent assessment</p><p>Sample result from your dashboard.</p></section></div><h2 class="section-title">Where a little practice could help</h2><section class="panel"><div class="table-wrap"><table class="data-table"><thead><tr><th>Skill</th><th>Subject</th><th>Recent score</th><th>Next step</th></tr></thead><tbody><tr><td>Algebra</td><td>Mathematics</td><td>62%</td><td><button class="text-button" data-action="study" data-topic="algebra">Practise algebra</button></td></tr><tr><td>Lab reports</td><td>Life Sciences</td><td>48%</td><td><button class="text-button" data-action="assignment" data-id="science">Work on your report</button></td></tr><tr><td>Essay structure</td><td>English</td><td>71%</td><td><button class="text-button" data-action="study" data-topic="essay">Build an outline</button></td></tr></tbody></table></div></section>`;
           if (currentView === "chom")
             html =
               viewHeader(
                 "A good place to get unstuck.",
                 "Choose a guided session, try a quick quiz, or collect your thoughts.",
               ) +
-              `<div class="info-strip">Your study preview includes guided exercises and a notebook. Live AI chat is not connected.</div><div class="content-grid"><section class="content-card"><span class="subject-icon">${icon("spark")}</span><h2>Make algebra make sense</h2><p>Break a quadratic equation into smaller, clearer steps.</p><button class="button secondary" data-action="study" data-topic="algebra">Start a session</button></section><section class="content-card"><span class="subject-icon mint">${icon("flask")}</span><h2>A quick osmosis check</h2><p>Three questions to help you see what’s sticking.</p><button class="button secondary" data-action="study" data-topic="quiz">Take the quiz</button></section></div><h2 class="section-title">Your study notebook</h2><section class="content-card"><label for="study-notes" class="muted">An idea, a question, a lightbulb moment. Keep it here.</label><textarea id="study-notes" class="notes-area" maxlength="12000" style="margin-top:12px" placeholder="Today I learned...">${esc(state.notes)}</textarea><div class="form-actions"><button class="button" data-action="save-notes">Save my notes</button></div></section>`;
+              `<div class="info-strip">Guided exercises and a notebook to help you study. Open-ended AI chat is coming soon.</div><div class="content-grid"><section class="content-card"><span class="subject-icon">${icon("spark")}</span><h2>Make algebra make sense</h2><p>Break a quadratic equation into smaller, clearer steps.</p><button class="button secondary" data-action="study" data-topic="algebra">Start a session</button></section><section class="content-card"><span class="subject-icon mint">${icon("flask")}</span><h2>A quick osmosis check</h2><p>Three questions to help you see what’s sticking.</p><button class="button secondary" data-action="study" data-topic="quiz">Take the quiz</button></section></div><h2 class="section-title">Your study notebook</h2><section class="content-card"><label for="study-notes" class="muted">An idea, a question, a lightbulb moment. Keep it here.</label><textarea id="study-notes" class="notes-area" maxlength="12000" style="margin-top:12px" placeholder="Today I learned...">${esc(state.notes)}</textarea><div class="form-actions"><button class="button" data-action="save-notes">Save my notes</button></div></section>`;
           if (currentView === "school")
             html =
               viewHeader(
@@ -3847,7 +3790,7 @@ SOFTWARE.
                   "sport",
                   "ball",
                   "Sports & activities",
-                  "Hockey practice and time for the things you love.",
+                  "Time for the things you love.",
                 ],
                 [
                   "news",
@@ -3859,7 +3802,7 @@ SOFTWARE.
                   "transport",
                   "bus",
                   "Getting home",
-                  "Your bus and after-school travel details.",
+                  "After-school travel details from your school.",
                 ],
                 [
                   "support",
@@ -3891,14 +3834,14 @@ SOFTWARE.
                 "A place to stay in the loop.",
                 "Messages from your teachers and school will live here.",
               ) +
-              `<section class="panel"><div class="empty-message">${icon("message").replace('class="icon"', 'class="icon" style="margin:0 auto 15px;width:32px;height:32px"')}<h2>Your inbox is ready.</h2><p style="margin-top:10px">School messaging isn’t connected in this preview.<br>There are no messages to read or send yet.</p><a class="button secondary" style="margin-top:20px" href="#school">Explore school life</a></div></section>`;
+              `<section class="panel"><div class="empty-message">${icon("message").replace('class="icon"', 'class="icon" style="margin:0 auto 15px;width:32px;height:32px"')}<h2>Your inbox is ready.</h2><p style="margin-top:10px">There are no messages yet.<br>Messages from your teachers and school will show here.</p><a class="button secondary" style="margin-top:20px" href="#school">Explore school life</a></div></section>`;
           if (currentView === "settings")
             html =
               viewHeader(
                 "Make a little space for you.",
                 "Your preferences are saved in this browser.",
               ) +
-              `<section class="content-card"><h2>Your learning space</h2><div class="switch-row"><div><label for="focus-toggle">Keep my dashboard focused</label><p>Hide the extra school links and sidebar tip.</p></div><input type="checkbox" id="focus-toggle" ${state.focus ? "checked" : ""}></div><div class="switch-row"><div><label for="theme-toggle">Dark mode</label><p>Light is the default. Switch on for a navy background.</p></div><input type="checkbox" id="theme-toggle" ${state.theme === "dark" ? "checked" : ""}></div><div class="notice">This is a student preview with sample school data. Tasks, notes, and preferences are stored on this device. They do not sync to a school account.</div></section>`;
+              `<section class="content-card"><h2>Your learning space</h2><div class="switch-row"><div><label for="focus-toggle">Keep my dashboard focused</label><p>Hide the extra school links and sidebar tip.</p></div><input type="checkbox" id="focus-toggle" ${state.focus ? "checked" : ""}></div><div class="switch-row"><div><label for="theme-toggle">Dark mode</label><p>Light is the default. Switch on for a navy background.</p></div><input type="checkbox" id="theme-toggle" ${state.theme === "dark" ? "checked" : ""}></div><div class="notice">Your notes and preferences are saved in this browser.</div></section>`;
           $("#main").innerHTML =
             (!storageAvailable
               ? '<div class="storage-warning">Your browser is not saving changes. Keep this page open to retain your work for this visit.</div>'
@@ -3974,31 +3917,65 @@ SOFTWARE.
         function subjectDialog(id) {
           const x = subjectList.find((y) => y.id === id);
           if (!x) return;
-          const shared = window.School?.subjects.some((y) => y.id === id);
           modal(
             x.name,
-            `<p>Grade 10 · ${x.room}${x.teacher ? " · " + x.teacher : ""}</p><h3>This week</h3><ul class="lesson-list">${lessonsOf(x)
-              .map(
-                (l) =>
-                  `<li><span>${dayNames[l.day]}</span><span>${slotTimes[l.slot].join("–")}</span></li>`,
-              )
-              .join("")}</ul>${shared ? `<div class="form-actions"><button class="button secondary" data-action="navigate" data-view="timetable">View timetable</button><a class="button" href="#subjects?subject=${id}" data-action="close-dialog">Open class material</a></div>` : `<div class="notice">No class material has been shared for ${x.name} yet. When your teacher adds notes or worksheets, you’ll find them here.</div><div class="form-actions"><button class="button secondary" data-action="navigate" data-view="timetable">View timetable</button></div>`}`,
+            `<p>${esc(gradeShort)} · ${esc(x.teacher || "Teacher to be confirmed")}</p><p>${x.target ? `Your goal: <strong>${x.target}%</strong>` : "You haven’t set a goal for this subject yet."}${x.isFocus ? " This is one of your focus subjects." : ""}</p>${x.units.length ? `<h3>This year’s units</h3><ul class="lesson-list">${x.units.map((u) => `<li><span>${u.status === "done" ? "✓ " : u.status === "now" ? "● " : ""}${esc(u.title)}</span><span>${esc(shortDay(u.startsOn))} – ${esc(shortDay(u.endsOn))}${u.term ? ` · T${u.term}` : ""}</span></li>`).join("")}</ul>` : ""}<div class="notice">Lesson times appear once your timetable is loaded. Class material appears when your teacher shares it.</div>`,
           );
         }
         function addTask() {
           modal(
             "One more thing on your list.",
-            `<p>Give it a name. Take it one step at a time.</p><form id="add-task-form"><div class="field"><label for="task-title">What do you need to do?</label><input id="task-title" name="title" placeholder="e.g. Revise chapter 4" required maxlength="120" autocomplete="off"></div><div class="form-row"><div class="field"><label for="task-subject">Subject</label><select id="task-subject" name="subject">${["Maths", "English", "Life Sciences", "History", "Afrikaans", "Geography", "Art", "Personal"].map((x) => `<option>${x}</option>`).join("")}</select></div><div class="field"><label for="task-when">When is it due?</label><select id="task-when" name="when"><option value="today">Today</option><option value="upcoming">Tomorrow</option></select></div></div><div class="form-actions"><button class="button secondary" type="button" data-action="close-dialog">Cancel</button><button class="button" type="submit">Add task</button></div></form>`,
+            `<p>Just for you. Your teachers won’t see it.</p><form id="add-live-task-form"><div class="field"><label for="task-title">What do you need to do?</label><input id="task-title" name="title" placeholder="e.g. Revise chapter 4" required maxlength="200" autocomplete="off"></div><div class="field"><label for="task-due">Due date (optional)</label><input id="task-due" name="dueOn" type="date"></div><div class="form-actions"><button class="button secondary" type="button" data-action="close-dialog">Cancel</button><button class="button" type="submit">Add task</button></div></form>`,
           );
           $("#task-title").focus();
         }
-        function assignment(id) {
-          const science = id === "science";
-          if (!["science", "history"].includes(id)) return;
+        function fileSize(bytes) {
+          return bytes >= 1048576 ? `${(bytes / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(bytes / 1024))} KB`;
+        }
+        function taskDetail(id) {
+          const t = state.tasks.find((x) => x.id === id);
+          if (!t) return;
+          const meta = [t.kind === "assigned" ? t.subject : "Your own task", t.teacher, t.done ? "Done" : t.time]
+            .filter(Boolean)
+            .map(esc)
+            .join(" · ");
+          const files = (t.attachments || [])
+            .map((a) => `<li><a class="text-button" href="/api/student/tasks/files/${esc(a.id)}">${esc(a.name)}</a> <span class="muted">${esc(fileSize(a.size))}</span></li>`)
+            .join("");
           modal(
-            science ? "Osmosis lab report" : "World War I essay",
-            `<p>${science ? "Life Sciences" : "History"} · Due Friday, 9 October</p><div class="notice">A personal drafting space. Check your teacher’s brief for the exact assignment requirements.</div><form id="assignment-form" data-id="${id}"><div class="field"><label for="assignment-notes">My draft notes</label><textarea id="assignment-notes" name="notes" class="notes-area" maxlength="12000" placeholder="${science ? "Record your observations, results and conclusion..." : "Start with your main argument and supporting points..."}">${esc(state.assignmentNotes[id] || "")}</textarea></div><div class="field"><label for="assignment-progress">Draft progress</label><select id="assignment-progress" name="progress">${[0, 20, 40, 60, 80, 100].map((n) => `<option value="${n}" ${state.assignmentProgress[id] === n ? "selected" : ""}>${n === 0 ? "Not started" : n === 100 ? "Draft complete" : n + "% drafted"}</option>`).join("")}</select></div><div class="form-actions"><button class="button" type="submit">Save draft</button></div></form>`,
+            t.title,
+            `<p class="muted">${meta}</p>${t.notes ? `<div style="white-space:pre-wrap;margin:12px 0">${esc(t.notes)}</div>` : ""}${files ? `<h3>Files</h3><ul class="lesson-list">${files}</ul>` : ""}<div class="form-actions">${t.kind === "personal" ? `<button class="button secondary" type="button" data-action="task-delete" data-id="${esc(t.id)}">Delete</button>` : ""}<button class="button" type="button" data-action="close-dialog">Close</button></div>`,
           );
+        }
+        async function saveDone(t, done) {
+          try {
+            const r = await fetch(`/api/student/tasks/${encodeURIComponent(t.id)}`, {
+              method: "PATCH",
+              credentials: "same-origin",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ done }),
+            });
+            if (!r.ok) throw new Error();
+          } catch {
+            t.done = !done;
+            render();
+            announce("Couldn’t save that. Check your connection and try again.");
+          }
+        }
+        async function deleteTask(id) {
+          try {
+            const r = await fetch(`/api/student/tasks/${encodeURIComponent(id)}`, {
+              method: "DELETE",
+              credentials: "same-origin",
+            });
+            if (!r.ok && r.status !== 404) throw new Error();
+            state.tasks = state.tasks.filter((t) => t.id !== id);
+            closeModal();
+            render();
+            announce("Task deleted.");
+          } catch {
+            announce("Couldn’t delete that. Try again.");
+          }
         }
         function study(topic, query = "") {
           if (topic === "quiz") {
@@ -4038,7 +4015,7 @@ SOFTWARE.
           }
           modal(
             "What shall we work on?",
-            `${query ? `<p>You’re exploring “${esc(query)}”.</p>` : "<p>A little help can make a big difference.</p>"}<div class="topic-options"><button class="topic-option" data-action="study" data-topic="algebra">${icon("spark")}<span>Understand quadratic equations<small>A step-by-step guided example</small></span>${icon("chevron", true)}</button><button class="topic-option" data-action="study" data-topic="quiz">${icon("flask")}<span>Test your osmosis knowledge<small>Three questions, with explanations</small></span>${icon("chevron", true)}</button><button class="topic-option" data-action="study" data-topic="plan">${icon("calendar")}<span>Find my next step<small>A plan based on your task list</small></span>${icon("chevron", true)}</button></div><div class="notice">These guided sessions work in this preview. Open-ended AI chat is not connected yet.</div>`,
+            `${query ? `<p>You’re exploring “${esc(query)}”.</p>` : "<p>A little help can make a big difference.</p>"}<div class="topic-options"><button class="topic-option" data-action="study" data-topic="algebra">${icon("spark")}<span>Understand quadratic equations<small>A step-by-step guided example</small></span>${icon("chevron", true)}</button><button class="topic-option" data-action="study" data-topic="quiz">${icon("flask")}<span>Test your osmosis knowledge<small>Three questions, with explanations</small></span>${icon("chevron", true)}</button><button class="topic-option" data-action="study" data-topic="plan">${icon("calendar")}<span>Find my next step<small>A plan based on your task list</small></span>${icon("chevron", true)}</button></div><div class="notice">Open-ended AI chat is coming soon.</div>`,
           );
         }
         const quiz = [
@@ -4119,9 +4096,7 @@ SOFTWARE.
                 " · " +
                 (t.done
                   ? "Completed"
-                  : t.when === "today"
-                    ? "Today"
-                    : "Tomorrow"),
+                  : t.time),
               view: "tasks",
               filter: t.done ? "done" : t.when,
             })),
@@ -4139,19 +4114,19 @@ SOFTWARE.
         const serviceContent = {
           sport: [
             "Sports & activities",
-            `<p>Make time for the things you enjoy outside class.</p><h3>Hockey practice</h3><p>Today at 15:30 · Sample activity</p><div class="notice">Confirm practice times, venue, and transport with your school. Activity sign-up is not connected in this preview.</div>`,
+            `<p>Make time for the things you enjoy outside class.</p><div class="notice">Your school hasn’t shared any activities here yet. Check with your school for practice times and sign-ups.</div>`,
           ],
           transport: [
             "Your ride home",
-            `<p>Your saved sample transport information.</p><h3>Bus 14 · 15:55</h3><p>Check your school’s transport notice for the collection point.</p><div class="notice">This is sample schedule data, not live tracking. Confirm the bus time before making travel plans.</div>`,
+            `<p>Transport times from your school will show here.</p><div class="notice">For now, check your school’s transport notice for times and the collection point.</div>`,
           ],
           support: [
             "You don’t have to figure it all out alone.",
-            `<p>School can feel like a lot. A teacher, parent, or school counsellor can help you work through what’s on your mind.</p><h3>Ask for a private conversation</h3><p>Contact your school office or speak to a teacher you trust to find out how to meet with the counsellor.</p><div class="notice">This preview does not send messages or book counselling sessions. You don’t need to share personal details here.</div>`,
+            `<p>School can feel like a lot. A teacher, parent, or school counsellor can help you work through what’s on your mind.</p><h3>Ask for a private conversation</h3><p>Contact your school office or speak to a teacher you trust to find out how to meet with the counsellor.</p><div class="notice">Chom doesn’t send messages or book counselling sessions. You don’t need to share personal details here.</div>`,
           ],
           news: [
             "Around your school",
-            `<p>Your school news feed is ready for future updates.</p><div class="notice">No live announcements are connected in this preview. Check your school’s usual channels for current notices.</div>`,
+            `<p>Your school hasn’t shared any news here yet.</p><div class="notice">Check your school’s usual channels for current notices.</div>`,
           ],
           career: [
             "A future with room for you.",
@@ -4159,7 +4134,7 @@ SOFTWARE.
           ],
           uniform: [
             "School essentials",
-            `<p>Your school’s uniform shop will be accessible from here.</p><div class="notice">The shop is not connected in this preview. Contact your school for its approved supplier, sizes, and opening hours.</div>`,
+            `<p>Your school’s uniform shop will be accessible from here.</p><div class="notice">Contact your school for its approved supplier, sizes, and opening hours.</div>`,
           ],
         };
         document.addEventListener("click", (e) => {
@@ -4168,13 +4143,6 @@ SOFTWARE.
             taskFilter = filter.dataset.filter;
             $("#tasks-content").innerHTML = tasksMarkup();
             $(`[data-filter="${taskFilter}"]`).focus();
-            return;
-          }
-          const day = e.target.closest("[data-day]");
-          if (day) {
-            selectedDay = +day.dataset.day;
-            $(".schedule-panel").outerHTML = schedulePanel();
-            $(`[data-day="${selectedDay}"]`).focus();
             return;
           }
           const answer = e.target.closest("[data-answer]");
@@ -4201,8 +4169,10 @@ SOFTWARE.
           if (a === "close-dialog") closeModal();
           if (a === "navigate") go(b.dataset.view);
           if (a === "add-task") addTask();
+          if (a === "task-detail") taskDetail(b.dataset.id);
+          if (a === "reload-page") location.reload();
+          if (a === "task-delete") deleteTask(b.dataset.id);
           if (a === "subject") subjectDialog(b.dataset.subject);
-          if (a === "assignment") assignment(b.dataset.id);
           if (a === "study") study(b.dataset.topic);
           if (a === "search") search();
           if (a === "search-go") {
@@ -4217,13 +4187,13 @@ SOFTWARE.
             $("#notification-dot").hidden = true;
             modal(
               "Your little updates.",
-              `<p>You’re all caught up with this sample workspace.</p><div class="topic-options"><button class="topic-option" data-action="search-go" data-view="results">${icon("chart")}<span>Your Geography result is ready<small>78% · Sample assessment result</small></span>${icon("chevron", true)}</button><button class="topic-option" data-action="search-go" data-view="assignments">${icon("file")}<span>Two assignments due Friday<small>History essay and Life Sciences lab report</small></span>${icon("chevron", true)}</button></div>`,
+              `<p>You’re all caught up.</p><p class="muted">Updates from your teachers and school will show here.</p>`,
             );
           }
           if (a === "profile")
             modal(
-              "Hi, Amara.",
-              `<div style="display:flex;align-items:center;gap:16px"><span class="avatar" style="width:54px;height:54px;font-size:17px">AN</span><div><h3 style="margin:0">Amara</h3><p class="muted">Grade 10 · Class B</p></div></div><div class="notice">You’re viewing a sample student profile. No school account is connected.</div><div class="form-actions"><button class="button secondary" data-action="search-go" data-view="settings">My preferences</button><a class="button" href="../">Sign out</a></div>`,
+              `Hi, ${esc(displayName)}.`,
+              `<div style="display:flex;align-items:center;gap:16px"><span class="avatar" style="width:54px;height:54px;font-size:17px">${esc(initials)}</span><div><h3 style="margin:0">${esc(me.fullName)}</h3><p class="muted">${esc(gradeLine)} · ${esc(me.schoolName)}</p></div></div><div class="notice">Signed in to ${esc(me.schoolName)}. Your subjects and teachers come from your school.</div><div class="form-actions"><button class="button secondary" data-action="search-go" data-view="settings">My preferences</button><a class="button" href="../">Sign out</a></div>`,
             );
           if (a === "service") {
             const info = serviceContent[b.dataset.service];
@@ -4262,6 +4232,7 @@ SOFTWARE.
             if (!t) return;
             const done = e.target.checked;
             t.done = done;
+            saveDone(t, done);
             const id = t.id;
             save();
             if ($("#tasks-content")) $("#tasks-content").innerHTML = tasksMarkup();
@@ -4304,47 +4275,40 @@ SOFTWARE.
             save();
           }
         });
-        document.addEventListener("submit", (e) => {
-          if (e.target.id === "add-task-form") {
+        document.addEventListener("submit", async (e) => {
+          if (e.target.id === "add-live-task-form") {
             e.preventDefault();
             const f = new FormData(e.target),
-              title = f.get("title").trim();
+              title = String(f.get("title") || "").trim(),
+              dueOn = String(f.get("dueOn") || "");
             if (!title) {
               $("#task-title").setCustomValidity("Give your task a name.");
               $("#task-title").reportValidity();
-              $("#task-title").addEventListener(
-                "input",
-                () => $("#task-title").setCustomValidity(""),
-                { once: true },
-              );
+              $("#task-title").addEventListener("input", () => $("#task-title").setCustomValidity(""), { once: true });
               return;
             }
-            state.tasks.push({
-              id:
-                "task-" +
-                Date.now() +
-                "-" +
-                Math.random().toString(36).slice(2, 8),
-              title,
-              subject: f.get("subject"),
-              when: f.get("when"),
-              time: f.get("when") === "today" ? "Today" : "Tomorrow",
-              done: false,
-            });
-            taskFilter = f.get("when");
-            persist("A little more clarity. Your task is added.");
-            closeModal();
-            render();
-          }
-          if (e.target.id === "assignment-form") {
-            e.preventDefault();
-            const f = new FormData(e.target),
-              id = e.target.dataset.id;
-            state.assignmentNotes[id] = f.get("notes");
-            state.assignmentProgress[id] = +f.get("progress");
-            persist("Your draft is saved on this device.");
-            closeModal();
-            render();
+            const submit = e.target.querySelector('[type="submit"]');
+            submit.disabled = true;
+            try {
+              const r = await fetch("/api/student/tasks", {
+                method: "POST",
+                credentials: "same-origin",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, dueOn: dueOn || null }),
+              });
+              if (!r.ok) throw new Error();
+              const { task } = await r.json();
+              const added = fromServer(task);
+              state.tasks.push(added);
+              taskFilter = added.when;
+              closeModal();
+              render();
+              announce("A little more clarity. Your task is added.");
+            } catch {
+              submit.disabled = false;
+              announce("Couldn’t add that. Check your connection and try again.");
+            }
+            return;
           }
         });
         $("#nav-overlay").addEventListener("click", () => {

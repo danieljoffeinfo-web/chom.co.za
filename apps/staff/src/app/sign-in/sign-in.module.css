@@ -112,3 +112,37 @@
   align-self: flex-start;
   margin-top: var(--chom-space-2);
 }
+
+.code {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  text-align: center;
+}
+
+.fieldHint {
+  margin-top: calc(-1 * var(--chom-space-2));
+  font-size: 13px;
+  color: var(--chom-text-muted);
+}
+
+.notice {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--chom-space-3);
+}
+
+.links .linkButton {
+  margin-top: 0;
+}
+
+.linkButton:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
