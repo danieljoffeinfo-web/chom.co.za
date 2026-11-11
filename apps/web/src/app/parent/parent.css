@@ -6,9 +6,15 @@
 
 /* ---------- Bottom dock: the five sections on phones (spec §4) ---------- */
 
-/* On wide screens the sidebar has the sections; the dock keeps only the avatar. */
+/* On wide screens the sidebar has the sections and Account, so the dock isn't shown:
+   it would only float over the page. Phones use it for everything. */
 .parent-tab {
   display: none;
+}
+@media (min-width: 901px) {
+  .parent-dock {
+    display: none;
+  }
 }
 .quick-button.active {
   background: var(--soft);
@@ -106,6 +112,17 @@
 }
 
 /* ---------- Home and Academics ---------- */
+
+/* Home has three headline numbers: keep them on one row beside the greeting. */
+.cd-stats.parent-stats {
+  flex-basis: 520px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 600px) {
+  .cd-stats.parent-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 
 .subject-rows {
   margin: 0;
