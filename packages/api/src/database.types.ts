@@ -1727,7 +1727,7 @@ export type Database = {
       membership_role: 'student' | 'teacher' | 'parent' | 'school_admin';
       membership_status: 'active' | 'inactive';
       offering_kind: 'fundamental' | 'elective' | 'extra';
-      sign_in_provider: 'microsoft' | 'google';
+      sign_in_provider: 'microsoft' | 'google' | 'email_code';
       staff_level: 'support' | 'operations' | 'owner';
       study_method:
         'pen_and_paper' | 'videos' | 'ai_chat' | 'past_papers' | 'flashcards' | 'study_group';
@@ -1855,7 +1855,7 @@ export const Constants = {
       membership_role: ['student', 'teacher', 'parent', 'school_admin'],
       membership_status: ['active', 'inactive'],
       offering_kind: ['fundamental', 'elective', 'extra'],
-      sign_in_provider: ['microsoft', 'google'],
+      sign_in_provider: ['microsoft', 'google', 'email_code'],
       staff_level: ['support', 'operations', 'owner'],
       study_method: [
         'pen_and_paper',
