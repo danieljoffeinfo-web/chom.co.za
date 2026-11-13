@@ -5,34 +5,27 @@
 begin;
 create extension if not exists pgtap with schema extensions;
 
-select plan(18);
+select plan(15);
 set local client_min_messages = warning;
 
 -- ---------------------------------------------------------------------------------
--- Curriculum units (reference data)
+-- Curriculum units (reference data): cleared, so this test brings its own
 -- ---------------------------------------------------------------------------------
 
-select is((select count(*)::int from public.curriculum_units), 455, 'All 455 curriculum units from the brief are loaded');
+select is((select count(*)::int from public.curriculum_units), 0, 'No curriculum units are loaded');
 
-select is(
-  (select count(distinct (curriculum_subject_id, grade))::int from public.curriculum_units),
-  58,
-  '18 subjects in Grades 10-12, plus Further Studies Maths and English in Grades 11-12'
-);
-
-select is_empty(
-  $$ select curriculum_subject_id, grade from public.curriculum_units
-     group by curriculum_subject_id, grade having max(position) <> count(*) $$,
-  'Every subject''s units are numbered 1, 2, 3 ... with no gaps'
-);
-
-select results_eq(
-  $$ select cu.title, cu.teaching_weeks::int from public.curriculum_units cu
-     join public.curriculum_subjects cs on cs.id = cu.curriculum_subject_id
-     where cs.name = 'Mathematics' and cu.grade = 11 and cu.position in (1, 12) order by cu.position $$,
-  $$ values ('Exponents and surds', 3), ('Statistics', 3) $$,
-  'Grade 11 Maths starts with exponents and surds and ends with statistics'
-);
+-- Four units for Mathematics and English Home Language in each of Grades 10-12;
+-- Grade 11 Maths has Probability third.
+insert into public.curriculum_units (curriculum_id, curriculum_subject_id, grade, position, title, teaching_weeks)
+select cs.curriculum_id, cs.id, g.grade, u.position,
+       case when cs.name = 'Mathematics' and g.grade = 11 and u.position = 3 then 'Probability'
+            else cs.name || ' unit ' || u.position end,
+       u.weeks
+from public.curriculum_subjects cs
+join public.curricula c on c.id = cs.curriculum_id and c.code = 'IEB'
+cross join (values (10), (11), (12)) as g (grade)
+cross join (values (1, 4.0), (2, 3.0), (3, 3.0), (4, 2.0)) as u (position, weeks)
+where cs.name in ('Mathematics', 'English Home Language');
 
 -- ---------------------------------------------------------------------------------
 -- A school's calendar and schedule (the test school, A: Maths and English, Grades 10-12)
