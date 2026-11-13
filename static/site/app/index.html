@@ -4356,6 +4356,336 @@
           transform: none;
         }
       }
+      /* Assignments: each a dropdown, tinted in its subject's colour. */
+      .assign-group + .assign-group {
+        margin-top: 40px;
+      }
+      .assign-list {
+        display: grid;
+        gap: 12px;
+      }
+      .assign {
+        border: 1px solid var(--line);
+        border-left: 6px solid var(--subject, var(--muted));
+        border-radius: 20px;
+        background: var(--card);
+        overflow: hidden;
+      }
+      .assign[open] {
+        background: color-mix(in srgb, var(--subject, var(--muted)) 7%, var(--card));
+      }
+      .assign summary {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-height: 72px;
+        padding: 14px 18px 14px 16px;
+        list-style: none;
+        cursor: pointer;
+      }
+      .assign summary::-webkit-details-marker {
+        display: none;
+      }
+      .assign summary:hover {
+        background: color-mix(in srgb, var(--subject, var(--muted)) 10%, transparent);
+      }
+      .assign summary:focus-visible {
+        outline-offset: -3px;
+      }
+      .assign-copy {
+        flex: 1 1 auto;
+        display: grid;
+        min-width: 0;
+      }
+      .assign-copy strong {
+        font-size: 16px;
+        overflow-wrap: anywhere;
+      }
+      .assign-copy small {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .assign-status {
+        padding: 5px 11px;
+        border-radius: 999px;
+        background: var(--soft);
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .assign-status.draft {
+        background: color-mix(in srgb, var(--chom-accent-lilac) 32%, var(--card));
+      }
+      .assign-status.done {
+        background: color-mix(in srgb, var(--chom-accent-mint) 32%, var(--card));
+      }
+      .assign-chevron {
+        display: grid;
+        transition: transform 0.2s;
+      }
+      .assign[open] .assign-chevron {
+        transform: rotate(180deg);
+      }
+      .assign-body {
+        padding: 4px 22px 22px 70px;
+      }
+      .assign-body h3 {
+        margin: 10px 0 6px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .assign-notes {
+        white-space: pre-wrap;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+      .assign-files {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .assign-files .text-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .assign-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px 20px;
+        margin-top: 18px;
+      }
+      .assign-actions .button {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .assign-done {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      @media (max-width: 600px) {
+        .assign summary {
+          flex-wrap: wrap;
+          gap: 8px 12px;
+        }
+        .assign-copy {
+          flex-basis: calc(100% - 100px);
+        }
+        .assign .dt-due {
+          order: 0;
+        }
+        .assign-chevron {
+          order: 1;
+          margin-left: auto;
+        }
+        .assign-body {
+          padding: 4px 16px 18px;
+        }
+      }
+
+      /* Writing Studio: a quiet page to write on; pasted text sits on a yellow highlight. */
+      .studio {
+        max-width: 820px;
+        margin: 0 auto;
+      }
+      .studio-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+      .studio-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 40px;
+        padding: 0 16px 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--card);
+        color: var(--ink);
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .studio-back .icon {
+        transform: rotate(180deg);
+      }
+      .studio-saved {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .studio-head {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 20px;
+        border-radius: 24px;
+        background: color-mix(in srgb, var(--subject, var(--muted)) 16%, var(--card));
+      }
+      .studio-title {
+        flex: 1 1 auto;
+        display: grid;
+        min-width: 0;
+      }
+      .studio-kicker {
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .studio-title h1 {
+        margin: 2px 0;
+        font-size: clamp(24px, 3.4vw, 32px);
+        line-height: 1.15;
+        letter-spacing: -0.6px;
+        overflow-wrap: anywhere;
+      }
+      .studio-title small {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .studio-brief {
+        margin-top: 12px;
+        padding: 12px 16px;
+        border-radius: 16px;
+        background: var(--soft);
+      }
+      .studio-brief summary {
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .studio-brief div {
+        margin-top: 8px;
+        white-space: pre-wrap;
+        line-height: 1.6;
+      }
+      .studio-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 10px;
+        margin: 22px 0 10px;
+      }
+      .studio-chip {
+        padding: 5px 12px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--chom-accent-sky) 26%, var(--card));
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .studio-chip.pasted {
+        background: var(--chom-accent-sunflower);
+        color: var(--chom-on-accent);
+      }
+      .studio-legend {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .studio-legend i {
+        width: 22px;
+        height: 14px;
+        border-radius: 4px;
+        background: color-mix(in srgb, var(--chom-accent-sunflower) 70%, transparent);
+      }
+      /* The text box sits over a copy of the essay that draws only the highlights, so both
+         must lay text out identically: same font, size, padding and wrapping. */
+      .studio-paper {
+        position: relative;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: var(--card);
+        box-shadow: 0 18px 40px -28px color-mix(in srgb, var(--ink) 45%, transparent);
+      }
+      .studio-paper:focus-within {
+        border-color: color-mix(in srgb, var(--ink) 45%, var(--line));
+        box-shadow:
+          0 0 0 4px color-mix(in srgb, var(--chom-accent-sky) 25%, transparent),
+          0 18px 40px -28px color-mix(in srgb, var(--ink) 45%, transparent);
+      }
+      .studio-text:focus-visible {
+        outline: none;
+      }
+      .studio-mirror,
+      .studio-text {
+        margin: 0;
+        padding: 36px 44px 48px;
+        font: inherit;
+        font-size: 18px;
+        line-height: 1.75;
+        letter-spacing: normal;
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        word-break: normal;
+        tab-size: 4;
+      }
+      .studio-mirror {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        color: transparent;
+        pointer-events: none;
+      }
+      .studio-mirror mark {
+        border-radius: 4px;
+        background: color-mix(in srgb, var(--chom-accent-sunflower) 70%, transparent);
+        color: transparent;
+      }
+      .studio-text {
+        position: relative;
+        display: block;
+        width: 100%;
+        min-height: 55vh;
+        border: 0;
+        outline: 0;
+        resize: none;
+        overflow: hidden;
+        background: transparent;
+        color: var(--ink);
+      }
+      .studio-text::placeholder {
+        color: var(--muted);
+      }
+      /* On navy the highlight is softer, so the light text on it stays readable. */
+      :root[data-theme="dark"] .studio-mirror mark,
+      :root[data-theme="dark"] .studio-legend i {
+        background: color-mix(in srgb, var(--chom-accent-sunflower) 46%, transparent);
+      }
+      .studio-note {
+        margin: 14px 4px 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      @media (max-width: 600px) {
+        .studio-head {
+          flex-wrap: wrap;
+          padding: 16px;
+        }
+        .studio-mirror,
+        .studio-text {
+          padding: 22px 20px 32px;
+          font-size: 16px;
+        }
+        .studio-legend {
+          margin-left: 0;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .assign-chevron {
+          transition: none;
+        }
+      }
     </style>
 </head>
   <body>
@@ -5019,6 +5349,131 @@ SOFTWARE.
           return `<div class="dt-group"><h3 class="dt-group-title">Due today <span>${tasksFailed ? "" : left ? left + " left" : "All done"}</span></h3>${today.length ? `<ul class="dt-list">${today.map(dashTaskRow).join("")}</ul>` : tasksFailed ? tasksFailedNote : `<div class="dt-cheer">${icon("check")}<p><strong>All caught up!</strong> Nothing due today.</p></div>`}</div>${upcoming.length ? `<div class="dt-group"><h3 class="dt-group-title">Coming up</h3><ul class="dt-list">${upcoming.map(dashTaskRow).join("")}</ul></div>` : ""}`;
         }
         // My tasks: three tiles that are also the filters, then the list in the Home page's rows.
+        // Assignments: the teachers' work, each a dropdown. Any one can be written in Writing
+        // Studio, where text pasted from outside Chom is highlighted yellow.
+        // shortcut: essays save in this browser only (state.essays); move them to the database when teachers need to see them.
+        let studioTask = null,
+          studioClip = "",
+          studioExternal = false,
+          studioSaveTimer;
+        const assignOpen = new Set();
+        const wordCount = (text) => (text.match(/\S+/g) || []).length;
+        const essayOf = (id) => (state.essays && state.essays[id]) || { text: "", pasted: [] };
+        // Pasted ranges after `removed` characters at `start` became `inserted` new ones:
+        // ranges before the edit stay, ranges after it shift, the edited part drops out.
+        function shiftRanges(ranges, start, removed, inserted) {
+          const end = start + removed,
+            d = inserted - removed,
+            out = [];
+          for (const [a, b] of ranges) {
+            if (a < start) out.push([a, Math.min(b, start)]);
+            if (b > end) out.push([Math.max(a, end) + d, b + d]);
+          }
+          return out.filter(([a, b]) => b > a);
+        }
+        function addRange(ranges, a, b) {
+          const out = [];
+          for (const r of [...ranges, [a, b]].sort((x, y) => x[0] - y[0])) {
+            const last = out[out.length - 1];
+            if (last && r[0] <= last[1]) last[1] = Math.max(last[1], r[1]);
+            else out.push([...r]);
+          }
+          return out;
+        }
+        // Where an edit happened: it ends at the caret, starts no later than the selection did
+        // before it (so typing over "cat" with "c" replaces from the "c"), and leaves the text
+        // after the caret unchanged.
+        function editAt(before, after, caret, selStart = Infinity) {
+          const tail = after.length - caret;
+          if (tail < 0 || before.length < tail || before.slice(before.length - tail) !== after.slice(caret)) {
+            let p = 0;
+            while (p < before.length && p < after.length && before[p] === after[p]) p++;
+            let q = 0;
+            while (q < before.length - p && q < after.length - p && before[before.length - 1 - q] === after[after.length - 1 - q]) q++;
+            return { start: p, removed: before.length - p - q, inserted: after.length - p - q };
+          }
+          let p = 0;
+          const limit = Math.min(caret, before.length - tail, selStart);
+          while (p < limit && before[p] === after[p]) p++;
+          return { start: p, removed: before.length - tail - p, inserted: caret - p };
+        }
+        function assignmentItem(t) {
+          const w = wordCount(essayOf(t.id).text);
+          const status = t.done ? "Done" : w ? `Draft · ${w} ${w === 1 ? "word" : "words"}` : "Not started";
+          const files = (t.attachments || [])
+            .map((a) => `<li><a class="text-button" href="/api/student/tasks/files/${esc(a.id)}">${icon("file", true)}${esc(a.name)}</a></li>`)
+            .join("");
+          return `<details class="assign subject-tint ${subjectColor(t.subject)}" data-assign="${esc(t.id)}"${assignOpen.has(t.id) ? " open" : ""}><summary>${subjectBadge(t.subject)}<span class="assign-copy"><strong>${esc(t.title)}</strong><small>${esc(t.subject)}${t.teacher ? ` · ${esc(t.teacher)}` : ""}</small></span><span class="assign-status${t.done ? " done" : w ? " draft" : ""}">${status}</span>${t.done ? "" : `<span class="dt-due ${dueTone(t)}">${esc(t.time)}</span>`}<span class="assign-chevron" aria-hidden="true">${icon("down", true)}</span></summary><div class="assign-body">${t.notes ? `<h3>From your teacher</h3><div class="assign-notes">${esc(t.notes)}</div>` : `<p class="muted">No extra instructions from your teacher.</p>`}${files ? `<h3>Files</h3><ul class="assign-files">${files}</ul>` : ""}<div class="assign-actions"><button class="button" type="button" data-action="studio-open" data-id="${esc(t.id)}">${icon("file", true)}${w ? "Keep writing" : "Write it in Writing Studio"}</button><label class="assign-done"><input type="checkbox" class="dt-check" data-task="${esc(t.id)}" ${t.done ? "checked" : ""}>Mark as done</label></div></div></details>`;
+        }
+        function assignmentsView() {
+          if (studioTask && state.tasks.some((t) => t.id === studioTask)) return studioView(studioTask);
+          studioTask = null;
+          const header = viewHeader("Good work takes a little planning.", "Every assignment from your teachers, with what to do and when it’s due.");
+          if (tasksFailed) return header + `<section class="panel">${tasksFailedNote}</section>`;
+          const list = state.tasks.filter((t) => t.kind === "assigned");
+          if (!list.length)
+            return header + `<section class="panel"><div class="empty-message">${icon("file")}<h2>No assignments yet</h2><p>When your teachers set work, it appears here with its due date.</p></div></section>`;
+          const byDue = (x, y) => ((x.dueAt || "9") < (y.dueAt || "9") ? -1 : 1);
+          const group = (label, title, items, tone) =>
+            items.length
+              ? `<section class="cd-section assign-group ${tone}"><div class="cd-head"><div><span class="cd-label">${label}</span><h2>${title}</h2></div></div><div class="assign-list">${items.map(assignmentItem).join("")}</div></section>`
+              : "";
+          const open = list.filter((t) => !t.done).sort(byDue),
+            done = list.filter((t) => t.done).sort(byDue);
+          return header + group("To do", "Still to finish", open, "tone-coral") + group("Done", "Finished", done, "tone-mint");
+        }
+        function studioView(id) {
+          const t = state.tasks.find((x) => x.id === id),
+            e = essayOf(id);
+          return `<div class="studio"><div class="studio-top"><button type="button" class="studio-back" data-action="studio-close">${icon("arrow", true)}Assignments</button><span class="studio-saved" id="studio-saved" role="status">Saved on this device</span></div><header class="studio-head subject-tint ${subjectColor(t.subject)}">${subjectBadge(t.subject)}<div class="studio-title"><span class="studio-kicker">Writing Studio</span><h1>${esc(t.title)}</h1><small>${esc(t.subject)}${t.teacher ? ` · ${esc(t.teacher)}` : ""}</small></div><span class="dt-due ${dueTone(t)}">${esc(t.time)}</span></header>${t.notes ? `<details class="studio-brief"><summary>Your teacher’s instructions</summary><div>${esc(t.notes)}</div></details>` : ""}<div class="studio-bar"><span class="studio-chip" id="studio-words"></span><span class="studio-chip pasted" id="studio-pasted" hidden></span><span class="studio-legend"><i aria-hidden="true"></i>Pasted from outside Chom</span></div><div class="studio-paper"><div class="studio-mirror" id="studio-mirror" aria-hidden="true"></div><textarea id="studio-text" class="studio-text" aria-label="Your essay" aria-describedby="studio-note" placeholder="Start writing. Everything you type is your own." maxlength="60000">${esc(e.text)}</textarea></div><p class="studio-note" id="studio-note">Text you paste from outside Chom is highlighted in yellow, so it’s clear which words are your own. Your essay saves on this device as you write.</p></div>`;
+        }
+        // Draw the yellow highlights under the text, size the page to the essay, update the counts.
+        function studioSync() {
+          const ta = $("#studio-text"),
+            e = essayOf(studioTask);
+          let html = "",
+            at = 0;
+          for (const [a, b] of e.pasted) {
+            html += `${esc(e.text.slice(at, a))}<mark>${esc(e.text.slice(a, b))}</mark>`;
+            at = b;
+          }
+          // A trailing line break keeps a final empty line as tall as the text box's.
+          $("#studio-mirror").innerHTML = `${html}${esc(e.text.slice(at))}\n`;
+          ta.style.height = "auto";
+          ta.style.height = `${ta.scrollHeight}px`;
+          const w = wordCount(e.text),
+            pw = [...e.text.matchAll(/\S+/g)].filter((m) => e.pasted.some(([a, b]) => a < m.index + m[0].length && b > m.index)).length;
+          $("#studio-words").textContent = `${w} ${w === 1 ? "word" : "words"}`;
+          $("#studio-pasted").hidden = !pw;
+          $("#studio-pasted").textContent = `${pw} pasted · ${Math.round((100 * pw) / Math.max(w, 1))}%`;
+        }
+        // Recent versions of the essay and their highlights, so undo and redo restore both
+        // (otherwise deleting pasted text and undoing would bring it back unhighlighted).
+        const studioHistory = new Map();
+        let studioSelStart = Infinity;
+        function studioInput(event) {
+          const ta = event.target,
+            before = essayOf(studioTask),
+            text = ta.value,
+            { start, removed, inserted } = editAt(before.text, text, ta.selectionEnd, studioSelStart);
+          studioSelStart = Infinity;
+          studioHistory.set(before.text, before.pasted);
+          if (studioHistory.size > 60) studioHistory.delete(studioHistory.keys().next().value);
+          let pasted = /^history(Undo|Redo)$/.test(event.inputType) && studioHistory.has(text)
+            ? studioHistory.get(text)
+            : shiftRanges(before.pasted, start, removed, inserted);
+          const fromOutside = (event.inputType === "insertFromPaste" || event.inputType === "insertFromDrop") && studioExternal;
+          if (fromOutside && inserted) pasted = addRange(pasted, start, start + inserted);
+          studioExternal = false;
+          state.essays = { ...state.essays, [studioTask]: { text, pasted, updatedAt: new Date().toISOString() } };
+          studioSync();
+          $("#studio-saved").textContent = "Saving…";
+          clearTimeout(studioSaveTimer);
+          studioSaveTimer = setTimeout(() => {
+            const stored = save();
+            if ($("#studio-saved")) $("#studio-saved").textContent = stored ? "Saved on this device" : "Not saved: this browser isn’t storing changes";
+          }, 500);
+        }
         function tasksMarkup() {
           const byDue = (x, y) => ((x.dueAt || "9") < (y.dueAt || "9") ? -1 : 1);
           const lists = {
@@ -5122,9 +5577,8 @@ SOFTWARE.
           if (currentView === "timetable")
             html = viewHeader("A little structure for your week.", `${esc(gradeLine)} · ${esc(me.yearLabel)}`) +
               comingSoon("Your timetable is on its way", `Your lesson times will appear here once ${esc(me.schoolName)} loads its timetable. What each subject is teaching this term is in My subjects.`);
-          if (currentView === "assignments")
-            html = viewHeader("Good work takes a little planning.", "Keep your drafts and deadlines in one place.") +
-              comingSoon("No assignments yet", "When your teachers set assignments, they’ll appear here with their due dates.");
+          if (currentView !== "assignments") studioTask = null;
+          if (currentView === "assignments") html = assignmentsView();
           if (currentView === "results")
             html = viewHeader("See how far you’re coming.", "Use your results to find your next small step.") +
               comingSoon("No results yet", "Your marks will appear here as your teachers record them, next to the goals you set.");
@@ -5206,6 +5660,7 @@ SOFTWARE.
               : "") +
             html +
             footer();
+          if ($("#studio-text")) studioSync();
         }
         function closeNav() {
           const wasOpen = $("#sidebar").classList.contains("open");
@@ -5589,6 +6044,22 @@ SOFTWARE.
           if (a === "subject") subjectDialog(b.dataset.subject);
           if (a === "study") study(b.dataset.topic, "", !!b.closest(".ask"));
           if (a === "start-quiz") startQuiz();
+          if (a === "studio-open") {
+            studioTask = b.dataset.id;
+            studioHistory.clear();
+            render();
+            window.scrollTo(0, 0);
+            $("#studio-text").focus();
+          }
+          if (a === "studio-close") {
+            clearTimeout(studioSaveTimer);
+            save();
+            const id = studioTask;
+            studioTask = null;
+            assignOpen.add(id);
+            render();
+            $(`[data-assign="${id}"] summary`)?.focus();
+          }
           if (a === "search") search();
           if (a === "search-go") {
             closeModal();
@@ -5656,6 +6127,10 @@ SOFTWARE.
             $("#nav-task-count").textContent = remaining();
             if ($("#task-count")) $("#task-count").textContent = remaining();
             if ($("#dash-hero")) $("#dash-hero").innerHTML = heroCopy();
+            if ($(".assign")) {
+              assignOpen.add(id);
+              render();
+            }
             const replacement = $$("[data-task]").find(
               (el) => el.dataset.task === id,
             );
@@ -5683,6 +6158,7 @@ SOFTWARE.
         });
         document.addEventListener("input", (e) => {
           if (e.target.id === "global-search") searchResults(e.target.value);
+          if (e.target.id === "studio-text") studioInput(e);
           if (e.target.id === "ask-input") {
             e.target.style.height = "auto";
             e.target.style.height = `${e.target.scrollHeight}px`;
@@ -5788,6 +6264,35 @@ SOFTWARE.
             $(`[data-filter="${taskFilter}"]`).focus();
           }
         });
+        // Writing Studio: text copied inside the essay isn't "from outside" when pasted back.
+        document.addEventListener("copy", (e) => {
+          if (e.target.id === "studio-text") studioClip = e.target.value.slice(e.target.selectionStart, e.target.selectionEnd);
+        });
+        document.addEventListener("cut", (e) => {
+          if (e.target.id === "studio-text") studioClip = e.target.value.slice(e.target.selectionStart, e.target.selectionEnd);
+        });
+        document.addEventListener("dragstart", (e) => {
+          if (e.target.id === "studio-text") studioClip = e.target.value.slice(e.target.selectionStart, e.target.selectionEnd);
+        });
+        document.addEventListener("beforeinput", (e) => {
+          if (e.target.id === "studio-text") studioSelStart = e.target.selectionStart;
+        });
+        document.addEventListener("paste", (e) => {
+          if (e.target.id === "studio-text") studioExternal = (e.clipboardData?.getData("text/plain") || "").replace(/\r\n/g, "\n") !== studioClip;
+        });
+        document.addEventListener("drop", (e) => {
+          if (e.target.id === "studio-text") studioExternal = (e.dataTransfer?.getData("text/plain") || "").replace(/\r\n/g, "\n") !== studioClip;
+        });
+        // Remember which assignments are open, so a redraw (ticking one off) keeps them open.
+        document.addEventListener(
+          "toggle",
+          (e) => {
+            if (!e.target.matches?.("details[data-assign]")) return;
+            if (e.target.open) assignOpen.add(e.target.dataset.assign);
+            else assignOpen.delete(e.target.dataset.assign);
+          },
+          true,
+        );
         window.addEventListener("hashchange", route);
         route();
       })();
