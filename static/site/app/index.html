@@ -3934,6 +3934,313 @@
         font-weight: 500;
         color: var(--muted);
       }
+      /* Study with Chom: a calm, centred chat page. Chom's mark is four confetti dots. */
+      .ask {
+        max-width: 720px;
+        margin: 0 auto;
+        padding-top: 7vh;
+      }
+      .ask-mark,
+      .ask-avatar {
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+        width: 44px;
+        height: 44px;
+      }
+      .ask-mark i,
+      .ask-avatar i {
+        border-radius: 50%;
+        background: var(--chom-accent-coral);
+      }
+      .ask-mark i:nth-child(2),
+      .ask-avatar i:nth-child(2) {
+        background: var(--chom-accent-sunflower);
+      }
+      .ask-mark i:nth-child(3),
+      .ask-avatar i:nth-child(3) {
+        background: var(--chom-accent-mint);
+      }
+      .ask-mark i:nth-child(4),
+      .ask-avatar i:nth-child(4) {
+        background: var(--chom-accent-sky);
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .ask-mark i {
+          animation: ask-bob 2.4s ease-in-out infinite;
+        }
+        .ask-mark i:nth-child(2) {
+          animation-delay: 0.15s;
+        }
+        .ask-mark i:nth-child(3) {
+          animation-delay: 0.45s;
+        }
+        .ask-mark i:nth-child(4) {
+          animation-delay: 0.3s;
+        }
+      }
+      @keyframes ask-bob {
+        50% {
+          transform: scale(0.82);
+        }
+      }
+      .ask-hero {
+        margin-bottom: 28px;
+        text-align: center;
+      }
+      .ask-hero h1 {
+        margin: 18px 0 0;
+        font-size: clamp(30px, 4.6vw, 46px);
+        line-height: 1.08;
+        letter-spacing: -1.2px;
+      }
+      .composer {
+        padding: 16px 12px 10px 20px;
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        background: var(--card);
+        box-shadow: 0 18px 40px -26px color-mix(in srgb, var(--ink) 45%, transparent);
+        transition: border-color 0.15s, box-shadow 0.15s;
+      }
+      .composer:focus-within {
+        border-color: color-mix(in srgb, var(--ink) 45%, var(--line));
+        box-shadow:
+          0 0 0 4px color-mix(in srgb, var(--chom-accent-sky) 25%, transparent),
+          0 18px 40px -26px color-mix(in srgb, var(--ink) 45%, transparent);
+      }
+      .composer textarea {
+        display: block;
+        width: 100%;
+        max-height: 200px;
+        min-height: 28px;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        resize: none;
+        background: none;
+        color: var(--ink);
+        font: inherit;
+        font-size: 17px;
+        line-height: 1.5;
+      }
+      .composer textarea::placeholder {
+        color: var(--muted);
+      }
+      .composer-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 12px;
+      }
+      .composer-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px 5px 9px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--chom-accent-lilac) 26%, var(--card));
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .composer-send {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        border: 0;
+        border-radius: 14px;
+        background: var(--chom-accent-coral);
+        color: var(--chom-on-accent);
+        cursor: pointer;
+        transition: transform 0.15s;
+      }
+      .composer-send:hover {
+        transform: translateY(-1px);
+      }
+      .composer-send .icon {
+        width: 20px;
+        height: 20px;
+      }
+      .ask-chips {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .ask-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 42px;
+        padding: 6px 16px 6px 6px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--card);
+        color: var(--ink);
+        font: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 0.15s, border-color 0.15s;
+      }
+      .ask-chip:hover {
+        border-color: var(--tone);
+        background: color-mix(in srgb, var(--tone) 20%, var(--card));
+      }
+      .ask-chip .icon {
+        box-sizing: content-box;
+        padding: 7px;
+        border-radius: 50%;
+        background: var(--tone);
+        color: var(--chom-on-accent);
+      }
+      .ask-note {
+        margin: 18px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+        text-align: center;
+      }
+
+      /* The conversation: the learner's words in a soft bubble, Chom's reply beside its mark. */
+      .ask-thread {
+        display: grid;
+        gap: 32px;
+      }
+      .ask.has-thread {
+        padding-top: 0;
+      }
+      .ask.has-thread .ask-hero {
+        margin-bottom: 24px;
+        text-align: left;
+      }
+      .ask.has-thread .ask-mark,
+      .ask.has-thread .ask-chips,
+      .ask.has-thread .ask-note {
+        display: none;
+      }
+      .ask.has-thread .ask-hero h1 {
+        margin: 0;
+        font-size: 24px;
+        letter-spacing: -0.4px;
+      }
+      .ask.has-thread .ask-thread {
+        margin-bottom: 28px;
+      }
+      .ask.has-thread .composer {
+        position: sticky;
+        z-index: 5;
+        bottom: 24px;
+      }
+      .ask-turn {
+        display: grid;
+        gap: 20px;
+        scroll-margin-top: 24px;
+      }
+      .ask-you {
+        justify-self: end;
+        max-width: 82%;
+        padding: 12px 18px;
+        border-radius: 22px 22px 6px 22px;
+        background: color-mix(in srgb, var(--chom-accent-sky) 24%, var(--card));
+        color: var(--ink);
+        font-size: 15px;
+      }
+      .ask-you p {
+        margin: 0;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+      .ask-chom {
+        display: grid;
+        grid-template-columns: 32px minmax(0, 1fr);
+        gap: 14px;
+      }
+      .ask-avatar {
+        width: 30px;
+        height: 30px;
+        gap: 3px;
+        margin-top: 2px;
+      }
+      .ask-reply {
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--ink);
+      }
+      .ask-reply h3 {
+        margin: 2px 0 8px;
+        font-size: 19px;
+        letter-spacing: -0.3px;
+      }
+      .ask-reply p {
+        margin: 0 0 10px;
+      }
+      .ask-reply ol {
+        margin: 0 0 12px;
+        padding-left: 20px;
+      }
+      .ask-reply li {
+        margin: 6px 0;
+      }
+      .ask-reply .notice {
+        margin-top: 14px;
+      }
+
+      /* The notebook: a sunflower page under the chat. */
+      .ask-notebook {
+        max-width: 720px;
+        margin: 64px auto 0;
+        padding: 22px;
+        border-radius: 26px;
+        background: color-mix(in srgb, var(--chom-accent-sunflower) 22%, var(--card));
+      }
+      .ask-notebook-head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 14px;
+      }
+      .ask-notebook-head h2 {
+        margin: 0;
+        font-size: 19px;
+      }
+      .ask-notebook-head label {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .ask-notebook-icon {
+        display: grid;
+        place-items: center;
+        flex: none;
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: var(--chom-accent-sunflower);
+        color: var(--chom-on-accent);
+      }
+      :root[data-theme="dark"] .ask-notebook {
+        background: var(--card);
+        box-shadow: inset 0 6px 0 var(--chom-accent-sunflower);
+      }
+      .ask-notebook .notes-area {
+        background: var(--card);
+      }
+      @media (max-width: 900px) {
+        .ask {
+          padding-top: 3vh;
+        }
+        .ask.has-thread .composer {
+          bottom: 104px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .composer,
+        .composer-send,
+        .ask-chip {
+          transition: none;
+        }
+      }
     </style>
 </head>
   <body>
@@ -4694,13 +5001,7 @@ SOFTWARE.
                 `<button class="button" data-action="add-task">${icon("plus", true)}Add a task</button>`,
               ) +
               `<section class="panel"><div class="panel-head"><h2>My tasks</h2><span class="muted" id="tasks-summary">${remaining()} left today</span></div><div id="tasks-content">${tasksMarkup()}</div></section>`;
-          if (currentView === "chom")
-            html =
-              viewHeader(
-                "A good place to get unstuck.",
-                "Choose a guided session, try a quick quiz, or collect your thoughts.",
-              ) +
-              `<div class="info-strip">Guided exercises and a notebook to help you study. Open-ended AI chat is coming soon.</div><div class="content-grid"><section class="content-card"><span class="subject-icon">${icon("spark")}</span><h2>Make algebra make sense</h2><p>Break a quadratic equation into smaller, clearer steps.</p><button class="button secondary" data-action="study" data-topic="algebra">Start a session</button></section><section class="content-card"><span class="subject-icon mint">${icon("flask")}</span><h2>A quick osmosis check</h2><p>Three questions to help you see what’s sticking.</p><button class="button secondary" data-action="study" data-topic="quiz">Take the quiz</button></section></div><h2 class="section-title">Your study notebook</h2><section class="content-card"><label for="study-notes" class="muted">An idea, a question, a lightbulb moment. Keep it here.</label><textarea id="study-notes" class="notes-area" maxlength="12000" style="margin-top:12px" placeholder="Today I learned...">${esc(state.notes)}</textarea><div class="form-actions"><button class="button" data-action="save-notes">Save my notes</button></div></section>`;
+          if (currentView === "chom") html = askView();
           if (currentView === "school")
             html =
               viewHeader(
@@ -4906,20 +5207,69 @@ SOFTWARE.
             announce("Couldn’t delete that. Try again.");
           }
         }
-        function study(topic, query = "") {
+        // Study with Chom: a conversation of guided sessions (open chat comes later).
+        let askThread = [];
+        const askAsks = {
+          algebra: "Help me make algebra click",
+          quiz: "Quiz me on osmosis",
+          plan: "What should I study next?",
+          essay: "Help me shape my essay",
+        };
+        // What a typed question is about; anything else gets the session picker.
+        const askTopics = [
+          [/quadratic|algebra|factoris|equation|\bmaths?\b|mathematics/i, "algebra"],
+          [/osmosis|quiz|test me|life sciences|biology|\bcells?\b/i, "quiz"],
+          [/essay|paragraph|introduction|conclusion|argument|\bwrit/i, "essay"],
+          [/plan|next|today|tasks?|homework|focus|where (do|should) i start/i, "plan"],
+        ];
+        const askTopic = (text) => (askTopics.find(([re]) => re.test(text)) || [, "pick"])[1];
+        const askMark = (cls) => `<span class="${cls}" aria-hidden="true"><i></i><i></i><i></i><i></i></span>`;
+        function askTurn(t) {
+          return `<div class="ask-turn"><div class="ask-you"><p>${esc(t.q)}</p></div><div class="ask-chom">${askMark("ask-avatar")}<div class="ask-reply"><h3>${t.title}</h3>${t.body}</div></div></div>`;
+        }
+        function askView() {
+          const chips = [
+            ["algebra", "tone-sky", "calculator", "Make algebra click"],
+            ["quiz", "tone-mint", "flask", "Quick osmosis quiz"],
+            ["plan", "tone-sunflower", "calendar", "Plan my study"],
+            ["essay", "tone-coral", "book-open", "Shape my essay"],
+          ]
+            .map(([topic, tone, ic, label]) => `<button type="button" class="ask-chip ${tone}" data-action="study" data-topic="${topic}">${icon(ic, true)}${label}</button>`)
+            .join("");
+          return `<div class="ask${askThread.length ? " has-thread" : ""}"><header class="ask-hero">${askMark("ask-mark")}<h1>What shall we work on, ${esc(displayName)}?</h1></header><div class="ask-thread" id="ask-thread" aria-live="polite">${askThread.map(askTurn).join("")}</div><form class="composer" id="ask-form"><textarea id="ask-input" name="q" rows="1" maxlength="500" aria-label="Ask Chom" placeholder="Ask about a topic, a task or what to study next" autocomplete="off"></textarea><div class="composer-bar"><span class="composer-tag">${icon("spark", true)}Guided study</span><button class="composer-send" type="submit" aria-label="Send">${icon("up")}</button></div></form><div class="ask-chips">${chips}</div><p class="ask-note">Chom guides you through study sessions for now. Open chat is coming soon.</p></div><section class="ask-notebook"><div class="ask-notebook-head"><span class="ask-notebook-icon" aria-hidden="true">${icon("book")}</span><div><h2>Your study notebook</h2><label for="study-notes">An idea, a question, a lightbulb moment. Keep it here.</label></div></div><textarea id="study-notes" class="notes-area" maxlength="12000" placeholder="Today I learned...">${esc(state.notes)}</textarea><div class="form-actions"><button class="button" data-action="save-notes">Save my notes</button></div></section>`;
+        }
+        function askAppend() {
+          const box = $(".ask");
+          if (!box) return;
+          box.classList.add("has-thread");
+          // Append only the new turn, so revealed answers in earlier ones stay open.
+          $("#ask-thread").insertAdjacentHTML("beforeend", askTurn(askThread[askThread.length - 1]));
+          const last = $("#ask-thread").lastElementChild;
+          if (last) last.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+        }
+        function study(topic, query = "", inThread = false) {
+          const show = inThread
+            ? (title, body) => {
+                askThread.push({ q: query || askAsks[topic] || "Help me study", title, body });
+                askAppend();
+              }
+            : modal;
           if (topic === "quiz") {
-            startQuiz();
-            return;
+            if (!inThread) return startQuiz();
+            return show(
+              "Let’s see what’s sticking.",
+              `<p>Three quick questions on osmosis, each with an explanation.</p><div class="form-actions"><button class="button" data-action="start-quiz">Start the quiz</button></div>`,
+            );
           }
           if (topic === "algebra") {
-            modal(
+            show(
               "Let’s make algebra click.",
-              `<p>We’ll start with a quadratic equation you can factorise.</p><div class="study-example">x² + 5x + 6 = 0</div><ol><li>Find two numbers that multiply to <strong>6</strong> and add to <strong>5</strong>. They are 2 and 3.</li><li>Rewrite the equation: <strong>(x + 2)(x + 3) = 0</strong>.</li><li>One of those factors must be zero. So <strong>x = −2</strong> or <strong>x = −3</strong>.</li></ol><h3>Your turn</h3><p>Factorise x² + 7x + 12 = 0.</p><button class="button secondary" style="margin-top:14px" data-action="reveal-algebra">Show me the answer</button><div id="algebra-answer" hidden class="notice">The two numbers are 3 and 4. So (x + 3)(x + 4) = 0, giving x = −3 or x = −4.</div><div class="notice">Guided study · Mathematics · Factorising quadratics</div>`,
+              `<p>We’ll start with a quadratic equation you can factorise.</p><div class="study-example">x² + 5x + 6 = 0</div><ol><li>Find two numbers that multiply to <strong>6</strong> and add to <strong>5</strong>. They are 2 and 3.</li><li>Rewrite the equation: <strong>(x + 2)(x + 3) = 0</strong>.</li><li>One of those factors must be zero. So <strong>x = −2</strong> or <strong>x = −3</strong>.</li></ol><h3>Your turn</h3><p>Factorise x² + 7x + 12 = 0.</p><button class="button secondary" style="margin-top:14px" data-action="reveal-algebra">Show me the answer</button><div data-answer hidden class="notice">The two numbers are 3 and 4. So (x + 3)(x + 4) = 0, giving x = −3 or x = −4.</div><div class="notice">Guided study · Mathematics · Factorising quadratics</div>`,
             );
             return;
           }
           if (topic === "plan") {
-            modal(
+            show(
               "Find your next small step.",
               `<p>A manageable plan starts with what’s already on your list.</p><ol>${
                 state.tasks
@@ -4936,15 +5286,15 @@ SOFTWARE.
             return;
           }
           if (topic === "essay") {
-            modal(
+            show(
               "Give your essay a clear shape.",
               `<p>Build your argument before polishing your sentences.</p><ol><li><strong>Introduction:</strong> introduce the question and state your main argument.</li><li><strong>Body paragraphs:</strong> make one point, support it with evidence, then explain how it supports your argument.</li><li><strong>Conclusion:</strong> bring your main ideas together and answer the original question.</li></ol><div class="form-actions"><button class="button" data-action="essay-notes">Open my notebook</button></div>`,
             );
             return;
           }
-          modal(
-            "What shall we work on?",
-            `${query ? `<p>You’re exploring “${esc(query)}”.</p>` : "<p>A little help can make a big difference.</p>"}<div class="topic-options"><button class="topic-option" data-action="study" data-topic="algebra">${icon("spark")}<span>Understand quadratic equations<small>A step-by-step guided example</small></span>${icon("chevron", true)}</button><button class="topic-option" data-action="study" data-topic="quiz">${icon("flask")}<span>Test your osmosis knowledge<small>Three questions, with explanations</small></span>${icon("chevron", true)}</button><button class="topic-option" data-action="study" data-topic="plan">${icon("calendar")}<span>Find my next step<small>A plan based on your task list</small></span>${icon("chevron", true)}</button></div><div class="notice">Open-ended AI chat is coming soon.</div>`,
+          show(
+            inThread ? "I can’t chat about that just yet." : "What shall we work on?",
+            `${inThread ? "<p>Open chat is coming soon. For now, pick a guided session and we’ll work through it together.</p>" : query ? `<p>You’re exploring “${esc(query)}”.</p>` : "<p>A little help can make a big difference.</p>"}<div class="topic-options"><button class="topic-option" data-action="study" data-topic="algebra">${icon("spark")}<span>Understand quadratic equations<small>A step-by-step guided example</small></span>${icon("chevron", true)}</button><button class="topic-option" data-action="study" data-topic="quiz">${icon("flask")}<span>Test your osmosis knowledge<small>Three questions, with explanations</small></span>${icon("chevron", true)}</button><button class="topic-option" data-action="study" data-topic="plan">${icon("calendar")}<span>Find my next step<small>A plan based on your task list</small></span>${icon("chevron", true)}</button><button class="topic-option" data-action="study" data-topic="essay">${icon("book-open")}<span>Shape an essay<small>Introduction, body and conclusion</small></span>${icon("chevron", true)}</button></div>${inThread ? "" : `<div class="notice">Open-ended AI chat is coming soon.</div>`}`,
           );
         }
         const quiz = [
@@ -5102,7 +5452,8 @@ SOFTWARE.
           if (a === "reload-page") location.reload();
           if (a === "task-delete") deleteTask(b.dataset.id);
           if (a === "subject") subjectDialog(b.dataset.subject);
-          if (a === "study") study(b.dataset.topic);
+          if (a === "study") study(b.dataset.topic, "", !!b.closest(".ask"));
+          if (a === "start-quiz") startQuiz();
           if (a === "search") search();
           if (a === "search-go") {
             closeModal();
@@ -5129,7 +5480,7 @@ SOFTWARE.
             if (info) modal(info[0], info[1]);
           }
           if (a === "reveal-algebra") {
-            $("#algebra-answer").hidden = false;
+            b.parentElement.querySelector("[data-answer]").hidden = false;
             b.hidden = true;
           }
           if (a === "open-tasks") {
@@ -5139,6 +5490,7 @@ SOFTWARE.
           if (a === "essay-notes") {
             closeModal();
             go("chom");
+            $("#study-notes")?.focus();
           }
           if (a === "save-notes") {
             state.notes = $("#study-notes").value;
@@ -5198,12 +5550,27 @@ SOFTWARE.
         });
         document.addEventListener("input", (e) => {
           if (e.target.id === "global-search") searchResults(e.target.value);
+          if (e.target.id === "ask-input") {
+            e.target.style.height = "auto";
+            e.target.style.height = `${e.target.scrollHeight}px`;
+          }
           if (e.target.id === "study-notes") {
             state.notes = e.target.value;
             save();
           }
         });
         document.addEventListener("submit", async (e) => {
+          if (e.target.id === "ask-form") {
+            e.preventDefault();
+            const input = $("#ask-input"),
+              q = input.value.trim();
+            if (!q) return input.focus();
+            input.value = "";
+            input.style.height = "auto";
+            study(askTopic(q), q, true);
+            input.focus();
+            return;
+          }
           if (e.target.id === "add-live-task-form") {
             e.preventDefault();
             const f = new FormData(e.target),
@@ -5244,6 +5611,11 @@ SOFTWARE.
           $(".mobile-menu").focus();
         });
         document.addEventListener("keydown", (e) => {
+          // Enter sends; Shift+Enter starts a new line.
+          if (e.target.id === "ask-input" && e.key === "Enter" && !e.shiftKey && !e.isComposing) {
+            e.preventDefault();
+            e.target.form.requestSubmit();
+          }
           if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
             e.preventDefault();
             search();
