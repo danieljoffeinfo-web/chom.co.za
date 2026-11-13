@@ -14,7 +14,7 @@
     "sprite": "node scripts/sprite.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "node scripts/sprite.mjs --check",
-    "test": "node scripts/sprite.mjs --check"
+    "test": "node scripts/sprite.mjs --check && node --experimental-strip-types --test test/*.test.ts"
   },
   "peerDependencies": {
     "react": "19.3.0"

@@ -188,14 +188,6 @@ export function personInitials(fullName: string): string {
     .join('');
 }
 
-/** "Mathematics" → "MA", "Life Sciences" → "LS". */
-export function subjectInitials(name: string): string {
-  const words = name.split(/\s+/).filter((w) => /^[A-Za-z]/.test(w));
-  const [first, second] = words;
-  const letters = first && second ? first.charAt(0) + second.charAt(0) : name.slice(0, 2);
-  return letters.toUpperCase();
-}
-
 /** The Future tab is full for Grades 11–12 and lighter below (spec §5.6). */
 export function futureStage(grade: number | null): 'university' | 'subject_choice' | 'pathways' {
   if (grade !== null && grade >= 11) return 'university';

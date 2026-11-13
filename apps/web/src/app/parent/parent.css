@@ -4,13 +4,10 @@
  * through the prototype names (--ink, --card, ...) that map to @chom/tokens.
  */
 
-/* ---------- Bottom dock: the five sections on phones (spec §4) ---------- */
+/* ---------- Phones: the five sections are the bottom tabs (spec §4) ---------- */
 
-/* On wide screens the sidebar has the sections and Account, so the dock isn't shown:
-   it would only float over the page. Phones use it for everything. */
-.parent-tab {
-  display: none;
-}
+/* On wide screens the sidebar has the sections and Account, so the account button
+   isn't shown: it would only float over the page. */
 @media (min-width: 901px) {
   .parent-dock {
     display: none;
@@ -20,40 +17,8 @@
   background: var(--soft);
 }
 @media (max-width: 900px) {
-  /* Every section is in the dock, so phones don't need the slide-in sidebar. */
+  /* Every section is a tab, so phones don't need the slide-in sidebar. */
   .parent-sidebar {
-    display: none;
-  }
-  .parent-dock {
-    gap: 2px;
-    padding: 5px;
-    max-width: calc(100vw - 24px);
-  }
-  .quick-button.parent-tab {
-    display: grid;
-    width: 58px;
-    height: 50px;
-    gap: 2px;
-    align-content: center;
-    font-size: 10px;
-    font-weight: 700;
-    line-height: 1;
-  }
-  .quick-button.parent-tab > .icon {
-    width: 18px;
-    height: 18px;
-    margin: 0 auto;
-  }
-  .quick-button.parent-tab.active {
-    background: var(--ink);
-    color: var(--card);
-  }
-}
-@media (max-width: 380px) {
-  .quick-button.parent-tab {
-    width: 46px;
-  }
-  .quick-button.parent-tab span {
     display: none;
   }
 }
@@ -113,23 +78,6 @@
 
 /* ---------- Home and Academics ---------- */
 
-/* Home has three headline numbers: one row beside the greeting when both fit (the
-   greeting keeps at least 460px, so it never squeezes onto three lines), otherwise
-   the row moves under the greeting. */
-.parent-top > .cd-hero {
-  flex-basis: 460px;
-}
-.cd-stats.parent-stats {
-  flex-basis: 420px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
-}
-@media (max-width: 600px) {
-  .cd-stats.parent-stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 .subject-rows {
   margin: 0;
   list-style: none;
@@ -167,10 +115,6 @@
 }
 .band.none {
   background: var(--soft);
-  color: var(--muted);
-}
-.cd-of {
-  font-size: 0.45em;
   color: var(--muted);
 }
 .study-facts dl {

@@ -13,6 +13,12 @@
   width: 100%;
 }
 
+/* "71/84" in a headline number: the total is smaller and quieter. */
+.cd-of {
+  font-size: 0.45em;
+  color: var(--muted);
+}
+
 /* Empty and coming-soon states. */
 .empty-message > .icon {
   width: 32px;

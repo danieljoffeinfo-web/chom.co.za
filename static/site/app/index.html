@@ -40,6 +40,17 @@
         --blue-soft: #e4e0cb;
         --ink-hover: #383c63;
         --accent-on-fill: #eeebda;
+        --chom-subject-maths: #2563eb;
+        --chom-subject-english: #7c3aed;
+        --chom-subject-language: #db2777;
+        --chom-subject-life-orientation: #16a34a;
+        --chom-subject-physical-sciences: #0284c7;
+        --chom-subject-life-sciences: #0d9488;
+        --chom-subject-commerce: #d97706;
+        --chom-subject-humanities: #ea580c;
+        --chom-subject-technology: #4f46e5;
+        --chom-subject-arts: #c026d3;
+        --chom-on-subject: #ffffff;
         --r: 24px;
         --sidebar: 248px;
       }
@@ -61,6 +72,17 @@
         --orange: #eeebda;
         --on-orange: #282b4a;
         --peach: #464a70;
+        --chom-subject-maths: #60a5fa;
+        --chom-subject-english: #a78bfa;
+        --chom-subject-language: #f472b6;
+        --chom-subject-life-orientation: #4ade80;
+        --chom-subject-physical-sciences: #38bdf8;
+        --chom-subject-life-sciences: #2dd4bf;
+        --chom-subject-commerce: #fbbf24;
+        --chom-subject-humanities: #fb923c;
+        --chom-subject-technology: #818cf8;
+        --chom-subject-arts: #e879f9;
+        --chom-on-subject: #282b4a;
       }
       * {
         box-sizing: border-box;
@@ -3120,8 +3142,111 @@
         border-color: var(--ink);
         background: var(--soft);
       }
+      /* ---------- Subject badges: one fixed colour and icon per subject, on every dashboard ---------- */
+      .subject-badge {
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        flex: none;
+        border-radius: 8px;
+        background: var(--subject, var(--muted));
+        color: var(--chom-on-subject);
+      }
+      .subject-badge .icon {
+        width: 20px;
+        height: 20px;
+      }
+      .subject-badge.small {
+        width: 32px;
+        height: 32px;
+      }
+      .subject-badge.small .icon {
+        width: 16px;
+        height: 16px;
+      }
+      .subject-badge.maths { --subject: var(--chom-subject-maths); }
+      .subject-badge.english { --subject: var(--chom-subject-english); }
+      .subject-badge.language { --subject: var(--chom-subject-language); }
+      .subject-badge.life-orientation { --subject: var(--chom-subject-life-orientation); }
+      .subject-badge.physical-sciences { --subject: var(--chom-subject-physical-sciences); }
+      .subject-badge.life-sciences { --subject: var(--chom-subject-life-sciences); }
+      .subject-badge.commerce { --subject: var(--chom-subject-commerce); }
+      .subject-badge.humanities { --subject: var(--chom-subject-humanities); }
+      .subject-badge.technology { --subject: var(--chom-subject-technology); }
+      .subject-badge.arts { --subject: var(--chom-subject-arts); }
+
+      /* ---------- Phones: the main sections as bottom tabs, Home first; search, alerts and
+         profile move to the top right. More (where a dashboard has it) opens the menu. ---------- */
+      .tab-dock {
+        display: none;
+      }
+      @media (max-width: 900px) {
+        .tab-dock {
+          position: fixed;
+          z-index: 30;
+          left: 12px;
+          right: 12px;
+          bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+          max-width: 480px;
+          margin: 0 auto;
+          display: grid;
+          grid-auto-flow: column;
+          grid-auto-columns: minmax(0, 1fr);
+          gap: 4px;
+          padding: 6px;
+          border: 1px solid var(--line);
+          border-radius: 16px;
+          background: var(--card);
+          box-shadow: 0 8px 32px rgba(20, 20, 20, 0.08);
+        }
+        .tab-dock > a,
+        .tab-dock > button {
+          display: grid;
+          justify-items: center;
+          align-content: center;
+          gap: 4px;
+          min-width: 0;
+          min-height: 52px;
+          padding: 0 2px;
+          border-radius: 12px;
+          color: var(--muted);
+          font-size: 11px;
+          font-weight: 700;
+          line-height: 1;
+          text-decoration: none;
+        }
+        .tab-dock .icon {
+          width: 20px;
+          height: 20px;
+        }
+        .tab-dock .active {
+          background: var(--ink);
+          color: var(--card);
+        }
+        .quick-actions {
+          position: absolute;
+          top: 14px;
+          right: 14px;
+          bottom: auto;
+          left: auto;
+          transform: none;
+          padding: 0;
+          border: 0;
+          background: transparent;
+          box-shadow: none;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+        }
+        .quick-actions .mobile-menu,
+        .dock-divider {
+          display: none;
+        }
+        .page {
+          padding-top: 72px;
+        }
+      }
     </style>
-  <link rel="stylesheet" href="/shared/subjects.css">
 </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -3330,6 +3455,51 @@ SOFTWARE.
             d="M3 15.055v-.684c.126.053.255.1.39.142 2.092.642 4.313.987 6.61.987 2.297 0 4.518-.345 6.61-.987.135-.041.264-.089.39-.142v.684c0 1.347-.985 2.53-2.363 2.686a41.454 41.454 0 0 1-9.274 0C3.985 17.585 3 16.402 3 15.055Z"
           />
         </symbol>
+        <symbol id="i-calculator" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 1c-1.716 0-3.408.106-5.07.31C3.806 1.45 3 2.414 3 3.517V16.75A2.25 2.25 0 0 0 5.25 19h9.5A2.25 2.25 0 0 0 17 16.75V3.517c0-1.103-.806-2.068-1.93-2.207A41.403 41.403 0 0 0 10 1ZM5.99 8.75A.75.75 0 0 1 6.74 8h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75h-.01a.75.75 0 0 1-.75-.75v-.01Zm.75 1.417a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75v-.01a.75.75 0 0 0-.75-.75h-.01Zm-.75 2.916a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75h-.01a.75.75 0 0 1-.75-.75v-.01Zm.75 1.417a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75v-.01a.75.75 0 0 0-.75-.75h-.01Zm1.417-5.75a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75h-.01a.75.75 0 0 1-.75-.75v-.01Zm.75 1.417a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75v-.01a.75.75 0 0 0-.75-.75h-.01Zm-.75 2.916a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75h-.01a.75.75 0 0 1-.75-.75v-.01Zm.75 1.417a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75v-.01a.75.75 0 0 0-.75-.75h-.01Zm1.42-5.75a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75h-.01a.75.75 0 0 1-.75-.75v-.01Zm.75 1.417a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75v-.01a.75.75 0 0 0-.75-.75h-.01Zm-.75 2.916a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75h-.01a.75.75 0 0 1-.75-.75v-.01Zm.75 1.417a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75v-.01a.75.75 0 0 0-.75-.75h-.01ZM12.5 8.75a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75h-.01a.75.75 0 0 1-.75-.75v-.01Zm.75 1.417a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75v-.01a.75.75 0 0 0-.75-.75h-.01Zm0 2.166a.75.75 0 0 1 .75.75v2.167a.75.75 0 1 1-1.5 0v-2.167a.75.75 0 0 1 .75-.75ZM6.75 4a.75.75 0 0 0-.75.75v.5c0 .414.336.75.75.75h6.5a.75.75 0 0 0 .75-.75v-.5a.75.75 0 0 0-.75-.75h-6.5Z" clip-rule="evenodd" />
+        </symbol>
+        <symbol id="i-book-open" viewBox="0 0 20 20">
+          <path d="M10.75 16.82A7.462 7.462 0 0 1 15 15.5c.71 0 1.396.098 2.046.282A.75.75 0 0 0 18 15.06v-11a.75.75 0 0 0-.546-.721A9.006 9.006 0 0 0 15 3a8.963 8.963 0 0 0-4.25 1.065V16.82ZM9.25 4.065A8.963 8.963 0 0 0 5 3c-.85 0-1.673.118-2.454.339A.75.75 0 0 0 2 4.06v11a.75.75 0 0 0 .954.721A7.506 7.506 0 0 1 5 15.5c1.579 0 3.042.487 4.25 1.32V4.065Z" />
+        </symbol>
+        <symbol id="i-language" viewBox="0 0 20 20">
+          <path d="M7.75 2.75a.75.75 0 0 0-1.5 0v1.258a32.987 32.987 0 0 0-3.599.278.75.75 0 1 0 .198 1.487A31.545 31.545 0 0 1 8.7 5.545 19.381 19.381 0 0 1 7 9.56a19.418 19.418 0 0 1-1.002-2.05.75.75 0 0 0-1.384.577 20.935 20.935 0 0 0 1.492 2.91 19.613 19.613 0 0 1-3.828 4.154.75.75 0 1 0 .945 1.164A21.116 21.116 0 0 0 7 12.331c.095.132.192.262.29.391a.75.75 0 0 0 1.194-.91c-.204-.266-.4-.538-.59-.815a20.888 20.888 0 0 0 2.333-5.332c.31.031.618.068.924.108a.75.75 0 0 0 .198-1.487 32.832 32.832 0 0 0-3.599-.278V2.75Z" />
+          <path fill-rule="evenodd" d="M13 8a.75.75 0 0 1 .671.415l4.25 8.5a.75.75 0 1 1-1.342.67L15.787 16h-5.573l-.793 1.585a.75.75 0 1 1-1.342-.67l4.25-8.5A.75.75 0 0 1 13 8Zm2.037 6.5L13 10.427 10.964 14.5h4.073Z" clip-rule="evenodd" />
+        </symbol>
+        <symbol id="i-beaker" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M8.5 3.528v4.644c0 .729-.29 1.428-.805 1.944l-1.217 1.216a8.75 8.75 0 0 1 3.55.621l.502.201a7.25 7.25 0 0 0 4.178.365l-2.403-2.403a2.75 2.75 0 0 1-.805-1.944V3.528a40.205 40.205 0 0 0-3 0Zm4.5.084.19.015a.75.75 0 1 0 .12-1.495 41.364 41.364 0 0 0-6.62 0 .75.75 0 0 0 .12 1.495L7 3.612v4.56c0 .331-.132.649-.366.883L2.6 13.09c-1.496 1.496-.817 4.15 1.403 4.475C5.961 17.852 7.963 18 10 18s4.039-.148 5.997-.436c2.22-.325 2.9-2.979 1.403-4.475l-4.034-4.034A1.25 1.25 0 0 1 13 8.172v-4.56Z" clip-rule="evenodd" />
+        </symbol>
+        <symbol id="i-bolt" viewBox="0 0 20 20">
+          <path d="M11.983 1.907a.75.75 0 0 0-1.292-.657l-8.5 9.5A.75.75 0 0 0 2.75 12h6.572l-1.305 6.093a.75.75 0 0 0 1.292.657l8.5-9.5A.75.75 0 0 0 17.25 8h-6.572l1.305-6.093Z" />
+        </symbol>
+        <symbol id="i-banknotes" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M1 4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4Zm12 4a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM4 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm13-1a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM1.75 14.5a.75.75 0 0 0 0 1.5c4.417 0 8.693.603 12.749 1.73 1.111.309 2.251-.512 2.251-1.696v-.784a.75.75 0 0 0-1.5 0v.784a.272.272 0 0 1-.35.25A49.043 49.043 0 0 0 1.75 14.5Z" clip-rule="evenodd" />
+        </symbol>
+        <symbol id="i-briefcase" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M6 3.75A2.75 2.75 0 0 1 8.75 1h2.5A2.75 2.75 0 0 1 14 3.75v.443c.572.055 1.14.122 1.706.2C17.053 4.582 18 5.75 18 7.07v3.469c0 1.126-.694 2.191-1.83 2.54-1.952.599-4.024.921-6.17.921s-4.219-.322-6.17-.921C2.694 12.73 2 11.665 2 10.539V7.07c0-1.321.947-2.489 2.294-2.676A41.047 41.047 0 0 1 6 4.193V3.75Zm6.5 0v.325a41.622 41.622 0 0 0-5 0V3.75c0-.69.56-1.25 1.25-1.25h2.5c.69 0 1.25.56 1.25 1.25ZM10 10a1 1 0 0 0-1 1v.01a1 1 0 0 0 1 1h.01a1 1 0 0 0 1-1V11a1 1 0 0 0-1-1H10Z" clip-rule="evenodd" />
+          <path d="M3 15.055v-.684c.126.053.255.1.39.142 2.092.642 4.313.987 6.61.987 2.297 0 4.518-.345 6.61-.987.135-.041.264-.089.39-.142v.684c0 1.347-.985 2.53-2.363 2.686a41.454 41.454 0 0 1-9.274 0C3.985 17.585 3 16.402 3 15.055Z" />
+        </symbol>
+        <symbol id="i-drama" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.536-4.464a.75.75 0 1 0-1.061-1.061 3.5 3.5 0 0 1-4.95 0 .75.75 0 0 0-1.06 1.06 5 5 0 0 0 7.07 0ZM9 8.5c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S7.448 7 8 7s1 .672 1 1.5Zm3 1.5c.552 0 1-.672 1-1.5S12.552 7 12 7s-1 .672-1 1.5.448 1.5 1 1.5Z" clip-rule="evenodd" />
+        </symbol>
+        <symbol id="i-globe" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-1.503.204A6.5 6.5 0 1 1 7.95 3.83L6.927 5.62a1.453 1.453 0 0 0 1.91 2.02l.175-.087a.5.5 0 0 1 .224-.053h.146a.5.5 0 0 1 .447.724l-.028.055a.4.4 0 0 1-.357.221h-.502a2.26 2.26 0 0 0-1.88 1.006l-.044.066a2.099 2.099 0 0 0 1.085 3.156.58.58 0 0 1 .397.547v1.05a1.175 1.175 0 0 0 2.093.734l1.611-2.014c.192-.24.296-.536.296-.842 0-.316.128-.624.353-.85a1.363 1.363 0 0 0 .173-1.716l-.464-.696a.369.369 0 0 1 .527-.499l.343.257c.316.237.738.275 1.091.098a.586.586 0 0 1 .677.11l1.297 1.297Z" clip-rule="evenodd" />
+        </symbol>
+        <symbol id="i-clock" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z" clip-rule="evenodd" />
+        </symbol>
+        <symbol id="i-computer" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M2 4.25A2.25 2.25 0 0 1 4.25 2h11.5A2.25 2.25 0 0 1 18 4.25v8.5A2.25 2.25 0 0 1 15.75 15h-3.105a3.501 3.501 0 0 0 1.1 1.677A.75.75 0 0 1 13.26 18H6.74a.75.75 0 0 1-.484-1.323A3.501 3.501 0 0 0 7.355 15H4.25A2.25 2.25 0 0 1 2 12.75v-8.5Zm1.5 0a.75.75 0 0 1 .75-.75h11.5a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-.75.75H4.25a.75.75 0 0 1-.75-.75v-7.5Z" clip-rule="evenodd" />
+        </symbol>
+        <symbol id="i-paint" viewBox="0 0 20 20">
+          <path d="M15.993 1.385a1.87 1.87 0 0 1 2.623 2.622l-4.03 5.27a12.749 12.749 0 0 1-4.237 3.562 4.508 4.508 0 0 0-3.188-3.188 12.75 12.75 0 0 1 3.562-4.236l5.27-4.03ZM6 11a3 3 0 0 0-3 3 .5.5 0 0 1-.72.45.75.75 0 0 0-1.035.931A4.001 4.001 0 0 0 9 14.004V14a3.01 3.01 0 0 0-1.66-2.685A2.99 2.99 0 0 0 6 11Z" />
+        </symbol>
+        <symbol id="i-music" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M17.721 1.599a.75.75 0 0 1 .279.583v11.29a2.25 2.25 0 0 1-1.774 2.2l-2.041.44a2.216 2.216 0 0 1-.938-4.332l2.662-.577a.75.75 0 0 0 .591-.733V6.112l-8 1.73v7.684a2.25 2.25 0 0 1-1.774 2.2l-2.042.44a2.216 2.216 0 1 1-.935-4.331l2.659-.573A.75.75 0 0 0 7 12.529V4.236a.75.75 0 0 1 .591-.733l9.5-2.054a.75.75 0 0 1 .63.15Z" clip-rule="evenodd" />
+        </symbol>
+        <symbol id="i-tools" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M14.5 10a4.5 4.5 0 0 0 4.284-5.882c-.105-.324-.51-.391-.752-.15L15.34 6.66a.454.454 0 0 1-.493.11 3.01 3.01 0 0 1-1.618-1.616.455.455 0 0 1 .11-.494l2.694-2.692c.24-.241.174-.647-.15-.752a4.5 4.5 0 0 0-5.873 4.575c.055.873-.128 1.808-.8 2.368l-7.23 6.024a2.724 2.724 0 1 0 3.837 3.837l6.024-7.23c.56-.672 1.495-.855 2.368-.8.096.007.193.01.291.01ZM5 16a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" clip-rule="evenodd" />
+          <path d="M14.5 11.5c.173 0 .345-.007.514-.022l3.754 3.754a2.5 2.5 0 0 1-3.536 3.536l-4.41-4.41 2.172-2.607c.052-.063.147-.138.342-.196.202-.06.469-.087.777-.067.128.008.257.012.387.012ZM6 4.586l2.33 2.33a.452.452 0 0 1-.08.09L6.8 8.214 4.586 6H3.309a.5.5 0 0 1-.447-.276l-1.7-3.402a.5.5 0 0 1 .093-.577l.49-.49a.5.5 0 0 1 .577-.094l3.402 1.7A.5.5 0 0 1 6 3.31v1.277Z" />
+        </symbol>
       </defs>
     </svg>
     <div class="overlay" id="nav-overlay"></div>
@@ -3356,7 +3526,7 @@ SOFTWARE.
           data-view="dashboard"
           class="active"
           aria-current="page"
-          ><svg class="icon"><use href="#i-home" /></svg>Dashboard</a
+          ><svg class="icon"><use href="#i-home" /></svg>Home</a
         ><a href="#subjects" data-view="subjects"><svg class="icon"><use href="#i-file" /></svg>My subjects</a><a href="#chom" data-view="chom"
           ><svg class="icon"><use href="#i-spark" /></svg>Study with Chom</a
         ><a href="#tasks" data-view="tasks"
@@ -3401,18 +3571,21 @@ SOFTWARE.
       </div>
     </aside>
     <div class="shell">
-      <nav class="quick-actions" aria-label="Quick actions">
+      <nav class="tab-dock" aria-label="Sections">
+        <a href="#dashboard" data-view="dashboard"><svg class="icon" aria-hidden="true"><use href="#i-home" /></svg>Home</a>
+        <a href="#subjects" data-view="subjects"><svg class="icon" aria-hidden="true"><use href="#i-book" /></svg>Subjects</a>
+        <a href="#tasks" data-view="tasks"><svg class="icon" aria-hidden="true"><use href="#i-check" /></svg>Tasks</a>
+        <a href="#chom" data-view="chom"><svg class="icon" aria-hidden="true"><use href="#i-spark" /></svg>Study</a>
         <button
-          class="quick-button mobile-menu"
+          class="mobile-menu"
           data-action="open-nav"
-          aria-label="Open menu"
           aria-controls="sidebar"
           aria-expanded="false"
-          data-hint="Menu"
         >
-          <svg class="icon" aria-hidden="true"><use href="#i-menu" /></svg>
+          <svg class="icon" aria-hidden="true"><use href="#i-menu" /></svg>More
         </button>
-        <span class="dock-divider mobile-only" aria-hidden="true"></span>
+      </nav>
+      <nav class="quick-actions" aria-label="Quick actions">
         <button
           class="quick-button"
           data-action="search"
@@ -3588,7 +3761,7 @@ SOFTWARE.
           toastTimer,
           lastFocused;
         const views = {
-          dashboard: "My dashboard",
+          dashboard: "Home",
           subjects: "My subjects",
           tasks: "My tasks",
           timetable: "Timetable",
@@ -3600,22 +3773,35 @@ SOFTWARE.
           settings: "Settings",
         };
         const subjectList = [];
-        const palette = ["#1967d2", "#129eaf", "#e8710a", "#1e8e3e", "#9334e6", "#c5221f", "#e52592", "#5f6368"];
-        const shortName = (raw) => {
-          const name = String(raw ?? "").trim();
-          const words = name.split(/\s+/).filter(Boolean);
-          return words.length > 1 && !/Language$/.test(name)
-            ? words[0][0] + words[1][0].toLowerCase()
-            : name.slice(0, 2);
+        // One fixed icon and colour per subject, the same on every dashboard. A copy of
+        // packages/dashboard/src/subject-icon.ts: change both.
+        const subjectRules = [
+          [/life orientation/i, "heart", "life-orientation"],
+          [/life sciences|biology|natural sciences|marine|agricultur/i, "beaker", "life-sciences"],
+          [/physical sciences|physics|chemistry/i, "bolt", "physical-sciences"],
+          [/english/i, "book-open", "english"],
+          [/afrikaans|isizulu|isixhosa|sesotho|sepedi|setswana|siswati|xitsonga|tshivenda|isindebele|french|german|portuguese|spanish|mandarin|latin|language/i, "language", "language"],
+          [/math/i, "calculator", "maths"],
+          [/accounting/i, "banknotes", "commerce"],
+          [/business|econom|\bems\b|tourism|consumer|hospitality/i, "briefcase", "commerce"],
+          [/drama|theatre/i, "drama", "arts"],
+          [/geography|social sciences/i, "globe", "humanities"],
+          [/history/i, "clock", "humanities"],
+          [/computer|information technology/i, "computer", "technology"],
+          [/engineering|technical|technology/i, "tools", "technology"],
+          [/visual arts|design|creative arts|dance/i, "paint", "arts"],
+          [/music/i, "music", "arts"],
+        ];
+        const subjectBadge = (name) => {
+          const [, icon, color] = subjectRules.find(([re]) => re.test(name)) || [, "book", "other"];
+          return `<span class="subject-badge ${color}" aria-hidden="true"><svg class="icon"><use href="#i-${icon}" /></svg></span>`;
         };
         me.subjects.forEach((s, i) =>
             subjectList.push({
               id: s.id,
               name: s.name,
-              short: shortName(s.name),
               room: "",
               teacher: s.teacher,
-              color: palette[i % palette.length],
               isFocus: s.isFocus,
               target: s.target,
               units: Array.isArray(s.units) ? s.units : [],
@@ -3685,7 +3871,7 @@ SOFTWARE.
           return { label: "Your goal", title: x.target ? x.target + "%" : "Not set" };
         }
         function liveClassCard(x) {
-          return `<button class="cd-class" data-action="subject" data-subject="${esc(x.id)}"><span class="cd-class-top"><span class="cd-avatar" aria-hidden="true">${esc(x.short)}</span>${x.isFocus ? '<span class="cd-pill small">Focus</span>' : ""}</span><span><strong>${esc(x.name)}</strong><small>${esc(gradeShort)} · ${esc(x.teacher || "Teacher to be confirmed")}${x.target ? ` · Goal ${x.target}%` : ""}</small></span><span class="cd-next"><span>${esc(unitNow(x).label)}</span><b>${esc(unitNow(x).title)}</b></span></button>`;
+          return `<button class="cd-class" data-action="subject" data-subject="${esc(x.id)}"><span class="cd-class-top">${subjectBadge(x.name)}${x.isFocus ? '<span class="cd-pill small">Focus</span>' : ""}</span><span><strong>${esc(x.name)}</strong><small>${esc(gradeShort)} · ${esc(x.teacher || "Teacher to be confirmed")}${x.target ? ` · Goal ${x.target}%` : ""}</small></span><span class="cd-next"><span>${esc(unitNow(x).label)}</span><b>${esc(unitNow(x).title)}</b></span></button>`;
         }
         function comingSoon(title, copy) {
           return `<section class="panel"><div class="cd-head"><div><span class="cd-label">Coming soon</span><h2>${title}</h2></div></div><p class="muted" style="margin:0;padding:0 24px 28px">${copy}</p></section>`;
@@ -3712,12 +3898,27 @@ SOFTWARE.
           );
           return `<div class="filter-row" role="tablist" aria-label="Task filters">${["today", "upcoming", "done"].map((f) => `<button class="filter ${taskFilter === f ? "active" : ""}" role="tab" aria-selected="${taskFilter === f}" aria-controls="task-results" data-filter="${f}">${{ today: "Today", upcoming: "Upcoming", done: "Completed" }[f]}<span>${state.tasks.filter((t) => (f === "done" ? t.done : f === "upcoming" ? t.when === "upcoming" && !t.done : t.when === "today")).length}</span></button>`).join("")}</div><div class="task-list" id="task-results" role="tabpanel" aria-label="${taskFilter} tasks">${list.length ? list.map((t) => `<div class="task-row ${t.done ? "completed" : ""}"><label class="task-check"><input type="checkbox" data-task="${esc(t.id)}" aria-label="Complete ${esc(t.title)}" ${t.done ? "checked" : ""}></label><div class="task-content"><button type="button" class="task-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button><span class="task-sub"><i class="subject-dot ${esc(t.subject)}"></i>${esc(t.subject)}</span></div><span class="due ${t.done ? "done" : ""}">${t.done ? "Completed" : esc(t.time)}</span></div>`).join("") : tasksFailed ? tasksFailedNote : `<p class="task-empty">${taskFilter === "done" ? "Your completed tasks will appear here." : taskFilter === "upcoming" ? "A little breathing room. No upcoming tasks." : "Nothing due today. You’re all caught up."}</p>`}</div>`;
         }
+        // "Amara, 3 tasks on today’s list." and the next thing to do. Redrawn as tasks are ticked.
+        function heroCopy() {
+          const left = remaining();
+          const byDue = (a, b) => (a.dueAt || "9") < (b.dueAt || "9") ? -1 : 1;
+          const next =
+            state.tasks.filter((t) => t.when === "today" && !t.done).sort(byDue)[0] ||
+            state.tasks.filter((t) => t.when === "upcoming" && !t.done).sort(byDue)[0];
+          const headline = left
+            ? `${esc(displayName)}, ${left} ${left === 1 ? "task" : "tasks"} on today’s list.`
+            : `${esc(displayName)}, you’re clear today.`;
+          const lede = next
+            ? `Next up: <strong>${esc(next.title)}</strong>, ${esc(next.time.charAt(0).toLowerCase() + next.time.slice(1))}.`
+            : "Nothing on your list. Add a task to plan ahead.";
+          return `<h1 class="cd-title">${headline}</h1><p class="cd-lede">${lede}</p>`;
+        }
         function liveDashboard() {
           const weekday = day(me.today, { weekday: "long" }),
-            date = day(me.today, { day: "numeric", month: "long", year: "numeric" }),
-            termLabel = me.term ? ` · Term ${me.term.number} · Week ${me.term.week}` : "",
+            date = day(me.today, { day: "numeric", month: "long" }),
+            termLabel = me.term ? ` · Term ${me.term.number}, Week ${me.term.week}` : "",
             focus = subjectList.filter((x) => x.isFocus);
-          return `<div class="cd"><div class="cd-top"><header class="cd-hero"><span class="cd-label">${esc(weekday)} · ${esc(date)}${esc(termLabel)}</span><h1 class="cd-title">Hey, ${esc(displayName)}.</h1><p class="cd-lede">You’ve got <strong id="remaining-copy">${remaining()} tasks</strong> on your list today.</p></header><section class="cd-stats" aria-label="Your week in numbers"><div class="cd-stat"><span class="cd-num" id="task-count">${remaining()}</span><strong>Tasks due today</strong><small>Tick them off as you go</small></div><div class="cd-stat"><span class="cd-num">${focus.length}</span><strong>Focus subjects</strong><small>${focus.length ? esc(focus.map((x) => x.name).join(", ")) : "Pick them in your answers"}</small></div></section></div><div class="cd-split"><div class="cd-col"><section class="panel dt-panel" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="dt-all" href="#tasks">See all tasks ${icon("arrow", true)}</a></div><div id="dash-tasks">${dashTasks()}</div></section>${comingUp()}</div></div></div>`;
+          return `<div class="cd"><div class="cd-top"><header class="cd-hero"><span class="cd-label">${esc(weekday)} ${esc(date)}${esc(termLabel)}</span><div id="dash-hero" style="display:contents">${heroCopy()}</div></header><section class="cd-stats" aria-label="Your week in numbers"><div class="cd-stat"><span class="cd-num" id="task-count">${remaining()}</span><strong>Tasks due today</strong><small>Tick them off as you go</small></div><div class="cd-stat"><span class="cd-num">${focus.length}</span><strong>Focus subjects</strong><small>${focus.length ? esc(focus.map((x) => x.name).join(", ")) : "Pick them in your answers"}</small></div></section></div><div class="cd-split"><div class="cd-col"><section class="panel dt-panel" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="dt-all" href="#tasks">See all tasks ${icon("arrow", true)}</a></div><div id="dash-tasks">${dashTasks()}</div></section>${comingUp()}</div></div></div>`;
         }
         function comingUp() {
           const exams = (me.exams || []).slice(0, 3);
@@ -4192,7 +4393,7 @@ SOFTWARE.
           }
           if (a === "profile")
             modal(
-              `Hi, ${esc(displayName)}.`,
+              "Your profile",
               `<div style="display:flex;align-items:center;gap:16px"><span class="avatar" style="width:54px;height:54px;font-size:17px">${esc(initials)}</span><div><h3 style="margin:0">${esc(me.fullName)}</h3><p class="muted">${esc(gradeLine)} · ${esc(me.schoolName)}</p></div></div><div class="notice">Signed in to ${esc(me.schoolName)}. Your subjects and teachers come from your school.</div><div class="form-actions"><button class="button secondary" data-action="search-go" data-view="settings">My preferences</button><a class="button" href="../">Sign out</a></div>`,
             );
           if (a === "service") {
@@ -4241,8 +4442,7 @@ SOFTWARE.
             if ($("#task-count")) $("#task-count").textContent = remaining();
             if ($("#tasks-summary"))
               $("#tasks-summary").textContent = remaining() + " left today";
-            if ($("#remaining-copy"))
-              $("#remaining-copy").textContent = remaining() + " tasks";
+            if ($("#dash-hero")) $("#dash-hero").innerHTML = heroCopy();
             const replacement = $$("[data-task]").find(
               (el) => el.dataset.task === id,
             );

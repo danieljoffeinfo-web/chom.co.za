@@ -33,18 +33,39 @@ Navy and vanilla, with no orange. Light mode is the default; dark mode is opt-in
 
 Never write a colour value in app code. Use a token, or a prototype name that maps to one.
 
+### Subject colour
+
+Every subject has one fixed colour and icon, picked by its name (`subjectStyle()` in `packages/dashboard/src/subject-icon.ts`; the learner dashboard keeps a copy of the table). The same subject looks the same on all three dashboards, in every class.
+
+| Family            | Subjects                                     | Token                              | Light     | Dark      |
+| ----------------- | -------------------------------------------- | ---------------------------------- | --------- | --------- |
+| Maths             | Mathematics, Maths Literacy                  | `--chom-subject-maths`             | `#2563eb` | `#60a5fa` |
+| English           | English                                      | `--chom-subject-english`           | `#7c3aed` | `#a78bfa` |
+| Language          | Afrikaans, isiZulu and other languages       | `--chom-subject-language`          | `#db2777` | `#f472b6` |
+| Life Orientation  | Life Orientation                             | `--chom-subject-life-orientation`  | `#16a34a` | `#4ade80` |
+| Physical sciences | Physical Sciences                            | `--chom-subject-physical-sciences` | `#0284c7` | `#38bdf8` |
+| Life sciences     | Life Sciences, Natural Sciences              | `--chom-subject-life-sciences`     | `#0d9488` | `#2dd4bf` |
+| Commerce          | Accounting, Business Studies, Economics, EMS | `--chom-subject-commerce`          | `#d97706` | `#fbbf24` |
+| Humanities        | Geography, History                           | `--chom-subject-humanities`        | `#ea580c` | `#fb923c` |
+| Technology        | IT, CAT, EGD, Technology                     | `--chom-subject-technology`        | `#4f46e5` | `#818cf8` |
+| Arts              | Visual Arts, Drama, Music, Design            | `--chom-subject-arts`              | `#c026d3` | `#e879f9` |
+
+The icon on the fill is `--chom-on-subject` (white in light, navy in dark). Subject colours appear only on subject badges, never on text or buttons. Squares mean subjects; circles mean people.
+
 ## Type
 
 Inter Tight, from Google Fonts (via `next/font` in the apps). Base size 14px.
 
-- Page hero (`.cd-title`): very large, heavy, tight letter spacing. "Hey, Amara." / "Good morning, Sizwe."
-- Small caps label above a heading (`.cd-label`): the section name, e.g. "My Classes".
+- Page hero (`.cd-title`): very large, heavy, tight letter spacing. No greeting: the person's name and today's one fact. "Amara, 3 tasks on today’s list." / "Sizwe, 2 tasks due this week." / "Amara is focusing on Mathematics." (parents read about their child). One lede line under it says what's next.
+- Date line (`.cd-label` above the hero): "Thursday 13 November", plus " · Term 4, Week 6" where the term is known.
+- Label above a heading (`.cd-label`): the section name, in sentence case, e.g. "My classes".
 - Section heading (`.cd-head h2`): "Your classes" / "What you teach".
 
 ## Layout
 
 - **Sidebar** (`.sidebar`, 248px): wordmark, school card, a labelled main navigation, a secondary navigation (Settings), then Sign out and a footer line at the bottom. Below 900px it becomes a slide-in menu with a dimmed overlay.
-- **Quick-actions dock** (`.quick-actions`): floating at the bottom right; on small screens it holds the menu button.
+- **Quick-actions dock** (`.quick-actions`): floating at the bottom right; below 900px it sits at the top right of the page.
+- **Bottom tabs** (`.tab-dock`): below 900px only. The main sections, Home first, labels always shown. On the learner and staff dashboards the last tab, More, opens the sidebar as a menu.
 - **Page** (`.page`): up to 1500px wide. Dashboard home pages use `.cd`, which is up to 1180px.
 - **Other pages** start with `.view-header` (an `h1` and one line of intro).
 
@@ -52,7 +73,9 @@ Inter Tight, from Google Fonts (via `next/font` in the apps). Base size 14px.
 
 | Component      | Class                                                | Used for                                              |
 | -------------- | ---------------------------------------------------- | ----------------------------------------------------- |
-| Hero and stats | `.cd-top`, `.cd-hero`, `.cd-stats`, `.cd-stat`       | Greeting, date, and two headline numbers              |
+| Hero and stats | `.cd-top`, `.cd-hero`, `.cd-stats`, `.cd-stat`       | Date, headline, lede and two headline numbers         |
+| Subject badge  | `.subject-badge` (`<SubjectBadge name=… />`)         | A subject's fixed colour and icon, beside its name    |
+| Bottom tabs    | `.tab-dock`                                          | The main sections on phones                           |
 | Section        | `.cd-section`, `.cd-head`                            | A labelled block with an optional "See all" link      |
 | Class card     | `.cd-classes`, `.cd-class`, `.cd-avatar`, `.cd-next` | One subject and class                                 |
 | Panel          | `.panel`, `.panel-head`                              | Lists and tables                                      |
@@ -64,12 +87,14 @@ Inter Tight, from Google Fonts (via `next/font` in the apps). Base size 14px.
 
 ## Navigation
 
-| Learner dashboard                                                                     | Staff dashboard                                                      | Parent dashboard                                     |
-| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ---------------------------------------------------- |
-| Dashboard, My subjects, Study with Chom, My tasks, Assignments, My results, Timetable | Today, My Classes, Set Work, Calendar, Analytics, Messages, Co-pilot | Home, Academics, Sport, Future, Messages (per child) |
-| School life, Messages, Settings                                                       | Settings                                                             | Account                                              |
+| Learner dashboard                                                                | Staff dashboard                                                     | Parent dashboard                                     |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------- |
+| Home, My subjects, Study with Chom, My tasks, Assignments, My results, Timetable | Home, My classes, Set work, Calendar, Analytics, Messages, Co-pilot | Home, Academics, Sport, Future, Messages (per child) |
+| School life, Messages, Settings                                                  | Settings                                                            | Account                                              |
 
-The parent dashboard is mobile-first: below 900px the sidebar is hidden and the five sections move into the bottom dock. A sibling switcher sits at the top of every page and keeps the parent in the same section when they switch child.
+Phone tabs (below 900px): learner Home, Subjects, Tasks, Study, More; staff Home, Classes, Set work, Messages, More; parent Home, Academics, Sport, Future, Messages.
+
+The parent dashboard is mobile-first: below 900px the sidebar is hidden and the five sections are the bottom tabs. A sibling switcher sits at the top of every page and keeps the parent in the same section when they switch child.
 
 ## Writing
 

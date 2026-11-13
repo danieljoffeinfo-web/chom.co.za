@@ -82,14 +82,6 @@ export async function loadStaffContext(supabase: Client): Promise<StaffContext |
   };
 }
 
-/** "Mathematics" → "MA", "Life Sciences" → "LS": the badge on a class card. */
-export function subjectInitials(name: string): string {
-  const words = name.split(/\s+/).filter((w) => /^[A-Za-z]/.test(w));
-  const [first, second] = words;
-  const letters = first && second ? first.charAt(0) + second.charAt(0) : name.slice(0, 2);
-  return letters.toUpperCase();
-}
-
 /** "Sizwe Dlamini" → "SD": the avatar in the quick-actions dock. */
 export function personInitials(fullName: string): string {
   return fullName

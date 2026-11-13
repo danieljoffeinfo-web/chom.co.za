@@ -1,7 +1,6 @@
 // Copies the student dashboard (static/) into the web app's public folder before each
 // build:
 //   /app/      the student dashboard (where students land after onboarding)
-//   /shared/   its subject styles
 // The copies are build output (git-ignored); edit the originals in static/.
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
@@ -11,13 +10,12 @@ const web = join(dirname(fileURLToPath(import.meta.url)), '..');
 const repo = join(web, '..', '..');
 const pub = join(web, 'public');
 
-const copies = [
-  ['static/site/app', 'app'],
-  ['static/shared', 'shared'],
-];
+const copies = [['static/site/app', 'app']];
 
-// The teacher prototype was removed; clear any old copy.
-await rm(join(pub, 'teacher'), { recursive: true, force: true });
+// The teacher prototype and the old subject styles were removed; clear any old copies.
+for (const gone of ['teacher', 'shared']) {
+  await rm(join(pub, gone), { recursive: true, force: true });
+}
 
 for (const [from, to] of copies) {
   await rm(join(pub, to), { recursive: true, force: true });
@@ -38,4 +36,4 @@ await patch('app/index.html', [
   ['class="sign-out" href="../"', 'class="sign-out" href="/sign-out"'],
   ['<a class="button" href="../">Sign out</a>', '<a class="button" href="/sign-out">Sign out</a>'],
 ]);
-console.log('Copied the student dashboard into apps/web/public/{app,shared}');
+console.log('Copied the student dashboard into apps/web/public/app');

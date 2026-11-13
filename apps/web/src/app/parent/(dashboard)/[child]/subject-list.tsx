@@ -1,5 +1,6 @@
+import { SubjectBadge } from '@chom/dashboard';
+
 import type { ChildSubject } from '@/lib/parent/parent';
-import { subjectInitials } from '@/lib/parent/parent';
 
 /**
  * One row per subject. Status bands (on track / watch / needs attention) arrive with
@@ -28,9 +29,7 @@ export function SubjectList({
       <ul className="task-list subject-rows">
         {subjects.map((s) => (
           <li className="task-row" key={s.id}>
-            <span className="cd-avatar" aria-hidden="true">
-              {subjectInitials(s.name)}
-            </span>
+            <SubjectBadge name={s.name} />
             <span className="task-content">
               <span className="task-name">
                 {s.name}
