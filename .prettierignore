@@ -1,4 +1,5 @@
 # Generated or vendored
+.claude/skills
 pnpm-lock.yaml
 dist
 .next
