@@ -3643,8 +3643,8 @@
          colour (.subject-tint plus its family class), the goal as a ring. */
       .subject-cards {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 16px;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 24px 20px;
         margin: 0;
         padding: 0;
         list-style: none;
@@ -3657,6 +3657,12 @@
         border-top: 6px solid var(--subject);
         border-radius: 22px;
         background: color-mix(in srgb, var(--subject) 12%, var(--card));
+      }
+      /* Every card the same height, so the grid lines up (on phones they just stack). */
+      @media (min-width: 601px) {
+        .subject-cards {
+          grid-auto-rows: 1fr;
+        }
       }
       .subject-card-top {
         display: flex;
@@ -3731,10 +3737,7 @@
       }
 
       /* My subjects: summary tiles, then cards that open the subject. */
-      .subject-group + .subject-group {
-        margin-top: 44px;
-      }
-      .subject-group + .notice {
+      .subject-cards + .notice {
         margin-top: 32px;
       }
       .subject-stats {
@@ -4645,19 +4648,12 @@ SOFTWARE.
         }
         function liveSubjects() {
           const focus = subjectList.filter((x) => x.isFocus),
-            rest = subjectList.filter((x) => !x.isFocus),
             goals = subjectList.filter((x) => x.target).length,
             n = subjectList.length;
-          const group = (label, title, list, tone) =>
-            list.length
-              ? `<section class="cd-section subject-group ${tone}"><div class="cd-head"><div><span class="cd-label">${label}</span><h2>${title}</h2></div></div><ul class="subject-cards">${list.map(liveClassCard).join("")}</ul></section>`
-              : "";
           const stats = `<section class="cd-stats subject-stats" aria-label="Your subjects in numbers"><div class="cd-stat"><span class="cd-stat-icon" aria-hidden="true">${icon("book")}</span><span class="cd-num">${n}</span><strong>Subjects</strong><small>This year</small></div><div class="cd-stat"><span class="cd-stat-icon" aria-hidden="true">${icon("leaf")}</span><span class="cd-num">${focus.length}</span><strong>Focus subjects</strong><small>${focus.length ? esc(focus.map((x) => x.name).join(", ")) : "Pick them in your answers"}</small></div><div class="cd-stat"><span class="cd-stat-icon" aria-hidden="true">${icon("check")}</span><span class="cd-num">${goals}<small class="cd-of">/${n}</small></span><strong>Goals set</strong><small>The mark you’re aiming for</small><span class="cd-meter" aria-hidden="true"><i style="--v:${n ? (100 * goals) / n : 0}%"></i></span></div></section>`;
           const body = !n
             ? `<section class="panel"><div class="empty-message">${icon("book")}<h2>No subjects yet</h2><p>Your subjects appear here once your school has set up your classes.</p></div></section>`
-            : focus.length
-              ? group("Your focus", "The ones you want to improve", focus, "tone-sunflower") + group("Everything else", "Your other subjects", rest, "tone-sky")
-              : group("This year", "All your subjects", subjectList, "tone-sky");
+            : `<ul class="subject-cards">${subjectList.map(liveClassCard).join("")}</ul>`;
           return viewHeader("My subjects", `${esc(gradeLine)} · ${esc(me.schoolName)}`) + (n ? stats : "") + body +
             `<div class="notice">Class notes and worksheets appear here when your teachers share them.</div>`;
         }
