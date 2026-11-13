@@ -4686,6 +4686,74 @@
           transition: none;
         }
       }
+      /* School life: one bright card per service. */
+      .life-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 20px;
+      }
+      .life-card {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        min-height: 220px;
+        padding: 22px;
+        border: 0;
+        border-top: 6px solid var(--tone);
+        border-radius: 24px;
+        background: color-mix(in srgb, var(--tone) 18%, var(--card));
+        color: var(--ink);
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        transition: transform 0.15s, box-shadow 0.15s;
+      }
+      .life-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px -18px color-mix(in srgb, var(--ink) 50%, transparent);
+      }
+      .life-icon {
+        display: grid;
+        place-items: center;
+        width: 52px;
+        height: 52px;
+        margin-bottom: 12px;
+        border-radius: 16px;
+        background: var(--tone);
+        color: var(--chom-on-accent);
+      }
+      .life-icon .icon {
+        width: 26px;
+        height: 26px;
+      }
+      .life-card strong {
+        font-size: 20px;
+        letter-spacing: -0.3px;
+      }
+      .life-copy {
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .life-go {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: auto;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: var(--card);
+        font-size: 14px;
+        font-weight: 700;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .life-card {
+          transition: none;
+        }
+        .life-card:hover {
+          transform: none;
+        }
+      }
     </style>
 </head>
   <body>
@@ -5599,49 +5667,16 @@ SOFTWARE.
             html =
               viewHeader(
                 "There’s more to your school day.",
-                "Find your people, your activities, and the support you need.",
+                "Your activities, school news and the uniform shop, in one place.",
               ) +
-              `<div class="content-grid">${[
-                [
-                  "sport",
-                  "ball",
-                  "Sports & activities",
-                  "Time for the things you love.",
-                ],
-                [
-                  "news",
-                  "file",
-                  "School news",
-                  "Updates from around your school.",
-                ],
-                [
-                  "transport",
-                  "bus",
-                  "Getting home",
-                  "After-school travel details from your school.",
-                ],
-                [
-                  "support",
-                  "heart",
-                  "Someone to talk to",
-                  "Find out how to get support from your school.",
-                ],
-                [
-                  "career",
-                  "target",
-                  "What comes next?",
-                  "Make some space to explore your interests.",
-                ],
-                [
-                  "uniform",
-                  "school",
-                  "Uniform shop",
-                  "Find the right place for school essentials.",
-                ],
+              `<div class="life-grid">${[
+                ["sport", "tone-mint", "ball", "Sports & activities", "Time for the things you love."],
+                ["news", "tone-sky", "file", "School news", "Updates from around your school."],
+                ["uniform", "tone-sunflower", "school", "Uniform shop", "Find the right place for school essentials."],
               ]
                 .map(
-                  ([id, ic, title, copy]) =>
-                    `<section class="content-card"><span class="subject-icon ${id === "support" || id === "sport" ? "mint" : ""}">${icon(ic)}</span><h2>${title}</h2><p>${copy}</p><button class="button secondary" data-action="service" data-service="${id}">Explore</button></section>`,
+                  ([id, tone, ic, title, copy]) =>
+                    `<button type="button" class="life-card ${tone}" data-action="service" data-service="${id}"><span class="life-icon" aria-hidden="true">${icon(ic)}</span><strong>${title}</strong><span class="life-copy">${copy}</span><span class="life-go">Explore ${icon("arrow", true)}</span></button>`,
                 )
                 .join("")}</div>`;
           if (currentView === "messages")
@@ -5989,21 +6024,9 @@ SOFTWARE.
             "Sports & activities",
             `<p>Make time for the things you enjoy outside class.</p><div class="notice">Your school hasn’t shared any activities here yet. Check with your school for practice times and sign-ups.</div>`,
           ],
-          transport: [
-            "Your ride home",
-            `<p>Transport times from your school will show here.</p><div class="notice">For now, check your school’s transport notice for times and the collection point.</div>`,
-          ],
-          support: [
-            "You don’t have to figure it all out alone.",
-            `<p>School can feel like a lot. A teacher, parent, or school counsellor can help you work through what’s on your mind.</p><h3>Ask for a private conversation</h3><p>Contact your school office or speak to a teacher you trust to find out how to meet with the counsellor.</p><div class="notice">Chom doesn’t send messages or book counselling sessions. You don’t need to share personal details here.</div>`,
-          ],
           news: [
             "Around your school",
             `<p>Your school hasn’t shared any news here yet.</p><div class="notice">Check your school’s usual channels for current notices.</div>`,
-          ],
-          career: [
-            "A future with room for you.",
-            `<p>Start with curiosity. You don’t need to have it all worked out.</p><ol><li>Which subjects or activities make you lose track of time?</li><li>What problems do you enjoy solving?</li><li>Who could tell you more about a career you’re curious about?</li></ol><div class="form-actions"><button class="button secondary" data-action="essay-notes">Write in my notebook</button></div>`,
           ],
           uniform: [
             "School essentials",
