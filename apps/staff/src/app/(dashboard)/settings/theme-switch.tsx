@@ -20,7 +20,7 @@ export function ThemeSwitch({ initial }: { initial: Theme }) {
     <div className="switch-row">
       <div>
         <label htmlFor="theme-toggle">Dark mode</label>
-        <p>Light is the default. Switch on for a navy background.</p>
+        <p>Light is the default. Switch on for a black background.</p>
       </div>
       <input
         type="checkbox"
