@@ -3639,6 +3639,298 @@
         background: color-mix(in srgb, var(--chom-accent-sunflower) 30%, var(--card));
         font-weight: 600;
       }
+      /* Subject cards (learner My subjects, parent Home and Academics): tinted in the subject's
+         colour (.subject-tint plus its family class), the goal as a ring. */
+      .subject-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 16px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .subject-card {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 18px;
+        border-top: 6px solid var(--subject);
+        border-radius: 22px;
+        background: color-mix(in srgb, var(--subject) 12%, var(--card));
+      }
+      .subject-card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .subject-card-name {
+        font-size: 17px;
+        line-height: 1.25;
+        font-weight: 800;
+      }
+      .subject-card-teacher {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .subject-card-unit {
+        display: grid;
+        margin-top: 10px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .subject-card-unit small {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .subject-card-foot {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px 12px;
+        margin-top: auto;
+        padding-top: 16px;
+      }
+      .subject-card-goal {
+        flex: 1 1 auto;
+        display: grid;
+        line-height: 1.2;
+      }
+      .subject-card-goal small {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+      .subject-card-goal b {
+        font-size: 13px;
+      }
+      .goal-ring {
+        display: grid;
+        place-items: center;
+        flex: none;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background:
+          radial-gradient(var(--card) 0 58%, transparent 59%),
+          conic-gradient(var(--subject) var(--v), color-mix(in srgb, var(--subject) 22%, var(--card)) 0);
+        font-size: 13px;
+        font-weight: 800;
+      }
+      .goal-ring.empty {
+        color: var(--muted);
+      }
+      .focus-tag {
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: var(--chom-accent-sunflower);
+        color: var(--chom-on-accent);
+        font-size: 11px;
+        font-style: normal;
+        font-weight: 800;
+      }
+
+      /* My subjects: summary tiles, then cards that open the subject. */
+      .subject-group + .subject-group {
+        margin-top: 44px;
+      }
+      .subject-group + .notice {
+        margin-top: 32px;
+      }
+      .subject-stats {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        margin-bottom: 40px;
+      }
+      button.subject-card {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        border-top: 6px solid var(--subject);
+        font: inherit;
+        color: var(--ink);
+        text-align: left;
+        cursor: pointer;
+        transition: transform 0.15s, box-shadow 0.15s;
+      }
+      button.subject-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px -14px var(--subject);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        button.subject-card {
+          transition: none;
+        }
+        button.subject-card:hover {
+          transform: none;
+        }
+      }
+      .todo-pill {
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--chom-accent-coral) 32%, var(--card));
+        font-size: 12px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+      .todo-pill.clear {
+        background: color-mix(in srgb, var(--chom-accent-mint) 32%, var(--card));
+      }
+
+      /* Subject dialog */
+      .sd-hero {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px;
+        border-radius: 20px;
+        background: color-mix(in srgb, var(--subject) 16%, var(--card));
+      }
+      .sd-who {
+        flex: 1 1 auto;
+        display: grid;
+        min-width: 0;
+      }
+      .sd-who small {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .goal-ring.big {
+        width: 64px;
+        height: 64px;
+        font-size: 16px;
+      }
+      .sd-goal {
+        margin: 14px 0 0;
+      }
+      .sd-title {
+        margin: 22px 0 10px;
+        font-size: 15px;
+      }
+      .dialog-body .sd-tasks,
+      .dialog-body .unit-line {
+        padding: 0;
+      }
+      .dialog-body .sd-tasks li,
+      .dialog-body .unit-line li {
+        margin: 0;
+      }
+      .sd-tasks {
+        display: grid;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .sd-tasks li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 10px 10px 14px;
+        border-radius: 14px;
+        background: var(--bg);
+      }
+      .sd-tasks button {
+        padding: 0;
+        border: 0;
+        background: none;
+        font: inherit;
+        font-weight: 700;
+        color: var(--ink);
+        text-align: left;
+        cursor: pointer;
+      }
+      .sd-clear {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 18px 0 0;
+        padding: 12px 14px;
+        border-radius: 14px;
+        background: color-mix(in srgb, var(--chom-accent-mint) 22%, var(--card));
+        font-weight: 600;
+      }
+      .sd-clear .icon {
+        flex: none;
+        color: var(--ink);
+      }
+      /* Units as a line: done in mint, the current one in coral, the rest still to come. */
+      .unit-line {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .unit-line li {
+        position: relative;
+        display: grid;
+        padding: 0 0 14px 28px;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .unit-line li::before {
+        content: "";
+        position: absolute;
+        top: 4px;
+        left: 0;
+        width: 10px;
+        height: 10px;
+        border: 2px solid var(--line);
+        border-radius: 50%;
+        background: var(--card);
+      }
+      .unit-line li:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 20px;
+        bottom: 0;
+        left: 6px;
+        width: 2px;
+        background: var(--line);
+      }
+      .unit-line li.done::before {
+        border-color: var(--chom-accent-mint);
+        background: var(--chom-accent-mint);
+      }
+      .unit-line li.now::before {
+        border-color: var(--chom-accent-coral);
+        background: var(--chom-accent-coral);
+        box-shadow: 0 0 0 5px color-mix(in srgb, var(--chom-accent-coral) 30%, transparent);
+      }
+      .unit-line li.done span {
+        color: var(--muted);
+      }
+      .unit-line li > span {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px 8px;
+      }
+      .unit-line .now-tag {
+        background: var(--chom-accent-coral);
+        color: var(--chom-on-accent);
+      }
+      @media (max-width: 600px) {
+        .subject-stats {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 8px;
+          margin-bottom: 28px;
+        }
+        .subject-stats .cd-stat {
+          padding: 14px 12px 12px;
+          border-radius: 18px;
+        }
+        .subject-stats .cd-num {
+          font-size: 30px;
+        }
+        .subject-stats .cd-stat > small,
+        .subject-stats .cd-stat-icon {
+          display: none;
+        }
+      }
+      .unit-line small {
+        font-weight: 500;
+        color: var(--muted);
+      }
     </style>
 </head>
   <body>
@@ -4263,8 +4555,19 @@ SOFTWARE.
           if (next) return { label: "Next", title: `${next.title} · ${shortDay(next.startsOn)}` };
           return { label: "Your goal", title: x.target ? x.target + "%" : "Not set" };
         }
+        const subjectColor = (name) => (subjectRules.find(([re]) => re.test(name)) || [, , "other"])[2];
+        // The teacher's work for this subject still to do, soonest first.
+        const openTasks = (x) =>
+          state.tasks
+            .filter((t) => t.kind === "assigned" && t.subject === x.name && !t.done)
+            .sort((a, b) => ((a.dueAt || "9") < (b.dueAt || "9") ? -1 : 1));
+        const goalRing = (target, big = false) =>
+          `<span class="goal-ring${big ? " big" : ""}${target ? "" : " empty"}" style="--v:${target || 0}%" aria-hidden="true">${target || "–"}</span>`;
         function liveClassCard(x) {
-          return `<button class="cd-class" data-action="subject" data-subject="${esc(x.id)}"><span class="cd-class-top">${subjectBadge(x.name)}${x.isFocus ? '<span class="cd-pill small">Focus</span>' : ""}</span><span><strong>${esc(x.name)}</strong><small>${esc(gradeShort)} · ${esc(x.teacher || "Teacher to be confirmed")}${x.target ? ` · Goal ${x.target}%` : ""}</small></span><span class="cd-next"><span>${esc(unitNow(x).label)}</span><b>${esc(unitNow(x).title)}</b></span></button>`;
+          const todo = openTasks(x).length;
+          const u = unitNow(x);
+          const showUnit = x.units.length || (me.contentEndsOn && me.today > me.contentEndsOn);
+          return `<li><button type="button" class="subject-card subject-tint ${subjectColor(x.name)}" data-action="subject" data-subject="${esc(x.id)}"><span class="subject-card-top">${subjectBadge(x.name)}${x.isFocus ? '<em class="focus-tag">Focus</em>' : ""}</span><strong class="subject-card-name">${esc(x.name)}</strong><span class="subject-card-teacher">${esc(x.teacher || "Teacher to be confirmed")}</span>${showUnit ? `<span class="subject-card-unit"><small>${esc(u.label)}</small>${esc(u.title)}</span>` : ""}<span class="subject-card-foot">${goalRing(x.target)}<span class="subject-card-goal"><small>Goal</small><b>${x.target ? `Aiming for ${x.target}%` : "No goal yet"}</b></span><span class="todo-pill${todo ? "" : " clear"}">${todo ? `${todo} to do` : "Nothing due"}</span></span></button></li>`;
         }
         function comingSoon(title, copy) {
           return `<section class="panel"><div class="cd-head"><div><span class="cd-label">Coming soon</span><h2>${title}</h2></div></div><p class="muted" style="margin:0;padding:0 24px 28px">${copy}</p></section>`;
@@ -4341,8 +4644,21 @@ SOFTWARE.
           return liveDashboard();
         }
         function liveSubjects() {
-          return viewHeader("My subjects", `${esc(gradeLine)} · ${esc(me.schoolName)}`) +
-            `<section class="cd-section"><div class="cd-classes">${subjectList.map(liveClassCard).join("")}</div></section>` +
+          const focus = subjectList.filter((x) => x.isFocus),
+            rest = subjectList.filter((x) => !x.isFocus),
+            goals = subjectList.filter((x) => x.target).length,
+            n = subjectList.length;
+          const group = (label, title, list, tone) =>
+            list.length
+              ? `<section class="cd-section subject-group ${tone}"><div class="cd-head"><div><span class="cd-label">${label}</span><h2>${title}</h2></div></div><ul class="subject-cards">${list.map(liveClassCard).join("")}</ul></section>`
+              : "";
+          const stats = `<section class="cd-stats subject-stats" aria-label="Your subjects in numbers"><div class="cd-stat"><span class="cd-stat-icon" aria-hidden="true">${icon("book")}</span><span class="cd-num">${n}</span><strong>Subjects</strong><small>This year</small></div><div class="cd-stat"><span class="cd-stat-icon" aria-hidden="true">${icon("leaf")}</span><span class="cd-num">${focus.length}</span><strong>Focus subjects</strong><small>${focus.length ? esc(focus.map((x) => x.name).join(", ")) : "Pick them in your answers"}</small></div><div class="cd-stat"><span class="cd-stat-icon" aria-hidden="true">${icon("check")}</span><span class="cd-num">${goals}<small class="cd-of">/${n}</small></span><strong>Goals set</strong><small>The mark you’re aiming for</small><span class="cd-meter" aria-hidden="true"><i style="--v:${n ? (100 * goals) / n : 0}%"></i></span></div></section>`;
+          const body = !n
+            ? `<section class="panel"><div class="empty-message">${icon("book")}<h2>No subjects yet</h2><p>Your subjects appear here once your school has set up your classes.</p></div></section>`
+            : focus.length
+              ? group("Your focus", "The ones you want to improve", focus, "tone-sunflower") + group("Everything else", "Your other subjects", rest, "tone-sky")
+              : group("This year", "All your subjects", subjectList, "tone-sky");
+          return viewHeader("My subjects", `${esc(gradeLine)} · ${esc(me.schoolName)}`) + (n ? stats : "") + body +
             `<div class="notice">Class notes and worksheets appear here when your teachers share them.</div>`;
         }
         function viewHeader(title, copy, extra = "") {
@@ -4527,9 +4843,16 @@ SOFTWARE.
         function subjectDialog(id) {
           const x = subjectList.find((y) => y.id === id);
           if (!x) return;
+          const todo = openTasks(x);
+          const tasks = todo.length
+            ? `<h3 class="sd-title">To do</h3><ul class="sd-tasks">${todo.map((t) => `<li><button type="button" data-action="task-detail" data-id="${esc(t.id)}">${esc(t.title)}</button><span class="dt-due ${dueTone(t)}">${esc(t.time)}</span></li>`).join("")}</ul>`
+            : `<p class="sd-clear">${icon("check")}Nothing to do for ${esc(x.name)} right now.</p>`;
+          const units = x.units.length
+            ? `<h3 class="sd-title">This year’s units</h3><ol class="unit-line">${x.units.map((u) => `<li class="${esc(u.status)}"><span>${esc(u.title)}${u.status === "now" ? '<span class="now-tag">Now</span>' : ""}</span><small>${esc(shortDay(u.startsOn))} – ${esc(shortDay(u.endsOn))}${u.term ? ` · Term ${u.term}` : ""}</small></li>`).join("")}</ol>`
+            : "";
           modal(
             x.name,
-            `<p>${esc(gradeShort)} · ${esc(x.teacher || "Teacher to be confirmed")}</p><p>${x.target ? `Your goal: <strong>${x.target}%</strong>` : "You haven’t set a goal for this subject yet."}${x.isFocus ? " This is one of your focus subjects." : ""}</p>${x.units.length ? `<h3>This year’s units</h3><ul class="lesson-list">${x.units.map((u) => `<li><span>${u.status === "done" ? "✓ " : u.status === "now" ? "● " : ""}${esc(u.title)}</span><span>${esc(shortDay(u.startsOn))} – ${esc(shortDay(u.endsOn))}${u.term ? ` · T${u.term}` : ""}</span></li>`).join("")}</ul>` : ""}<div class="notice">Lesson times appear once your timetable is loaded. Class material appears when your teacher shares it.</div>`,
+            `<div class="sd-hero subject-tint ${subjectColor(x.name)}">${subjectBadge(x.name)}<div class="sd-who"><strong>${esc(x.teacher || "Teacher to be confirmed")}</strong><small>${esc(gradeShort)}${x.isFocus ? " · one of your focus subjects" : ""}</small></div>${goalRing(x.target, true)}</div><p class="sd-goal">${x.target ? `You’re aiming for <strong>${x.target}%</strong>.` : "You haven’t set a goal for this subject yet."}</p>${tasks}${units}<div class="notice">Lesson times appear once your timetable is loaded. Class material appears when your teacher shares it.</div>`,
           );
         }
         function addTask() {
