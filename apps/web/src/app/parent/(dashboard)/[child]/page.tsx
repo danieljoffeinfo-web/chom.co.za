@@ -4,7 +4,7 @@ import type { CSSProperties } from 'react';
 import { notFound } from 'next/navigation';
 
 import { findChild } from '@/lib/parent/current-parent';
-import { gradeLabel } from '@/lib/parent/parent';
+import { gradeAndClasses } from '@/lib/parent/parent';
 import { SESSION_LENGTHS, STUDY_METHODS, STUDY_TIMES } from '@/lib/student';
 
 import { SubjectList } from './subject-list';
@@ -40,7 +40,7 @@ export default async function ChildHome({ params }: { params: Promise<{ child: s
 
   const targets = child.subjects.filter((s) => s.targetPercent != null).length;
   const focus = child.subjects.filter((s) => s.isFocus);
-  const where = [gradeLabel(child.grade), child.classes.join(', ')].filter(Boolean).join(', ');
+  const where = gradeAndClasses(child.grade, child.classes).join(', ');
   const onboarded = Boolean(child.study?.onboardingCompletedAt);
   // About the child, not a greeting for the parent: the one thing Chom knows today.
   // shortcut: parents can't read tasks yet (RLS), so no "3 tasks due today"; add it when they can.

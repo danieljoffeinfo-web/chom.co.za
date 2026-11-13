@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import type { ReactNode } from 'react';
 
 import { currentLinks, currentParent } from '@/lib/parent/current-parent';
-import { gradeLabel, needsConsent, personInitials } from '@/lib/parent/parent';
+import { gradeAndClasses, needsConsent, personInitials } from '@/lib/parent/parent';
 
 import { ParentShell } from './shell';
 
@@ -24,7 +24,7 @@ export default async function ParentDashboardLayout({ children }: { children: Re
         name: c.name,
         initials: personInitials(c.fullName),
         schoolName: c.schoolName,
-        detail: [gradeLabel(c.grade), c.classes.join(', ')].filter(Boolean).join(' · '),
+        detail: gradeAndClasses(c.grade, c.classes).join(' · '),
       }))}
     >
       {children}
