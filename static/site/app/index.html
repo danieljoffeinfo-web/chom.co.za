@@ -4754,6 +4754,373 @@
           transform: none;
         }
       }
+      /* Messages: a list of class teams and chats on the left, the open one on the right. */
+      .msg {
+        display: grid;
+        grid-template-columns: 300px minmax(0, 1fr);
+        height: max(520px, calc(100vh - 230px));
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: var(--card);
+      }
+      .msg-list {
+        overflow-y: auto;
+        padding: 14px 10px;
+        border-right: 1px solid var(--line);
+        background: var(--bg);
+      }
+      .msg-label {
+        margin: 12px 10px 6px;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .msg-label:first-child {
+        margin-top: 4px;
+      }
+      .msg-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 10px;
+        border: 0;
+        border-radius: 14px;
+        background: none;
+        color: var(--ink);
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+      }
+      .msg-item:hover {
+        background: var(--soft);
+      }
+      .msg-item.active {
+        background: var(--card);
+        box-shadow:
+          inset 3px 0 0 var(--chom-accent-coral),
+          0 6px 16px -12px color-mix(in srgb, var(--ink) 60%, transparent);
+      }
+      .msg-item-copy {
+        flex: 1 1 auto;
+        display: grid;
+        min-width: 0;
+      }
+      .msg-item-copy strong,
+      .msg-item-copy small {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .msg-item-copy strong {
+        font-size: 14px;
+      }
+      .msg-item-copy small {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .msg-count {
+        display: grid;
+        place-items: center;
+        min-width: 22px;
+        height: 22px;
+        padding: 0 6px;
+        border-radius: 999px;
+        background: var(--chom-accent-coral);
+        color: var(--chom-on-accent);
+        font-size: 12px;
+        font-weight: 800;
+      }
+      .msg-avatar {
+        display: grid;
+        place-items: center;
+        flex: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--tone);
+        color: var(--chom-on-accent);
+        font-size: 12px;
+        font-weight: 800;
+      }
+      .msg-avatar.big {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+      }
+      .msg-pane {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        min-height: 0;
+      }
+      .msg-back {
+        display: none;
+      }
+      .msg-head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 22px;
+        border-bottom: 1px solid var(--line);
+      }
+      .msg-head-copy h2 {
+        margin: 0;
+        font-size: 18px;
+      }
+      .msg-head-copy small {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .msg-tabs {
+        display: flex;
+        gap: 4px;
+        padding: 0 18px;
+        border-bottom: 1px solid var(--line);
+      }
+      .msg-tabs button {
+        padding: 12px 10px 10px;
+        border: 0;
+        border-bottom: 3px solid transparent;
+        background: none;
+        color: var(--muted);
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .msg-tabs button.active {
+        border-bottom-color: var(--chom-accent-coral);
+        color: var(--ink);
+      }
+      .msg-tabs button span {
+        margin-left: 4px;
+        padding: 1px 7px;
+        border-radius: 999px;
+        background: var(--soft);
+        font-size: 12px;
+      }
+      .msg-feed {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        overflow-y: auto;
+        padding: 22px;
+        background: color-mix(in srgb, var(--bg) 55%, var(--card));
+      }
+      .msg-post {
+        display: flex;
+        gap: 12px;
+        max-width: 680px;
+      }
+      .msg-post-body {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+      .msg-post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 6px;
+        margin-bottom: 6px;
+        font-size: 14px;
+      }
+      .msg-post-meta span {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .msg-card {
+        padding: 14px 16px;
+        border: 1px solid var(--line);
+        border-left: 5px solid var(--subject, var(--muted));
+        border-radius: 16px;
+        background: var(--card);
+      }
+      .msg-card-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px 10px;
+      }
+      .msg-card-head strong {
+        flex: 1 1 200px;
+        font-size: 15px;
+      }
+      .msg-card-icon {
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 9px;
+        background: color-mix(in srgb, var(--subject, var(--muted)) 18%, var(--card));
+      }
+      .msg-card-icon .icon {
+        width: 16px;
+        height: 16px;
+      }
+      .msg-card-notes {
+        display: -webkit-box;
+        margin: 10px 0 0;
+        overflow: hidden;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        font-size: 14px;
+        line-height: 1.55;
+        white-space: pre-wrap;
+      }
+      .msg-card-files {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin: 10px 0 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .msg-card-open {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 12px;
+        padding: 7px 14px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--bg);
+        color: var(--ink);
+        font: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .msg-card-open:hover {
+        border-color: var(--ink);
+      }
+      .msg-files {
+        display: grid;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .msg-files a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--card);
+        color: var(--ink);
+      }
+      .msg-files span {
+        display: grid;
+      }
+      .msg-files small {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .msg-empty {
+        display: grid;
+        justify-items: center;
+        gap: 14px;
+        max-width: 420px;
+        margin: auto;
+        text-align: center;
+        color: var(--muted);
+      }
+      .msg-empty .icon {
+        box-sizing: content-box;
+        width: 26px;
+        height: 26px;
+        padding: 16px;
+        border-radius: 50%;
+        background: color-mix(in srgb, var(--chom-accent-lilac) 35%, var(--card));
+        color: var(--ink);
+      }
+      .msg-empty p {
+        margin: 0;
+      }
+      .msg-empty strong {
+        color: var(--ink);
+      }
+      .msg-composer {
+        display: flex;
+        gap: 10px;
+        margin: 0;
+        padding: 14px 18px;
+        border-top: 1px solid var(--line);
+      }
+      .msg-composer input {
+        flex: 1 1 auto;
+        min-width: 0;
+        height: 44px;
+        padding: 0 16px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--bg);
+        color: var(--ink);
+        font: inherit;
+      }
+      .msg-composer input::placeholder {
+        color: var(--muted);
+      }
+      .msg-composer button {
+        display: grid;
+        place-items: center;
+        flex: none;
+        width: 44px;
+        height: 44px;
+        border: 0;
+        border-radius: 14px;
+        background: var(--soft);
+        color: var(--muted);
+      }
+      /* Phones: the list first; opening one shows it full width with a way back. */
+      @media (max-width: 900px) {
+        .msg {
+          grid-template-columns: 1fr;
+          height: calc(100vh - 290px);
+          min-height: 460px;
+        }
+        .msg .msg-pane {
+          display: none;
+        }
+        .msg.is-open .msg-list {
+          display: none;
+        }
+        .msg.is-open .msg-pane {
+          display: flex;
+        }
+        .msg-list {
+          border-right: 0;
+        }
+        .msg-back {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          align-self: flex-start;
+          margin: 12px 0 0 14px;
+          padding: 6px 12px 6px 8px;
+          border: 1px solid var(--line);
+          border-radius: 999px;
+          background: var(--card);
+          color: var(--ink);
+          font: inherit;
+          font-size: 13px;
+          font-weight: 700;
+        }
+        .msg-back .icon {
+          transform: rotate(180deg);
+        }
+        .msg-head {
+          padding: 12px 16px;
+        }
+        .msg-feed {
+          padding: 16px;
+        }
+      }
     </style>
 </head>
   <body>
@@ -5546,6 +5913,58 @@ SOFTWARE.
             if ($("#studio-saved")) $("#studio-saved").textContent = stored ? "Saved on this device" : "Not saved: this browser isn’t storing changes";
           }, 500);
         }
+        // Messages, laid out like a team chat: a team per subject (its feed is the work the
+        // teacher sets) and a chat per teacher. Sending isn't built yet, so the box says so.
+        let teamOpen = null,
+          teamTab = "posts",
+          teamChosen = false;
+        const teacherTone = (name) => ["tone-coral", "tone-sky", "tone-mint", "tone-lilac", "tone-sunflower"][[...name].reduce((n, c) => n + c.charCodeAt(0), 0) % 5];
+        const nameInitials = (name) => name.split(/\s+/).filter(Boolean).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
+        const personDot = (name, cls = "") => `<span class="msg-avatar ${teacherTone(name)} ${cls}" aria-hidden="true">${esc(nameInitials(name))}</span>`;
+        function messagesView() {
+          const teams = subjectList.map((x) => ({
+            id: `team:${x.id}`,
+            x,
+            posts: state.tasks.filter((t) => t.kind === "assigned" && t.subject === x.name).sort((a, b) => ((a.dueAt || "") < (b.dueAt || "") ? -1 : 1)),
+          }));
+          const teachers = [...new Set(subjectList.map((x) => x.teacher).filter(Boolean))].map((name) => ({
+            id: `chat:${name}`,
+            name,
+            subjects: subjectList.filter((x) => x.teacher === name).map((x) => x.name),
+          }));
+          if (!teams.some((t) => t.id === teamOpen) && !teachers.some((c) => c.id === teamOpen)) teamOpen = teams[0]?.id || teachers[0]?.id || null;
+          const header = viewHeader("Messages", "Your classes and teachers, in one place.");
+          if (!teamOpen)
+            return header + `<section class="panel"><div class="empty-message">${icon("message")}<h2>No classes yet</h2><p>Your class teams appear here once your school has set up your subjects.</p></div></section>`;
+          const item = (id, lead, title, sub, count) =>
+            `<button type="button" class="msg-item${id === teamOpen ? " active" : ""}" data-action="team-open" data-team="${esc(id)}" aria-current="${id === teamOpen}">${lead}<span class="msg-item-copy"><strong>${esc(title)}</strong><small>${esc(sub)}</small></span>${count ? `<span class="msg-count">${count}</span>` : ""}</button>`;
+          const list = `<aside class="msg-list" aria-label="Teams and chats"><h2 class="msg-label">Teams</h2>${teams
+            .map((t) => item(t.id, subjectBadge(t.x.name).replace('class="subject-badge ', 'class="subject-badge small '), t.x.name, `${gradeShort}${t.x.teacher ? ` · ${t.x.teacher}` : ""}`, t.posts.filter((p) => !p.done).length))
+            .join("")}${teachers.length ? `<h2 class="msg-label">Chats</h2>${teachers.map((c) => item(c.id, personDot(c.name), c.name, c.subjects.join(", "))).join("")}` : ""}</aside>`;
+          const composer = (who) =>
+            `<form class="msg-composer" onsubmit="return false"><input type="text" disabled aria-label="Message ${esc(who)}" placeholder="Messaging is coming soon"><button type="button" disabled aria-label="Send">${icon("up")}</button></form>`;
+          const team = teams.find((t) => t.id === teamOpen);
+          let pane;
+          if (team) {
+            const files = team.posts.flatMap((p) => (p.attachments || []).map((a) => ({ a, p })));
+            const posts = team.posts.length
+              ? team.posts
+                  .map(
+                    (p) =>
+                      `<article class="msg-post">${personDot(p.teacher || team.x.teacher || "Teacher")}<div class="msg-post-body"><div class="msg-post-meta"><strong>${esc(p.teacher || team.x.teacher || "Your teacher")}</strong><span>set an assignment</span></div><div class="msg-card subject-tint ${subjectColor(team.x.name)}"><div class="msg-card-head"><span class="msg-card-icon" aria-hidden="true">${icon("file")}</span><strong>${esc(p.title)}</strong>${p.done ? '<span class="assign-status done">Done</span>' : `<span class="dt-due ${dueTone(p)}">${esc(p.time)}</span>`}</div>${p.notes ? `<p class="msg-card-notes">${esc(p.notes)}</p>` : ""}${(p.attachments || []).length ? `<p class="msg-card-files">${icon("file", true)}${p.attachments.length} ${p.attachments.length === 1 ? "file" : "files"}</p>` : ""}<button type="button" class="msg-card-open" data-action="post-open" data-id="${esc(p.id)}">View assignment ${icon("arrow", true)}</button></div></div></article>`,
+                  )
+                  .join("")
+              : `<div class="msg-empty">${icon("message")}<p><strong>No posts yet.</strong> When ${esc(team.x.teacher || "your teacher")} sets work for ${esc(team.x.name)}, it shows here.</p></div>`;
+            const filesList = files.length
+              ? `<ul class="msg-files">${files.map(({ a, p }) => `<li><a href="/api/student/tasks/files/${esc(a.id)}">${icon("file", true)}<span><strong>${esc(a.name)}</strong><small>${esc(p.title)}</small></span></a></li>`).join("")}</ul>`
+              : `<div class="msg-empty">${icon("file")}<p><strong>No files yet.</strong> Files your teacher attaches to work show here.</p></div>`;
+            pane = `<header class="msg-head">${subjectBadge(team.x.name)}<div class="msg-head-copy"><h2>${esc(team.x.name)}</h2><small>${esc(gradeShort)}${team.x.teacher ? ` · ${esc(team.x.teacher)}` : ""}</small></div></header><div class="msg-tabs" role="tablist" aria-label="${esc(team.x.name)}"><button type="button" role="tab" aria-selected="${teamTab === "posts"}" class="${teamTab === "posts" ? "active" : ""}" data-action="team-tab" data-tab="posts">Posts</button><button type="button" role="tab" aria-selected="${teamTab === "files"}" class="${teamTab === "files" ? "active" : ""}" data-action="team-tab" data-tab="files">Files${files.length ? ` <span>${files.length}</span>` : ""}</button></div><div class="msg-feed" id="msg-feed" role="tabpanel">${teamTab === "files" ? filesList : posts}</div>${composer(team.x.teacher || "your class")}`;
+          } else {
+            const chat = teachers.find((c) => c.id === teamOpen);
+            pane = `<header class="msg-head">${personDot(chat.name, "big")}<div class="msg-head-copy"><h2>${esc(chat.name)}</h2><small>${esc(chat.subjects.join(", "))}</small></div></header><div class="msg-feed" id="msg-feed"><div class="msg-empty">${icon("message")}<p><strong>Chat with ${esc(chat.name)} is coming soon.</strong> For now, ask in class or use your school’s usual way of reaching teachers.</p></div></div>${composer(chat.name)}`;
+          }
+          return header + `<div class="msg${teamChosen ? " is-open" : ""}">${list}<section class="msg-pane" aria-label="Conversation"><button type="button" class="msg-back" data-action="team-back">${icon("arrow", true)}All chats</button>${pane}</section></div>`;
+        }
         function tasksMarkup() {
           const byDue = (x, y) => ((x.dueAt || "9") < (y.dueAt || "9") ? -1 : 1);
           const lists = {
@@ -5679,13 +6098,7 @@ SOFTWARE.
                     `<button type="button" class="life-card ${tone}" data-action="service" data-service="${id}"><span class="life-icon" aria-hidden="true">${icon(ic)}</span><strong>${title}</strong><span class="life-copy">${copy}</span><span class="life-go">Explore ${icon("arrow", true)}</span></button>`,
                 )
                 .join("")}</div>`;
-          if (currentView === "messages")
-            html =
-              viewHeader(
-                "A place to stay in the loop.",
-                "Messages from your teachers and school will live here.",
-              ) +
-              `<section class="panel"><div class="empty-message">${icon("message").replace('class="icon"', 'class="icon" style="margin:0 auto 15px;width:32px;height:32px"')}<h2>Your inbox is ready.</h2><p style="margin-top:10px">There are no messages yet.<br>Messages from your teachers and school will show here.</p><a class="button secondary" style="margin-top:20px" href="#school">Explore school life</a></div></section>`;
+          if (currentView === "messages") html = messagesView();
           if (currentView === "settings")
             html =
               viewHeader(
@@ -6071,6 +6484,27 @@ SOFTWARE.
           if (a === "subject") subjectDialog(b.dataset.subject);
           if (a === "study") study(b.dataset.topic, "", !!b.closest(".ask"));
           if (a === "start-quiz") startQuiz();
+          if (a === "team-open") {
+            teamOpen = b.dataset.team;
+            teamTab = "posts";
+            teamChosen = true;
+            render();
+            const feed = $("#msg-feed");
+            if (feed) feed.scrollTop = feed.scrollHeight;
+          }
+          if (a === "team-tab") {
+            teamTab = b.dataset.tab;
+            render();
+            $(`[data-action="team-tab"][data-tab="${teamTab}"]`)?.focus();
+          }
+          if (a === "team-back") {
+            teamChosen = false;
+            render();
+          }
+          if (a === "post-open") {
+            assignOpen.add(b.dataset.id);
+            go("assignments");
+          }
           if (a === "studio-open") {
             studioTask = b.dataset.id;
             studioHistory.clear();
