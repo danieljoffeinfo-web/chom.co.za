@@ -3561,7 +3561,7 @@
         margin: 4px 0;
         padding: 18px 20px;
         border-radius: 18px;
-        background: color-mix(in srgb, var(--chom-accent-mint) 22%, var(--card));
+        background: color-mix(in srgb, var(--tone, var(--chom-accent-mint)) 22%, var(--card));
         color: var(--ink);
       }
       .dt-cheer .icon {
@@ -3571,7 +3571,7 @@
         height: 22px;
         padding: 10px;
         border-radius: 50%;
-        background: var(--chom-accent-mint);
+        background: var(--tone, var(--chom-accent-mint));
         color: var(--chom-on-accent);
       }
       .dt-cheer p {
@@ -4241,6 +4241,121 @@
           transition: none;
         }
       }
+      /* My tasks: the three tiles are the filters; the open one is filled in. */
+      .task-tabs {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 28px;
+      }
+      .task-tab {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+        min-height: 132px;
+        padding: 18px;
+        border: 2px solid transparent;
+        border-radius: 22px;
+        background: color-mix(in srgb, var(--tone) 22%, var(--card));
+        color: var(--ink);
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        transition: background-color 0.15s, transform 0.15s;
+      }
+      .task-tab:hover {
+        transform: translateY(-2px);
+        border-color: var(--tone);
+      }
+      .task-tab.active {
+        background: var(--tone);
+        color: var(--chom-on-accent);
+      }
+      .task-tab-icon {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        background: var(--tone);
+        color: var(--chom-on-accent);
+      }
+      .task-tab.active .task-tab-icon {
+        background: color-mix(in srgb, var(--chom-on-accent) 12%, transparent);
+      }
+      .task-tab-icon .icon {
+        width: 20px;
+        height: 20px;
+      }
+      .task-tab-num {
+        margin-bottom: 6px;
+        font-size: 40px;
+        line-height: 1;
+        font-weight: 800;
+        letter-spacing: -1.5px;
+      }
+      .task-tab strong {
+        font-size: 15px;
+      }
+      .task-tab small {
+        font-size: 13px;
+        opacity: 0.8;
+      }
+      .task-tab .cd-meter {
+        width: 100%;
+        margin-top: 8px;
+        background: color-mix(in srgb, var(--ink) 14%, transparent);
+      }
+      .task-tab .cd-meter i {
+        background: var(--ink);
+      }
+      .task-tab.active .cd-meter {
+        background: color-mix(in srgb, var(--chom-on-accent) 16%, transparent);
+      }
+      .task-tab.active .cd-meter i {
+        background: var(--chom-on-accent);
+      }
+      .task-panel {
+        padding: 22px 24px 24px;
+      }
+      .task-panel-title {
+        margin: 0 0 14px;
+        font-size: 22px;
+        letter-spacing: -0.3px;
+      }
+      @media (max-width: 600px) {
+        .task-tabs {
+          gap: 8px;
+        }
+        .task-tab {
+          min-height: 0;
+          padding: 14px 12px 12px;
+          border-radius: 18px;
+        }
+        .task-tab-num {
+          font-size: 30px;
+        }
+        .task-tab small,
+        .task-tab-icon {
+          display: none;
+        }
+        .task-panel {
+          padding: 18px 16px 16px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .task-tab {
+          transition: none;
+        }
+        .task-tab:hover {
+          transform: none;
+        }
+      }
     </style>
 </head>
   <body>
@@ -4903,15 +5018,35 @@ SOFTWARE.
             left = remaining();
           return `<div class="dt-group"><h3 class="dt-group-title">Due today <span>${tasksFailed ? "" : left ? left + " left" : "All done"}</span></h3>${today.length ? `<ul class="dt-list">${today.map(dashTaskRow).join("")}</ul>` : tasksFailed ? tasksFailedNote : `<div class="dt-cheer">${icon("check")}<p><strong>All caught up!</strong> Nothing due today.</p></div>`}</div>${upcoming.length ? `<div class="dt-group"><h3 class="dt-group-title">Coming up</h3><ul class="dt-list">${upcoming.map(dashTaskRow).join("")}</ul></div>` : ""}`;
         }
+        // My tasks: three tiles that are also the filters, then the list in the Home page's rows.
         function tasksMarkup() {
-          const list = state.tasks.filter((t) =>
-            taskFilter === "done"
-              ? t.done
-              : taskFilter === "upcoming"
-                ? t.when === "upcoming" && !t.done
-                : t.when === "today",
-          );
-          return `<div class="filter-row" role="tablist" aria-label="Task filters">${["today", "upcoming", "done"].map((f) => `<button class="filter ${taskFilter === f ? "active" : ""}" role="tab" aria-selected="${taskFilter === f}" aria-controls="task-results" data-filter="${f}">${{ today: "Today", upcoming: "Upcoming", done: "Completed" }[f]}<span>${state.tasks.filter((t) => (f === "done" ? t.done : f === "upcoming" ? t.when === "upcoming" && !t.done : t.when === "today")).length}</span></button>`).join("")}</div><div class="task-list" id="task-results" role="tabpanel" aria-label="${taskFilter} tasks">${list.length ? list.map((t) => `<div class="task-row ${t.done ? "completed" : ""}"><label class="task-check"><input type="checkbox" data-task="${esc(t.id)}" aria-label="Complete ${esc(t.title)}" ${t.done ? "checked" : ""}></label><div class="task-content"><button type="button" class="task-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button><span class="task-sub"><i class="subject-dot ${esc(t.subject)}"></i>${esc(t.subject)}</span></div><span class="due ${t.done ? "done" : ""}">${t.done ? "Completed" : esc(t.time)}</span></div>`).join("") : tasksFailed ? tasksFailedNote : `<p class="task-empty">${taskFilter === "done" ? "Your completed tasks will appear here." : taskFilter === "upcoming" ? "A little breathing room. No upcoming tasks." : "Nothing due today. You’re all caught up."}</p>`}</div>`;
+          const byDue = (x, y) => ((x.dueAt || "9") < (y.dueAt || "9") ? -1 : 1);
+          const lists = {
+            today: state.tasks.filter((t) => t.when === "today").sort((x, y) => x.done - y.done || byDue(x, y)),
+            upcoming: state.tasks.filter((t) => t.when === "upcoming" && !t.done).sort(byDue),
+            done: state.tasks.filter((t) => t.done),
+          };
+          const total = state.tasks.length,
+            done = lists.done.length,
+            left = remaining();
+          const tabs = [
+            ["today", "tone-sunflower", "check", left, "Today", tasksFailed ? "Couldn’t load" : left ? "to do today" : "All done"],
+            ["upcoming", "tone-sky", "calendar", lists.upcoming.length, "Upcoming", "on the way"],
+            ["done", "tone-mint", "leaf", done, "Done", "ticked off"],
+          ]
+            .map(
+              ([f, tone, ic, n, label, sub]) =>
+                `<button class="task-tab ${tone}${taskFilter === f ? " active" : ""}" role="tab" aria-selected="${taskFilter === f}" aria-controls="task-results" data-filter="${f}"><span class="task-tab-icon" aria-hidden="true">${icon(ic)}</span><span class="task-tab-num">${n}</span><strong>${label}</strong><small>${sub}</small>${f === "done" ? `<span class="cd-meter" aria-hidden="true"><i style="--v:${total ? (100 * done) / total : 0}%"></i></span>` : ""}</button>`,
+            )
+            .join("");
+          const empty = {
+            today: ["tone-mint", "check", "<strong>All caught up!</strong> Nothing due today."],
+            upcoming: ["tone-sky", "calendar", "<strong>A little breathing room.</strong> Nothing coming up yet."],
+            done: ["tone-sunflower", "leaf", "<strong>Nothing ticked off yet.</strong> Finished tasks land here."],
+          }[taskFilter];
+          const list = lists[taskFilter];
+          const title = { today: "Due today", upcoming: "Coming up", done: "Done" }[taskFilter];
+          return `<div class="task-tabs" role="tablist" aria-label="Task filters">${tabs}</div><section class="panel task-panel" id="task-results" role="tabpanel" aria-label="${title}"><h2 class="task-panel-title">${title}</h2>${list.length ? `<ul class="dt-list">${list.map(dashTaskRow).join("")}</ul>` : tasksFailed ? tasksFailedNote : `<div class="dt-cheer ${empty[0]}">${icon(empty[1])}<p>${empty[2]}</p></div>`}</section>`;
         }
         // "Amara, 3 tasks on today’s list." and the next thing to do. Redrawn as tasks are ticked.
         function heroCopy() {
@@ -5000,7 +5135,7 @@ SOFTWARE.
                 "A clear head starts with a clear list.",
                 `<button class="button" data-action="add-task">${icon("plus", true)}Add a task</button>`,
               ) +
-              `<section class="panel"><div class="panel-head"><h2>My tasks</h2><span class="muted" id="tasks-summary">${remaining()} left today</span></div><div id="tasks-content">${tasksMarkup()}</div></section>`;
+              `<div id="tasks-content">${tasksMarkup()}</div>`;
           if (currentView === "chom") html = askView();
           if (currentView === "school")
             html =
@@ -5520,8 +5655,6 @@ SOFTWARE.
             if ($("#dash-tasks")) $("#dash-tasks").innerHTML = dashTasks();
             $("#nav-task-count").textContent = remaining();
             if ($("#task-count")) $("#task-count").textContent = remaining();
-            if ($("#tasks-summary"))
-              $("#tasks-summary").textContent = remaining() + " left today";
             if ($("#dash-hero")) $("#dash-hero").innerHTML = heroCopy();
             const replacement = $$("[data-task]").find(
               (el) => el.dataset.task === id,
