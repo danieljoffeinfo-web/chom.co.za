@@ -178,6 +178,18 @@ export function gradeLabel(grade: number | null): string | null {
   return grade === 0 ? 'Grade R' : `Grade ${grade}`;
 }
 
+/**
+ * ["Grade 10", "10B"] for a child's grade and classes, or just ["10B"] when every class
+ * name already starts with the grade ("10B" says Grade 10). Callers choose the separator.
+ */
+export function gradeAndClasses(grade: number | null, classes: string[]): string[] {
+  const named =
+    classes.length > 0 && classes.every((c) => grade !== null && c.startsWith(String(grade)));
+  return [named ? null : gradeLabel(grade), classes.join(', ')].filter((part): part is string =>
+    Boolean(part),
+  );
+}
+
 /** "Amara Nwosu" → "AN". */
 export function personInitials(fullName: string): string {
   return fullName

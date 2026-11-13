@@ -5250,7 +5250,11 @@ SOFTWARE.
         const displayName = me.firstName;
         const initials = me.initials;
         const gradeShort = me.registerClass || `Grade ${me.grade ?? ""}`;
-        const gradeLine = [me.grade != null ? `Grade ${me.grade}` : "", me.registerClass ? `Class ${me.registerClass}` : ""]
+        // "Class 10D" already says Grade 10; the grade shows only when the class name doesn't start with it.
+        const gradeLine = [
+          me.grade != null && !String(me.registerClass || "").startsWith(String(me.grade)) ? `Grade ${me.grade}` : "",
+          me.registerClass ? `Class ${me.registerClass}` : "",
+        ]
           .filter(Boolean)
           .join(" · ");
         $("#school-space-line").textContent = gradeLine;
