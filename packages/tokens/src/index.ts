@@ -22,6 +22,13 @@ export const palette = {
   vanillaSoft: '#E4E0CB',
   slate: '#5F6178',
   slateLight: '#ABA9B8',
+  black: '#0A0A0A',
+  blackRaised: '#161616',
+  blackLine: '#2A2A2A',
+  blackSoft: '#1F1F1F',
+  white: '#F5F5F5',
+  whiteHover: '#D4D4D4',
+  grey: '#A3A3A3',
 } as const;
 
 export type ColorRole =
@@ -52,18 +59,18 @@ export const light: ColorScheme = {
   highlight: palette.vanillaLine,
 };
 
-/** Dark mode is opt-in from Settings. Navy and vanilla swap roles. */
+/** Dark mode is opt-in from Settings: a clean, neutral black with soft white text. */
 export const dark: ColorScheme = {
-  background: palette.navy,
-  surface: palette.navyRaised,
-  text: palette.vanilla,
-  textMuted: palette.slateLight,
-  border: palette.navyLine,
-  subtle: palette.navySoft,
-  primary: palette.vanilla,
-  onPrimary: palette.navy,
-  primaryHover: palette.vanillaLine,
-  highlight: palette.navyLine,
+  background: palette.black,
+  surface: palette.blackRaised,
+  text: palette.white,
+  textMuted: palette.grey,
+  border: palette.blackLine,
+  subtle: palette.blackSoft,
+  primary: palette.white,
+  onPrimary: palette.black,
+  primaryHover: palette.whiteHover,
+  highlight: palette.blackLine,
 };
 
 export const colors = { light, dark } as const;
@@ -111,8 +118,8 @@ export const subjectColors: Record<'light' | 'dark', Record<SubjectFamily, strin
   },
 };
 
-/** The icon on a subject badge: white on the light fills, navy on the dark ones. */
-export const onSubject = { light: '#FFFFFF', dark: palette.navy } as const;
+/** The icon on a subject badge: white on the light fills, black on the dark ones. */
+export const onSubject = { light: '#FFFFFF', dark: palette.black } as const;
 
 export type AccentName = 'coral' | 'sunflower' | 'mint' | 'sky' | 'lilac';
 

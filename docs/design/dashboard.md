@@ -18,18 +18,18 @@ When the learner dashboard's styles change, copy the change into `packages/dashb
 
 ## Colour
 
-Navy and vanilla are the base, with bright accents for fun. Light mode is the default; dark mode is opt-in from Settings.
+Navy and vanilla are the base, with bright accents for fun. Light mode is the default; dark mode, a clean neutral black, is opt-in from Settings.
 
 | Role         | Light     | Dark      | Token               |
 | ------------ | --------- | --------- | ------------------- |
-| Background   | `#eeebda` | `#282b4a` | `--chom-background` |
-| Card/surface | `#f7f5eb` | `#33375c` | `--chom-surface`    |
-| Text         | `#282b4a` | `#eeebda` | `--chom-text`       |
-| Muted text   | `#5f6178` | `#aba9b8` | `--chom-text-muted` |
-| Lines        | `#dcd8c3` | `#464a70` | `--chom-border`     |
-| Soft fill    | `#e4e0cb` | `#3c4068` | `--chom-subtle`     |
-| Primary      | `#282b4a` | `#eeebda` | `--chom-primary`    |
-| On primary   | `#eeebda` | `#282b4a` | `--chom-on-primary` |
+| Background   | `#eeebda` | `#0a0a0a` | `--chom-background` |
+| Card/surface | `#f7f5eb` | `#161616` | `--chom-surface`    |
+| Text         | `#282b4a` | `#f5f5f5` | `--chom-text`       |
+| Muted text   | `#5f6178` | `#a3a3a3` | `--chom-text-muted` |
+| Lines        | `#dcd8c3` | `#2a2a2a` | `--chom-border`     |
+| Soft fill    | `#e4e0cb` | `#1f1f1f` | `--chom-subtle`     |
+| Primary      | `#282b4a` | `#f5f5f5` | `--chom-primary`    |
+| On primary   | `#eeebda` | `#0a0a0a` | `--chom-on-primary` |
 
 Never write a colour value in app code. Use a token, or a prototype name that maps to one.
 
@@ -64,7 +64,7 @@ Every subject has one fixed colour and icon, picked by its name (`subjectStyle()
 | Technology        | IT, CAT, EGD, Technology                     | `--chom-subject-technology`        | `#4f46e5` | `#818cf8` |
 | Arts              | Visual Arts, Drama, Music, Design            | `--chom-subject-arts`              | `#c026d3` | `#e879f9` |
 
-The icon on the fill is `--chom-on-subject` (white in light, navy in dark). Subject colours fill subject badges and may tint a card that is about one subject (`.subject-tint`, with the family class) and draw its goal ring. Never use them on text or buttons. Squares mean subjects; circles mean people.
+The icon on the fill is `--chom-on-subject` (white in light, black in dark). Subject colours fill subject badges and may tint a card that is about one subject (`.subject-tint`, with the family class) and draw its goal ring. Never use them on text or buttons. Squares mean subjects; circles mean people.
 
 ## Type
 

@@ -62,22 +62,22 @@
       }
       :root[data-theme="dark"] {
         color-scheme: dark;
-        --bg: #282b4a;
-        --paper: #33375c;
-        --card: #33375c;
-        --ink: #eeebda;
-        --text: #eeebda;
-        --muted: #aba9b8;
-        --line: #464a70;
-        --soft: #3c4068;
-        --blue: #eeebda;
-        --blue-hover: #dcd8c3;
-        --blue-soft: #3c4068;
-        --ink-hover: #dcd8c3;
-        --accent-on-fill: #282b4a;
-        --orange: #eeebda;
-        --on-orange: #282b4a;
-        --peach: #464a70;
+        --bg: #0a0a0a;
+        --paper: #161616;
+        --card: #161616;
+        --ink: #f5f5f5;
+        --text: #f5f5f5;
+        --muted: #a3a3a3;
+        --line: #2a2a2a;
+        --soft: #1f1f1f;
+        --blue: #f5f5f5;
+        --blue-hover: #d4d4d4;
+        --blue-soft: #1f1f1f;
+        --ink-hover: #d4d4d4;
+        --accent-on-fill: #0a0a0a;
+        --orange: #f5f5f5;
+        --on-orange: #0a0a0a;
+        --peach: #2a2a2a;
         --chom-subject-maths: #60a5fa;
         --chom-subject-english: #a78bfa;
         --chom-subject-language: #f472b6;
@@ -88,7 +88,7 @@
         --chom-subject-humanities: #fb923c;
         --chom-subject-technology: #818cf8;
         --chom-subject-arts: #e879f9;
-        --chom-on-subject: #282b4a;
+        --chom-on-subject: #0a0a0a;
       }
       * {
         box-sizing: border-box;
@@ -5704,7 +5704,7 @@ SOFTWARE.
           const dark = state.theme === "dark";
           document.documentElement.dataset.theme = dark ? "dark" : "light";
           const meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) meta.content = dark ? "#282b4a" : "#eeebda";
+          if (meta) meta.content = dark ? "#0a0a0a" : "#eeebda";
         }
         function save() {
           try {
@@ -6105,7 +6105,7 @@ SOFTWARE.
                 "Make a little space for you.",
                 "Your preferences are saved in this browser.",
               ) +
-              `<section class="content-card"><h2>Your learning space</h2><div class="switch-row"><div><label for="focus-toggle">Keep my dashboard focused</label><p>Hide the extra school links and sidebar tip.</p></div><input type="checkbox" id="focus-toggle" ${state.focus ? "checked" : ""}></div><div class="switch-row"><div><label for="theme-toggle">Dark mode</label><p>Light is the default. Switch on for a navy background.</p></div><input type="checkbox" id="theme-toggle" ${state.theme === "dark" ? "checked" : ""}></div><div class="notice">Your notes and preferences are saved in this browser.</div></section>`;
+              `<section class="content-card"><h2>Your learning space</h2><div class="switch-row"><div><label for="focus-toggle">Keep my dashboard focused</label><p>Hide the extra school links and sidebar tip.</p></div><input type="checkbox" id="focus-toggle" ${state.focus ? "checked" : ""}></div><div class="switch-row"><div><label for="theme-toggle">Dark mode</label><p>Light is the default. Switch on for a black background.</p></div><input type="checkbox" id="theme-toggle" ${state.theme === "dark" ? "checked" : ""}></div><div class="notice">Your notes and preferences are saved in this browser.</div></section>`;
           $("#main").innerHTML =
             (!storageAvailable
               ? '<div class="storage-warning">Your browser is not saving changes. Keep this page open to retain your work for this visit.</div>'
