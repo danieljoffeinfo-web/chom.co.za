@@ -3238,64 +3238,126 @@ h3 {
 .tone-lilac {
   --tone: var(--chom-accent-lilac);
 }
+/* Glass: frosted panes, used by the hero. Lighter in light mode, smoked in dark. */
 :root {
-  --hero-bg: var(--ink);
-  --hero-ink: var(--card);
+  --glass: color-mix(in srgb, var(--card) 42%, transparent);
+  --glass-strong: color-mix(in srgb, var(--card) 62%, transparent);
+  --glass-edge: color-mix(in srgb, var(--card) 92%, transparent);
+  --glass-shadow: color-mix(in srgb, var(--ink) 28%, transparent);
 }
 :root[data-theme='dark'] {
-  --hero-bg: var(--card);
-  --hero-ink: var(--ink);
+  --glass: color-mix(in srgb, var(--card) 58%, transparent);
+  --glass-strong: color-mix(in srgb, var(--card) 74%, transparent);
+  --glass-edge: color-mix(in srgb, var(--ink) 14%, transparent);
+  --glass-shadow: color-mix(in srgb, var(--bg) 85%, transparent);
 }
 
-/* Hero: a navy band with confetti, the headline in vanilla and the stats as bright tiles. */
+/* Hero: liquid glass. A frosted pane over soft, blurred colour; dark text; the stats as
+   smaller panes with an accent icon and bar. */
 .cd-top {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   padding: 40px 44px;
+  border: 1px solid var(--glass-edge);
   border-radius: 32px;
-  background: var(--hero-bg);
-  color: var(--hero-ink);
+  background: var(--card);
+  box-shadow:
+    0 30px 60px -38px var(--glass-shadow),
+    inset 0 1px 0 var(--glass-edge);
+  color: var(--ink);
 }
+/* The colour under the glass. */
 .cd-top::before {
   content: '';
   position: absolute;
-  z-index: -1;
-  top: -84px;
-  right: -64px;
-  width: 200px;
-  height: 200px;
-  border: 30px solid var(--chom-accent-sunflower);
-  border-radius: 50%;
+  z-index: -2;
+  inset: -25%;
+  background:
+    radial-gradient(
+      28% 42% at 20% 30%,
+      color-mix(in srgb, var(--chom-accent-sky) 95%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      26% 40% at 80% 22%,
+      color-mix(in srgb, var(--chom-accent-sunflower) 100%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      30% 40% at 64% 82%,
+      color-mix(in srgb, var(--chom-accent-lilac) 90%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      22% 34% at 34% 86%,
+      color-mix(in srgb, var(--chom-accent-mint) 85%, transparent),
+      transparent 72%
+    );
+  filter: blur(28px);
 }
+/* The frosted sheet, brighter at the top left like light catching glass. */
 .cd-top::after {
   content: '';
   position: absolute;
   z-index: -1;
   inset: 0;
-  background:
-    radial-gradient(circle at 58% 12%, var(--chom-accent-coral) 0 6px, transparent 7px),
-    radial-gradient(circle at 66% 30%, var(--chom-accent-mint) 0 4px, transparent 5px),
-    radial-gradient(circle at 47% 7%, var(--chom-accent-sky) 0 5px, transparent 6px),
-    radial-gradient(circle at 74% 9%, var(--chom-accent-lilac) 0 8px, transparent 9px),
-    radial-gradient(circle at 2% 96%, var(--chom-accent-sunflower) 0 26px, transparent 27px),
-    radial-gradient(circle at 36% 97%, var(--chom-accent-coral) 0 4px, transparent 5px);
+  border-radius: inherit;
+  background: linear-gradient(
+    140deg,
+    var(--glass-strong) 0%,
+    var(--glass) 55%,
+    var(--glass-strong) 100%
+  );
 }
 .cd-top .cd-title,
 .cd-top .cd-lede,
 .cd-top .cd-label {
-  color: var(--hero-ink);
+  color: var(--ink);
 }
 .cd-top .cd-label {
-  opacity: 0.75;
+  opacity: 0.7;
 }
 .cd-top .cd-lede strong {
-  color: var(--chom-accent-sunflower);
+  padding: 0 2px;
+  background: linear-gradient(
+    transparent 60%,
+    color-mix(in srgb, var(--chom-accent-sunflower) 65%, transparent) 60%
+  );
 }
 .cd-top .cd-stats {
   flex-basis: 400px;
   gap: 12px;
 }
+.cd-top .cd-stat {
+  border: 1px solid var(--glass-edge);
+  background: var(--glass-strong);
+  box-shadow:
+    inset 0 1px 0 var(--glass-edge),
+    0 14px 30px -24px var(--glass-shadow);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+}
+.cd-top .cd-stat .cd-num,
+.cd-top .cd-stat strong {
+  color: var(--ink);
+}
+.cd-top .cd-stat small,
+.cd-top .cd-stat .cd-of {
+  color: var(--muted);
+  opacity: 1;
+}
+.cd-top .cd-stat-icon {
+  background: var(--tone);
+  color: var(--chom-on-accent);
+}
+.cd-top .cd-meter {
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
+}
+.cd-top .cd-meter i {
+  background: var(--tone);
+}
+/* Stat tiles elsewhere (My subjects) stay bright accent tiles. */
 .cd-stat {
   position: relative;
   gap: 4px;
@@ -3363,21 +3425,6 @@ h3 {
     margin: 0 -4px;
     padding: 28px 22px 22px;
     border-radius: 26px;
-  }
-  .cd-top::before {
-    top: -100px;
-    right: -100px;
-    width: 140px;
-    height: 140px;
-    border-width: 22px;
-  }
-  /* Narrow: confetti only along the edges, clear of the headline. */
-  .cd-top::after {
-    background:
-      radial-gradient(circle at 96% 40%, var(--chom-accent-coral) 0 5px, transparent 6px),
-      radial-gradient(circle at 92% 47%, var(--chom-accent-mint) 0 3px, transparent 4px),
-      radial-gradient(circle at 2% 98%, var(--chom-accent-sunflower) 0 22px, transparent 23px),
-      radial-gradient(circle at 60% 99%, var(--chom-accent-lilac) 0 5px, transparent 6px);
   }
   .cd-stat {
     min-height: 0;
