@@ -68,5 +68,28 @@ for (const [name, selectorPattern] of [
   }
 }
 
+// Accents: accentColors against --chom-accent-* in :root (one set for both themes).
+{
+  const block = cssBlock(':root') ?? '';
+  const entries = [
+    ...(ts.match(/export const accentColors[^{]*\{([\s\S]*?)\n\};/)?.[1] ?? '').matchAll(
+      /(\w+): '(#[0-9A-Fa-f]{6})'/g,
+    ),
+  ];
+  if (!entries.length) {
+    console.error('accentColors not found in src/index.ts');
+    failures++;
+  }
+  for (const [, name, value] of entries) {
+    const match = block.match(new RegExp(`--chom-accent-${kebab(name)}: (#[0-9a-f]{6});`));
+    if (match?.[1] !== value.toLowerCase()) {
+      console.error(
+        `accentColors.${name}: expected ${value.toLowerCase()}, tokens.css has ${match?.[1] ?? 'nothing'}`,
+      );
+      failures++;
+    }
+  }
+}
+
 if (failures) process.exit(1);
 console.log('tokens.css matches src/index.ts');

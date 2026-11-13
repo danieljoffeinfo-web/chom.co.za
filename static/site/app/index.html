@@ -51,6 +51,12 @@
         --chom-subject-technology: #4f46e5;
         --chom-subject-arts: #c026d3;
         --chom-on-subject: #ffffff;
+        --chom-accent-coral: #ff7a59;
+        --chom-accent-sunflower: #ffc83d;
+        --chom-accent-mint: #3ccf9a;
+        --chom-accent-sky: #4fb3ff;
+        --chom-accent-lilac: #a78bfa;
+        --chom-on-accent: #282b4a;
         --r: 24px;
         --sidebar: 248px;
       }
@@ -3165,16 +3171,16 @@
         width: 16px;
         height: 16px;
       }
-      .subject-badge.maths { --subject: var(--chom-subject-maths); }
-      .subject-badge.english { --subject: var(--chom-subject-english); }
-      .subject-badge.language { --subject: var(--chom-subject-language); }
-      .subject-badge.life-orientation { --subject: var(--chom-subject-life-orientation); }
-      .subject-badge.physical-sciences { --subject: var(--chom-subject-physical-sciences); }
-      .subject-badge.life-sciences { --subject: var(--chom-subject-life-sciences); }
-      .subject-badge.commerce { --subject: var(--chom-subject-commerce); }
-      .subject-badge.humanities { --subject: var(--chom-subject-humanities); }
-      .subject-badge.technology { --subject: var(--chom-subject-technology); }
-      .subject-badge.arts { --subject: var(--chom-subject-arts); }
+      :is(.subject-badge, .subject-tint).maths { --subject: var(--chom-subject-maths); }
+      :is(.subject-badge, .subject-tint).english { --subject: var(--chom-subject-english); }
+      :is(.subject-badge, .subject-tint).language { --subject: var(--chom-subject-language); }
+      :is(.subject-badge, .subject-tint).life-orientation { --subject: var(--chom-subject-life-orientation); }
+      :is(.subject-badge, .subject-tint).physical-sciences { --subject: var(--chom-subject-physical-sciences); }
+      :is(.subject-badge, .subject-tint).life-sciences { --subject: var(--chom-subject-life-sciences); }
+      :is(.subject-badge, .subject-tint).commerce { --subject: var(--chom-subject-commerce); }
+      :is(.subject-badge, .subject-tint).humanities { --subject: var(--chom-subject-humanities); }
+      :is(.subject-badge, .subject-tint).technology { --subject: var(--chom-subject-technology); }
+      :is(.subject-badge, .subject-tint).arts { --subject: var(--chom-subject-arts); }
 
       /* ---------- Phones: the main sections as bottom tabs, Home first; search, alerts and
          profile move to the top right. More (where a dashboard has it) opens the menu. ---------- */
@@ -3245,6 +3251,393 @@
         .page {
           padding-top: 72px;
         }
+      }
+      /* ---------- Colour and play (docs/design/dashboard.md, "Accents") ----------
+         Navy and vanilla stay the base; the accents (--chom-accent-*) add the fun. A part
+         picks its accent with a .tone-* class (or by position) and reads it as --tone. */
+      .tone-coral {
+        --tone: var(--chom-accent-coral);
+      }
+      .tone-sunflower {
+        --tone: var(--chom-accent-sunflower);
+      }
+      .tone-mint {
+        --tone: var(--chom-accent-mint);
+      }
+      .tone-sky {
+        --tone: var(--chom-accent-sky);
+      }
+      .tone-lilac {
+        --tone: var(--chom-accent-lilac);
+      }
+      :root {
+        --hero-bg: var(--ink);
+        --hero-ink: var(--card);
+      }
+      :root[data-theme="dark"] {
+        --hero-bg: var(--card);
+        --hero-ink: var(--ink);
+      }
+
+      /* Hero: a navy band with confetti, the headline in vanilla and the stats as bright tiles. */
+      .cd-top {
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        padding: 40px 44px;
+        border-radius: 32px;
+        background: var(--hero-bg);
+        color: var(--hero-ink);
+      }
+      .cd-top::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: -84px;
+        right: -64px;
+        width: 200px;
+        height: 200px;
+        border: 30px solid var(--chom-accent-sunflower);
+        border-radius: 50%;
+      }
+      .cd-top::after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        inset: 0;
+        background:
+          radial-gradient(circle at 58% 12%, var(--chom-accent-coral) 0 6px, transparent 7px),
+          radial-gradient(circle at 66% 30%, var(--chom-accent-mint) 0 4px, transparent 5px),
+          radial-gradient(circle at 47% 7%, var(--chom-accent-sky) 0 5px, transparent 6px),
+          radial-gradient(circle at 74% 9%, var(--chom-accent-lilac) 0 8px, transparent 9px),
+          radial-gradient(circle at 2% 96%, var(--chom-accent-sunflower) 0 26px, transparent 27px),
+          radial-gradient(circle at 36% 97%, var(--chom-accent-coral) 0 4px, transparent 5px);
+      }
+      .cd-top .cd-title,
+      .cd-top .cd-lede,
+      .cd-top .cd-label {
+        color: var(--hero-ink);
+      }
+      .cd-top .cd-label {
+        opacity: 0.75;
+      }
+      .cd-top .cd-lede strong {
+        color: var(--chom-accent-sunflower);
+      }
+      .cd-top .cd-stats {
+        flex-basis: 400px;
+        gap: 12px;
+      }
+      .cd-stat {
+        position: relative;
+        gap: 4px;
+        min-height: 132px;
+        padding: 18px 18px 16px;
+        border-top: 0;
+        border-radius: 22px;
+        background: var(--tone);
+        color: var(--chom-on-accent);
+      }
+      .cd-stat:nth-child(3n + 1) {
+        --tone: var(--chom-accent-sunflower);
+      }
+      .cd-stat:nth-child(3n + 2) {
+        --tone: var(--chom-accent-mint);
+      }
+      .cd-stat:nth-child(3n + 3) {
+        --tone: var(--chom-accent-sky);
+      }
+      .cd-stat .cd-num,
+      .cd-stat strong {
+        color: var(--chom-on-accent);
+      }
+      .cd-stat .cd-num {
+        margin-bottom: 6px;
+      }
+      .cd-stat small,
+      .cd-stat .cd-of {
+        color: var(--chom-on-accent);
+        opacity: 0.8;
+      }
+      .cd-stat-icon {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        background: color-mix(in srgb, var(--chom-on-accent) 12%, transparent);
+      }
+      .cd-stat-icon .icon {
+        width: 20px;
+        height: 20px;
+      }
+      /* "4 of 6" as a bar. Decorative: the number beside it says the same. */
+      .cd-meter {
+        display: block;
+        height: 8px;
+        margin-top: 6px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--chom-on-accent) 16%, transparent);
+      }
+      .cd-meter i {
+        display: block;
+        width: var(--v);
+        height: 100%;
+        border-radius: inherit;
+        background: var(--chom-on-accent);
+      }
+      @media (max-width: 600px) {
+        .cd-top {
+          margin: 0 -4px;
+          padding: 28px 22px 22px;
+          border-radius: 26px;
+        }
+        .cd-top::before {
+          top: -100px;
+          right: -100px;
+          width: 140px;
+          height: 140px;
+          border-width: 22px;
+        }
+        /* Narrow: confetti only along the edges, clear of the headline. */
+        .cd-top::after {
+          background:
+            radial-gradient(circle at 96% 40%, var(--chom-accent-coral) 0 5px, transparent 6px),
+            radial-gradient(circle at 92% 47%, var(--chom-accent-mint) 0 3px, transparent 4px),
+            radial-gradient(circle at 2% 98%, var(--chom-accent-sunflower) 0 22px, transparent 23px),
+            radial-gradient(circle at 60% 99%, var(--chom-accent-lilac) 0 5px, transparent 6px);
+        }
+        .cd-stat {
+          min-height: 0;
+        }
+      }
+
+      /* Section labels: a pill in the section's accent ("My tasks", "Academics"). */
+      .cd-head .cd-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 12px 5px 10px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--tone, var(--chom-accent-sky)) 28%, var(--card));
+        color: var(--ink);
+        font-size: 13px;
+      }
+      .cd-head .cd-label::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--tone, var(--chom-accent-sky));
+      }
+
+      /* Empty and coming-soon states: the icon sits in a bright blob. */
+      .empty-message > .icon {
+        box-sizing: content-box;
+        width: 28px;
+        height: 28px;
+        margin: 10px auto 22px;
+        padding: 18px;
+        border-radius: 50%;
+        background: var(--tone, var(--chom-accent-sunflower));
+        color: var(--chom-on-accent);
+        box-shadow: 0 0 0 10px color-mix(in srgb, var(--tone, var(--chom-accent-sunflower)) 30%, transparent);
+      }
+      .empty-message h2 {
+        color: var(--ink);
+      }
+      .coming-list li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-align: left;
+      }
+      .coming-list li::before {
+        content: "";
+        flex: none;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--chom-accent-coral);
+      }
+      .coming-list li:nth-child(5n + 2)::before {
+        background: var(--chom-accent-sunflower);
+      }
+      .coming-list li:nth-child(5n + 3)::before {
+        background: var(--chom-accent-mint);
+      }
+      .coming-list li:nth-child(5n + 4)::before {
+        background: var(--chom-accent-sky);
+      }
+      .coming-list li:nth-child(5n + 5)::before {
+        background: var(--chom-accent-lilac);
+      }
+
+      /* Notices: a lilac strip, not a grey one. */
+      .notice {
+        position: relative;
+        padding: 16px 20px 16px 48px;
+        border-radius: 18px;
+        background: color-mix(in srgb, var(--chom-accent-lilac) 22%, var(--card));
+        color: var(--ink);
+        font-size: 13px;
+      }
+      .notice::before {
+        content: "";
+        position: absolute;
+        top: 18px;
+        left: 20px;
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+        background: var(--chom-accent-lilac);
+        transform: rotate(45deg);
+      }
+
+      /* The open section's icon in the sidebar, in sunflower (on navy, so light mode only). */
+      :root:not([data-theme="dark"]) .nav a.active .icon {
+        color: var(--chom-accent-sunflower);
+      }
+      /* Learner home: task rows carry their subject's badge; due pills say how soon. */
+      .subject-badge.mine {
+        --subject: var(--chom-accent-lilac);
+        color: var(--chom-on-accent);
+      }
+      .dt-row {
+        padding-left: 14px;
+      }
+      .dt-row:hover {
+        border-color: var(--tone, var(--ink));
+      }
+      .dt-due.is-today {
+        background: color-mix(in srgb, var(--chom-accent-coral) 30%, var(--card));
+      }
+      .dt-due.is-late {
+        background: var(--chom-accent-coral);
+        color: var(--chom-on-accent);
+      }
+      .dt-due.is-later {
+        background: color-mix(in srgb, var(--chom-accent-sky) 30%, var(--card));
+      }
+      .dt-due.is-any {
+        background: color-mix(in srgb, var(--chom-accent-lilac) 30%, var(--card));
+      }
+      .dt-due.is-done {
+        color: var(--ink);
+      }
+      .dt-check {
+        border-radius: 50%;
+      }
+      .dt-check:checked {
+        border-color: var(--chom-accent-mint);
+        background: var(--chom-accent-mint);
+      }
+      .dt-check:checked:after {
+        border-color: var(--chom-on-accent);
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .dt-check:checked {
+          animation: dt-pop 0.35s ease-out;
+        }
+      }
+      @keyframes dt-pop {
+        40% {
+          transform: scale(1.25);
+          box-shadow: 0 0 0 8px color-mix(in srgb, var(--chom-accent-mint) 35%, transparent);
+        }
+      }
+      .dt-row.done {
+        background: color-mix(in srgb, var(--chom-accent-mint) 12%, transparent);
+        border-color: transparent;
+      }
+      .dt-cheer {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 4px 0;
+        padding: 18px 20px;
+        border-radius: 18px;
+        background: color-mix(in srgb, var(--chom-accent-mint) 22%, var(--card));
+        color: var(--ink);
+      }
+      .dt-cheer .icon {
+        box-sizing: content-box;
+        flex: none;
+        width: 22px;
+        height: 22px;
+        padding: 10px;
+        border-radius: 50%;
+        background: var(--chom-accent-mint);
+        color: var(--chom-on-accent);
+      }
+      .dt-cheer p {
+        margin: 0;
+        font-size: 15px;
+      }
+
+      /* Coming up: a calendar tile per date. */
+      .when-list {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .when-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 10px 16px 10px 10px;
+        border-radius: 18px;
+        background: var(--bg);
+      }
+      .when-row h3 {
+        margin: 0;
+        font-size: 16px;
+      }
+      .when-row p {
+        margin: 2px 0 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .date-tile {
+        display: grid;
+        flex: none;
+        width: 56px;
+        overflow: hidden;
+        border-radius: 14px;
+        background: var(--card);
+        text-align: center;
+        box-shadow: inset 0 0 0 2px var(--tone);
+      }
+      .date-tile small {
+        padding: 3px 0;
+        background: var(--tone);
+        color: var(--chom-on-accent);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+      .date-tile b {
+        padding: 4px 0 6px;
+        font-size: 22px;
+        line-height: 1.1;
+        color: var(--ink);
+      }
+      .revise-strip {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0 0 12px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        background: color-mix(in srgb, var(--chom-accent-sunflower) 30%, var(--card));
+        font-weight: 600;
       }
     </style>
 </head>
@@ -3879,14 +4272,23 @@ SOFTWARE.
         function dueLabel(t) {
           return t.done ? "Done" : t.time;
         }
+        // Due pill colour: late is coral, today warm, later sky, no date lilac.
+        function dueTone(t) {
+          if (t.done) return "is-done";
+          if (!t.dueDay) return "is-any";
+          return t.dueDay < me.today ? "is-late" : t.dueDay === me.today ? "is-today" : "is-later";
+        }
         function dashTaskRow(t) {
-          return `<li><div class="dt-row ${t.done ? "done" : ""}"><span class="dt-copy"><button type="button" class="dt-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button><span class="dt-subject">${esc(t.subject)}</span></span><span class="dt-due ${t.done ? "is-done" : ""}">${esc(dueLabel(t))}</span><input type="checkbox" class="dt-check" data-task="${esc(t.id)}" aria-label="Mark ${esc(t.title)} as done" ${t.done ? "checked" : ""}></div></li>`;
+          const badge = t.kind === "personal"
+            ? `<span class="subject-badge small mine" aria-hidden="true">${icon("file")}</span>`
+            : subjectBadge(t.subject).replace('class="subject-badge ', 'class="subject-badge small ');
+          return `<li><div class="dt-row ${t.done ? "done" : ""}">${badge}<span class="dt-copy"><button type="button" class="dt-name" data-action="task-detail" data-id="${esc(t.id)}" style="background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer">${esc(t.title)}${t.attachments && t.attachments.length ? " 📎" : ""}</button><span class="dt-subject">${esc(t.subject)}</span></span><span class="dt-due ${dueTone(t)}">${esc(dueLabel(t))}</span><input type="checkbox" class="dt-check" data-task="${esc(t.id)}" aria-label="Mark ${esc(t.title)} as done" ${t.done ? "checked" : ""}></div></li>`;
         }
         function dashTasks() {
           const today = state.tasks.filter((t) => t.when === "today"),
             upcoming = state.tasks.filter((t) => t.when === "upcoming"),
             left = remaining();
-          return `<div class="dt-group"><h3 class="dt-group-title">Due today <span>${tasksFailed ? "" : left ? left + " left" : "All done"}</span></h3>${today.length ? `<ul class="dt-list">${today.map(dashTaskRow).join("")}</ul>` : tasksFailed ? tasksFailedNote : `<p class="task-empty">Nothing due today. You’re all caught up.</p>`}</div>${upcoming.length ? `<div class="dt-group"><h3 class="dt-group-title">Coming up</h3><ul class="dt-list">${upcoming.map(dashTaskRow).join("")}</ul></div>` : ""}`;
+          return `<div class="dt-group"><h3 class="dt-group-title">Due today <span>${tasksFailed ? "" : left ? left + " left" : "All done"}</span></h3>${today.length ? `<ul class="dt-list">${today.map(dashTaskRow).join("")}</ul>` : tasksFailed ? tasksFailedNote : `<div class="dt-cheer">${icon("check")}<p><strong>All caught up!</strong> Nothing due today.</p></div>`}</div>${upcoming.length ? `<div class="dt-group"><h3 class="dt-group-title">Coming up</h3><ul class="dt-list">${upcoming.map(dashTaskRow).join("")}</ul></div>` : ""}`;
         }
         function tasksMarkup() {
           const list = state.tasks.filter((t) =>
@@ -3918,15 +4320,22 @@ SOFTWARE.
             date = day(me.today, { day: "numeric", month: "long" }),
             termLabel = me.term ? ` · Term ${me.term.number}, Week ${me.term.week}` : "",
             focus = subjectList.filter((x) => x.isFocus);
-          return `<div class="cd"><div class="cd-top"><header class="cd-hero"><span class="cd-label">${esc(weekday)} ${esc(date)}${esc(termLabel)}</span><div id="dash-hero" style="display:contents">${heroCopy()}</div></header><section class="cd-stats" aria-label="Your week in numbers"><div class="cd-stat"><span class="cd-num" id="task-count">${remaining()}</span><strong>Tasks due today</strong><small>Tick them off as you go</small></div><div class="cd-stat"><span class="cd-num">${focus.length}</span><strong>Focus subjects</strong><small>${focus.length ? esc(focus.map((x) => x.name).join(", ")) : "Pick them in your answers"}</small></div></section></div><div class="cd-split"><div class="cd-col"><section class="panel dt-panel" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="dt-all" href="#tasks">See all tasks ${icon("arrow", true)}</a></div><div id="dash-tasks">${dashTasks()}</div></section>${comingUp()}</div></div></div>`;
+          return `<div class="cd"><div class="cd-top"><header class="cd-hero"><span class="cd-label">${esc(weekday)} ${esc(date)}${esc(termLabel)}</span><div id="dash-hero" style="display:contents">${heroCopy()}</div></header><section class="cd-stats" aria-label="Your week in numbers"><div class="cd-stat"><span class="cd-stat-icon" aria-hidden="true">${icon("check")}</span><span class="cd-num" id="task-count">${remaining()}</span><strong>Tasks due today</strong><small>Tick them off as you go</small></div><div class="cd-stat"><span class="cd-stat-icon" aria-hidden="true">${icon("leaf")}</span><span class="cd-num">${focus.length}</span><strong>Focus subjects</strong><small>${focus.length ? esc(focus.map((x) => x.name).join(", ")) : "Pick them in your answers"}</small></div></section></div><div class="cd-split"><div class="cd-col"><section class="panel dt-panel tone-coral" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="dt-all" href="#tasks">See all tasks ${icon("arrow", true)}</a></div><div id="dash-tasks">${dashTasks()}</div></section>${comingUp()}</div></div></div>`;
+        }
+        // A little calendar page: month on top, day below.
+        function dateTile(iso, tone) {
+          return `<span class="date-tile ${tone}" aria-hidden="true"><small>${months[Number(iso.slice(5, 7)) - 1]}</small><b>${Number(iso.slice(8, 10))}</b></span>`;
         }
         function comingUp() {
           const exams = (me.exams || []).slice(0, 3);
           const revising = me.contentEndsOn && me.today > me.contentEndsOn;
           const rows = exams
-            .map((e) => `<li class="slot"><time class="slot-time">${esc(shortDay(e.startsOn))}</time><div class="slot-body"><h3>${esc(e.label)}${e.inProgress ? '<span class="now-tag">Now</span>' : ""}</h3><p>${esc(shortDay(e.startsOn))} – ${esc(shortDay(e.endsOn))}${e.isApproximate ? " · dates to be confirmed" : ""}</p></div></li>`)
+            .map((e) => `<li class="when-row">${dateTile(e.startsOn, "tone-coral")}<div><h3>${esc(e.label)}${e.inProgress ? '<span class="now-tag">Now</span>' : ""}</h3><p>${esc(shortDay(e.startsOn))} – ${esc(shortDay(e.endsOn))}${e.isApproximate ? " · dates to be confirmed" : ""}</p></div></li>`)
             .join("");
-          return `<section class="panel"><div class="cd-head"><div><span class="cd-label">Coming up</span><h2>${exams.length ? "Exams" : "Your term"}</h2></div></div><div style="padding:0 24px 24px">${revising ? `<p class="muted" style="margin:0 0 12px">New content finished on ${esc(day(me.contentEndsOn, { day: "numeric", month: "long" }))}. Time to revise.</p>` : ""}${rows ? `<ul class="schedule-list" style="list-style:none;margin:0;padding:0">${rows}</ul>` : `<p class="muted" style="margin:0">No exams coming up${me.term ? `. Term ${me.term.number} ends on ${esc(day(me.term.endsOn, { day: "numeric", month: "long" }))}.` : "."}</p>`}</div></section>`;
+          const termEnd = me.term
+            ? `<li class="when-row">${dateTile(me.term.endsOn, "tone-mint")}<div><h3>Term ${me.term.number} ends</h3><p>${esc(day(me.term.endsOn, { weekday: "long" }))} ${esc(day(me.term.endsOn, { day: "numeric", month: "long" }))}</p></div></li>`
+            : "";
+          return `<section class="panel tone-lilac"><div class="cd-head"><div><span class="cd-label">Coming up</span><h2>${exams.length ? "Exams" : "Your term"}</h2></div></div><div style="padding:0 24px 24px">${revising ? `<p class="revise-strip">${icon("spark")}New content finished on ${esc(day(me.contentEndsOn, { day: "numeric", month: "long" }))}. Time to revise.</p>` : ""}${rows || termEnd ? `<ul class="when-list">${rows}${termEnd}</ul>` : `<p class="muted" style="margin:0">No exams coming up.</p>`}</div></section>`;
         }
         function dashboard() {
           return liveDashboard();

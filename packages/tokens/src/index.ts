@@ -114,6 +114,24 @@ export const subjectColors: Record<'light' | 'dark', Record<SubjectFamily, strin
 /** The icon on a subject badge: white on the light fills, navy on the dark ones. */
 export const onSubject = { light: '#FFFFFF', dark: palette.navy } as const;
 
+export type AccentName = 'coral' | 'sunflower' | 'mint' | 'sky' | 'lilac';
+
+/**
+ * Accents: bright fills that make the dashboards feel playful (stat tiles, highlights,
+ * empty states). The same in both themes. Text and icons on an accent are onAccent.
+ * Subjects keep their own subjectColors; accents never stand in for a subject.
+ */
+export const accentColors: Record<AccentName, string> = {
+  coral: '#FF7A59',
+  sunflower: '#FFC83D',
+  mint: '#3CCF9A',
+  sky: '#4FB3FF',
+  lilac: '#A78BFA',
+};
+
+/** Navy: readable on every accent fill. */
+export const onAccent = palette.navy;
+
 export const fontFamily = {
   /** Web: load from Google Fonts. Mobile: @expo-google-fonts/inter-tight. */
   sans: '"Inter Tight", Inter, system-ui, sans-serif',

@@ -3118,34 +3118,34 @@ h3 {
   width: 16px;
   height: 16px;
 }
-.subject-badge.maths {
+:is(.subject-badge, .subject-tint).maths {
   --subject: var(--chom-subject-maths);
 }
-.subject-badge.english {
+:is(.subject-badge, .subject-tint).english {
   --subject: var(--chom-subject-english);
 }
-.subject-badge.language {
+:is(.subject-badge, .subject-tint).language {
   --subject: var(--chom-subject-language);
 }
-.subject-badge.life-orientation {
+:is(.subject-badge, .subject-tint).life-orientation {
   --subject: var(--chom-subject-life-orientation);
 }
-.subject-badge.physical-sciences {
+:is(.subject-badge, .subject-tint).physical-sciences {
   --subject: var(--chom-subject-physical-sciences);
 }
-.subject-badge.life-sciences {
+:is(.subject-badge, .subject-tint).life-sciences {
   --subject: var(--chom-subject-life-sciences);
 }
-.subject-badge.commerce {
+:is(.subject-badge, .subject-tint).commerce {
   --subject: var(--chom-subject-commerce);
 }
-.subject-badge.humanities {
+:is(.subject-badge, .subject-tint).humanities {
   --subject: var(--chom-subject-humanities);
 }
-.subject-badge.technology {
+:is(.subject-badge, .subject-tint).technology {
   --subject: var(--chom-subject-technology);
 }
-.subject-badge.arts {
+:is(.subject-badge, .subject-tint).arts {
   --subject: var(--chom-subject-arts);
 }
 
@@ -3218,4 +3218,256 @@ h3 {
   .page {
     padding-top: 72px;
   }
+}
+
+/* ---------- Colour and play (docs/design/dashboard.md, "Accents") ----------
+   Navy and vanilla stay the base; the accents (--chom-accent-*) add the fun. A part
+   picks its accent with a .tone-* class (or by position) and reads it as --tone. */
+.tone-coral {
+  --tone: var(--chom-accent-coral);
+}
+.tone-sunflower {
+  --tone: var(--chom-accent-sunflower);
+}
+.tone-mint {
+  --tone: var(--chom-accent-mint);
+}
+.tone-sky {
+  --tone: var(--chom-accent-sky);
+}
+.tone-lilac {
+  --tone: var(--chom-accent-lilac);
+}
+:root {
+  --hero-bg: var(--ink);
+  --hero-ink: var(--card);
+}
+:root[data-theme='dark'] {
+  --hero-bg: var(--card);
+  --hero-ink: var(--ink);
+}
+
+/* Hero: a navy band with confetti, the headline in vanilla and the stats as bright tiles. */
+.cd-top {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 40px 44px;
+  border-radius: 32px;
+  background: var(--hero-bg);
+  color: var(--hero-ink);
+}
+.cd-top::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: -84px;
+  right: -64px;
+  width: 200px;
+  height: 200px;
+  border: 30px solid var(--chom-accent-sunflower);
+  border-radius: 50%;
+}
+.cd-top::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(circle at 58% 12%, var(--chom-accent-coral) 0 6px, transparent 7px),
+    radial-gradient(circle at 66% 30%, var(--chom-accent-mint) 0 4px, transparent 5px),
+    radial-gradient(circle at 47% 7%, var(--chom-accent-sky) 0 5px, transparent 6px),
+    radial-gradient(circle at 74% 9%, var(--chom-accent-lilac) 0 8px, transparent 9px),
+    radial-gradient(circle at 2% 96%, var(--chom-accent-sunflower) 0 26px, transparent 27px),
+    radial-gradient(circle at 36% 97%, var(--chom-accent-coral) 0 4px, transparent 5px);
+}
+.cd-top .cd-title,
+.cd-top .cd-lede,
+.cd-top .cd-label {
+  color: var(--hero-ink);
+}
+.cd-top .cd-label {
+  opacity: 0.75;
+}
+.cd-top .cd-lede strong {
+  color: var(--chom-accent-sunflower);
+}
+.cd-top .cd-stats {
+  flex-basis: 400px;
+  gap: 12px;
+}
+.cd-stat {
+  position: relative;
+  gap: 4px;
+  min-height: 132px;
+  padding: 18px 18px 16px;
+  border-top: 0;
+  border-radius: 22px;
+  background: var(--tone);
+  color: var(--chom-on-accent);
+}
+.cd-stat:nth-child(3n + 1) {
+  --tone: var(--chom-accent-sunflower);
+}
+.cd-stat:nth-child(3n + 2) {
+  --tone: var(--chom-accent-mint);
+}
+.cd-stat:nth-child(3n + 3) {
+  --tone: var(--chom-accent-sky);
+}
+.cd-stat .cd-num,
+.cd-stat strong {
+  color: var(--chom-on-accent);
+}
+.cd-stat .cd-num {
+  margin-bottom: 6px;
+}
+.cd-stat small,
+.cd-stat .cd-of {
+  color: var(--chom-on-accent);
+  opacity: 0.8;
+}
+.cd-stat-icon {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--chom-on-accent) 12%, transparent);
+}
+.cd-stat-icon .icon {
+  width: 20px;
+  height: 20px;
+}
+/* "4 of 6" as a bar. Decorative: the number beside it says the same. */
+.cd-meter {
+  display: block;
+  height: 8px;
+  margin-top: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--chom-on-accent) 16%, transparent);
+}
+.cd-meter i {
+  display: block;
+  width: var(--v);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--chom-on-accent);
+}
+@media (max-width: 600px) {
+  .cd-top {
+    margin: 0 -4px;
+    padding: 28px 22px 22px;
+    border-radius: 26px;
+  }
+  .cd-top::before {
+    top: -100px;
+    right: -100px;
+    width: 140px;
+    height: 140px;
+    border-width: 22px;
+  }
+  /* Narrow: confetti only along the edges, clear of the headline. */
+  .cd-top::after {
+    background:
+      radial-gradient(circle at 96% 40%, var(--chom-accent-coral) 0 5px, transparent 6px),
+      radial-gradient(circle at 92% 47%, var(--chom-accent-mint) 0 3px, transparent 4px),
+      radial-gradient(circle at 2% 98%, var(--chom-accent-sunflower) 0 22px, transparent 23px),
+      radial-gradient(circle at 60% 99%, var(--chom-accent-lilac) 0 5px, transparent 6px);
+  }
+  .cd-stat {
+    min-height: 0;
+  }
+}
+
+/* Section labels: a pill in the section's accent ("My tasks", "Academics"). */
+.cd-head .cd-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tone, var(--chom-accent-sky)) 28%, var(--card));
+  color: var(--ink);
+  font-size: 13px;
+}
+.cd-head .cd-label::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--tone, var(--chom-accent-sky));
+}
+
+/* Empty and coming-soon states: the icon sits in a bright blob. */
+.empty-message > .icon {
+  box-sizing: content-box;
+  width: 28px;
+  height: 28px;
+  margin: 10px auto 22px;
+  padding: 18px;
+  border-radius: 50%;
+  background: var(--tone, var(--chom-accent-sunflower));
+  color: var(--chom-on-accent);
+  box-shadow: 0 0 0 10px
+    color-mix(in srgb, var(--tone, var(--chom-accent-sunflower)) 30%, transparent);
+}
+.empty-message h2 {
+  color: var(--ink);
+}
+.coming-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+}
+.coming-list li::before {
+  content: '';
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--chom-accent-coral);
+}
+.coming-list li:nth-child(5n + 2)::before {
+  background: var(--chom-accent-sunflower);
+}
+.coming-list li:nth-child(5n + 3)::before {
+  background: var(--chom-accent-mint);
+}
+.coming-list li:nth-child(5n + 4)::before {
+  background: var(--chom-accent-sky);
+}
+.coming-list li:nth-child(5n + 5)::before {
+  background: var(--chom-accent-lilac);
+}
+
+/* Notices: a lilac strip, not a grey one. */
+.notice {
+  position: relative;
+  padding: 16px 20px 16px 48px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--chom-accent-lilac) 22%, var(--card));
+  color: var(--ink);
+  font-size: 13px;
+}
+.notice::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background: var(--chom-accent-lilac);
+  transform: rotate(45deg);
+}
+
+/* The open section's icon in the sidebar, in sunflower (on navy, so light mode only). */
+:root:not([data-theme='dark']) .nav a.active .icon {
+  color: var(--chom-accent-sunflower);
 }

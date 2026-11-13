@@ -1,5 +1,6 @@
 import { Icon } from '@chom/dashboard';
 import Link from 'next/link';
+import type { CSSProperties } from 'react';
 import { notFound } from 'next/navigation';
 
 import { findChild } from '@/lib/parent/current-parent';
@@ -66,22 +67,37 @@ export default async function ChildHome({ params }: { params: Promise<{ child: s
         </header>
         <section className="cd-stats" aria-label={`${child.name} in numbers`}>
           <div className="cd-stat">
+            <span className="cd-stat-icon" aria-hidden="true">
+              <Icon name="book" />
+            </span>
             <span className="cd-num">{child.subjects.length}</span>
             <strong>Subjects</strong>
             <small>This year</small>
           </div>
           <div className="cd-stat">
+            <span className="cd-stat-icon" aria-hidden="true">
+              <Icon name="leaf" />
+            </span>
             <span className="cd-num">
               {targets}
               <small className="cd-of">/{child.subjects.length}</small>
             </span>
             <strong>Targets set</strong>
             <small>Chosen by {child.name}</small>
+            <span className="cd-meter" aria-hidden="true">
+              <i
+                style={
+                  {
+                    '--v': `${child.subjects.length ? (100 * targets) / child.subjects.length : 0}%`,
+                  } as CSSProperties
+                }
+              />
+            </span>
           </div>
         </section>
       </div>
 
-      <section className="cd-section" aria-labelledby="week-title">
+      <section className="cd-section tone-sky" aria-labelledby="week-title">
         <div className="cd-head">
           <div>
             <span className="cd-label">What’s coming up</span>
@@ -91,15 +107,23 @@ export default async function ChildHome({ params }: { params: Promise<{ child: s
         <section className="panel">
           <div className="empty-message">
             <Icon name="calendar" />
+            <h2>{child.name}’s week, at a glance</h2>
             <p>
               Tests, homework, training, fixtures and school events will show here, with anything
               you need to do, like confirming {child.name} can play or signing a slip.
             </p>
+            <ul className="peek-chips" aria-label="Coming to this week">
+              <li className="tone-coral">Tests</li>
+              <li className="tone-sunflower">Homework</li>
+              <li className="tone-mint">Fixtures</li>
+              <li className="tone-sky">Events</li>
+              <li className="tone-lilac">Slips to sign</li>
+            </ul>
           </div>
         </section>
       </section>
 
-      <section className="cd-section" aria-labelledby="subjects-title">
+      <section className="cd-section tone-lilac" aria-labelledby="subjects-title">
         <div className="cd-head">
           <div>
             <span className="cd-label">Academics</span>
@@ -113,32 +137,38 @@ export default async function ChildHome({ params }: { params: Promise<{ child: s
       </section>
 
       {child.study && onboarded && (
-        <section className="cd-section" aria-labelledby="study-title">
+        <section className="cd-section tone-mint" aria-labelledby="study-title">
           <div className="cd-head">
             <div>
               <span className="cd-label">Study habits</span>
               <h2 id="study-title">How {child.name} likes to study</h2>
             </div>
           </div>
-          <section className="content-card study-facts">
-            <dl>
-              <div>
-                <dt>In one go</dt>
-                <dd>
-                  {SESSION_LENGTHS.find((o) => o.value === child.study?.sessionLength)?.label ??
-                    '—'}
-                </dd>
-              </div>
-              <div>
-                <dt>How</dt>
-                <dd>{labels(STUDY_METHODS, child.study.studyMethods).join(', ') || '—'}</dd>
-              </div>
-              <div>
-                <dt>When</dt>
-                <dd>{labels(STUDY_TIMES, child.study.studyTimes).join(', ') || '—'}</dd>
-              </div>
-            </dl>
-          </section>
+          <dl className="study-tiles">
+            <div className="study-tile tone-coral">
+              <dt>
+                <Icon name="clock" />
+                In one go
+              </dt>
+              <dd>
+                {SESSION_LENGTHS.find((o) => o.value === child.study?.sessionLength)?.label ?? '—'}
+              </dd>
+            </div>
+            <div className="study-tile tone-sky">
+              <dt>
+                <Icon name="book" />
+                How
+              </dt>
+              <dd>{labels(STUDY_METHODS, child.study.studyMethods).join(', ') || '—'}</dd>
+            </div>
+            <div className="study-tile tone-sunflower">
+              <dt>
+                <Icon name="sun" />
+                When
+              </dt>
+              <dd>{labels(STUDY_TIMES, child.study.studyTimes).join(', ') || '—'}</dd>
+            </div>
+          </dl>
         </section>
       )}
 

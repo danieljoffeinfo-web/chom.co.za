@@ -71,39 +71,100 @@
   color: var(--card);
   opacity: 0.75;
 }
-.child-chip.active .avatar {
-  background: var(--card);
-  color: var(--ink);
+.child-chip .avatar {
+  background: var(--chom-accent-sunflower);
+  color: var(--chom-on-accent);
+}
+.child-chip:nth-child(4n + 2) .avatar {
+  background: var(--chom-accent-mint);
+}
+.child-chip:nth-child(4n + 3) .avatar {
+  background: var(--chom-accent-sky);
+}
+.child-chip:nth-child(4n + 4) .avatar {
+  background: var(--chom-accent-coral);
 }
 
 /* ---------- Home and Academics ---------- */
 
-.subject-rows {
+/* Subject cards: tinted in the subject's colour, the child's goal as a ring. */
+.subject-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
   margin: 0;
+  padding: 0;
   list-style: none;
 }
-.subject-rows .cd-avatar {
+.subject-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px;
+  border-top: 6px solid var(--subject);
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--subject) 12%, var(--card));
+}
+.subject-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.subject-card-name {
+  font-size: 17px;
+  line-height: 1.25;
+  font-weight: 800;
+}
+.subject-card-teacher {
+  font-size: 13px;
+  color: var(--muted);
+}
+.subject-card-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+  margin-top: auto;
+  padding-top: 16px;
+}
+.subject-card-goal {
+  flex: 1 1 auto;
+  display: grid;
+  line-height: 1.2;
+}
+.subject-card-goal small {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.subject-card-goal b {
+  font-size: 13px;
+}
+.goal-ring {
+  display: grid;
+  place-items: center;
   flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background:
+    radial-gradient(var(--card) 0 58%, transparent 59%),
+    conic-gradient(var(--subject) var(--v), color-mix(in srgb, var(--subject) 22%, var(--card)) 0);
+  font-size: 13px;
+  font-weight: 800;
+}
+.goal-ring.empty {
+  color: var(--muted);
 }
 .focus-tag {
-  margin-left: 8px;
-  padding: 2px 8px;
+  padding: 4px 10px;
   border-radius: 999px;
-  background: var(--soft);
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 700;
-  vertical-align: 2px;
-}
-.subject-figures {
-  display: grid;
-  justify-items: end;
-  gap: 4px;
-  text-align: right;
-}
-.subject-figures small {
+  background: var(--chom-accent-sunflower);
+  color: var(--chom-on-accent);
   font-size: 11px;
-  color: var(--muted);
+  font-style: normal;
+  font-weight: 800;
 }
 /* Status bands (spec §5.1). Only "none" exists until marks arrive. */
 .band {
@@ -114,22 +175,86 @@
   white-space: nowrap;
 }
 .band.none {
-  background: var(--soft);
+  background: var(--card);
   color: var(--muted);
 }
-.study-facts dl {
+
+/* This week, before it's switched on: what will show, as coloured chips. */
+.peek-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.peek-chips li {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tone) 30%, var(--card));
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* How they like to study: one bright tile per fact. */
+.study-tiles {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
   margin: 0;
 }
-.study-facts dt {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--muted);
+.study-tile {
+  padding: 20px;
+  border-radius: 22px;
+  background: var(--tone);
+  color: var(--chom-on-accent);
 }
-.study-facts dd {
-  margin: 4px 0 0;
+.study-tile dt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.study-tile dt .icon {
+  box-sizing: content-box;
+  width: 18px;
+  height: 18px;
+  padding: 8px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--chom-on-accent) 12%, transparent);
+}
+.study-tile dd {
+  margin: 14px 0 0;
+  font-size: 18px;
+  line-height: 1.3;
+  font-weight: 800;
+}
+
+/* Academics: what's coming, one accent each. */
+.coming-card {
+  position: relative;
+  border-top: 6px solid var(--tone);
+}
+.coming-card-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  background: var(--tone);
+  color: var(--chom-on-accent);
+}
+.soon-pill {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--tone) 30%, var(--card));
+  font-size: 12px;
   font-weight: 700;
 }
 .parent-coming,

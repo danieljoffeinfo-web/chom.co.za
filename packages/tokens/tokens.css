@@ -30,6 +30,15 @@
   --chom-subject-arts: #c026d3;
   --chom-on-subject: #ffffff;
 
+  /* Accents (accentColors in src/index.ts): bright fills for stats, tiles and highlights.
+     The same in both themes; anything on an accent fill uses --chom-on-accent. */
+  --chom-accent-coral: #ff7a59;
+  --chom-accent-sunflower: #ffc83d;
+  --chom-accent-mint: #3ccf9a;
+  --chom-accent-sky: #4fb3ff;
+  --chom-accent-lilac: #a78bfa;
+  --chom-on-accent: #282b4a;
+
   --chom-font-sans: 'Inter Tight', Inter, system-ui, sans-serif;
 
   --chom-radius-sm: 8px;
