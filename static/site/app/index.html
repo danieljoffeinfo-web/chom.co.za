@@ -5380,8 +5380,10 @@ SOFTWARE.
           }
           return out;
         }
-        // Where an edit happened: it ends at the caret, and the text after the caret is unchanged.
-        function editAt(before, after, caret) {
+        // Where an edit happened: it ends at the caret, starts no later than the selection did
+        // before it (so typing over "cat" with "c" replaces from the "c"), and leaves the text
+        // after the caret unchanged.
+        function editAt(before, after, caret, selStart = Infinity) {
           const tail = after.length - caret;
           if (tail < 0 || before.length < tail || before.slice(before.length - tail) !== after.slice(caret)) {
             let p = 0;
@@ -5391,7 +5393,7 @@ SOFTWARE.
             return { start: p, removed: before.length - p - q, inserted: after.length - p - q };
           }
           let p = 0;
-          const limit = Math.min(caret, before.length - tail);
+          const limit = Math.min(caret, before.length - tail, selStart);
           while (p < limit && before[p] === after[p]) p++;
           return { start: p, removed: before.length - tail - p, inserted: caret - p };
         }
@@ -5440,17 +5442,26 @@ SOFTWARE.
           ta.style.height = "auto";
           ta.style.height = `${ta.scrollHeight}px`;
           const w = wordCount(e.text),
-            pw = wordCount(e.pasted.map(([a, b]) => e.text.slice(a, b)).join(" "));
+            pw = [...e.text.matchAll(/\S+/g)].filter((m) => e.pasted.some(([a, b]) => a < m.index + m[0].length && b > m.index)).length;
           $("#studio-words").textContent = `${w} ${w === 1 ? "word" : "words"}`;
           $("#studio-pasted").hidden = !pw;
           $("#studio-pasted").textContent = `${pw} pasted · ${Math.round((100 * pw) / Math.max(w, 1))}%`;
         }
+        // Recent versions of the essay and their highlights, so undo and redo restore both
+        // (otherwise deleting pasted text and undoing would bring it back unhighlighted).
+        const studioHistory = new Map();
+        let studioSelStart = Infinity;
         function studioInput(event) {
           const ta = event.target,
             before = essayOf(studioTask),
             text = ta.value,
-            { start, removed, inserted } = editAt(before.text, text, ta.selectionEnd);
-          let pasted = shiftRanges(before.pasted, start, removed, inserted);
+            { start, removed, inserted } = editAt(before.text, text, ta.selectionEnd, studioSelStart);
+          studioSelStart = Infinity;
+          studioHistory.set(before.text, before.pasted);
+          if (studioHistory.size > 60) studioHistory.delete(studioHistory.keys().next().value);
+          let pasted = /^history(Undo|Redo)$/.test(event.inputType) && studioHistory.has(text)
+            ? studioHistory.get(text)
+            : shiftRanges(before.pasted, start, removed, inserted);
           const fromOutside = (event.inputType === "insertFromPaste" || event.inputType === "insertFromDrop") && studioExternal;
           if (fromOutside && inserted) pasted = addRange(pasted, start, start + inserted);
           studioExternal = false;
@@ -5459,7 +5470,8 @@ SOFTWARE.
           $("#studio-saved").textContent = "Saving…";
           clearTimeout(studioSaveTimer);
           studioSaveTimer = setTimeout(() => {
-            if ($("#studio-saved")) $("#studio-saved").textContent = save() ? "Saved on this device" : "Not saved: this browser isn’t storing changes";
+            const stored = save();
+            if ($("#studio-saved")) $("#studio-saved").textContent = stored ? "Saved on this device" : "Not saved: this browser isn’t storing changes";
           }, 500);
         }
         function tasksMarkup() {
@@ -6034,11 +6046,14 @@ SOFTWARE.
           if (a === "start-quiz") startQuiz();
           if (a === "studio-open") {
             studioTask = b.dataset.id;
+            studioHistory.clear();
             render();
             window.scrollTo(0, 0);
             $("#studio-text").focus();
           }
           if (a === "studio-close") {
+            clearTimeout(studioSaveTimer);
+            save();
             const id = studioTask;
             studioTask = null;
             assignOpen.add(id);
@@ -6258,6 +6273,9 @@ SOFTWARE.
         });
         document.addEventListener("dragstart", (e) => {
           if (e.target.id === "studio-text") studioClip = e.target.value.slice(e.target.selectionStart, e.target.selectionEnd);
+        });
+        document.addEventListener("beforeinput", (e) => {
+          if (e.target.id === "studio-text") studioSelStart = e.target.selectionStart;
         });
         document.addEventListener("paste", (e) => {
           if (e.target.id === "studio-text") studioExternal = (e.clipboardData?.getData("text/plain") || "").replace(/\r\n/g, "\n") !== studioClip;
