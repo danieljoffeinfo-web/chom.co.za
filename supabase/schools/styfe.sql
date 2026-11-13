@@ -46,12 +46,8 @@ begin
   values (v_school, '2026', '2026-01-14', '2026-12-09', v_curriculum, true)
   returning id into v_year;
 
-  -- 2026 terms (the national school calendar). Change them if Styfe's differ.
-  insert into public.school_terms (school_id, academic_year_id, term_number, starts_on, ends_on) values
-    (v_school, v_year, 1, '2026-01-14', '2026-03-27'),
-    (v_school, v_year, 2, '2026-04-08', '2026-06-26'),
-    (v_school, v_year, 3, '2026-07-21', '2026-10-02'),
-    (v_school, v_year, 4, '2026-10-13', '2026-12-09');
+  -- No calendar (terms, holidays, exams) or unit schedule yet: both are being
+  -- redesigned (see migration 20261113160000).
 
   -- People ----------------------------------------------------------------------
 
@@ -109,8 +105,5 @@ begin
 
     v_subject := null;
   end loop;
-
-  -- Lay the Grade 10 units over Styfe's 2026 terms.
-  perform private.generate_unit_schedule(v_year);
 end;
 $$;
