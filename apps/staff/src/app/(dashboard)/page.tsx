@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type { CSSProperties } from 'react';
 
 import { Icon } from '@chom/dashboard';
 import { currentStaff } from '@/lib/current-staff';
@@ -80,22 +81,35 @@ export default async function Home() {
         </header>
         <section className="cd-stats" aria-label="Your week in numbers">
           <div className="cd-stat">
+            <span className="cd-stat-icon" aria-hidden="true">
+              <Icon name="calendar" />
+            </span>
             <span className="cd-num">{dueThisWeek}</span>
             <strong>Due this week</strong>
             <small>{classCount === 1 ? 'Across 1 class' : `Across ${classCount} classes`}</small>
           </div>
           <div className="cd-stat">
+            <span className="cd-stat-icon" aria-hidden="true">
+              <Icon name="user" />
+            </span>
             <span className="cd-num">
               {onboarded}
               <small className="cd-of">/{learners}</small>
             </span>
             <strong>Learners on Chom</strong>
             <small>Finished their study setup</small>
+            <span className="cd-meter" aria-hidden="true">
+              <i
+                style={
+                  { '--v': `${learners ? (100 * onboarded) / learners : 0}%` } as CSSProperties
+                }
+              />
+            </span>
           </div>
         </section>
       </div>
 
-      <section className="cd-section" aria-labelledby="classes-title">
+      <section className="cd-section tone-sky" aria-labelledby="classes-title">
         <div className="cd-head">
           <div>
             <span className="cd-label">My classes</span>

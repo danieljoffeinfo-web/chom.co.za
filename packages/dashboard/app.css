@@ -20,11 +20,6 @@
 }
 
 /* Empty and coming-soon states. */
-.empty-message > .icon {
-  width: 32px;
-  height: 32px;
-  margin: 0 auto 15px;
-}
 .empty-message p {
   margin-top: 10px;
 }

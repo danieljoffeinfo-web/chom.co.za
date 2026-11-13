@@ -18,7 +18,7 @@ When the learner dashboard's styles change, copy the change into `packages/dashb
 
 ## Colour
 
-Navy and vanilla, with no orange. Light mode is the default; dark mode is opt-in from Settings.
+Navy and vanilla are the base, with bright accents for fun. Light mode is the default; dark mode is opt-in from Settings.
 
 | Role         | Light     | Dark      | Token               |
 | ------------ | --------- | --------- | ------------------- |
@@ -32,6 +32,20 @@ Navy and vanilla, with no orange. Light mode is the default; dark mode is opt-in
 | On primary   | `#eeebda` | `#282b4a` | `--chom-on-primary` |
 
 Never write a colour value in app code. Use a token, or a prototype name that maps to one.
+
+### Accents
+
+Five bright accents make the dashboards playful. They are the same in both themes, and anything on an accent fill (text, icons, bars) is navy, `--chom-on-accent`.
+
+| Accent    | Token                     | Value     | Typical use                                  |
+| --------- | ------------------------- | --------- | -------------------------------------------- |
+| Coral     | `--chom-accent-coral`     | `#ff7a59` | Due and late work, tests                     |
+| Sunflower | `--chom-accent-sunflower` | `#ffc83d` | First stat tile, Focus tags, the hero's ring |
+| Mint      | `--chom-accent-mint`      | `#3ccf9a` | Done, ticked tasks, progress                 |
+| Sky       | `--chom-accent-sky`       | `#4fb3ff` | Later dates, calendar                        |
+| Lilac     | `--chom-accent-lilac`     | `#a78bfa` | Notices, the learner's own tasks             |
+
+A part picks its accent with a `.tone-coral` (`-sunflower`, `-mint`, `-sky`, `-lilac`) class and reads it as `--tone`. Soft fills mix it into the card: `color-mix(in srgb, var(--tone) 24%, var(--card))`. Stat tiles and class cards take their accents in turn by position. Accents never stand in for a subject.
 
 ### Subject colour
 
@@ -50,7 +64,7 @@ Every subject has one fixed colour and icon, picked by its name (`subjectStyle()
 | Technology        | IT, CAT, EGD, Technology                     | `--chom-subject-technology`        | `#4f46e5` | `#818cf8` |
 | Arts              | Visual Arts, Drama, Music, Design            | `--chom-subject-arts`              | `#c026d3` | `#e879f9` |
 
-The icon on the fill is `--chom-on-subject` (white in light, navy in dark). Subject colours appear only on subject badges, never on text or buttons. Squares mean subjects; circles mean people.
+The icon on the fill is `--chom-on-subject` (white in light, navy in dark). Subject colours fill subject badges and may tint a card that is about one subject (`.subject-tint`, with the family class) and draw its goal ring. Never use them on text or buttons. Squares mean subjects; circles mean people.
 
 ## Type
 
@@ -71,19 +85,19 @@ Inter Tight, from Google Fonts (via `next/font` in the apps). Base size 14px.
 
 ## Components
 
-| Component      | Class                                                | Used for                                              |
-| -------------- | ---------------------------------------------------- | ----------------------------------------------------- |
-| Hero and stats | `.cd-top`, `.cd-hero`, `.cd-stats`, `.cd-stat`       | Date, headline, lede and two headline numbers         |
-| Subject badge  | `.subject-badge` (`<SubjectBadge name=… />`)         | A subject's fixed colour and icon, beside its name    |
-| Bottom tabs    | `.tab-dock`                                          | The main sections on phones                           |
-| Section        | `.cd-section`, `.cd-head`                            | A labelled block with an optional "See all" link      |
-| Class card     | `.cd-classes`, `.cd-class`, `.cd-avatar`, `.cd-next` | One subject and class                                 |
-| Panel          | `.panel`, `.panel-head`                              | Lists and tables                                      |
-| Content card   | `.content-card`                                      | Settings and single blocks of content                 |
-| Notice         | `.notice`, `.info-strip`                             | One line of context, e.g. what's coming               |
-| Empty state    | `.empty-message`                                     | Nothing here yet, and coming soon                     |
-| Buttons        | `.button`, `.button.secondary`, `.text-button`       | Actions and "See all" links                           |
-| Switch         | `.switch-row`                                        | A setting with a label, a line of help and a checkbox |
+| Component      | Class                                                                        | Used for                                                                                                           |
+| -------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Hero and stats | `.cd-top`, `.cd-hero`, `.cd-stats`, `.cd-stat`, `.cd-stat-icon`, `.cd-meter` | A navy band with confetti: date, headline, lede, and the numbers as accent tiles (an icon, and a bar for “4 of 6”) |
+| Subject badge  | `.subject-badge` (`<SubjectBadge name=… />`)                                 | A subject's fixed colour and icon, beside its name                                                                 |
+| Bottom tabs    | `.tab-dock`                                                                  | The main sections on phones                                                                                        |
+| Section        | `.cd-section`, `.cd-head`                                                    | A labelled block with an optional "See all" link; the label is a pill in the section's `.tone-*`                   |
+| Class card     | `.cd-classes`, `.cd-class`, `.cd-avatar`, `.cd-next`                         | One subject and class                                                                                              |
+| Panel          | `.panel`, `.panel-head`                                                      | Lists and tables                                                                                                   |
+| Content card   | `.content-card`                                                              | Settings and single blocks of content                                                                              |
+| Notice         | `.notice`, `.info-strip`                                                     | One line of context, e.g. what's coming (a lilac strip)                                                            |
+| Empty state    | `.empty-message`                                                             | Nothing here yet, and coming soon; its icon sits in a bright blob                                                  |
+| Buttons        | `.button`, `.button.secondary`, `.text-button`                               | Actions and "See all" links                                                                                        |
+| Switch         | `.switch-row`                                                                | A setting with a label, a line of help and a checkbox                                                              |
 
 ## Navigation
 

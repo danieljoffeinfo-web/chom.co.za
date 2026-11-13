@@ -8,27 +8,46 @@
   display: grid;
   gap: 20px;
 }
+/* Each class gets its own accent, in turn: a tinted header with the class name on a tile. */
 .class-group {
+  --tone: var(--chom-accent-sky);
   border: 1px solid var(--line);
-  border-radius: 20px;
+  border-radius: 22px;
   background: var(--card);
   overflow: hidden;
 }
+.class-group:nth-child(5n + 2) {
+  --tone: var(--chom-accent-lilac);
+}
+.class-group:nth-child(5n + 3) {
+  --tone: var(--chom-accent-mint);
+}
+.class-group:nth-child(5n + 4) {
+  --tone: var(--chom-accent-coral);
+}
+.class-group:nth-child(5n + 5) {
+  --tone: var(--chom-accent-sunflower);
+}
 .class-group-head {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
-  padding: 14px 20px 12px;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px 12px 14px;
   border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--tone) 24%, var(--card));
 }
 .class-group-head strong {
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: var(--tone);
+  color: var(--chom-on-accent);
   font-size: 15px;
   font-weight: 800;
-  color: var(--ink);
 }
 .class-group-head span {
   font-size: 13px;
-  color: var(--muted);
+  font-weight: 600;
+  color: var(--ink);
 }
 .class-list {
   list-style: none;
@@ -49,7 +68,7 @@
   transition: background-color 0.15s;
 }
 .class-row:hover {
-  background: var(--bg);
+  background: color-mix(in srgb, var(--tone) 12%, var(--card));
 }
 .class-row:focus-visible {
   outline-offset: -3px;
@@ -68,6 +87,11 @@
 }
 .class-row-status b {
   font-weight: 700;
+  color: var(--ink);
+}
+/* Work waiting: a coral pill, so it stands out from "No work set". */
+.class-row-status.due {
+  background: color-mix(in srgb, var(--chom-accent-coral) 30%, var(--card));
   color: var(--ink);
 }
 .class-row-go {
@@ -124,6 +148,7 @@
   }
   .class-row-status {
     grid-area: status;
+    justify-self: start;
   }
   .class-row-go {
     grid-area: go;
