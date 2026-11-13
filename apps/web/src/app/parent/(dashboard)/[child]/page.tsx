@@ -12,11 +12,9 @@ export const metadata = { title: 'Home · Chom Parent' };
 
 const ZONE = 'Africa/Johannesburg';
 
-function greeting(hour: number) {
-  if (hour < 12) return 'Good morning';
-  if (hour < 17) return 'Good afternoon';
-  return 'Good evening';
-}
+/** "Maths", "Maths and English", "Maths, English and History". */
+const listOf = (names: string[]) =>
+  names.length < 2 ? (names[0] ?? '') : `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;
 
 const labels = <T extends string>(options: { value: T; label: string }[], values: T[]) =>
   options.filter((o) => values.includes(o.value)).map((o) => o.label);
@@ -32,13 +30,8 @@ export default async function ChildHome({ params }: { params: Promise<{ child: s
   if (!parent || !child) notFound();
 
   const now = new Date();
-  const hour = Number(
-    new Intl.DateTimeFormat('en-ZA', { hour: 'numeric', hourCycle: 'h23', timeZone: ZONE }).format(
-      now,
-    ),
-  );
+  const weekday = new Intl.DateTimeFormat('en-ZA', { weekday: 'long', timeZone: ZONE }).format(now);
   const date = new Intl.DateTimeFormat('en-ZA', {
-    weekday: 'long',
     day: 'numeric',
     month: 'long',
     timeZone: ZONE,
@@ -48,23 +41,30 @@ export default async function ChildHome({ params }: { params: Promise<{ child: s
   const focus = child.subjects.filter((s) => s.isFocus);
   const where = [gradeLabel(child.grade), child.classes.join(', ')].filter(Boolean).join(', ');
   const onboarded = Boolean(child.study?.onboardingCompletedAt);
+  // About the child, not a greeting for the parent: the one thing Chom knows today.
+  // shortcut: parents can't read tasks yet (RLS), so no "3 tasks due today"; add it when they can.
+  const headline = !onboarded
+    ? `${child.name} hasn’t set up Chom yet.`
+    : focus.length
+      ? `${child.name} is focusing on ${listOf(focus.map((s) => s.name))}.`
+      : `${child.name} has set ${targets} of ${child.subjects.length} targets.`;
 
   return (
     <div className="cd">
-      <div className="cd-top parent-top">
+      <div className="cd-top">
         <header className="cd-hero">
-          <span className="cd-label">{date}</span>
-          <h1 className="cd-title">
-            {greeting(hour)}, {parent.name}.
-          </h1>
+          <span className="cd-label">
+            {weekday} {date}
+          </span>
+          <h1 className="cd-title">{headline}</h1>
           <p className="cd-lede">
-            <strong>{child.name}</strong> is in {where || 'school'} at {child.schoolName}.{' '}
+            {child.name} is in <strong>{where || 'school'}</strong> at {child.schoolName}.{' '}
             {onboarded
-              ? `${child.name} has set up Chom and chosen what to work towards.`
-              : `${child.name} hasn’t finished setting up Chom yet.`}
+              ? 'Marks and what’s due will show here as the school switches them on.'
+              : 'Once they do, their targets and how they like to study show here.'}
           </p>
         </header>
-        <section className="cd-stats parent-stats" aria-label={`${child.name} in numbers`}>
+        <section className="cd-stats" aria-label={`${child.name} in numbers`}>
           <div className="cd-stat">
             <span className="cd-num">{child.subjects.length}</span>
             <strong>Subjects</strong>
@@ -77,11 +77,6 @@ export default async function ChildHome({ params }: { params: Promise<{ child: s
             </span>
             <strong>Targets set</strong>
             <small>Chosen by {child.name}</small>
-          </div>
-          <div className="cd-stat">
-            <span className="cd-num">{focus.length}</span>
-            <strong>Focus subjects</strong>
-            <small>{focus.length ? focus.map((s) => s.name).join(', ') : 'None chosen yet'}</small>
           </div>
         </section>
       </div>

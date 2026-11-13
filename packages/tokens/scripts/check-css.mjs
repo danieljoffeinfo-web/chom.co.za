@@ -45,5 +45,28 @@ for (const [name, selectorPattern, label] of [
   }
 }
 
+// Subject fills: subjectColors.light / .dark against --chom-subject-* in each theme.
+for (const [name, selectorPattern] of [
+  ['light', ':root'],
+  ['dark', `:root\\[data-theme=["']dark["']\\]`],
+]) {
+  const block = cssBlock(selectorPattern) ?? '';
+  const ts_block = ts.match(new RegExp(`\\n  ${name}: \\{([\\s\\S]*?)\\n  \\}`))?.[1] ?? '';
+  const entries = [...ts_block.matchAll(/(\w+): '(#[0-9A-Fa-f]{6})'/g)];
+  if (!entries.length) {
+    console.error(`subjectColors.${name} not found in src/index.ts`);
+    failures++;
+  }
+  for (const [, family, value] of entries) {
+    const match = block.match(new RegExp(`--chom-subject-${kebab(family)}: (#[0-9a-f]{6});`));
+    if (match?.[1] !== value.toLowerCase()) {
+      console.error(
+        `subjectColors.${name}.${family}: expected ${value.toLowerCase()}, tokens.css has ${match?.[1] ?? 'nothing'}`,
+      );
+      failures++;
+    }
+  }
+}
+
 if (failures) process.exit(1);
 console.log('tokens.css matches src/index.ts');

@@ -10,9 +10,9 @@ import { Logo } from '@/components/logo';
 type NavItem = { href: string; label: string; icon: IconName };
 
 const TEACHING: NavItem[] = [
-  { href: '/', label: 'Today', icon: 'home' },
-  { href: '/classes', label: 'My Classes', icon: 'school' },
-  { href: '/set-work', label: 'Set Work', icon: 'file' },
+  { href: '/', label: 'Home', icon: 'home' },
+  { href: '/classes', label: 'My classes', icon: 'school' },
+  { href: '/set-work', label: 'Set work', icon: 'file' },
   { href: '/calendar', label: 'Calendar', icon: 'calendar' },
   { href: '/analytics', label: 'Analytics', icon: 'chart' },
   { href: '/messages', label: 'Messages', icon: 'message' },
@@ -21,13 +21,21 @@ const TEACHING: NavItem[] = [
 
 const PREFERENCES: NavItem[] = [{ href: '/settings', label: 'Settings', icon: 'settings' }];
 
+/** The bottom tabs on phones; More opens the menu with everything else. */
+const TABS: NavItem[] = [
+  { href: '/', label: 'Home', icon: 'home' },
+  { href: '/classes', label: 'Classes', icon: 'school' },
+  { href: '/set-work', label: 'Set work', icon: 'file' },
+  { href: '/messages', label: 'Messages', icon: 'message' },
+];
+
 function isActive(path: string, href: string) {
   return href === '/' ? path === '/' : path === href || path.startsWith(`${href}/`);
 }
 
 /**
- * The dashboard frame, the same as the learner dashboard: sidebar on the left (a
- * slide-in menu on small screens) and the quick-actions dock.
+ * The dashboard frame, the same as the learner dashboard: sidebar on the left and the
+ * quick-actions dock; on phones, bottom tabs with More opening the sidebar as a menu.
  */
 export function Shell({
   schoolName,
@@ -138,18 +146,19 @@ export function Shell({
         </div>
       </aside>
       <div className="shell">
-        <nav className="quick-actions" aria-label="Quick actions">
+        <nav className="tab-dock" aria-label="Sections">
+          {navLinks(TABS)}
           <button
-            className="quick-button mobile-menu"
+            type="button"
             onClick={() => setMenuOpen(true)}
-            aria-label="Open menu"
             aria-controls="sidebar"
             aria-expanded={menuOpen}
-            data-hint="Menu"
           >
             <Icon name="menu" />
+            More
           </button>
-          <span className="dock-divider mobile-only" aria-hidden="true" />
+        </nav>
+        <nav className="quick-actions" aria-label="Quick actions">
           <Link
             className="quick-button"
             href="/settings"

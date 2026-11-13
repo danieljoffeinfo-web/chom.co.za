@@ -3095,3 +3095,127 @@ h3 {
   border-color: var(--ink);
   background: var(--soft);
 }
+/* ---------- Subject badges: one fixed colour and icon per subject, on every dashboard ---------- */
+.subject-badge {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 8px;
+  background: var(--subject, var(--muted));
+  color: var(--chom-on-subject);
+}
+.subject-badge .icon {
+  width: 20px;
+  height: 20px;
+}
+.subject-badge.small {
+  width: 32px;
+  height: 32px;
+}
+.subject-badge.small .icon {
+  width: 16px;
+  height: 16px;
+}
+.subject-badge.maths {
+  --subject: var(--chom-subject-maths);
+}
+.subject-badge.english {
+  --subject: var(--chom-subject-english);
+}
+.subject-badge.language {
+  --subject: var(--chom-subject-language);
+}
+.subject-badge.life-orientation {
+  --subject: var(--chom-subject-life-orientation);
+}
+.subject-badge.physical-sciences {
+  --subject: var(--chom-subject-physical-sciences);
+}
+.subject-badge.life-sciences {
+  --subject: var(--chom-subject-life-sciences);
+}
+.subject-badge.commerce {
+  --subject: var(--chom-subject-commerce);
+}
+.subject-badge.humanities {
+  --subject: var(--chom-subject-humanities);
+}
+.subject-badge.technology {
+  --subject: var(--chom-subject-technology);
+}
+.subject-badge.arts {
+  --subject: var(--chom-subject-arts);
+}
+
+/* ---------- Phones: the main sections as bottom tabs, Home first; search, alerts and
+   profile move to the top right. More (where a dashboard has it) opens the menu. ---------- */
+.tab-dock {
+  display: none;
+}
+@media (max-width: 900px) {
+  .tab-dock {
+    position: fixed;
+    z-index: 30;
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    max-width: 480px;
+    margin: 0 auto;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 4px;
+    padding: 6px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--card);
+    box-shadow: 0 8px 32px rgba(20, 20, 20, 0.08);
+  }
+  .tab-dock > a,
+  .tab-dock > button {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 4px;
+    min-width: 0;
+    min-height: 52px;
+    padding: 0 2px;
+    border-radius: 12px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+  }
+  .tab-dock .icon {
+    width: 20px;
+    height: 20px;
+  }
+  .tab-dock .active {
+    background: var(--ink);
+    color: var(--card);
+  }
+  .quick-actions {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .quick-actions .mobile-menu,
+  .dock-divider {
+    display: none;
+  }
+  .page {
+    padding-top: 72px;
+  }
+}

@@ -68,6 +68,52 @@ export const dark: ColorScheme = {
 
 export const colors = { light, dark } as const;
 
+export type SubjectFamily =
+  | 'maths'
+  | 'english'
+  | 'language'
+  | 'lifeOrientation'
+  | 'physicalSciences'
+  | 'lifeSciences'
+  | 'commerce'
+  | 'humanities'
+  | 'technology'
+  | 'arts';
+
+/**
+ * Subject badge fills: one fixed colour per subject family, the same on every
+ * dashboard. The icon on top is onSubject. Unmatched subjects use textMuted.
+ */
+export const subjectColors: Record<'light' | 'dark', Record<SubjectFamily, string>> = {
+  light: {
+    maths: '#2563EB',
+    english: '#7C3AED',
+    language: '#DB2777',
+    lifeOrientation: '#16A34A',
+    physicalSciences: '#0284C7',
+    lifeSciences: '#0D9488',
+    commerce: '#D97706',
+    humanities: '#EA580C',
+    technology: '#4F46E5',
+    arts: '#C026D3',
+  },
+  dark: {
+    maths: '#60A5FA',
+    english: '#A78BFA',
+    language: '#F472B6',
+    lifeOrientation: '#4ADE80',
+    physicalSciences: '#38BDF8',
+    lifeSciences: '#2DD4BF',
+    commerce: '#FBBF24',
+    humanities: '#FB923C',
+    technology: '#818CF8',
+    arts: '#E879F9',
+  },
+};
+
+/** The icon on a subject badge: white on the light fills, navy on the dark ones. */
+export const onSubject = { light: '#FFFFFF', dark: palette.navy } as const;
+
 export const fontFamily = {
   /** Web: load from Google Fonts. Mobile: @expo-google-fonts/inter-tight. */
   sans: '"Inter Tight", Inter, system-ui, sans-serif',

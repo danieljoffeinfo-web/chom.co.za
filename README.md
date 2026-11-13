@@ -21,7 +21,6 @@ packages/               Shared workspace packages (picked up automatically)
 static/                 The student dashboard (no-build HTML), copied into
                         apps/web at build time and served at chom.co.za/app
   site/app/             The dashboard itself
-  shared/               Its subject styles
 supabase/               The database: migrations (structure and access rules),
                         test seed data and automated access tests
 docs/

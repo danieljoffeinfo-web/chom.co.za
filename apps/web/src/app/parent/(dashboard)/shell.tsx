@@ -24,7 +24,7 @@ const childHref = (childId: string, section: string) =>
 
 /**
  * The parent dashboard frame, in the same look as the learner and staff dashboards:
- * sidebar on wide screens; on phones the sections move into the bottom dock. The
+ * sidebar on wide screens; on phones the sections move into the bottom tabs. The
  * sibling switcher sits at the top of every page and keeps you in the same section.
  */
 export function ParentShell({
@@ -125,9 +125,12 @@ export function ParentShell({
         </div>
       </aside>
       <div className="shell">
-        <nav className="quick-actions parent-dock" aria-label="Sections">
-          {sectionLinks('quick-button parent-tab')}
-          {current && <span className="dock-divider mobile-only" aria-hidden="true" />}
+        {current && (
+          <nav className="tab-dock" aria-label="Sections">
+            {sectionLinks()}
+          </nav>
+        )}
+        <nav className="quick-actions parent-dock" aria-label="Your account">
           <Link
             className={onAccount ? 'quick-button active' : 'quick-button'}
             href="/parent/account"

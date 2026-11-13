@@ -17,6 +17,19 @@
   --chom-primary-hover: #383c63;
   --chom-highlight: #dcd8c3;
 
+  /* Subject badge fills (subjectColors in src/index.ts) and the icon on them. */
+  --chom-subject-maths: #2563eb;
+  --chom-subject-english: #7c3aed;
+  --chom-subject-language: #db2777;
+  --chom-subject-life-orientation: #16a34a;
+  --chom-subject-physical-sciences: #0284c7;
+  --chom-subject-life-sciences: #0d9488;
+  --chom-subject-commerce: #d97706;
+  --chom-subject-humanities: #ea580c;
+  --chom-subject-technology: #4f46e5;
+  --chom-subject-arts: #c026d3;
+  --chom-on-subject: #ffffff;
+
   --chom-font-sans: 'Inter Tight', Inter, system-ui, sans-serif;
 
   --chom-radius-sm: 8px;
@@ -47,4 +60,16 @@
   --chom-on-primary: #282b4a;
   --chom-primary-hover: #dcd8c3;
   --chom-highlight: #464a70;
+
+  --chom-subject-maths: #60a5fa;
+  --chom-subject-english: #a78bfa;
+  --chom-subject-language: #f472b6;
+  --chom-subject-life-orientation: #4ade80;
+  --chom-subject-physical-sciences: #38bdf8;
+  --chom-subject-life-sciences: #2dd4bf;
+  --chom-subject-commerce: #fbbf24;
+  --chom-subject-humanities: #fb923c;
+  --chom-subject-technology: #818cf8;
+  --chom-subject-arts: #e879f9;
+  --chom-on-subject: #282b4a;
 }
