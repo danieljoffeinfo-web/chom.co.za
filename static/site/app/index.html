@@ -5134,7 +5134,7 @@
       .study-bubbles.done {
         opacity: 0;
       }
-      .study-bubbles i {
+      .study-bubbles > i {
         position: absolute;
         width: 24vmax;
         height: 24vmax;
@@ -5150,6 +5150,31 @@
         }
         to {
           transform: scale(7.5);
+        }
+      }
+      /* Chom's mark spins in the middle once the bubbles have covered the page. */
+      .study-bubbles .study-mark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 96px;
+        height: 96px;
+        margin: -48px 0 0 -48px;
+        gap: 10px;
+        opacity: 0;
+        animation: study-mark 1.4s cubic-bezier(0.5, 0, 0.2, 1) 0.65s forwards;
+      }
+      @keyframes study-mark {
+        0% {
+          opacity: 0;
+          transform: scale(0.4) rotate(-90deg);
+        }
+        30% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1) rotate(360deg);
         }
       }
     </style>
@@ -6203,13 +6228,14 @@ SOFTWARE.
             [56, 8, 460],
           ]
             .map(([x, y, delay]) => `<i style="left:${x}%;top:${y}%;animation-delay:${delay}ms"></i>`)
-            .join("");
+            .join("") + askMark("ask-mark study-mark");
           document.body.append(layer);
+          // The bubbles cover the page by ~0.9 s; Chom's mark spins in the middle, then all fades.
           setTimeout(() => {
             done();
             layer.classList.add("done");
             setTimeout(() => layer.remove(), 500);
-          }, 1500);
+          }, 2100);
         }
         function go(view) {
           if (currentView === view) {
