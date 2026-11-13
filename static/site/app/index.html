@@ -57,6 +57,7 @@
         --chom-accent-sky: #4fb3ff;
         --chom-accent-lilac: #a78bfa;
         --chom-on-accent: #282b4a;
+        --study-dark: #0a0a0a;
         --r: 24px;
         --sidebar: 248px;
       }
@@ -5121,6 +5122,36 @@
           padding: 16px;
         }
       }
+      /* Bubbles that fill the page on the way into Study with Chom. */
+      .study-bubbles {
+        position: fixed;
+        z-index: 1000;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        transition: opacity 0.45s ease;
+      }
+      .study-bubbles.done {
+        opacity: 0;
+      }
+      .study-bubbles i {
+        position: absolute;
+        width: 24vmax;
+        height: 24vmax;
+        margin: -12vmax 0 0 -12vmax;
+        border-radius: 50%;
+        background: var(--study-dark);
+        transform: scale(0);
+        animation: study-bubble 1.3s cubic-bezier(0.34, 0.1, 0.2, 1) forwards;
+      }
+      @keyframes study-bubble {
+        45% {
+          transform: scale(1.6);
+        }
+        to {
+          transform: scale(7.5);
+        }
+      }
     </style>
 </head>
   <body>
@@ -5700,8 +5731,9 @@ SOFTWARE.
         });
         const remaining = () =>
           state.tasks.filter((t) => t.when === "today" && !t.done).length;
+        // Study with Chom is always dark: a quiet place to focus, whatever the setting.
         function applyTheme() {
-          const dark = state.theme === "dark";
+          const dark = state.theme === "dark" || currentView === "chom";
           document.documentElement.dataset.theme = dark ? "dark" : "light";
           const meta = document.querySelector('meta[name="theme-color"]');
           if (meta) meta.content = dark ? "#0a0a0a" : "#eeebda";
@@ -6143,11 +6175,41 @@ SOFTWARE.
             $("#main").focus();
             return;
           }
+          const before = currentView;
           currentView = Object.hasOwn(views, key.split("?")[0]) ? key.split("?")[0] : "dashboard";
           closeNav();
-          render();
-          window.scrollTo(0, 0);
-          if (event) $("#main").focus({ preventScroll: true });
+          const show = () => {
+            render();
+            window.scrollTo(0, 0);
+            if (event) $("#main").focus({ preventScroll: true });
+          };
+          // From light mode into Study with Chom, black bubbles fill the page before it goes dark.
+          const bubbles =
+            event && currentView === "chom" && before !== "chom" && state.theme !== "dark" && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+          if (bubbles) studyBubbles(show);
+          else show();
+        }
+        function studyBubbles(done) {
+          $(".study-bubbles")?.remove();
+          const layer = document.createElement("div");
+          layer.className = "study-bubbles";
+          layer.setAttribute("aria-hidden", "true");
+          layer.innerHTML = [
+            [50, 55, 0],
+            [14, 22, 140],
+            [86, 26, 260],
+            [22, 86, 380],
+            [82, 82, 200],
+            [56, 8, 460],
+          ]
+            .map(([x, y, delay]) => `<i style="left:${x}%;top:${y}%;animation-delay:${delay}ms"></i>`)
+            .join("");
+          document.body.append(layer);
+          setTimeout(() => {
+            done();
+            layer.classList.add("done");
+            setTimeout(() => layer.remove(), 500);
+          }, 1500);
         }
         function go(view) {
           if (currentView === view) {
