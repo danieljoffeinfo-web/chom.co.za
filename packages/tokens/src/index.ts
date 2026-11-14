@@ -6,8 +6,8 @@
  * app (by importing these objects directly).
  *
  * Values match the live learner app: navy #282B4A as the main colour,
- * vanilla #EEEBDA as the background, light mode by default and dark mode
- * opt-in.
+ * vanilla #EEEBDA as the background in light mode. The web apps now use
+ * dark mode only.
  */
 
 export const palette = {
@@ -59,7 +59,7 @@ export const light: ColorScheme = {
   highlight: palette.vanillaLine,
 };
 
-/** Dark mode is opt-in from Settings: a clean, neutral black with soft white text. */
+/** Dark mode, which every app uses: a clean, neutral black with soft white text. */
 export const dark: ColorScheme = {
   background: palette.black,
   surface: palette.blackRaised,

@@ -6,8 +6,6 @@ import type { Metadata, Viewport } from 'next';
 import { Inter_Tight } from 'next/font/google';
 import type { ReactNode } from 'react';
 
-import { currentTheme } from '@/lib/theme';
-
 const interTight = Inter_Tight({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800'],
@@ -22,13 +20,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#eeebda',
+  themeColor: '#0a0a0a',
+  colorScheme: 'dark',
 };
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
-  const theme = await currentTheme();
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en-ZA" data-theme={theme} className={interTight.variable}>
+    <html lang="en-ZA" data-theme="dark" className={interTight.variable}>
       <body>{children}</body>
     </html>
   );

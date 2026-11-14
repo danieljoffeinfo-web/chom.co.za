@@ -18,7 +18,7 @@ When the learner dashboard's styles change, copy the change into `packages/dashb
 
 ## Colour
 
-Navy and vanilla are the base, with bright accents for fun. Light mode is the default; dark mode, a clean neutral black, is opt-in from Settings.
+The apps are dark only: a clean neutral black, with bright accents kept for small highlights. Every app sets `data-theme="dark"` on `<html>`. The light values below are kept in the tokens but nothing uses them today.
 
 | Role         | Light     | Dark      | Token               |
 | ------------ | --------- | --------- | ------------------- |
