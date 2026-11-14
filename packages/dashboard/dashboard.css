@@ -3238,77 +3238,68 @@ h3 {
 .tone-lilac {
   --tone: var(--chom-accent-lilac);
 }
-/* Glass: frosted panes, used by the hero. Lighter in light mode, smoked in dark. */
+/* Glass for the hero. The colour washes and the frosted sheen are the panel's own
+   background (no blurred layer), so they always clip cleanly to the rounded corners. */
 :root {
-  --glass: color-mix(in srgb, var(--card) 42%, transparent);
-  --glass-strong: color-mix(in srgb, var(--card) 62%, transparent);
-  --glass-edge: color-mix(in srgb, var(--card) 92%, transparent);
-  --glass-shadow: color-mix(in srgb, var(--ink) 28%, transparent);
+  --wash: 55%;
+  --glass-sheen: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--card) 78%, transparent) 0%,
+    color-mix(in srgb, var(--card) 40%, transparent) 100%
+  );
+  --glass-pane: color-mix(in srgb, var(--card) 58%, transparent);
+  --glass-line: color-mix(in srgb, var(--ink) 9%, transparent);
+  --glass-hi: color-mix(in srgb, var(--card) 100%, transparent);
+  --glass-shadow: color-mix(in srgb, var(--ink) 22%, transparent);
 }
 :root[data-theme='dark'] {
-  --glass: color-mix(in srgb, var(--card) 58%, transparent);
-  --glass-strong: color-mix(in srgb, var(--card) 74%, transparent);
-  --glass-edge: color-mix(in srgb, var(--ink) 14%, transparent);
-  --glass-shadow: color-mix(in srgb, var(--bg) 85%, transparent);
+  --wash: 26%;
+  --glass-sheen: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--ink) 7%, transparent) 0%,
+    color-mix(in srgb, var(--ink) 1%, transparent) 100%
+  );
+  --glass-pane: color-mix(in srgb, var(--ink) 6%, transparent);
+  --glass-line: color-mix(in srgb, var(--ink) 12%, transparent);
+  --glass-hi: color-mix(in srgb, var(--ink) 20%, transparent);
+  --glass-shadow: color-mix(in srgb, var(--bg) 90%, transparent);
 }
 
-/* Hero: liquid glass. A frosted pane over soft, blurred colour; dark text; the stats as
+/* Hero: liquid glass. A frosted pane over soft accent light; dark text; the stats as
    smaller panes with an accent icon and bar. */
 .cd-top {
   position: relative;
-  isolation: isolate;
   overflow: hidden;
   padding: 40px 44px;
-  border: 1px solid var(--glass-edge);
+  border: 1px solid var(--glass-line);
   border-radius: 32px;
-  background: var(--card);
-  box-shadow:
-    0 30px 60px -38px var(--glass-shadow),
-    inset 0 1px 0 var(--glass-edge);
-  color: var(--ink);
-}
-/* The colour under the glass. */
-.cd-top::before {
-  content: '';
-  position: absolute;
-  z-index: -2;
-  inset: -25%;
   background:
+    var(--glass-sheen),
     radial-gradient(
-      28% 42% at 20% 30%,
-      color-mix(in srgb, var(--chom-accent-sky) 95%, transparent),
-      transparent 72%
+      70% 120% at 0% 0%,
+      color-mix(in srgb, var(--chom-accent-sky) var(--wash), transparent),
+      transparent 62%
     ),
     radial-gradient(
-      26% 40% at 80% 22%,
-      color-mix(in srgb, var(--chom-accent-sunflower) 100%, transparent),
-      transparent 72%
+      60% 120% at 100% 0%,
+      color-mix(in srgb, var(--chom-accent-sunflower) var(--wash), transparent),
+      transparent 62%
     ),
     radial-gradient(
-      30% 40% at 64% 82%,
-      color-mix(in srgb, var(--chom-accent-lilac) 90%, transparent),
-      transparent 72%
+      60% 100% at 78% 100%,
+      color-mix(in srgb, var(--chom-accent-lilac) var(--wash), transparent),
+      transparent 62%
     ),
     radial-gradient(
-      22% 34% at 34% 86%,
-      color-mix(in srgb, var(--chom-accent-mint) 85%, transparent),
-      transparent 72%
-    );
-  filter: blur(28px);
-}
-/* The frosted sheet, brighter at the top left like light catching glass. */
-.cd-top::after {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    140deg,
-    var(--glass-strong) 0%,
-    var(--glass) 55%,
-    var(--glass-strong) 100%
-  );
+      50% 90% at 22% 100%,
+      color-mix(in srgb, var(--chom-accent-mint) var(--wash), transparent),
+      transparent 62%
+    ),
+    var(--card);
+  box-shadow:
+    inset 0 1px 0 var(--glass-hi),
+    0 30px 60px -42px var(--glass-shadow);
+  color: var(--ink);
 }
 .cd-top .cd-title,
 .cd-top .cd-lede,
@@ -3316,27 +3307,26 @@ h3 {
   color: var(--ink);
 }
 .cd-top .cd-label {
-  opacity: 0.7;
+  opacity: 0.65;
 }
 .cd-top .cd-lede strong {
-  padding: 0 2px;
-  background: linear-gradient(
-    transparent 60%,
-    color-mix(in srgb, var(--chom-accent-sunflower) 65%, transparent) 60%
-  );
+  text-decoration: underline;
+  text-decoration-color: var(--chom-accent-sunflower);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 5px;
 }
 .cd-top .cd-stats {
   flex-basis: 400px;
   gap: 12px;
 }
 .cd-top .cd-stat {
-  border: 1px solid var(--glass-edge);
-  background: var(--glass-strong);
+  border: 1px solid var(--glass-line);
+  background: var(--glass-pane);
   box-shadow:
-    inset 0 1px 0 var(--glass-edge),
-    0 14px 30px -24px var(--glass-shadow);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
+    inset 0 1px 0 var(--glass-hi),
+    0 12px 28px -22px var(--glass-shadow);
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
 }
 .cd-top .cd-stat .cd-num,
 .cd-top .cd-stat strong {
