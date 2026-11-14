@@ -404,3 +404,13 @@
     font-size: 32px;
   }
 }
+
+/* Dark mode: the study tiles are slate, with the accent kept on the icon. */
+:root[data-theme='dark'] .study-tile {
+  background: var(--slate);
+  color: var(--ink);
+}
+:root[data-theme='dark'] .study-tile dt .icon {
+  background: var(--tone);
+  color: var(--chom-on-accent);
+}
