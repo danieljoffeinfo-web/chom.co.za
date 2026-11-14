@@ -5322,6 +5322,22 @@
         backdrop-filter: blur(24px) saturate(190%);
         -webkit-backdrop-filter: blur(24px) saturate(190%);
       }
+      /* No lilac or mint wash in dark mode: just sky and sunflower light under the glass. */
+      :root[data-theme="dark"] .cd-top {
+        background:
+          var(--glass-sheen),
+          radial-gradient(
+            70% 120% at 0% 0%,
+            color-mix(in srgb, var(--chom-accent-sky) var(--wash), transparent),
+            transparent 62%
+          ),
+          radial-gradient(
+            60% 120% at 100% 0%,
+            color-mix(in srgb, var(--chom-accent-sunflower) var(--wash), transparent),
+            transparent 62%
+          ),
+          var(--card);
+      }
       /* Rings in one blue, like the subject icons. */
       :root[data-theme="dark"] .goal-ring {
         --subject: var(--chom-subject-maths);
