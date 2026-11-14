@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en-ZA">
+<html lang="en-ZA" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#eeebda" />
-    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="color-scheme" content="dark" />
     <meta
       name="description"
       content="A little more clarity for your school day. Plan your tasks, see your classes and study with Chom Learn."
@@ -3980,7 +3980,7 @@
         border-radius: 50%;
         background: #ffffff;
       }
-      /* Chom's mark: four dots in shades of white (Study with Chom is always dark). */
+      /* Chom's mark: four dots in shades of white. */
       .ask-mark i:nth-child(2),
       .ask-avatar i:nth-child(2) {
         background: #d4d4d4;
@@ -4247,7 +4247,7 @@
         background: var(--chom-accent-sunflower);
         color: var(--chom-on-accent);
       }
-      /* Dark (Study with Chom is always dark): grey and black, like the sidebar. */
+      /* Grey and black, like the sidebar. */
       :root[data-theme="dark"] .ask-notebook {
         background: var(--fill);
       }
@@ -5882,7 +5882,6 @@ SOFTWARE.
         const defaults = {
           notes: "",
           focus: false,
-          theme: "light",
           notificationsRead: false,
         };
         let storageAvailable = true,
@@ -5989,13 +5988,6 @@ SOFTWARE.
         });
         const remaining = () =>
           state.tasks.filter((t) => t.when === "today" && !t.done).length;
-        // Study with Chom is always dark: a quiet place to focus, whatever the setting.
-        function applyTheme() {
-          const dark = state.theme === "dark" || currentView === "chom";
-          document.documentElement.dataset.theme = dark ? "dark" : "light";
-          const meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) meta.content = dark ? "#0a0a0a" : "#eeebda";
-        }
         function save() {
           try {
             localStorage.setItem(storeKey, JSON.stringify(state));
@@ -6366,7 +6358,6 @@ SOFTWARE.
         }
         function render() {
           document.body.classList.toggle("focus-mode", !!state.focus);
-          applyTheme();
           document.title = `${views[currentView]} — Chom Learn`;
           $$("[data-view]")
             .filter((el) => el.closest("nav"))
@@ -6421,7 +6412,7 @@ SOFTWARE.
                 "Make a little space for you.",
                 "Your preferences are saved in this browser.",
               ) +
-              `<section class="content-card"><h2>Your learning space</h2><div class="switch-row"><div><label for="focus-toggle">Keep my dashboard focused</label><p>Hide the extra school links.</p></div><input type="checkbox" id="focus-toggle" ${state.focus ? "checked" : ""}></div><div class="switch-row"><div><label for="theme-toggle">Dark mode</label><p>Light is the default. Switch on for a black background.</p></div><input type="checkbox" id="theme-toggle" ${state.theme === "dark" ? "checked" : ""}></div><div class="notice">Your notes and preferences are saved in this browser.</div></section>`;
+              `<section class="content-card"><h2>Your learning space</h2><div class="switch-row"><div><label for="focus-toggle">Keep my dashboard focused</label><p>Hide the extra school links.</p></div><input type="checkbox" id="focus-toggle" ${state.focus ? "checked" : ""}></div><div class="notice">Your notes and preferences are saved in this browser.</div></section>`;
           $("#main").innerHTML =
             (!storageAvailable
               ? '<div class="storage-warning">Your browser is not saving changes. Keep this page open to retain your work for this visit.</div>'
@@ -6467,8 +6458,7 @@ SOFTWARE.
             window.scrollTo(0, 0);
             if (event) $("#main").focus({ preventScroll: true });
           };
-          // Into Study with Chom, bubbles fill the page before it opens: black in light mode
-          // (the page goes dark), raised grey in dark mode (they fade to the black page).
+          // Into Study with Chom, grey bubbles fill the page, then fade to the study page.
           const bubbles =
             event && currentView === "chom" && before !== "chom" && !matchMedia("(prefers-reduced-motion: reduce)").matches;
           if (bubbles) studyBubbles(show);
@@ -6953,11 +6943,6 @@ SOFTWARE.
                   : "Task moved back to your to-do list."
                 : "Updated for this visit. Browser storage is unavailable.",
             );
-          }
-          if (e.target.id === "theme-toggle") {
-            state.theme = e.target.checked ? "dark" : "light";
-            applyTheme();
-            persist(e.target.checked ? "Dark mode is on." : "Back to light mode.");
           }
           if (e.target.id === "focus-toggle") {
             state.focus = e.target.checked;
