@@ -164,3 +164,8 @@
     transform: none;
   }
 }
+
+/* Dark mode: class headers are slate; the class pill keeps its accent. */
+:root[data-theme='dark'] :is(.class-group-head, .class-row:hover) {
+  background: var(--slate);
+}

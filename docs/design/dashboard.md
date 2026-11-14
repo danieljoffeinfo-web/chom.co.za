@@ -33,6 +33,8 @@ Navy and vanilla are the base, with bright accents for fun. Light mode is the de
 
 Solid fills (the active nav item, buttons, the class happening now, avatars) use `--fill` with `--on-fill` text, from `dashboard.css`: navy with vanilla text in light mode, a raised grey (`#303030`) with white text in dark. Never a white fill in dark mode.
 
+In dark mode, coloured surfaces (tiles, subject cards, tinted panels) share one slate, `--slate` (sky mixed into the card). Colour stays in the small highlights that tell things apart: icon chips, badges, bars, coloured edges and the ring on a selected tile.
+
 Never write a colour value in app code. Use a token, or a prototype name that maps to one.
 
 ### Accents

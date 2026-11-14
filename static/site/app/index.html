@@ -5204,6 +5204,45 @@
           transform: scale(1) rotate(360deg);
         }
       }
+      /* ---------- Dark mode: one calm slate for coloured surfaces ----------
+         Tiles, cards and tinted panels share one slate; colour is kept for the small
+         highlights that tell things apart (icon chips, badges, bars, edges, rings). */
+      :root[data-theme="dark"] {
+        --slate: color-mix(in srgb, var(--chom-accent-sky) 20%, var(--card));
+      }
+      :root[data-theme="dark"] :is(.subject-stats .cd-stat, .task-tab, .subject-card, .sd-hero, .sd-clear, .studio-head, .assign[open], .life-card, .dt-cheer, .dt-row.done, .revise-strip, .ask-notebook, .ask-you, .ask-chip:hover, .notice) {
+        background: var(--slate);
+        color: var(--ink);
+      }
+      :root[data-theme="dark"] .subject-stats .cd-stat :is(.cd-num, strong) {
+        color: var(--ink);
+      }
+      :root[data-theme="dark"] .subject-stats .cd-stat :is(small, .cd-of) {
+        color: var(--muted);
+        opacity: 1;
+      }
+      :root[data-theme="dark"] :is(.subject-stats .cd-stat-icon, .task-tab.active .task-tab-icon) {
+        background: var(--tone);
+        color: var(--chom-on-accent);
+      }
+      :root[data-theme="dark"] :is(.subject-stats, .task-tab.active) .cd-meter {
+        background: color-mix(in srgb, var(--ink) 12%, transparent);
+      }
+      :root[data-theme="dark"] :is(.subject-stats, .task-tab) .cd-meter i {
+        background: var(--tone);
+      }
+      /* The selected filter tile: a ring in its own colour. */
+      :root[data-theme="dark"] .task-tab.active {
+        border-color: var(--tone);
+      }
+      :root[data-theme="dark"] :is(.sd-hero, .studio-head) {
+        box-shadow: inset 4px 0 0 var(--subject, var(--muted));
+      }
+      :root[data-theme="dark"] :is(.subject-card, .sd-hero) .goal-ring {
+        background:
+          radial-gradient(var(--slate) 0 58%, transparent 59%),
+          conic-gradient(var(--subject) var(--v), color-mix(in srgb, var(--subject) 22%, var(--slate)) 0);
+      }
     </style>
 </head>
   <body>
