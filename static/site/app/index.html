@@ -5210,7 +5210,7 @@
       :root[data-theme="dark"] {
         --slate: color-mix(in srgb, var(--chom-accent-sky) 20%, var(--card));
       }
-      :root[data-theme="dark"] :is(.subject-stats .cd-stat, .task-tab, .subject-card, .sd-hero, .sd-clear, .studio-head, .assign[open], .life-card, .dt-cheer, .dt-row.done, .revise-strip, .ask-notebook, .ask-you, .ask-chip:hover, .notice) {
+      :root[data-theme="dark"] :is(.subject-stats .cd-stat, .task-tab, .subject-card, .sd-hero, .sd-clear, .studio-head, .assign[open], .life-card, .dt-cheer, .revise-strip, .ask-notebook, .ask-you, .ask-chip:hover, .notice) {
         background: var(--slate);
         color: var(--ink);
       }
@@ -5237,6 +5237,13 @@
       }
       :root[data-theme="dark"] :is(.sd-hero, .studio-head) {
         box-shadow: inset 4px 0 0 var(--subject, var(--muted));
+      }
+      /* Subject cards: no coloured top edge or glow; the badge and goal ring say the subject. */
+      :root[data-theme="dark"] .subject-card {
+        border-top: 0;
+      }
+      :root[data-theme="dark"] button.subject-card:hover {
+        box-shadow: 0 10px 24px -14px #000;
       }
       :root[data-theme="dark"] :is(.subject-card, .sd-hero) .goal-ring {
         background:
