@@ -3636,6 +3636,11 @@ h3 {
 :root[data-theme='dark'] .subject-card {
   border-top: 0;
 }
+/* Every subject icon in one blue: the icon itself tells subjects apart. */
+:root[data-theme='dark'] .subject-badge {
+  background: var(--chom-subject-maths);
+  color: var(--chom-on-subject);
+}
 :root[data-theme='dark'] .subject-card .goal-ring {
   background:
     radial-gradient(var(--slate) 0 58%, transparent 59%),

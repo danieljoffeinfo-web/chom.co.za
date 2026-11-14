@@ -5238,6 +5238,11 @@
       :root[data-theme="dark"] :is(.sd-hero, .studio-head) {
         box-shadow: inset 4px 0 0 var(--subject, var(--muted));
       }
+      /* Every subject icon in one blue: the icon itself tells subjects apart. */
+      :root[data-theme="dark"] .subject-badge {
+        background: var(--chom-subject-maths);
+        color: var(--chom-on-subject);
+      }
       /* Subject cards: no coloured top edge or glow; the badge and goal ring say the subject. */
       :root[data-theme="dark"] .subject-card {
         border-top: 0;
