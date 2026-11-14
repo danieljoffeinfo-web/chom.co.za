@@ -31,6 +31,8 @@ Navy and vanilla are the base, with bright accents for fun. Light mode is the de
 | Primary      | `#282b4a` | `#f5f5f5` | `--chom-primary`    |
 | On primary   | `#eeebda` | `#0a0a0a` | `--chom-on-primary` |
 
+Solid fills (the active nav item, buttons, the class happening now, avatars) use `--fill` with `--on-fill` text, from `dashboard.css`: navy with vanilla text in light mode, a raised grey (`#303030`) with white text in dark. Never a white fill in dark mode.
+
 Never write a colour value in app code. Use a token, or a prototype name that maps to one.
 
 ### Accents
