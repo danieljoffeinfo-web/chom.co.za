@@ -37,13 +37,13 @@ Never write a colour value in app code. Use a token, or a prototype name that ma
 
 Five bright accents make the dashboards playful. They are the same in both themes, and anything on an accent fill (text, icons, bars) is navy, `--chom-on-accent`.
 
-| Accent    | Token                     | Value     | Typical use                                  |
-| --------- | ------------------------- | --------- | -------------------------------------------- |
-| Coral     | `--chom-accent-coral`     | `#ff7a59` | Due and late work, tests                     |
-| Sunflower | `--chom-accent-sunflower` | `#ffc83d` | First stat tile, Focus tags, the hero's ring |
-| Mint      | `--chom-accent-mint`      | `#3ccf9a` | Done, ticked tasks, progress                 |
-| Sky       | `--chom-accent-sky`       | `#4fb3ff` | Later dates, calendar                        |
-| Lilac     | `--chom-accent-lilac`     | `#a78bfa` | Notices, the learner's own tasks             |
+| Accent    | Token                     | Value     | Typical use                                       |
+| --------- | ------------------------- | --------- | ------------------------------------------------- |
+| Coral     | `--chom-accent-coral`     | `#ff7a59` | Due and late work, tests                          |
+| Sunflower | `--chom-accent-sunflower` | `#ffc83d` | First stat tile, Focus tags, the hero's highlight |
+| Mint      | `--chom-accent-mint`      | `#3ccf9a` | Done, ticked tasks, progress                      |
+| Sky       | `--chom-accent-sky`       | `#4fb3ff` | Later dates, calendar                             |
+| Lilac     | `--chom-accent-lilac`     | `#a78bfa` | Notices, the learner's own tasks                  |
 
 A part picks its accent with a `.tone-coral` (`-sunflower`, `-mint`, `-sky`, `-lilac`) class and reads it as `--tone`. Soft fills mix it into the card: `color-mix(in srgb, var(--tone) 24%, var(--card))`. Stat tiles and class cards take their accents in turn by position. Accents never stand in for a subject.
 
@@ -85,19 +85,19 @@ Inter Tight, from Google Fonts (via `next/font` in the apps). Base size 14px.
 
 ## Components
 
-| Component      | Class                                                                        | Used for                                                                                                           |
-| -------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Hero and stats | `.cd-top`, `.cd-hero`, `.cd-stats`, `.cd-stat`, `.cd-stat-icon`, `.cd-meter` | A navy band with confetti: date, headline, lede, and the numbers as accent tiles (an icon, and a bar for “4 of 6”) |
-| Subject badge  | `.subject-badge` (`<SubjectBadge name=… />`)                                 | A subject's fixed colour and icon, beside its name                                                                 |
-| Bottom tabs    | `.tab-dock`                                                                  | The main sections on phones                                                                                        |
-| Section        | `.cd-section`, `.cd-head`                                                    | A labelled block with an optional "See all" link; the label is a pill in the section's `.tone-*`                   |
-| Class card     | `.cd-classes`, `.cd-class`, `.cd-avatar`, `.cd-next`                         | One subject and class                                                                                              |
-| Panel          | `.panel`, `.panel-head`                                                      | Lists and tables                                                                                                   |
-| Content card   | `.content-card`                                                              | Settings and single blocks of content                                                                              |
-| Notice         | `.notice`, `.info-strip`                                                     | One line of context, e.g. what's coming (a lilac strip)                                                            |
-| Empty state    | `.empty-message`                                                             | Nothing here yet, and coming soon; its icon sits in a bright blob                                                  |
-| Buttons        | `.button`, `.button.secondary`, `.text-button`                               | Actions and "See all" links                                                                                        |
-| Switch         | `.switch-row`                                                                | A setting with a label, a line of help and a checkbox                                                              |
+| Component      | Class                                                                        | Used for                                                                                                                                                               |
+| -------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hero and stats | `.cd-top`, `.cd-hero`, `.cd-stats`, `.cd-stat`, `.cd-stat-icon`, `.cd-meter` | A liquid-glass panel (frosted, over soft blurred accent colour): date, headline, lede, and the numbers as smaller glass panes (an accent icon, and a bar for “4 of 6”) |
+| Subject badge  | `.subject-badge` (`<SubjectBadge name=… />`)                                 | A subject's fixed colour and icon, beside its name                                                                                                                     |
+| Bottom tabs    | `.tab-dock`                                                                  | The main sections on phones                                                                                                                                            |
+| Section        | `.cd-section`, `.cd-head`                                                    | A labelled block with an optional "See all" link; the label is a pill in the section's `.tone-*`                                                                       |
+| Class card     | `.cd-classes`, `.cd-class`, `.cd-avatar`, `.cd-next`                         | One subject and class                                                                                                                                                  |
+| Panel          | `.panel`, `.panel-head`                                                      | Lists and tables                                                                                                                                                       |
+| Content card   | `.content-card`                                                              | Settings and single blocks of content                                                                                                                                  |
+| Notice         | `.notice`, `.info-strip`                                                     | One line of context, e.g. what's coming (a lilac strip)                                                                                                                |
+| Empty state    | `.empty-message`                                                             | Nothing here yet, and coming soon; its icon sits in a bright blob                                                                                                      |
+| Buttons        | `.button`, `.button.secondary`, `.text-button`                               | Actions and "See all" links                                                                                                                                            |
+| Switch         | `.switch-row`                                                                | A setting with a label, a line of help and a checkbox                                                                                                                  |
 
 ## Navigation
 
