@@ -3647,20 +3647,120 @@ h3 {
     conic-gradient(var(--subject) var(--v), color-mix(in srgb, var(--subject) 22%, var(--slate)) 0);
 }
 
-/* Dark mode: the hero is a flat raised grey, like the selected nav item, with no
-   glass or coloured light; its panes are a shade lighter. */
+/* Dark mode: clear liquid glass on the hero, not frosted. Nothing is blurred: the glass
+   shows as a bright rim with a rainbow edge, curved streaks of light like poured
+   glass, and glossy inner edges. */
 :root[data-theme='dark'] .cd-top {
+  isolation: isolate;
   border-color: transparent;
-  background: var(--fill);
-  box-shadow: none;
+  background:
+    radial-gradient(
+      120% 90% at 0% 0%,
+      color-mix(in srgb, var(--ink) 9%, transparent),
+      transparent 55%
+    ),
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--ink) 6%, transparent),
+      color-mix(in srgb, var(--ink) 2%, transparent) 60%,
+      color-mix(in srgb, var(--ink) 5%, transparent)
+    ),
+    var(--bg);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ink) 55%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--ink) 16%, transparent),
+    inset 0 28px 56px -40px color-mix(in srgb, var(--ink) 40%, transparent),
+    inset 0 -36px 64px -44px color-mix(in srgb, var(--chom-accent-sky) 45%, transparent),
+    0 30px 60px -40px var(--bg);
+}
+:root[data-theme='dark'] .cd-top > * {
+  position: relative;
+  z-index: 1;
+}
+:root[data-theme='dark'] .cd-top::before,
+:root[data-theme='dark'] .cd-top::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+/* The rim: bright where the light hits, with a thin rainbow at the turns. */
+:root[data-theme='dark'] .cd-top::before {
+  padding: 1.5px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--ink) 80%, transparent),
+    color-mix(in srgb, var(--chom-accent-sky) 55%, transparent) 18%,
+    transparent 42%,
+    transparent 58%,
+    color-mix(in srgb, var(--chom-accent-coral) 45%, transparent) 80%,
+    color-mix(in srgb, var(--ink) 70%, transparent)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+/* Curved streaks of light, like the edges of poured glass, mostly on the right. */
+:root[data-theme='dark'] .cd-top::after {
+  background:
+    radial-gradient(
+      48% 170% at 100% 40%,
+      transparent 52%,
+      color-mix(in srgb, var(--ink) 4%, transparent) 54.5%,
+      color-mix(in srgb, var(--ink) 30%, transparent) 56.6%,
+      transparent 57.4%
+    ),
+    radial-gradient(
+      48% 170% at 100% 40%,
+      transparent 57.6%,
+      color-mix(in srgb, var(--chom-accent-coral) 22%, transparent) 58.6%,
+      color-mix(in srgb, var(--chom-accent-sunflower) 14%, transparent) 59.8%,
+      color-mix(in srgb, var(--chom-accent-sky) 22%, transparent) 61%,
+      transparent 63.5%
+    ),
+    radial-gradient(
+      80% 210% at 118% 30%,
+      transparent 64%,
+      color-mix(in srgb, var(--ink) 3%, transparent) 67%,
+      color-mix(in srgb, var(--ink) 14%, transparent) 68.8%,
+      transparent 69.6%
+    ),
+    radial-gradient(
+      60% 80% at -6% 122%,
+      transparent 58%,
+      color-mix(in srgb, var(--ink) 3%, transparent) 60.5%,
+      color-mix(in srgb, var(--ink) 18%, transparent) 62.2%,
+      color-mix(in srgb, var(--chom-accent-sky) 14%, transparent) 63.4%,
+      transparent 65%
+    ),
+    linear-gradient(
+      104deg,
+      transparent 34%,
+      color-mix(in srgb, var(--ink) 6%, transparent) 40%,
+      transparent 47%
+    );
 }
 :root[data-theme='dark'] .cd-top .cd-lede strong {
-  text-decoration-color: color-mix(in srgb, var(--ink) 45%, transparent);
+  text-decoration-color: color-mix(in srgb, var(--ink) 55%, transparent);
 }
+/* The panes: clear glass with glossy edges and a faint coloured edge glow, no blur. */
 :root[data-theme='dark'] :is(.today-card, .cd-top .cd-stat) {
   border-color: transparent;
-  background: color-mix(in srgb, var(--ink) 6%, transparent);
-  box-shadow: none;
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--ink) 11%, transparent),
+    color-mix(in srgb, var(--ink) 2%, transparent) 55%,
+    color-mix(in srgb, var(--ink) 6%, transparent)
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ink) 60%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--ink) 12%, transparent),
+    inset 0 -14px 26px -20px color-mix(in srgb, var(--chom-accent-sky) 45%, transparent),
+    inset 14px 0 26px -22px color-mix(in srgb, var(--chom-accent-coral) 30%, transparent),
+    0 20px 40px -26px var(--bg);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
