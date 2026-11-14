@@ -3364,6 +3364,70 @@
       .cd-top .cd-meter i {
         background: var(--tone);
       }
+      /* Today's progress: one glass pane, a mint ring that fills as tasks are ticked. */
+      .today-card {
+        flex: 0 1 360px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 20px 24px 20px 20px;
+        border: 1px solid var(--glass-line);
+        border-radius: 24px;
+        background: var(--glass-pane);
+        box-shadow:
+          inset 0 1px 0 var(--glass-hi),
+          0 12px 28px -22px var(--glass-shadow);
+        backdrop-filter: blur(20px) saturate(170%);
+        -webkit-backdrop-filter: blur(20px) saturate(170%);
+      }
+      .today-ring {
+        position: relative;
+        display: grid;
+        place-items: center;
+        flex: none;
+        width: 88px;
+        height: 88px;
+      }
+      .today-ring svg {
+        position: absolute;
+        inset: 0;
+        transform: rotate(-90deg);
+      }
+      .today-ring circle {
+        fill: none;
+        stroke: color-mix(in srgb, var(--ink) 12%, transparent);
+        stroke-width: 4.5;
+      }
+      .today-ring .today-fill {
+        stroke: var(--chom-accent-mint);
+        stroke-linecap: round;
+        transition: stroke-dasharray 0.6s ease;
+      }
+      .today-ring b {
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+      .today-ring b small {
+        font-size: 15px;
+        color: var(--muted);
+      }
+      .today-text {
+        display: grid;
+        gap: 4px;
+      }
+      .today-text strong {
+        font-size: 17px;
+      }
+      .today-text small {
+        font-size: 14px;
+        color: var(--muted);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .today-ring .today-fill {
+          transition: none;
+        }
+      }
       /* Stat tiles elsewhere (My subjects) stay bright accent tiles. */
       .cd-stat {
         position: relative;
@@ -6087,12 +6151,38 @@ SOFTWARE.
             : "Nothing on your list. Add a task to plan ahead.";
           return `<h1 class="cd-title">${headline}</h1><p class="cd-lede">${lede}</p>`;
         }
+        // Today's tasks as a ring that fills as they're ticked off.
+        function todayCard() {
+          const total = state.tasks.filter((t) => t.when === "today").length,
+            left = remaining(),
+            done = total - left,
+            pct = total ? (100 * done) / total : 0;
+          const note = tasksFailed
+            ? "Your tasks didn’t load. Try again soon."
+            : !total
+              ? "Nothing due today. Enjoy it."
+              : left
+                ? `${done} of ${total} done · ${left} to go`
+                : "All done. Nice work!";
+          return `<span class="today-ring" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"/><circle class="today-fill" cx="20" cy="20" r="17" pathLength="100" style="stroke-dasharray:${pct} 100;opacity:${pct ? 1 : 0}"/></svg><b>${tasksFailed ? "–" : `${done}<small>/${total}</small>`}</b></span><span class="today-text"><strong>Today’s progress</strong><small>${note}</small></span>`;
+        }
+        // Redraw in place so the ring animates rather than jumps.
+        function refreshToday() {
+          const card = $("#today-card");
+          if (!card) return;
+          const fresh = document.createElement("div");
+          fresh.innerHTML = todayCard();
+          const fill = card.querySelector(".today-fill"),
+            next = fresh.querySelector(".today-fill");
+          fill.style.cssText = next.style.cssText;
+          card.querySelector(".today-ring b").replaceWith(fresh.querySelector(".today-ring b"));
+          card.querySelector(".today-text").replaceWith(fresh.querySelector(".today-text"));
+        }
         function liveDashboard() {
           const weekday = day(me.today, { weekday: "long" }),
             date = day(me.today, { day: "numeric", month: "long" }),
-            termLabel = me.term ? ` · Term ${me.term.number}, Week ${me.term.week}` : "",
-            focus = subjectList.filter((x) => x.isFocus);
-          return `<div class="cd"><div class="cd-top"><header class="cd-hero"><span class="cd-label">${esc(weekday)} ${esc(date)}${esc(termLabel)}</span><div id="dash-hero" style="display:contents">${heroCopy()}</div></header><section class="cd-stats" aria-label="Your week in numbers"><div class="cd-stat"><span class="cd-stat-icon" aria-hidden="true">${icon("check")}</span><span class="cd-num" id="task-count">${remaining()}</span><strong>Tasks due today</strong><small>Tick them off as you go</small></div><div class="cd-stat"><span class="cd-stat-icon" aria-hidden="true">${icon("leaf")}</span><span class="cd-num">${focus.length}</span><strong>Focus subjects</strong><small>${focus.length ? esc(focus.map((x) => x.name).join(", ")) : "Pick them in your answers"}</small></div></section></div><div class="cd-split"><div class="cd-col"><section class="panel dt-panel tone-coral" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="dt-all" href="#tasks">See all tasks ${icon("arrow", true)}</a></div><div id="dash-tasks">${dashTasks()}</div></section>${comingUp()}</div></div></div>`;
+            termLabel = me.term ? ` · Term ${me.term.number}, Week ${me.term.week}` : "";
+          return `<div class="cd"><div class="cd-top"><header class="cd-hero"><span class="cd-label">${esc(weekday)} ${esc(date)}${esc(termLabel)}</span><div id="dash-hero" style="display:contents">${heroCopy()}</div></header><section class="today-card" id="today-card" aria-label="Today’s progress">${todayCard()}</section></div><div class="cd-split"><div class="cd-col"><section class="panel dt-panel tone-coral" aria-labelledby="tasks-title"><div class="cd-head"><div><span class="cd-label">My tasks</span><h2 id="tasks-title">Today’s list</h2></div><a class="dt-all" href="#tasks">See all tasks ${icon("arrow", true)}</a></div><div id="dash-tasks">${dashTasks()}</div></section>${comingUp()}</div></div></div>`;
         }
         // A little calendar page: month on top, day below.
         function dateTile(iso, tone) {
@@ -6695,7 +6785,7 @@ SOFTWARE.
             if ($("#tasks-content")) $("#tasks-content").innerHTML = tasksMarkup();
             if ($("#dash-tasks")) $("#dash-tasks").innerHTML = dashTasks();
             $("#nav-task-count").textContent = remaining();
-            if ($("#task-count")) $("#task-count").textContent = remaining();
+            refreshToday();
             if ($("#dash-hero")) $("#dash-hero").innerHTML = heroCopy();
             if ($(".assign")) {
               assignOpen.add(id);
