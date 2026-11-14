@@ -5161,6 +5161,9 @@
       .study-bubbles.done {
         opacity: 0;
       }
+      :root[data-theme="dark"] .study-bubbles > i {
+        background: var(--fill);
+      }
       .study-bubbles > i {
         position: absolute;
         width: 24vmax;
@@ -6336,7 +6339,7 @@ SOFTWARE.
                 "Make a little space for you.",
                 "Your preferences are saved in this browser.",
               ) +
-              `<section class="content-card"><h2>Your learning space</h2><div class="switch-row"><div><label for="focus-toggle">Keep my dashboard focused</label><p>Hide the extra school links and sidebar tip.</p></div><input type="checkbox" id="focus-toggle" ${state.focus ? "checked" : ""}></div><div class="switch-row"><div><label for="theme-toggle">Dark mode</label><p>Light is the default. Switch on for a black background.</p></div><input type="checkbox" id="theme-toggle" ${state.theme === "dark" ? "checked" : ""}></div><div class="notice">Your notes and preferences are saved in this browser.</div></section>`;
+              `<section class="content-card"><h2>Your learning space</h2><div class="switch-row"><div><label for="focus-toggle">Keep my dashboard focused</label><p>Hide the extra school links.</p></div><input type="checkbox" id="focus-toggle" ${state.focus ? "checked" : ""}></div><div class="switch-row"><div><label for="theme-toggle">Dark mode</label><p>Light is the default. Switch on for a black background.</p></div><input type="checkbox" id="theme-toggle" ${state.theme === "dark" ? "checked" : ""}></div><div class="notice">Your notes and preferences are saved in this browser.</div></section>`;
           $("#main").innerHTML =
             (!storageAvailable
               ? '<div class="storage-warning">Your browser is not saving changes. Keep this page open to retain your work for this visit.</div>'
@@ -6382,9 +6385,10 @@ SOFTWARE.
             window.scrollTo(0, 0);
             if (event) $("#main").focus({ preventScroll: true });
           };
-          // From light mode into Study with Chom, black bubbles fill the page before it goes dark.
+          // Into Study with Chom, bubbles fill the page before it opens: black in light mode
+          // (the page goes dark), raised grey in dark mode (they fade to the black page).
           const bubbles =
-            event && currentView === "chom" && before !== "chom" && state.theme !== "dark" && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+            event && currentView === "chom" && before !== "chom" && !matchMedia("(prefers-reduced-motion: reduce)").matches;
           if (bubbles) studyBubbles(show);
           else show();
         }
