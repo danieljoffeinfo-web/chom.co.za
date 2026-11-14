@@ -5231,9 +5231,9 @@
       :root[data-theme="dark"] :is(.subject-stats, .task-tab) .cd-meter i {
         background: var(--tone);
       }
-      /* The selected filter tile: a ring in its own colour. */
+      /* The selected filter tile: a white ring. */
       :root[data-theme="dark"] .task-tab.active {
-        border-color: var(--tone);
+        border-color: var(--ink);
       }
       :root[data-theme="dark"] :is(.sd-hero, .studio-head) {
         box-shadow: inset 4px 0 0 var(--subject, var(--muted));
@@ -5254,6 +5254,80 @@
         background:
           radial-gradient(var(--slate) 0 58%, transparent 59%),
           conic-gradient(var(--subject) var(--v), color-mix(in srgb, var(--subject) 22%, var(--slate)) 0);
+      }
+      /* Dark mode: real liquid glass on the hero. A glossy sheen, brighter washes, a bright
+         rim that catches the light at the corners and a curved highlight across the top. */
+      :root[data-theme="dark"] {
+        --wash: 40%;
+        --glass-sheen: linear-gradient(
+          125deg,
+          color-mix(in srgb, var(--ink) 16%, transparent) 0%,
+          color-mix(in srgb, var(--ink) 5%, transparent) 24%,
+          transparent 45%,
+          transparent 72%,
+          color-mix(in srgb, var(--ink) 7%, transparent) 100%
+        );
+        --glass-pane: linear-gradient(
+          160deg,
+          color-mix(in srgb, var(--ink) 18%, transparent),
+          color-mix(in srgb, var(--ink) 5%, transparent)
+        );
+        --glass-line: color-mix(in srgb, var(--ink) 24%, transparent);
+        --glass-hi: color-mix(in srgb, var(--ink) 50%, transparent);
+      }
+      :root[data-theme="dark"] .cd-top {
+        isolation: isolate;
+        border-color: transparent;
+      }
+      :root[data-theme="dark"] .cd-top > * {
+        position: relative;
+        z-index: 1;
+      }
+      :root[data-theme="dark"] .cd-top::before,
+      :root[data-theme="dark"] .cd-top::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+      }
+      :root[data-theme="dark"] .cd-top::before {
+        padding: 1px;
+        background: linear-gradient(
+          135deg,
+          color-mix(in srgb, var(--ink) 60%, transparent),
+          color-mix(in srgb, var(--ink) 10%, transparent) 30%,
+          transparent 55%,
+          color-mix(in srgb, var(--ink) 10%, transparent) 80%,
+          color-mix(in srgb, var(--ink) 40%, transparent)
+        );
+        -webkit-mask:
+          linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+      }
+      :root[data-theme="dark"] .cd-top::after {
+        background: radial-gradient(
+          120% 70% at 30% -10%,
+          color-mix(in srgb, var(--ink) 13%, transparent),
+          transparent 60%
+        );
+      }
+      :root[data-theme="dark"] :is(.today-card, .cd-top .cd-stat) {
+        box-shadow:
+          inset 0 1px 0 var(--glass-hi),
+          inset 0 -1px 0 color-mix(in srgb, var(--ink) 10%, transparent),
+          0 18px 36px -22px var(--glass-shadow);
+        backdrop-filter: blur(24px) saturate(190%);
+        -webkit-backdrop-filter: blur(24px) saturate(190%);
+      }
+      /* Rings in one blue, like the subject icons. */
+      :root[data-theme="dark"] .goal-ring {
+        --subject: var(--chom-subject-maths);
+      }
+      :root[data-theme="dark"] .today-ring .today-fill {
+        stroke: var(--chom-subject-maths);
       }
     </style>
 </head>
