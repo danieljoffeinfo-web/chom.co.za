@@ -5343,6 +5343,75 @@
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
       }
+      /* Light mode: the same clear liquid glass as dark, not frosted. A white rim with a
+         rainbow edge, curved streaks of light with a faint refraction shadow beside them,
+         and clear panes. No big colour washes. */
+      :root:not([data-theme="dark"]) .cd-top {
+        isolation: isolate;
+        border-color: transparent;
+        background:
+          radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, white 70%, transparent), transparent 55%),
+          linear-gradient(160deg, color-mix(in srgb, white 40%, transparent), color-mix(in srgb, white 8%, transparent) 60%, color-mix(in srgb, var(--chom-accent-sky) 10%, transparent)),
+          var(--card);
+        box-shadow:
+          0 0 0 1px color-mix(in srgb, var(--ink) 8%, transparent),
+          inset 0 1px 0 white,
+          inset 0 -1px 0 color-mix(in srgb, var(--ink) 6%, transparent),
+          inset 0 -40px 70px -50px color-mix(in srgb, var(--chom-accent-sky) 45%, transparent),
+          0 30px 60px -42px color-mix(in srgb, var(--ink) 30%, transparent);
+      }
+      :root:not([data-theme="dark"]) .cd-top > * {
+        position: relative;
+        z-index: 1;
+      }
+      :root:not([data-theme="dark"]) .cd-top::before,
+      :root:not([data-theme="dark"]) .cd-top::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        pointer-events: none;
+      }
+      :root:not([data-theme="dark"]) .cd-top::before {
+        padding: 1.5px;
+        background: linear-gradient(
+          135deg,
+          white,
+          color-mix(in srgb, var(--chom-accent-sky) 60%, transparent) 18%,
+          color-mix(in srgb, white 30%, transparent) 42%,
+          color-mix(in srgb, white 30%, transparent) 58%,
+          color-mix(in srgb, var(--chom-accent-coral) 50%, transparent) 80%,
+          white
+        );
+        -webkit-mask:
+          linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+      }
+      :root:not([data-theme="dark"]) .cd-top::after {
+        background:
+          radial-gradient(48% 170% at 100% 40%, transparent 52%, color-mix(in srgb, var(--ink) 2%, transparent) 54.5%, color-mix(in srgb, var(--ink) 9%, transparent) 56%, color-mix(in srgb, white 95%, transparent) 56.8%, transparent 57.8%),
+          radial-gradient(48% 170% at 100% 40%, transparent 57.8%, color-mix(in srgb, var(--chom-accent-coral) 30%, transparent) 58.8%, color-mix(in srgb, var(--chom-accent-sunflower) 24%, transparent) 60%, color-mix(in srgb, var(--chom-accent-sky) 30%, transparent) 61.2%, transparent 63.5%),
+          radial-gradient(80% 210% at 118% 30%, transparent 64%, color-mix(in srgb, white 30%, transparent) 67%, color-mix(in srgb, white 80%, transparent) 68.8%, transparent 69.6%),
+          radial-gradient(60% 80% at -6% 122%, transparent 58%, color-mix(in srgb, var(--ink) 6%, transparent) 61.4%, color-mix(in srgb, white 90%, transparent) 62.2%, color-mix(in srgb, var(--chom-accent-sky) 22%, transparent) 63.4%, transparent 65%),
+          linear-gradient(104deg, transparent 34%, color-mix(in srgb, white 35%, transparent) 40%, transparent 47%);
+      }
+      :root:not([data-theme="dark"]) .cd-top .cd-lede strong {
+        text-decoration-color: color-mix(in srgb, var(--ink) 30%, transparent);
+      }
+      :root:not([data-theme="dark"]) :is(.today-card, .cd-top .cd-stat) {
+        border-color: transparent;
+        background: linear-gradient(160deg, color-mix(in srgb, white 75%, transparent), color-mix(in srgb, white 25%, transparent) 55%, color-mix(in srgb, white 50%, transparent));
+        box-shadow:
+          inset 0 1px 0 white,
+          inset 0 0 0 1px color-mix(in srgb, var(--ink) 8%, transparent),
+          inset 0 -14px 26px -20px color-mix(in srgb, var(--chom-accent-sky) 45%, transparent),
+          inset 14px 0 26px -22px color-mix(in srgb, var(--chom-accent-coral) 35%, transparent),
+          0 20px 40px -26px color-mix(in srgb, var(--ink) 28%, transparent);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
       /* Rings in one blue, like the subject icons. */
       :root[data-theme="dark"] .goal-ring {
         --subject: var(--chom-subject-maths);
