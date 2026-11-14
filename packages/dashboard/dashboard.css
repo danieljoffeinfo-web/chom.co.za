@@ -3633,6 +3633,9 @@ h3 {
 :root[data-theme='dark'] :is(.subject-card, .notice) {
   background: var(--slate);
 }
+:root[data-theme='dark'] .subject-card {
+  border-top: 0;
+}
 :root[data-theme='dark'] .subject-card .goal-ring {
   background:
     radial-gradient(var(--slate) 0 58%, transparent 59%),
