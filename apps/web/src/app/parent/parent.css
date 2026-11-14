@@ -63,12 +63,12 @@
   color: var(--muted);
 }
 .child-chip.active {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  border-color: var(--fill);
+  color: var(--on-fill);
 }
 .child-chip.active small {
-  color: var(--card);
+  color: var(--on-fill);
   opacity: 0.75;
 }
 .child-chip .avatar {

@@ -24,8 +24,27 @@
   --blue-soft: var(--chom-subtle);
   --ink-hover: var(--chom-primary-hover);
   --accent-on-fill: var(--chom-on-primary);
+  /* Solid fills (the active nav item, buttons, "now" cards): navy in light mode. */
+  --fill: var(--ink);
+  --on-fill: var(--card);
+  --fill-hover: var(--ink-hover);
+  --fill-accent: var(--bg);
+  --on-fill-accent: var(--ink);
   --r: 24px;
   --sidebar: 248px;
+}
+/* In dark mode they're a raised grey with white text, not white. */
+:root[data-theme='dark'] {
+  --fill: color-mix(in srgb, var(--chom-text) 16%, var(--chom-background));
+  --on-fill: var(--ink);
+  --fill-hover: color-mix(in srgb, var(--chom-text) 22%, var(--chom-background));
+  --fill-accent: color-mix(in srgb, var(--chom-text) 30%, var(--chom-background));
+  --on-fill-accent: var(--ink);
+  --accent-on-fill: var(--ink);
+}
+:root[data-theme='dark'] .nav .badge {
+  background: var(--fill-accent);
+  color: var(--on-fill-accent);
 }
 * {
   box-sizing: border-box;
@@ -148,8 +167,8 @@ textarea::placeholder {
   left: 20px;
   z-index: 100;
   padding: 12px 20px;
-  background: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  color: var(--on-fill);
   border-radius: 8px;
 }
 .skip-link:focus {
@@ -452,8 +471,8 @@ textarea::placeholder {
   text-decoration: underline;
 }
 .button {
-  background: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  color: var(--on-fill);
   padding: 8px 24px;
   border-radius: 4px;
   display: inline-flex;
@@ -467,7 +486,7 @@ textarea::placeholder {
   transition: background 0.15s;
 }
 .button:hover {
-  background: var(--ink-hover);
+  background: var(--fill-hover);
 }
 .button.secondary {
   background: var(--card);
@@ -694,8 +713,8 @@ textarea::placeholder {
   color: var(--blue);
 }
 .day.selected b {
-  background: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  color: var(--on-fill);
 }
 .day:hover:not(.selected) b {
   background: var(--soft);
@@ -1499,8 +1518,8 @@ textarea::placeholder {
   left: calc(50% + var(--sidebar) / 2);
   transform: translate(-50%, 12px);
   padding: 13px 21px;
-  background: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  color: var(--on-fill);
   font-size: 13px;
   border-radius: 8px;
   box-shadow: 0 6px 22px #20212415;
@@ -2039,8 +2058,8 @@ textarea::placeholder {
   transform: translate(-50%, 3px);
   padding: 6px 9px;
   border-radius: 7px;
-  background: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  color: var(--on-fill);
   font-size: 11px;
   line-height: 1.4;
   white-space: nowrap;
@@ -2169,8 +2188,8 @@ h3 {
   background: var(--soft);
 }
 .nav a.active {
-  background: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  color: var(--on-fill);
   font-weight: 700;
 }
 .nav .badge,
@@ -2190,8 +2209,8 @@ h3 {
   padding-left: 0;
 }
 .mini-chom {
-  background: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  color: var(--on-fill);
   border-radius: 24px;
   padding: 20px;
 }
@@ -2206,7 +2225,7 @@ h3 {
   color: var(--orange);
 }
 .mini-chom p {
-  color: var(--card);
+  color: var(--on-fill);
   font-size: 16px;
   font-weight: 700;
   line-height: 1.3;
@@ -2248,8 +2267,8 @@ h3 {
 }
 .avatar,
 .quick-button .avatar {
-  background: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  color: var(--on-fill);
   border-color: var(--card);
   font-weight: 800;
 }
@@ -2298,9 +2317,9 @@ h3 {
   color: var(--ink);
 }
 .filter.active {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  border-color: var(--fill);
+  color: var(--on-fill);
   font-weight: 700;
 }
 .filter.active:after {
@@ -2393,13 +2412,13 @@ h3 {
   color: var(--blue);
 }
 .schedule-panel .day.selected {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  border-color: var(--fill);
+  color: var(--on-fill);
 }
 .schedule-panel .day.selected b {
   background: none;
-  color: var(--card);
+  color: var(--on-fill);
 }
 .schedule-panel .day:hover:not(.selected) {
   background: var(--soft);
@@ -2496,8 +2515,8 @@ h3 {
   color: var(--ink);
 }
 .schedule-panel .schedule-footer a:hover {
-  background: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  color: var(--on-fill);
 }
 
 /* Dashboard layout */
@@ -2542,8 +2561,8 @@ h3 {
   justify-content: space-between;
   padding: 24px 28px;
   border-radius: 24px;
-  background: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  color: var(--on-fill);
 }
 .cd-now-main {
   display: flex;
@@ -2603,13 +2622,13 @@ h3 {
 .cd-cta:hover {
   opacity: 0.88;
 }
-/* Inside navy (or, in dark mode, vanilla) fills the highlight flips to the page colour */
+/* Inside fills (navy in light mode, raised grey in dark) the highlight flips */
 .cd-now,
 .cd-class.live,
 .mini-chom,
 .nav a.active {
-  --orange: var(--bg);
-  --on-orange: var(--ink);
+  --orange: var(--fill-accent);
+  --on-orange: var(--on-fill-accent);
 }
 .cd-top {
   display: flex;
@@ -2814,12 +2833,12 @@ h3 {
   font-weight: 700;
 }
 .cd-class.live {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  border-color: var(--fill);
+  color: var(--on-fill);
 }
 .cd-class.live small {
-  color: var(--card);
+  color: var(--on-fill);
 }
 .cd-class.live .cd-avatar {
   background: var(--orange);
@@ -2904,8 +2923,8 @@ h3 {
   color: var(--ink);
 }
 .dt-all:hover {
-  background: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  color: var(--on-fill);
 }
 .dt-group {
   padding: 8px 24px 16px;
@@ -3062,8 +3081,8 @@ h3 {
 }
 .cd .panel > .cd-head .text-button:hover,
 .cd .panel > .cd-head .dt-all:hover {
-  background: var(--ink);
-  color: var(--card);
+  background: var(--fill);
+  color: var(--on-fill);
 }
 .dt-group {
   padding-top: 12px;
@@ -3194,8 +3213,8 @@ h3 {
     height: 20px;
   }
   .tab-dock .active {
-    background: var(--ink);
-    color: var(--card);
+    background: var(--fill);
+    color: var(--on-fill);
   }
   .quick-actions {
     position: absolute;
